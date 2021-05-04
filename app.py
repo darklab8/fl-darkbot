@@ -1,10 +1,20 @@
-import discord
 import os
-import json
 from types import SimpleNamespace
 from dotenv import load_dotenv
-
+import discord
+# import asyncio
 from discord.ext import commands
+
+import random
+
+from permissions import (
+    is_guild_owner,
+    can_manage_channels,
+    is_bot_controller,
+    all_checks,
+)
+
+from looper import Looper
 
 # nice settings loading
 load_dotenv()
@@ -12,62 +22,22 @@ settings = SimpleNamespace()
 for item, value in os.environ.items():
     setattr(settings, item, value)
 
-
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as {0}!'.format(self.user))
-
-    async def on_message(self, message):
-        print('Message from {0.author}: {0.content}'.format(message))
-
-        # if message.content.startswith(command_start):
-        #     if 'hello' in message.content:
-        #         await message.channel.send('hi there!')
-        #     if 'help' in message.content:
-        #         await message.channel.send(
-        #             'help command list will be implemented later!')
-        # and "darkwind" in message.author.name.lower():
-        #
-
+# discord.Guild.get_channel
 
 APIDATA = SimpleNamespace()
 
-from discord.ext import tasks, commands
-import requests
-import random
-
-
-class MyCog(commands.Cog):
-    def __init__(self, bot):
-        self.index = 0
-        self.bot = bot
-        self.printer.start()
-
-    def cog_unload(self):
-        self.printer.cancel()
-        print('unloading')
-
-    @tasks.loop(seconds=5.0)
-    async def printer(self):
-        #print(self.index)
-        APIDATA.players = requests.get(settings.player_request_url).json()
-        APIDATA.bases = requests.get(settings.base_request_url).json()
-        self.index += 1
-
-    @printer.before_loop
-    async def before_printer(self):
-        print('waiting...')
-        await self.bot.wait_until_ready()
-
-
-bot = MyClient()
-
-cog = MyCog(bot)
-
 bot = commands.Bot(command_prefix='$')
+
+cog = Looper(bot, APIDATA, settings)
+
+
+@bot.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(bot))
 
 
 @bot.command(name='fun')
+@commands.check_any(commands.is_owner(), all_checks())
 async def nine_nine(ctx):
     "says random message"
     brooklyn_99_quotes = [
@@ -82,6 +52,7 @@ async def nine_nine(ctx):
 
 
 @bot.command(name='check')
+@commands.check_any(commands.is_owner(), all_checks())
 async def check(ctx, number: int):
     await ctx.send(f"{number} is your lucky number!")
 
@@ -92,4 +63,48 @@ async def check_error(ctx, error):
         await ctx.send('incorrect command!')
 
 
+@bot.command(name='author')
+@commands.check_any(commands.is_owner())
+async def only_me(ctx, ):
+    await ctx.send('Only you!')
+    # {discord.Guild.get_channel()}
+
+
 bot.run(settings.secret_key)
+
+# @bot.event
+# async def on_message(message):
+#     if message.content.startswith('$thumb'):
+#         channel = message.channel
+#         await channel.send('Send me that 👍 reaction, mate')
+
+#         def check(reaction, user):
+#             return user == message.author and str(reaction.emoji) == '👍'
+
+#         try:
+#             reaction, user = await bot.wait_for('reaction_add',
+#                                                 timeout=60.0,
+#                                                 check=check)
+#         except asyncio.TimeoutError:
+#             await channel.send('👎')
+#         else:
+#             await channel.send('👍')
+
+# def owner_or_permissions(**perms):
+#     original = commands.has_permissions(**perms).predicate
+
+#     async def extended_check(ctx):
+#         if ctx.guild is None:
+#             return False
+#         return ctx.guild.owner_id == ctx.author.id or await original(
+#             ctx) or ctx.message.author.id == 370435997974134785
+
+#     return commands.check(extended_check)
+
+# def check_if_it_is_me(ctx):
+#     return ctx.message.author.id == 370435997974134785
+
+# @bot.command(name='me')
+# @commands.check(check_if_it_is_me)
+# async def only_for_me(ctx):
+#     await ctx.send('I know you!')
