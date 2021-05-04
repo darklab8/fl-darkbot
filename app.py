@@ -6,17 +6,11 @@ from dotenv import load_dotenv
 
 from discord.ext import commands
 
+# nice settings loading
 load_dotenv()
 settings = SimpleNamespace()
 for item, value in os.environ.items():
-    # print('{}: {}'.format(item, value))
     setattr(settings, item, value)
-
-# with open('secret.json') as file_:
-#     settings = SimpleNamespace(**(json.loads(file_.read())))
-
-SECRET_KEY = settings.secret_key
-command_start = '$d '
 
 
 class MyClient(discord.Client):
@@ -98,4 +92,4 @@ async def check_error(ctx, error):
         await ctx.send('incorrect command!')
 
 
-bot.run(SECRET_KEY)
+bot.run(settings.secret_key)
