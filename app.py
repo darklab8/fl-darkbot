@@ -87,8 +87,15 @@ async def nine_nine(ctx):
     await ctx.send(response)
 
 
-# @bot.command(name='help')
-# async def helping(ctx):
-#     await ctx.send('one day, you will find help here')
+@bot.command(name='check')
+async def check(ctx, number: int):
+    await ctx.send(f"{number} is your lucky number!")
+
+
+@check.error
+async def check_error(ctx, error):
+    if isinstance(error, commands.CommandError):
+        await ctx.send('incorrect command!')
+
 
 bot.run(SECRET_KEY)
