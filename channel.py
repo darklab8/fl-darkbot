@@ -7,8 +7,10 @@ from jinja2 import Template
 async def deleting_message(message):
     try:
         await message.delete()
+        return True
     except discord.errors.NotFound:
         print('channel was already deleted')
+        return False
 
 
 async def delete_messages_older_than_n_seconds(bot, unique_tag: str, n: int,
