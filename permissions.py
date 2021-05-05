@@ -28,6 +28,10 @@ def is_bot_controller():
     return commands.check(controller_predicate)
 
 
+def predicate_owner(ctx):
+    return ctx.bot.owner_id == ctx.author.id
+
+
 # async def predicate_bot_owner(ctx):
 #     # TODO it should be awaited
 #     return await ctx.bot.is_owner(ctx.author)
@@ -36,9 +40,23 @@ def is_bot_controller():
 #     return commands.check(predicate_bot_owner)
 
 
-def all_checks():
-    def predicate(ctx):
-        return predicate_guild_owner(ctx) or predicate_manage(
-            ctx) or controller_predicate(ctx)  # or predicate_bot_owner(ctx)
+def predicate_connected_to_channels(ctx, storage):
+    return (ctx.channel.id) in storage.channels
 
-    return commands.check(predicate)
+
+def predicate_all_permissions(ctx):
+    return predicate_owner(ctx) or predicate_guild_owner(
+        ctx) or predicate_manage(ctx) or controller_predicate(
+            ctx)  # or predicate_bot_owner(ctx)
+
+
+def connected_to_channel(storage):
+    def predicate_connected_and_permissions(ctx):
+        return predicate_all_permissions(
+            ctx) and predicate_connected_to_channels(ctx, storage)
+
+    return commands.check(predicate_connected_and_permissions)
+
+
+def all_checks():
+    return commands.check(predicate_all_permissions)
