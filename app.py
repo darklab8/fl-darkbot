@@ -10,7 +10,7 @@ from permissions import (
     connected_to_channel,
 )
 
-from universal import delete_messages_older_than_n_seconds
+from channel import delete_messages_older_than_n_seconds
 from looper import Looper
 
 # nice settings loading
@@ -30,6 +30,7 @@ except FileNotFoundError:
     STORAGE.channels = {}
 
 STORAGE.unique_tag = 'dark_info:'
+
 bot = commands.Bot(command_prefix='$')
 
 cog = Looper(bot, STORAGE, settings)
@@ -104,7 +105,8 @@ async def only_me(ctx, ):
     # {discord.Guild.get_channel()}
 
 
-bot.run(settings.secret_key)
+if __name__ == '__main__':
+    bot.run(settings.secret_key)
 
 # @bot.event
 # async def on_message(message):
