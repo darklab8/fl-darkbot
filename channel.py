@@ -1,3 +1,4 @@
+"functions handling work with channels"
 import datetime
 import discord
 from jinja2 import Template

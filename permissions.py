@@ -1,3 +1,4 @@
+"rules for command permissions"
 from discord.ext import commands
 
 # predicates
@@ -8,7 +9,8 @@ def predicate_guild_owner(ctx):
 
 
 def predicate_manage(ctx):
-    return ctx.guild is not None and ctx.author.guild_permissions.manage_channels
+    return (ctx.guild is not None
+            and ctx.author.guild_permissions.manage_channels)
 
 
 def predicate_controller(ctx):

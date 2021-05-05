@@ -1,3 +1,4 @@
+"module for background tasks in the loop"
 import requests
 from discord.ext import tasks, commands
 from copy import deepcopy
@@ -8,12 +9,12 @@ from channel import (
 
 
 class Looper(commands.Cog):
-    def __init__(self, bot, storage, settings):
+    def __init__(self, bot, storage):
         self.index = 0
         self.bot = bot
         self.printer.start()
-        self.settings = settings
         self.storage = storage
+        self.settings = storage.settings
         self.unique_tag = storage.unique_tag
 
     def cog_unload(self):
@@ -35,7 +36,7 @@ class Looper(commands.Cog):
         for channel_id in channels:
 
             await delete_messages_older_than_n_seconds(self.bot,
-                                                       self.unique_tag, 30,
+                                                       self.unique_tag, 10,
                                                        channel_id)
             await handle_tagged_messages(self.bot, self.unique_tag, channel_id)
 
