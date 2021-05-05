@@ -239,3 +239,4 @@ docs/build/
 secret.json
 .env
 legacy/
+channels.json

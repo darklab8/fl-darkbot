@@ -1,6 +1,5 @@
 import requests
 from discord.ext import tasks, commands
-from discord import channel
 import datetime
 from jinja2 import Template
 from copy import deepcopy

@@ -27,8 +27,11 @@ for item, value in os.environ.items():
 # discord.Guild.get_channel
 
 STORAGE = SimpleNamespace()
-with open('channels.json') as file_:
-    STORAGE.channels = json.loads(file_.read())
+try:
+    with open('channels.json') as file_:
+        STORAGE.channels = json.loads(file_.read())
+except FileNotFoundError:
+    STORAGE.channels = {}
 
 STORAGE.unique_tag = 'dark_info:'
 bot = commands.Bot(command_prefix='$')
