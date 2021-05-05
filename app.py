@@ -1,17 +1,13 @@
 import os
 from types import SimpleNamespace
 from dotenv import load_dotenv
-import discord
 # import asyncio
 from discord.ext import commands
 import json
 import random
-from permissions import connected_to_channel
 from permissions import (
-    is_guild_owner,
-    can_manage_channels,
-    is_bot_controller,
     all_checks,
+    connected_to_channel,
 )
 
 from universal import delete_messages_older_than_n_seconds
@@ -37,6 +33,11 @@ STORAGE.unique_tag = 'dark_info:'
 bot = commands.Bot(command_prefix='$')
 
 cog = Looper(bot, STORAGE, settings)
+
+
+@bot.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(bot))
 
 
 @bot.command(name='connect')
@@ -72,12 +73,6 @@ async def check(ctx, number: int):
 async def clear(ctx):
     await delete_messages_older_than_n_seconds(ctx.bot, STORAGE.unique_tag, 0,
                                                ctx.channel.id)
-
-
-@bot.event
-async def on_ready():
-    print('We have logged in as {0.user}'.format(bot))
-    # breakpoint()
 
 
 @bot.command(name='fun')
