@@ -33,19 +33,22 @@ def flake():
               is_flag=True,
               help="shows coverage",
               default=False)
-@click.option('--app',
-              '-a',
-              'app',
-              default="",
-              help="choose to test particular app")
-def unit(refresh, cover, app):
+@click.option('--mypy',
+              '-m',
+              'mypy',
+              is_flag=True,
+              help="shows hint coverage",
+              default=False)
+def unit(refresh, cover, mypy):
     "get unit tests"
     launcher = []
     launcher.append("pytest -n 6")
     if cover:
         launcher.append("-cov-config=.coveragerc --cov=.")
 
-    launcher.append(app)
+    if mypy:
+        launcher.append(" --mypy tests.py")
+
     say(" ".join(launcher))
 
 

@@ -8,21 +8,25 @@ import json
 # nice settings loading
 load_dotenv()
 
-STORAGE = SimpleNamespace()
-STORAGE.unique_tag = 'dark_info:'
 
-STORAGE.settings = SimpleNamespace()
-for item, value in os.environ.items():
-    setattr(STORAGE.settings, item, value)
+def storage_builder():
+    STORAGE = SimpleNamespace()
+    STORAGE.unique_tag = 'dark_info:'
 
-# loading persistent settings
-try:
-    with open('channels.json') as file_:
-        STORAGE.channels = json.loads(file_.read())
-except FileNotFoundError:
-    STORAGE.channels = {}
+    STORAGE.settings = SimpleNamespace()
+    for item, value in os.environ.items():
+        setattr(STORAGE.settings, item, value)
+    return STORAGE
 
-bot = created_app(STORAGE)
+    # loading persistent settings
+    try:
+        with open('channels.json') as file_:
+            STORAGE.channels = json.loads(file_.read())
+    except FileNotFoundError:
+        STORAGE.channels = {}
+
 
 if __name__ == '__main__':
+    STORAGE = storage_builder()
+    bot = created_app(STORAGE)
     bot.run(STORAGE.settings.secret_key)
