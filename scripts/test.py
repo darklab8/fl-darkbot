@@ -44,7 +44,7 @@ def unit(refresh, cover, mypy):
     launcher = []
     launcher.append("pytest -n 6")
     if cover:
-        launcher.append("-cov-config=.coveragerc --cov=.")
+        launcher.append("-cov-config=.coveragerc --cov=. tests.py")
 
     if mypy:
         launcher.append(" --mypy tests.py")
