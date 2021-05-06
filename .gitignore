@@ -240,3 +240,5 @@ secret.json
 .env
 legacy/
 channels.json
+.env*
+docs/
