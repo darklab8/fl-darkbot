@@ -8,7 +8,7 @@ from channel import delete_messages_older_than_n_seconds
 import random
 
 
-def attach_commands(storage, command_prefix='.'):
+def attach_commands(storage, command_prefix='.') -> commands.Bot:
     bot = commands.Bot(command_prefix)
 
     @bot.event
@@ -37,8 +37,13 @@ def attach_commands(storage, command_prefix='.'):
 
     @bot.command(name='check')
     @commands.check_any(connected_to_channel(storage))
-    async def check(ctx, number: int):
+    async def check_number(ctx, number: int):
         await ctx.send(f"{number} is your lucky number!")
+
+    @check_number.error
+    async def check_error(ctx, error):
+        if isinstance(error, commands.CommandError):
+            await ctx.send('incorrect number!')
 
     @bot.command(name='clear')
     @commands.check_any(connected_to_channel(storage))
@@ -59,11 +64,6 @@ def attach_commands(storage, command_prefix='.'):
 
         response = random.choice(brooklyn_99_quotes)
         await ctx.send(response)
-
-    @check.error
-    async def check_error(ctx, error):
-        if isinstance(error, commands.CommandError):
-            await ctx.send('incorrect command!')
 
     @bot.command(name='me')
     @commands.check_any(commands.is_owner())
