@@ -29,7 +29,10 @@ async def delete_messages_older_than_n_seconds(bot, unique_tag: str, n: int,
 async def give_me_last_tagged_channels(bot, unique_tag: str, channel_id: int):
     content_search = await bot.get_channel(channel_id).history(limit=200
                                                                ).flatten()
-    return [item for item in content_search if unique_tag in item.content]
+    return [
+        item for item in content_search
+        if unique_tag in item.content and bot.user.id == item.author.id
+    ]
 
 
 async def handle_tagged_messages(bot, unique_tag: str, channel_id: int):

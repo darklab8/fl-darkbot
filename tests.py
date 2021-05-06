@@ -1,13 +1,25 @@
 import pytest
-from app import created_app
-from storage import storage_builder
+from app import attach_commands
+from storage import Storage
+from looper import Looper
 
 
 @pytest.fixture
 def storage():
-    return storage_builder()
+    return Storage()
 
 
-def test_build_app(storage):
-    bot = created_app(storage)
-    assert bot is not None
+@pytest.fixture
+def bot(storage):
+    return attach_commands(storage)
+
+
+def looper(bot):
+    _ = Looper(bot, storage)
+
+
+def test_request_game_data(storage):
+    game_data = storage.get_game_data()
+
+    assert len(game_data.players) > 0
+    assert len(game_data.bases) > 0
