@@ -1,8 +1,13 @@
 import pytest
-from app import created_app, storage_builder
+from app import created_app
+from storage import storage_builder
 
 
-def test_build_app():
-    STORAGE = storage_builder()
-    bot = created_app(STORAGE)
+@pytest.fixture
+def storage():
+    return storage_builder()
+
+
+def test_build_app(storage):
+    bot = created_app(storage)
     assert bot is not None
