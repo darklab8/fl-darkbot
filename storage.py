@@ -59,7 +59,7 @@ class InfoController():
         if self.category in self.source[str(channel_id)]:
             return self.source[str(channel_id)][self.category][
                 'list'], self.source[str(channel_id)][self.category]['alert']
-        return None, None
+        return None, 999
 
 
 class Storage():
