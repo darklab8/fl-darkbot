@@ -4,6 +4,8 @@ from jinja2 import Template
 import datetime
 import json
 import discord
+from storage import render_players
+from .views import render_date
 
 
 class Looper(commands.Cog):
@@ -35,77 +37,19 @@ class Looper(commands.Cog):
                 await self.chanell_controller.delete_exp_msgs(channel_id, 40)
 
                 # date stamp
-                with open('templates/date.md') as file_:
-                    template = Template(file_.read())
-                    info = template.render(date=str(
-                        datetime.datetime.utcnow()),
-                                           timestamp=data.players['timestamp'])
+                info = render_date(data.players['timestamp'])
 
                 # bases
                 rendered_bases = await self.storage.base.view(
                     channel_id, data.bases)
 
-                friend_tags, friend_alert = await self.storage.friend.get_data(
-                    channel_id)
-                enemy_tags, enemy_alert = await self.storage.enemy.get_data(
-                    channel_id)
-                unrecognized_alert = await self.storage.unrecognized.get_data(
-                    channel_id)
-
-                system_tags = await self.storage.system.get_data(channel_id)
-                region_tags = await self.storage.region.get_data(channel_id)
-
-                players_all_list = {
-                    item['name']: item
-                    for item in data.players['players']
-                }
-
-                trackable_players = dict(
-                    self.storage.region.process_tag(players_all_list, 'region',
-                                                    region_tags),
-                    **(self.storage.system.process_tag(players_all_list,
-                                                       'system', system_tags)))
-
-                friends = self.storage.friend.process_tag(
-                    trackable_players, 'name', friend_tags)
-                enemies = self.storage.enemy.process_tag(
-                    trackable_players, 'name', enemy_tags)
-
-                unrecognized_tags = set(trackable_players) - set(
-                    friends) - set(enemies)
-
-                unregonizeds = {
-                    key: value
-                    for key, value in trackable_players.items()
-                    if key in unrecognized_tags
-                }
-                with open('templates/players.md') as file_:
-                    template = Template(file_.read())
-
-                    def rendering(title, data, alert_level):
-                        if data:
-                            alert_needed = False
-                            if alert_level is not None:
-                                alert_needed = len(data) >= alert_level
-                            return template.render(title=title,
-                                                   data=data,
-                                                   alert=alert_needed)
-                        return ''
-
-                    rendered_unrecognized = rendering('Players', unregonizeds,
-                                                      unrecognized_alert)
-                    rendered_enemies = rendering('Enemies', enemies,
-                                                 enemy_alert)
-                    rendered_friends = rendering('Friends', friends,
-                                                 friend_alert)
-
-                    rendered_all = (rendered_unrecognized + rendered_enemies +
-                                    rendered_friends)
-
+                # players
+                rendered_players = render_players(self.storage, channel_id,
+                                                  data.players)
                 # send final data update
                 try:
                     await self.chanell_controller.update_info(
-                        channel_id, info + rendered_all + rendered_bases)
+                        channel_id, info + rendered_players + rendered_bases)
                 except discord.errors.HTTPException:
                     await self.chanell_controller.update_info(
                         channel_id, info +

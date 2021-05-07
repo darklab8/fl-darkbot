@@ -40,17 +40,17 @@ class ChannelConstroller():
         ]
 
     async def update_info(self, channel_id: int, info: str):
-        channels = await self.get_tagged_msgs(channel_id)
+        messages = await self.get_tagged_msgs(channel_id)
 
-        if not channels:
+        if not messages:
             # create first msg
             await self.bot.get_channel(channel_id).send(self.unique_tag +
                                                         ' forming the message')
-        elif len(channels) > 1:
+        elif len(messages) > 1:
             # delete all others
-            deleting = channels[1:]
+            deleting = messages[1:]
             for message in deleting:
                 await deleting_message(message)
         else:
             # edit to apply tag
-            await channels[0].edit(content=str(info))
+            await messages[0].edit(content=str(info))
