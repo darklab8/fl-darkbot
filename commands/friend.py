@@ -25,4 +25,9 @@ def attach_friend(bot, storage) -> commands.Bot:
     async def friend_clear(ctx, *args):
         pass
 
+    @friend.command(name='alert', pass_context=True)
+    @execute_in_storage(storage)
+    async def friend_alert(ctx, *args):
+        pass
+
     return bot

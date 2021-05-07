@@ -41,7 +41,11 @@ class Looper(commands.Cog):
 
             # bases
             async def bases_to_view():
-                base_tags = await self.storage.base.get_data(channel_id)
+                base_tags, base_alert = await self.storage.base.get_data(
+                    channel_id)
+
+                if base_tags is None:
+                    return ''
 
                 rendering_bases = {}
                 for base_tag in base_tags:
@@ -61,10 +65,14 @@ class Looper(commands.Cog):
 
             rendered_bases = await bases_to_view()
 
-            friend_tags = await self.storage.friend.get_data(channel_id)
-            enemy_tags = await self.storage.enemy.get_data(channel_id)
-            system_tags = await self.storage.system.get_data(channel_id)
-            region_tags = await self.storage.region.get_data(channel_id)
+            friend_tags, friend_alert = await self.storage.friend.get_data(
+                channel_id)
+            enemy_tags, enemy_alert = await self.storage.enemy.get_data(
+                channel_id)
+            unrecognized_tags, unrecognized_alert = await self.storage.unrecognized.get_data(
+                channel_id)
+            system_tags, _ = await self.storage.system.get_data(channel_id)
+            region_tags, _ = await self.storage.region.get_data(channel_id)
 
             players_all_list = {
                 item['name']: item
@@ -108,13 +116,23 @@ class Looper(commands.Cog):
 
             with open('templates/players.md') as file_:
                 template = Template(file_.read())
-                rendered_unrecognized = template.render(title='unrecognized',
-                                                        data=unregonizeds)
-                rendered_enemies = template.render(title='enemies',
-                                                   data=enemies,
-                                                   alert=False)
-                rendered_friends = template.render(title='friends',
-                                                   data=friends)
+
+                def rendering(title, data, alert_level):
+
+                    if data:
+                        return template.render(title=title,
+                                               data=data,
+                                               alert=alert_level)
+                    return ''
+
+                rendered_unrecognized = rendering(
+                    'unrecognized', unregonizeds,
+                    len(unregonizeds) >= unrecognized_alert)
+                rendered_enemies = rendering('enemies', enemies,
+                                             len(enemies) >= enemy_alert)
+                rendered_friends = rendering('friends', friends,
+                                             len(friends) >= friend_alert)
+
                 rendered_all = (rendered_unrecognized + rendered_enemies +
                                 rendered_friends)
 
