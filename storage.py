@@ -6,11 +6,43 @@ from dotenv import load_dotenv
 import requests
 
 
+class InfoController():
+    def __init__(self, source, category):
+        self.source = source
+        self.category = category
+
+    def create_if_none(self, channel_id):
+        if self.category not in self.source[str(channel_id)]:
+            self.source[str(channel_id)][self.category] = []
+
+    def add(self, channel_id, *args):
+        self.create_if_none(channel_id)
+        for item in args:
+            self.source[str(channel_id)][self.category].append(item)
+
+    def remove(self, channel_id, *args):
+        self.create_if_none(channel_id)
+
+        for item in args:
+            self.source[str(channel_id)][self.category].remove(item)
+
+    def get_list(self, channel_id, *args):
+        self.create_if_none(channel_id)
+
+        return self.source[str(channel_id)][self.category]
+
+
 class Storage():
     def __init__(self, unique_tag='dark_info:'):
         self.unique_tag = unique_tag
         self.settings = self.load_env_settings()
         self.channels = self.load_channel_settings()
+
+        self.base = InfoController(self.channels, 'base')
+        self.system = InfoController(self.channels, 'system')
+        self.region = InfoController(self.channels, 'region')
+        self.friend = InfoController(self.channels, 'friend')
+        self.enemy = InfoController(self.channels, 'enemy')
 
     def load_env_settings(self) -> SimpleNamespace:
         "loading settings from os environment"
