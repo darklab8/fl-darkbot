@@ -61,6 +61,7 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
     @bot.command(name='config')
     @commands.check_any(connected_to_channel(storage))
     async def check_number(ctx):
+        "shows you current config"
         with open('templates/json.md') as file_:
             template = Template(file_.read())
 
@@ -76,6 +77,7 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
     @bot.command(name='clear')
     @commands.check_any(connected_to_channel(storage))
     async def clear(ctx):
+        "clears all msgs from the current channel"
         await chanell_controller.delete_exp_msgs(ctx.channel.id, 0)
 
     @bot.command(name='fun')
