@@ -4,7 +4,6 @@ from permissions import (
     all_checks,
     connected_to_channel,
 )
-from channel import delete_messages_older_than_n_seconds
 import random
 
 from .consts import timedelta
@@ -12,7 +11,7 @@ from jinja2 import Template
 import json
 
 
-def attach_root(bot, storage) -> commands.Bot:
+def attach_root(bot, storage, chanell_controller) -> commands.Bot:
     class MyHelpCommand(commands.DefaultHelpCommand):
         async def send_pages(self):
             """A helper utility to send the page output
@@ -77,8 +76,7 @@ def attach_root(bot, storage) -> commands.Bot:
     @bot.command(name='clear')
     @commands.check_any(connected_to_channel(storage))
     async def clear(ctx):
-        await delete_messages_older_than_n_seconds(ctx.bot, storage.unique_tag,
-                                                   0, ctx.channel.id)
+        await chanell_controller.delete_exp_msgs(ctx.channel.id, 0)
 
     @bot.command(name='fun')
     @commands.check_any(connected_to_channel(storage))

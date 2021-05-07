@@ -1,17 +1,16 @@
 "module for background tasks in the loop"
 from discord.ext import tasks, commands
-from channel import (
-    delete_messages_older_than_n_seconds,
-    handle_tagged_messages,
-)
+from jinja2 import Template
+import datetime
 
 
 class Looper(commands.Cog):
-    def __init__(self, bot, storage):
+    def __init__(self, bot, storage, chanell_controller):
         self.index = 0
         self.bot = bot
         self.printer.start()
         self.storage = storage
+        self.chanell_controller = chanell_controller
 
     def cog_unload(self):
         self.printer.cancel()
@@ -25,15 +24,17 @@ class Looper(commands.Cog):
 
         data = self.storage.get_game_data()
         self.storage.save_channel_settings()
+
         channel_ids = [int(item) for item in self.storage.channels.keys()]
-        print(channel_ids)
         for channel_id in channel_ids:
-            pass
-            # await delete_messages_older_than_n_seconds(self.bot,
-            #                                            self.storage.unique_tag,
-            #                                            10, channel_id)
-            # await handle_tagged_messages(self.bot, self.storage.unique_tag,
-            #                              channel_id)
+
+            await self.chanell_controller.delete_exp_msgs(channel_id, 40)
+
+            with open('templates/date.md') as file_:
+                template = Template(file_.read())
+                info = template.render(date=str(datetime.datetime.utcnow()))
+
+                await self.chanell_controller.update_info(channel_id, info)
 
     @printer.before_loop
     async def before_printer(self):

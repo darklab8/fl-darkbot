@@ -4,8 +4,8 @@ from .base import attach_base
 from .system import attach_system
 
 
-def attach_commands(bot, storage) -> commands.Bot:
-    bot = attach_root(bot, storage)
+def attach_commands(bot, storage, chanell_controller) -> commands.Bot:
+    bot = attach_root(bot, storage, chanell_controller)
     bot = attach_base(bot, storage)
     bot = attach_system(bot, storage)
 
