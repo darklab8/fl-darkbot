@@ -16,7 +16,7 @@ def execute_in_storage(storage):
             names = args[1:]
 
             await ctx.send(f'executing {methods} operation '
-                           f'for objects {names}, mr {ctx.author.mention}')
+                           f'for objects {names}, {ctx.author.mention}')
 
             category_controller = getattr(storage, category)
             await getattr(category_controller, operation)(ctx, names)
