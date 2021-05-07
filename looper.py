@@ -1,7 +1,7 @@
 "module for background tasks in the loop"
 from discord.ext import tasks, commands
 import discord
-from views import render_all
+from views import View
 
 
 class Looper(commands.Cog):
@@ -32,8 +32,8 @@ class Looper(commands.Cog):
                 # delete expired
                 await self.chanell_controller.delete_exp_msgs(channel_id, 40)
 
-                rendered_date, rendered_all = render_all(
-                    data, self.storage, channel_id)
+                rendered_date, rendered_all = await View(
+                    data, self.storage, channel_id).render_all()
                 # send final data update
                 try:
                     await self.chanell_controller.update_info(

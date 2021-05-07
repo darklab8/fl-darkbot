@@ -2,7 +2,7 @@ import pytest
 from commands import attach_commands
 from storage import Storage
 from looper import Looper
-from views import render_all
+from views import View
 
 
 @pytest.fixture
@@ -48,4 +48,6 @@ async def test_render_all(storage, data):
         if i > 10:
             break
 
-    _, _ = await render_all(data, storage, 1)
+    rendered_date, rendered_all = await View(data, storage, 1).render_all()
+    assert len(rendered_date) > 50
+    assert len(rendered_all) > 50
