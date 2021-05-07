@@ -101,8 +101,8 @@ class Storage():
         try:
             with open('channels.json', 'w') as file_:
                 file_.write(json.dumps(self.channels, indent=2))
-        except OSError:
-            print('ERR failed to save channels.json')
+        except OSError as error:
+            print('ERR failed to save channels.json ' + str(error))
 
     def get_game_data(self) -> SimpleNamespace:
         output = SimpleNamespace()
