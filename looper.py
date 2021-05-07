@@ -36,7 +36,8 @@ class Looper(commands.Cog):
             # date stamp
             with open('templates/date.md') as file_:
                 template = Template(file_.read())
-                info = template.render(date=str(datetime.datetime.utcnow()))
+                info = template.render(date=str(datetime.datetime.utcnow()),
+                                       timestamp=data.players['timestamp'])
 
             # bases
             async def bases_to_view():

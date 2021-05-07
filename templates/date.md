@@ -1,4 +1,5 @@
 **Dark_info:** 
 ```json
-["last_update"]:{"{{ date }}"}
+["info_update"]:{"{{ date }}"}
+["player_timestamp"]:{"{{ timestamp }}"}
 ```
