@@ -2,13 +2,15 @@
 from commands import attach_commands
 from storage import Storage
 from looper import Looper
+from discord.ext import commands
 
 # nice settings loading
 
 
 def create_app():
     storage = Storage()
-    bot = attach_commands(storage)
+    bot = commands.Bot(command_prefix='.')
+    bot = attach_commands(bot, storage)
     _ = Looper(bot, storage)
     return bot, storage.settings.secret_key
 

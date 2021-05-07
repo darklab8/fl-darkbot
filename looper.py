@@ -23,6 +23,8 @@ class Looper(commands.Cog):
         print(self.index)
         self.index += 1
 
+        data = self.storage.get_game_data()
+
         channel_ids = self.storage.channels.keys()
         for channel_id in channel_ids:
 

@@ -13,12 +13,11 @@ big_time = 20
 super_big_time = 40
 
 
-def attach_commands(storage, command_prefix='.') -> commands.Bot:
-    bot = commands.Bot(command_prefix)
-
+def attach_commands(bot, storage) -> commands.Bot:
     class MyHelpCommand(commands.DefaultHelpCommand):
         async def send_pages(self):
-            """A helper utility to send the page output from :attr:`paginator` to the destination."""
+            """A helper utility to send the page output
+            from :attr:`paginator` to the destination."""
             destination = self.get_destination()
             for page in self.paginator.pages:
                 await destination.send(page, delete_after=super_big_time)
@@ -96,5 +95,19 @@ def attach_commands(storage, command_prefix='.') -> commands.Bot:
         "more detailed help"
         with open('templates/info.md') as file_:
             await ctx.send(file_.read(), delete_after=super_big_time)
+
+    @bot.group(pass_context=True)
+    @commands.check_any(connected_to_channel(storage))
+    async def base(ctx):
+        if ctx.invoked_subcommand is None:
+            await ctx.send('Invalid sub command passed...')
+
+    @base.command(name='add', pass_context=True)
+    async def base_add(ctx):
+        await ctx.send(f'adding the base, mr {ctx.author.mention}')
+
+    @base.command(name='remove', pass_context=True)
+    async def base_remove(ctx):
+        await ctx.send(f'removing the base, mr {ctx.author.mention}')
 
     return bot

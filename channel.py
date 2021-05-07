@@ -41,7 +41,7 @@ async def handle_tagged_messages(bot, unique_tag: str, channel_id: int):
     if not channels:
         # create first msg
         await bot.get_channel(channel_id).send(unique_tag +
-                                               str(datetime.datetime.utcnow()))
+                                               ' forming the message')
     elif len(channels) > 1:
         # delete all others
         deleting = channels[1:]
