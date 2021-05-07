@@ -7,9 +7,27 @@ from permissions import (
 from channel import delete_messages_older_than_n_seconds
 import random
 
+small_time = 5
+medium_tme = 10
+big_time = 20
+super_big_time = 40
+
 
 def attach_commands(storage, command_prefix='.') -> commands.Bot:
     bot = commands.Bot(command_prefix)
+
+    class MyHelpCommand(commands.DefaultHelpCommand):
+        async def send_pages(self):
+            """A helper utility to send the page output from :attr:`paginator` to the destination."""
+            destination = self.get_destination()
+            for page in self.paginator.pages:
+                await destination.send(page, delete_after=super_big_time)
+
+            await destination.send(
+                f'the message is auto destroyed in {super_big_time} seconds',
+                delete_after=super_big_time)
+
+    bot.help_command = MyHelpCommand()
 
     @bot.event
     async def on_ready():
@@ -21,9 +39,9 @@ def attach_commands(storage, command_prefix='.') -> commands.Bot:
         "connects to channel"
         if (ctx.channel.id) not in storage.channels:
             storage.channels[(ctx.channel.id)] = {}
-            await ctx.send('connected')
+            await ctx.send('connected', delete_after=medium_tme)
         else:
-            await ctx.send('we are already connected')
+            await ctx.send('we are already connected', delete_after=medium_tme)
 
     @bot.command(name='disconnect')
     @commands.check_any(all_checks())
@@ -31,9 +49,10 @@ def attach_commands(storage, command_prefix='.') -> commands.Bot:
         "disconnects from channel"
         if (ctx.channel.id) in storage.channels:
             storage.channels.pop((ctx.channel.id))
-            await ctx.send('disconnected')
+            await ctx.send('disconnected', delete_after=medium_tme)
         else:
-            await ctx.send('we are already disconnected')
+            await ctx.send('we are already disconnected',
+                           delete_after=medium_tme)
 
     @bot.command(name='check')
     @commands.check_any(connected_to_channel(storage))
@@ -43,7 +62,7 @@ def attach_commands(storage, command_prefix='.') -> commands.Bot:
     @check_number.error
     async def check_error(ctx, error):
         if isinstance(error, commands.CommandError):
-            await ctx.send('incorrect number!')
+            await ctx.send('incorrect number!', delete_after=medium_tme)
 
     @bot.command(name='clear')
     @commands.check_any(connected_to_channel(storage))
@@ -63,12 +82,19 @@ def attach_commands(storage, command_prefix='.') -> commands.Bot:
         ]
 
         response = random.choice(brooklyn_99_quotes)
-        await ctx.send(response)
+        await ctx.send(response, delete_after=medium_tme)
 
     @bot.command(name='me')
     @commands.check_any(commands.is_owner())
     async def only_me(ctx, ):
         "secret command"
-        await ctx.send('Papa!')
+        await ctx.send('Papa!', delete_after=big_time)
+
+    @bot.command(name='info')
+    @commands.check_any(all_checks())
+    async def more_detailed_info(ctx):
+        "more detailed help"
+        with open('templates/info.md') as file_:
+            await ctx.send(file_.read(), delete_after=super_big_time)
 
     return bot

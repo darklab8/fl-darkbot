@@ -49,7 +49,7 @@ async def handle_tagged_messages(bot, unique_tag: str, channel_id: int):
             await deleting_message(message)
     else:
         # edit to apply tag
-        with open('date.md') as file_:
+        with open('templates/date.md') as file_:
             template = Template(file_.read())
 
             await channels[0].edit(content=str(
