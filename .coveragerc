@@ -2,3 +2,4 @@
 omit = venv/*
         scripts/*
         scripts.py
+        commands/*
