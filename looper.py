@@ -130,12 +130,11 @@ class Looper(commands.Cog):
                                                    alert=alert_needed)
                         return ''
 
-                    rendered_unrecognized = rendering('unrecognized',
-                                                      unregonizeds,
+                    rendered_unrecognized = rendering('Players', unregonizeds,
                                                       unrecognized_alert)
-                    rendered_enemies = rendering('enemies', enemies,
+                    rendered_enemies = rendering('Enemies', enemies,
                                                  enemy_alert)
-                    rendered_friends = rendering('friends', friends,
+                    rendered_friends = rendering('Friends', friends,
                                                  friend_alert)
 
                     rendered_all = (rendered_unrecognized + rendered_enemies +
