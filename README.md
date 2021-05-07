@@ -3,7 +3,7 @@
 * bot for [Discovery Freelancer community](https://discoverygc.com/forums/index.php)
 
 # Link
-* [bot invite link](https://discord.com/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
+* [bot invite link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=4294967287&scope=bot%20applications.commands)
 
 # Planned features
 
