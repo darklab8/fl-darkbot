@@ -10,6 +10,9 @@ async def deleting_message(message):
     except discord.errors.NotFound:
         print('channel was already deleted')
         return False
+    except discord.errors.Forbidden:
+        print('channel was already deleted')
+        return False
 
 
 class ChannelConstroller():
