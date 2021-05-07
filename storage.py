@@ -14,10 +14,7 @@ class InfoController():
 
     def create_if_none(self, ctx):
         if self.category not in self.source[str(ctx.channel.id)]:
-            self.source[str(ctx.channel.id)][self.category] = {
-                'list': [],
-                'alert': 999
-            }
+            self.source[str(ctx.channel.id)][self.category] = {'list': []}
 
     async def add(self, ctx, *args):
         self.create_if_none(ctx)
@@ -37,13 +34,6 @@ class InfoController():
 
         self.source[str(ctx.channel.id)][self.category]['list'].clear()
 
-    async def alert(self, ctx, *args):
-        self.create_if_none(ctx)
-
-        if args:
-            self.source[str(ctx.channel.id)][self.category]['alert'] = int(
-                args[0][0])
-
     async def lst(self, ctx, *args):
         self.create_if_none(ctx)
 
@@ -57,9 +47,41 @@ class InfoController():
 
     async def get_data(self, channel_id):
         if self.category in self.source[str(channel_id)]:
+            return self.source[str(channel_id)][self.category]['list']
+        return None
+
+
+class InfoWithAlertController(InfoController):
+    def create_if_none(self, ctx):
+        if self.category not in self.source[str(ctx.channel.id)]:
+            self.source[str(ctx.channel.id)][self.category] = {
+                'list': [],
+                'alert': 999
+            }
+
+    async def alert(self, ctx, *args):
+        self.create_if_none(ctx)
+
+        if args:
+            self.source[str(ctx.channel.id)][self.category]['alert'] = int(
+                args[0][0])
+
+    async def get_data(self, channel_id):
+        if self.category in self.source[str(channel_id)]:
             return self.source[str(channel_id)][self.category][
                 'list'], self.source[str(channel_id)][self.category]['alert']
         return None, 999
+
+
+class AlertOnlyController(InfoWithAlertController):
+    def create_if_none(self, ctx):
+        if self.category not in self.source[str(ctx.channel.id)]:
+            self.source[str(ctx.channel.id)][self.category] = {'alert': 999}
+
+    async def get_data(self, channel_id):
+        if self.category in self.source[str(channel_id)]:
+            return self.source[str(channel_id)][self.category]['alert']
+        return 999
 
 
 class Storage():
@@ -71,9 +93,9 @@ class Storage():
         self.base = InfoController(self.channels, 'base')
         self.system = InfoController(self.channels, 'system')
         self.region = InfoController(self.channels, 'region')
-        self.friend = InfoController(self.channels, 'friend')
-        self.enemy = InfoController(self.channels, 'enemy')
-        self.unrecognized = InfoController(self.channels, 'unrecognized')
+        self.friend = InfoWithAlertController(self.channels, 'friend')
+        self.enemy = InfoWithAlertController(self.channels, 'enemy')
+        self.unrecognized = AlertOnlyController(self.channels, 'unrecognized')
 
     def load_env_settings(self) -> SimpleNamespace:
         "loading settings from os environment"
