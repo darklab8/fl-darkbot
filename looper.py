@@ -28,123 +28,131 @@ class Looper(commands.Cog):
         self.storage.save_channel_settings()
 
         channel_ids = [int(item) for item in self.storage.channels.keys()]
-        for channel_id in channel_ids:
+        try:
+            for channel_id in channel_ids:
 
-            # delete expired
-            await self.chanell_controller.delete_exp_msgs(channel_id, 40)
+                # delete expired
+                await self.chanell_controller.delete_exp_msgs(channel_id, 40)
 
-            # date stamp
-            with open('templates/date.md') as file_:
-                template = Template(file_.read())
-                info = template.render(date=str(datetime.datetime.utcnow()),
-                                       timestamp=data.players['timestamp'])
-
-            # bases
-            async def bases_to_view():
-                base_tags, base_alert = await self.storage.base.get_data(
-                    channel_id)
-
-                if base_tags is None:
-                    return ''
-
-                rendering_bases = {}
-                for base_tag in base_tags:
-                    adding_bases = {
-                        key: value
-                        for key, value in data.bases.items() if base_tag in key
-                    }
-                    rendering_bases = dict(rendering_bases, **adding_bases)
-
-                if not rendering_bases:
-                    return ''
-
-                with open('templates/base.md') as file_:
+                # date stamp
+                with open('templates/date.md') as file_:
                     template = Template(file_.read())
-                    rendered_bases = template.render(data=rendering_bases)
-                    return rendered_bases
+                    info = template.render(date=str(
+                        datetime.datetime.utcnow()),
+                                           timestamp=data.players['timestamp'])
 
-            rendered_bases = await bases_to_view()
+                # bases
+                async def bases_to_view():
+                    base_tags, base_alert = await self.storage.base.get_data(
+                        channel_id)
 
-            friend_tags, friend_alert = await self.storage.friend.get_data(
-                channel_id)
-            enemy_tags, enemy_alert = await self.storage.enemy.get_data(
-                channel_id)
-            unrecognized_tags, unrecognized_alert = await self.storage.unrecognized.get_data(
-                channel_id)
-            system_tags, _ = await self.storage.system.get_data(channel_id)
-            region_tags, _ = await self.storage.region.get_data(channel_id)
+                    if base_tags is None:
+                        return ''
 
-            players_all_list = {
-                item['name']: item
-                for item in data.players['players']
-            }
-
-            def process_tag(output, from_where, access_key, tags):
-                if tags is not None:
-                    for tag in tags:
-                        found = {
+                    rendering_bases = {}
+                    for base_tag in base_tags:
+                        adding_bases = {
                             key: value
-                            for key, value in from_where.items()
-                            if tag in value[access_key]
+                            for key, value in data.bases.items()
+                            if base_tag in key
                         }
-                        output = dict(output, **found)
-                return output
+                        rendering_bases = dict(rendering_bases, **adding_bases)
 
-            trackable_players = {}
-            trackable_players = process_tag(trackable_players,
-                                            players_all_list, 'region',
-                                            region_tags)
-            trackable_players = process_tag(trackable_players,
-                                            players_all_list, 'system',
-                                            system_tags)
+                    if not rendering_bases:
+                        return ''
 
-            friends = {}
-            friends = process_tag(friends, trackable_players, 'name',
-                                  friend_tags)
+                    with open('templates/base.md') as file_:
+                        template = Template(file_.read())
+                        rendered_bases = template.render(data=rendering_bases)
+                        return rendered_bases
 
-            enemies = {}
-            enemies = process_tag(enemies, trackable_players, 'name',
-                                  enemy_tags)
+                rendered_bases = await bases_to_view()
 
-            unrecognized_tags = set(trackable_players) - set(friends) - set(
-                enemies)
-            unregonizeds = {
-                key: value
-                for key, value in trackable_players.items()
-                if key in unrecognized_tags
-            }
+                friend_tags, friend_alert = await self.storage.friend.get_data(
+                    channel_id)
+                enemy_tags, enemy_alert = await self.storage.enemy.get_data(
+                    channel_id)
+                unrecognized_tags, unrecognized_alert = await self.storage.unrecognized.get_data(
+                    channel_id)
+                system_tags, _ = await self.storage.system.get_data(channel_id)
+                region_tags, _ = await self.storage.region.get_data(channel_id)
 
-            with open('templates/players.md') as file_:
-                template = Template(file_.read())
+                players_all_list = {
+                    item['name']: item
+                    for item in data.players['players']
+                }
 
-                def rendering(title, data, alert_level):
-                    if data:
-                        alert_needed = False
-                        if alert_level is not None:
-                            alert_needed = len(data) >= alert_level
-                        return template.render(title=title,
-                                               data=data,
-                                               alert=alert_needed)
-                    return ''
+                def process_tag(output, from_where, access_key, tags):
+                    if tags is not None:
+                        for tag in tags:
+                            found = {
+                                key: value
+                                for key, value in from_where.items()
+                                if tag in value[access_key]
+                            }
+                            output = dict(output, **found)
+                    return output
 
-                rendered_unrecognized = rendering('unrecognized', unregonizeds,
-                                                  unrecognized_alert)
-                rendered_enemies = rendering('enemies', enemies, enemy_alert)
-                rendered_friends = rendering('friends', friends, friend_alert)
+                trackable_players = {}
+                trackable_players = process_tag(trackable_players,
+                                                players_all_list, 'region',
+                                                region_tags)
+                trackable_players = process_tag(trackable_players,
+                                                players_all_list, 'system',
+                                                system_tags)
 
-                rendered_all = (rendered_unrecognized + rendered_enemies +
-                                rendered_friends)
+                friends = {}
+                friends = process_tag(friends, trackable_players, 'name',
+                                      friend_tags)
 
-            # send final data update
-            try:
-                await self.chanell_controller.update_info(
-                    channel_id, info + rendered_all + rendered_bases)
-            except discord.errors.HTTPException:
-                await self.chanell_controller.update_info(
-                    channel_id,
-                    info + '\n**ERROR: you tried to render too much info!**' +
-                    '\nremove some of the values from config' +
-                    '\nor write them fully instead of tags')
+                enemies = {}
+                enemies = process_tag(enemies, trackable_players, 'name',
+                                      enemy_tags)
+
+                unrecognized_tags = set(trackable_players) - set(
+                    friends) - set(enemies)
+                unregonizeds = {
+                    key: value
+                    for key, value in trackable_players.items()
+                    if key in unrecognized_tags
+                }
+
+                with open('templates/players.md') as file_:
+                    template = Template(file_.read())
+
+                    def rendering(title, data, alert_level):
+                        if data:
+                            alert_needed = False
+                            if alert_level is not None:
+                                alert_needed = len(data) >= alert_level
+                            return template.render(title=title,
+                                                   data=data,
+                                                   alert=alert_needed)
+                        return ''
+
+                    rendered_unrecognized = rendering('unrecognized',
+                                                      unregonizeds,
+                                                      unrecognized_alert)
+                    rendered_enemies = rendering('enemies', enemies,
+                                                 enemy_alert)
+                    rendered_friends = rendering('friends', friends,
+                                                 friend_alert)
+
+                    rendered_all = (rendered_unrecognized + rendered_enemies +
+                                    rendered_friends)
+
+                # send final data update
+                try:
+                    await self.chanell_controller.update_info(
+                        channel_id, info + rendered_all + rendered_bases)
+                except discord.errors.HTTPException:
+                    await self.chanell_controller.update_info(
+                        channel_id, info +
+                        '\n**ERROR: you tried to render too much info!**' +
+                        '\nremove some of the values from config' +
+                        '\nor write them fully instead of tags')
+        except discord.errors.Forbidden:
+            print("skipping forbidden channel")
 
     @printer.before_loop
     async def before_printer(self):
