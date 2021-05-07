@@ -8,6 +8,8 @@ from channel import delete_messages_older_than_n_seconds
 import random
 
 from .consts import timedelta
+from jinja2 import Template
+import json
 
 
 def attach_root(bot, storage) -> commands.Bot:
@@ -30,12 +32,17 @@ def attach_root(bot, storage) -> commands.Bot:
     async def on_ready():
         print('We have logged in as {0.user}'.format(bot))
 
+    @bot.event
+    async def on_command_error(ctx, error):
+        print(f'ERR: {error}')
+        await ctx.send(f'ERR: {error}', delete_after=timedelta.medium)
+
     @bot.command(name='connect')
     @commands.check_any(all_checks())
     async def connect_the_channel(ctx):
         "connects to channel"
-        if (ctx.channel.id) not in storage.channels:
-            storage.channels[(ctx.channel.id)] = {}
+        if str(ctx.channel.id) not in storage.channels:
+            storage.channels[str(ctx.channel.id)] = {}
             await ctx.send('connected', delete_after=timedelta.medium)
         else:
             await ctx.send('we are already connected',
@@ -45,17 +52,22 @@ def attach_root(bot, storage) -> commands.Bot:
     @commands.check_any(all_checks())
     async def diconnect_the_channel(ctx):
         "disconnects from channel"
-        if (ctx.channel.id) in storage.channels:
-            storage.channels.pop((ctx.channel.id))
+        if str(ctx.channel.id) in storage.channels:
+            storage.channels.pop(str(ctx.channel.id))
             await ctx.send('disconnected', delete_after=timedelta.medium)
         else:
             await ctx.send('we are already disconnected',
                            delete_after=timedelta.medium)
 
-    @bot.command(name='check')
+    @bot.command(name='config')
     @commands.check_any(connected_to_channel(storage))
-    async def check_number(ctx, number: int):
-        await ctx.send(f"{number} is your lucky number!")
+    async def check_number(ctx):
+        with open('templates/json.md') as file_:
+            template = Template(file_.read())
+
+            await ctx.send(
+                template.render(data=json.dumps(
+                    storage.channels[str(ctx.channel.id)], indent=2)))
 
     @check_number.error
     async def check_error(ctx, error):

@@ -26,17 +26,29 @@ class Storage():
         set by users about channels"""
         output = {}
         try:
-            with open('channels.json') as file_:
+            with open('channels.json', 'r') as file_:
                 output = json.loads(file_.read())
         except FileNotFoundError:
             print('ERR failed to load channels.json')
         return output
+
+    def save_channel_settings(self) -> None:
+        """loadding perssistent settings
+        set by users about channels"""
+        try:
+            with open('channels.json', 'w') as file_:
+                file_.write(json.dumps(self.channels, indent=2))
+        except OSError:
+            print('ERR failed to save channels.json')
 
     def get_game_data(self) -> SimpleNamespace:
         output = SimpleNamespace()
         output.players = requests.get(self.settings.player_request_url).json()
         output.bases = requests.get(self.settings.base_request_url).json()
         return output
+
+    def base_add(self, name):
+        print('adding the base')
 
     # def get_channel_data(self, key) -> SimpleNamespace:
     #     return deepcopy(self.storage.channels[key])

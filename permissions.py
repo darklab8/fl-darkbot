@@ -24,7 +24,7 @@ def predicate_owner(ctx) -> bool:
 
 
 def predicate_connected_to_channels(ctx, storage: Storage) -> bool:
-    return (ctx.channel.id) in storage.channels
+    return str(ctx.channel.id) in storage.channels
 
 
 def predicate_all_permissions(ctx) -> bool:

@@ -24,15 +24,16 @@ class Looper(commands.Cog):
         self.index += 1
 
         data = self.storage.get_game_data()
-
-        channel_ids = self.storage.channels.keys()
+        self.storage.save_channel_settings()
+        channel_ids = [int(item) for item in self.storage.channels.keys()]
+        print(channel_ids)
         for channel_id in channel_ids:
-
-            await delete_messages_older_than_n_seconds(self.bot,
-                                                       self.storage.unique_tag,
-                                                       10, channel_id)
-            await handle_tagged_messages(self.bot, self.storage.unique_tag,
-                                         channel_id)
+            pass
+            # await delete_messages_older_than_n_seconds(self.bot,
+            #                                            self.storage.unique_tag,
+            #                                            10, channel_id)
+            # await handle_tagged_messages(self.bot, self.storage.unique_tag,
+            #                              channel_id)
 
     @printer.before_loop
     async def before_printer(self):
