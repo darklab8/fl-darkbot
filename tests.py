@@ -1,5 +1,5 @@
 import pytest
-from app import attach_commands
+from commands import attach_commands
 from storage import Storage
 from looper import Looper
 
