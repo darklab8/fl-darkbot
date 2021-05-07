@@ -19,7 +19,7 @@ def execute_in_storage(storage):
                            f'for objects {names}, mr {ctx.author.mention}')
 
             category_controller = getattr(storage, category)
-            getattr(category_controller, operation)(ctx.channel.id, names)
+            await getattr(category_controller, operation)(ctx, names)
             return await func(*args, **kwargs)
 
         return wrapper_repeat

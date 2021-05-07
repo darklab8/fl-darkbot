@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import json
 from dotenv import load_dotenv
 import requests
+from jinja2 import Template
 
 
 class InfoController():
@@ -11,30 +12,36 @@ class InfoController():
         self.source = source
         self.category = category
 
-    def create_if_none(self, channel_id):
-        if self.category not in self.source[str(channel_id)]:
-            self.source[str(channel_id)][self.category] = []
+    def create_if_none(self, ctx):
+        if self.category not in self.source[str(ctx.channel.id)]:
+            self.source[str(ctx.channel.id)][self.category] = []
 
-    def add(self, channel_id, *args):
-        self.create_if_none(channel_id)
-        for item in args:
-            self.source[str(channel_id)][self.category].append(item)
+    async def add(self, ctx, *args):
+        self.create_if_none(ctx)
+        for item in args[0]:
+            self.source[str(ctx.channel.id)][self.category].append(item)
 
-    def remove(self, channel_id, *args):
-        self.create_if_none(channel_id)
+    async def remove(self, ctx, *args):
+        self.create_if_none(ctx)
 
-        for item in args:
-            self.source[str(channel_id)][self.category].remove(item)
+        for item in args[0]:
+            self.source[str(ctx.channel.id)][self.category].remove(item)
 
-    def clear(self, channel_id, *args):
-        self.create_if_none(channel_id)
+    async def clear(self, ctx, *args):
+        self.create_if_none(ctx)
 
-        self.source[str(channel_id)][self.category].clear()
+        self.source[str(ctx.channel.id)][self.category].clear()
 
-    def get_list(self, channel_id, *args):
-        self.create_if_none(channel_id)
+    async def lst(self, ctx, *args):
+        self.create_if_none(ctx)
 
-        return self.source[str(channel_id)][self.category]
+        with open('templates/json.md') as file_:
+            template = Template(file_.read())
+
+            await ctx.send(
+                template.render(data=json.dumps(
+                    self.source[str(ctx.channel.id)][self.category], indent=2))
+            )
 
 
 class Storage():
