@@ -44,11 +44,13 @@ class InfoController():
             )
 
     async def get_data(self, channel_id):
-        return self.source[str(channel_id)][self.category]
+        if self.category in self.source[str(channel_id)]:
+            return self.source[str(channel_id)][self.category]
+        return None
 
 
 class Storage():
-    def __init__(self, unique_tag='dark_info:'):
+    def __init__(self, unique_tag='Dark_info:'):
         self.unique_tag = unique_tag
         self.settings = self.load_env_settings()
         self.channels = self.load_channel_settings()

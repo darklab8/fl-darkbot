@@ -1,4 +1,4 @@
-**dark_info:** 
-```ini
-last_update = {{ date }}
+**Dark_info:** 
+```json
+["last_update"]:{"{{ date }}"}
 ```

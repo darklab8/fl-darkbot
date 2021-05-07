@@ -33,32 +33,94 @@ class Looper(commands.Cog):
             # delete expired
             await self.chanell_controller.delete_exp_msgs(channel_id, 40)
 
+            # date stamp
             with open('templates/date.md') as file_:
                 template = Template(file_.read())
                 info = template.render(date=str(datetime.datetime.utcnow()))
 
-            base_tags = await self.storage.base.get_data(channel_id)
+            # bases
+            async def bases_to_view():
+                base_tags = await self.storage.base.get_data(channel_id)
 
-            rendering_bases = {}
-            for base_tag in base_tags:
-                adding_bases = {
-                    key: value
-                    for key, value in data.bases.items() if base_tag in key
-                }
-                rendering_bases = dict(rendering_bases, **adding_bases)
-            list_of_bases = [
-                json.dumps([value['health'], key])
-                for key, value in rendering_bases.items()
-            ]
+                rendering_bases = {}
+                for base_tag in base_tags:
+                    adding_bases = {
+                        key: value
+                        for key, value in data.bases.items() if base_tag in key
+                    }
+                    rendering_bases = dict(rendering_bases, **adding_bases)
 
-            with open('templates/base.md') as file_:
+                if not rendering_bases:
+                    return ''
+
+                with open('templates/base.md') as file_:
+                    template = Template(file_.read())
+                    rendered_bases = template.render(data=rendering_bases)
+                    return rendered_bases
+
+            rendered_bases = await bases_to_view()
+
+            friend_tags = await self.storage.friend.get_data(channel_id)
+            enemy_tags = await self.storage.enemy.get_data(channel_id)
+            system_tags = await self.storage.system.get_data(channel_id)
+            region_tags = await self.storage.region.get_data(channel_id)
+
+            players_all_list = {
+                item['name']: item
+                for item in data.players['players']
+            }
+
+            def process_tag(output, from_where, access_key, tags):
+                if tags is not None:
+                    for tag in tags:
+                        found = {
+                            key: value
+                            for key, value in from_where.items()
+                            if tag in value[access_key]
+                        }
+                        output = dict(output, **found)
+                return output
+
+            trackable_players = {}
+            trackable_players = process_tag(trackable_players,
+                                            players_all_list, 'region',
+                                            region_tags)
+            trackable_players = process_tag(trackable_players,
+                                            players_all_list, 'system',
+                                            system_tags)
+
+            friends = {}
+            friends = process_tag(friends, trackable_players, 'name',
+                                  friend_tags)
+
+            enemies = {}
+            enemies = process_tag(enemies, trackable_players, 'name',
+                                  enemy_tags)
+
+            unrecognized_tags = set(trackable_players) - set(friends) - set(
+                enemies)
+            unregonizeds = {
+                key: value
+                for key, value in trackable_players.items()
+                if key in unrecognized_tags
+            }
+
+            with open('templates/players.md') as file_:
                 template = Template(file_.read())
-                rendered_bases = template.render(data=rendering_bases)
+                rendered_unrecognized = template.render(title='unrecognized',
+                                                        data=unregonizeds)
+                rendered_enemies = template.render(title='enemies',
+                                                   data=enemies,
+                                                   alert=False)
+                rendered_friends = template.render(title='friends',
+                                                   data=friends)
+                rendered_all = (rendered_unrecognized + rendered_enemies +
+                                rendered_friends)
 
             # send final data update
             try:
                 await self.chanell_controller.update_info(
-                    channel_id, info + rendered_bases)
+                    channel_id, info + rendered_all + rendered_bases)
             except discord.errors.HTTPException:
                 await self.chanell_controller.update_info(
                     channel_id,
