@@ -42,30 +42,8 @@ class Looper(commands.Cog):
                                            timestamp=data.players['timestamp'])
 
                 # bases
-                async def bases_to_view():
-                    base_tags = await self.storage.base.get_data(channel_id)
-
-                    if base_tags is None:
-                        return ''
-
-                    rendering_bases = {}
-                    for base_tag in base_tags:
-                        adding_bases = {
-                            key: value
-                            for key, value in data.bases.items()
-                            if base_tag in key
-                        }
-                        rendering_bases = dict(rendering_bases, **adding_bases)
-
-                    if not rendering_bases:
-                        return ''
-
-                    with open('templates/base.md') as file_:
-                        template = Template(file_.read())
-                        rendered_bases = template.render(data=rendering_bases)
-                        return rendered_bases
-
-                rendered_bases = await bases_to_view()
+                rendered_bases = await self.storage.base.view(
+                    channel_id, data.bases)
 
                 friend_tags, friend_alert = await self.storage.friend.get_data(
                     channel_id)
@@ -73,6 +51,7 @@ class Looper(commands.Cog):
                     channel_id)
                 unrecognized_alert = await self.storage.unrecognized.get_data(
                     channel_id)
+
                 system_tags = await self.storage.system.get_data(channel_id)
                 region_tags = await self.storage.region.get_data(channel_id)
 
@@ -81,41 +60,25 @@ class Looper(commands.Cog):
                     for item in data.players['players']
                 }
 
-                def process_tag(output, from_where, access_key, tags):
-                    if tags is not None:
-                        for tag in tags:
-                            found = {
-                                key: value
-                                for key, value in from_where.items()
-                                if tag in value[access_key]
-                            }
-                            output = dict(output, **found)
-                    return output
+                trackable_players = dict(
+                    self.storage.region.process_tag(players_all_list, 'region',
+                                                    region_tags),
+                    **(self.storage.system.process_tag(players_all_list,
+                                                       'system', system_tags)))
 
-                trackable_players = {}
-                trackable_players = process_tag(trackable_players,
-                                                players_all_list, 'region',
-                                                region_tags)
-                trackable_players = process_tag(trackable_players,
-                                                players_all_list, 'system',
-                                                system_tags)
-
-                friends = {}
-                friends = process_tag(friends, trackable_players, 'name',
-                                      friend_tags)
-
-                enemies = {}
-                enemies = process_tag(enemies, trackable_players, 'name',
-                                      enemy_tags)
+                friends = self.storage.friend.process_tag(
+                    trackable_players, 'name', friend_tags)
+                enemies = self.storage.enemy.process_tag(
+                    trackable_players, 'name', enemy_tags)
 
                 unrecognized_tags = set(trackable_players) - set(
                     friends) - set(enemies)
+
                 unregonizeds = {
                     key: value
                     for key, value in trackable_players.items()
                     if key in unrecognized_tags
                 }
-
                 with open('templates/players.md') as file_:
                     template = Template(file_.read())
 

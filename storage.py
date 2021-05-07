@@ -50,6 +50,18 @@ class InfoController():
             return self.source[str(channel_id)][self.category]['list']
         return None
 
+    def process_tag(self, from_where, access_key, tags):
+        output = {}
+        if tags is not None:
+            for tag in tags:
+                found = {
+                    key: value
+                    for key, value in from_where.items()
+                    if tag in value[access_key]
+                }
+                output = dict(output, **found)
+        return output
+
 
 class InfoWithAlertController(InfoController):
     def create_if_none(self, ctx):
@@ -84,13 +96,37 @@ class AlertOnlyController(InfoWithAlertController):
         return 999
 
 
+class BaseViewer(InfoController):
+    async def view(self, channel_id, bases):
+        base_tags = await self.get_data(channel_id)
+
+        if base_tags is None:
+            return ''
+
+        rendering_bases = {}
+        for base_tag in base_tags:
+            adding_bases = {
+                key: value
+                for key, value in bases.items() if base_tag in key
+            }
+            rendering_bases = dict(rendering_bases, **adding_bases)
+
+        if not rendering_bases:
+            return ''
+
+        with open('templates/base.md') as file_:
+            template = Template(file_.read())
+            rendered_bases = template.render(data=rendering_bases)
+            return rendered_bases
+
+
 class Storage():
     def __init__(self, unique_tag='Dark_info:'):
         self.unique_tag = unique_tag
         self.settings = self.load_env_settings()
         self.channels = self.load_channel_settings()
 
-        self.base = InfoController(self.channels, 'base')
+        self.base = BaseViewer(self.channels, 'base')
         self.system = InfoController(self.channels, 'system')
         self.region = InfoController(self.channels, 'region')
         self.friend = InfoWithAlertController(self.channels, 'friend')
