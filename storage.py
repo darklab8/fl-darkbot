@@ -43,6 +43,9 @@ class InfoController():
                     self.source[str(ctx.channel.id)][self.category], indent=2))
             )
 
+    async def get_data(self, channel_id):
+        return self.source[str(channel_id)][self.category]
+
 
 class Storage():
     def __init__(self, unique_tag='dark_info:'):
