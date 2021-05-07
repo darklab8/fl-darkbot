@@ -1,5 +1,4 @@
 from jinja2 import Template
-from info_controller import InfoController
 import datetime
 
 
@@ -10,28 +9,27 @@ async def render_date(timestamp):
                                timestamp=timestamp)
 
 
-class BaseViewer(InfoController):
-    async def view(self, channel_id, bases):
-        base_tags = await self.get_data(channel_id)
+async def base_view(base, channel_id, bases):
+    base_tags = await base.get_data(channel_id)
 
-        if base_tags is None:
-            return ''
+    if base_tags is None:
+        return ''
 
-        rendering_bases = {}
-        for base_tag in base_tags:
-            adding_bases = {
-                key: value
-                for key, value in bases.items() if base_tag in key
-            }
-            rendering_bases = dict(rendering_bases, **adding_bases)
+    rendering_bases = {}
+    for base_tag in base_tags:
+        adding_bases = {
+            key: value
+            for key, value in bases.items() if base_tag in key
+        }
+        rendering_bases = dict(rendering_bases, **adding_bases)
 
-        if not rendering_bases:
-            return ''
+    if not rendering_bases:
+        return ''
 
-        with open('templates/base.md') as file_:
-            template = Template(file_.read())
-            rendered_bases = template.render(data=rendering_bases)
-            return rendered_bases
+    with open('templates/base.md') as file_:
+        template = Template(file_.read())
+        rendered_bases = template.render(data=rendering_bases)
+        return rendered_bases
 
 
 async def render_players(storage, channel_id, players):
@@ -85,7 +83,7 @@ async def render_all(data, storage, channel_id):
     info = await render_date(data.players['timestamp'])
 
     # bases
-    rendered_bases = await storage.base.view(channel_id, data.bases)
+    rendered_bases = await base_view(storage.base, channel_id, data.bases)
 
     # players
     rendered_players = await render_players(storage, channel_id, data.players)

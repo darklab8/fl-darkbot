@@ -7,7 +7,6 @@ import requests
 
 from info_controller import (InfoController, InfoWithAlertController,
                              AlertOnlyController)
-from views import BaseViewer
 
 
 class Storage():
@@ -16,7 +15,7 @@ class Storage():
         self.settings = self.load_env_settings()
         self.channels = self.load_channel_settings()
 
-        self.base = BaseViewer(self.channels, 'base')
+        self.base = InfoController(self.channels, 'base')
         self.system = InfoController(self.channels, 'system')
         self.region = InfoController(self.channels, 'region')
         self.friend = InfoWithAlertController(self.channels, 'friend')
