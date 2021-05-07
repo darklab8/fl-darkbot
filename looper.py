@@ -118,20 +118,19 @@ class Looper(commands.Cog):
                 template = Template(file_.read())
 
                 def rendering(title, data, alert_level):
-
                     if data:
+                        alert_needed = False
+                        if alert_level is not None:
+                            alert_needed = len(data) >= alert_level
                         return template.render(title=title,
                                                data=data,
-                                               alert=alert_level)
+                                               alert=alert_needed)
                     return ''
 
-                rendered_unrecognized = rendering(
-                    'unrecognized', unregonizeds,
-                    len(unregonizeds) >= unrecognized_alert)
-                rendered_enemies = rendering('enemies', enemies,
-                                             len(enemies) >= enemy_alert)
-                rendered_friends = rendering('friends', friends,
-                                             len(friends) >= friend_alert)
+                rendered_unrecognized = rendering('unrecognized', unregonizeds,
+                                                  unrecognized_alert)
+                rendered_enemies = rendering('enemies', enemies, enemy_alert)
+                rendered_friends = rendering('friends', friends, friend_alert)
 
                 rendered_all = (rendered_unrecognized + rendered_enemies +
                                 rendered_friends)
