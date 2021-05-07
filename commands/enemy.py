@@ -20,4 +20,9 @@ def attach_enemy(bot, storage) -> commands.Bot:
     async def enemy_remove(ctx, *args):
         pass
 
+    @enemy.command(name='clear', pass_context=True)
+    @execute_in_storage(storage)
+    async def enemy_clear(ctx, *args):
+        pass
+
     return bot

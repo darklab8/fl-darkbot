@@ -20,4 +20,9 @@ def attach_system(bot, storage) -> commands.Bot:
     async def system_remove(ctx, *args):
         pass
 
+    @system.command(name='clear', pass_context=True)
+    @execute_in_storage(storage)
+    async def system_clear(ctx, *args):
+        pass
+
     return bot

@@ -20,4 +20,9 @@ def attach_region(bot, storage) -> commands.Bot:
     async def region_remove(ctx, *args):
         pass
 
+    @region.command(name='clear', pass_context=True)
+    @execute_in_storage(storage)
+    async def region_clear(ctx, *args):
+        pass
+
     return bot

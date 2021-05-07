@@ -26,6 +26,11 @@ class InfoController():
         for item in args:
             self.source[str(channel_id)][self.category].remove(item)
 
+    def clear(self, channel_id, *args):
+        self.create_if_none(channel_id)
+
+        self.source[str(channel_id)][self.category].clear()
+
     def get_list(self, channel_id, *args):
         self.create_if_none(channel_id)
 

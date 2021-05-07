@@ -20,4 +20,9 @@ def attach_base(bot, storage) -> commands.Bot:
     async def base_remove(ctx, *args):
         pass
 
+    @base.command(name='clear', pass_context=True)
+    @execute_in_storage(storage)
+    async def base_clear(ctx, *args):
+        pass
+
     return bot
