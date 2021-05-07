@@ -28,9 +28,9 @@ class Looper(commands.Cog):
         self.storage.save_channel_settings()
 
         channel_ids = [int(item) for item in self.storage.channels.keys()]
-        try:
-            for channel_id in channel_ids:
 
+        for channel_id in channel_ids:
+            try:
                 # delete expired
                 await self.chanell_controller.delete_exp_msgs(channel_id, 40)
 
