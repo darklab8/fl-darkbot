@@ -1,44 +1,30 @@
-import json
-from jinja2 import Template
-
-
 class InfoController():
     def __init__(self, source, category):
         self.source = source
         self.category = category
 
-    def create_if_none(self, ctx):
-        if self.category not in self.source[str(ctx.channel.id)]:
-            self.source[str(ctx.channel.id)][self.category] = {'list': []}
+    def create_if_none(self, channel_id):
+        if str(channel_id) not in self.source:
+            self.source[str(channel_id)] = {}
 
-    async def add(self, ctx, *args):
-        self.create_if_none(ctx)
+        if self.category not in self.source[str(channel_id)]:
+            self.source[str(channel_id)][self.category] = {'list': []}
+
+    async def add(self, channel_id, *args):
+        self.create_if_none(channel_id)
         for item in args[0]:
-            self.source[str(
-                ctx.channel.id)][self.category]['list'].append(item)
+            self.source[str(channel_id)][self.category]['list'].append(item)
 
-    async def remove(self, ctx, *args):
-        self.create_if_none(ctx)
+    async def remove(self, channel_id, *args):
+        self.create_if_none(channel_id)
 
         for item in args[0]:
-            self.source[str(
-                ctx.channel.id)][self.category]['list'].remove(item)
+            self.source[str(channel_id)][self.category]['list'].remove(item)
 
-    async def clear(self, ctx, *args):
-        self.create_if_none(ctx)
+    async def clear(self, channel_id, *args):
+        self.create_if_none(channel_id)
 
-        self.source[str(ctx.channel.id)][self.category]['list'].clear()
-
-    async def lst(self, ctx, *args):
-        self.create_if_none(ctx)
-
-        with open('templates/json.md') as file_:
-            template = Template(file_.read())
-
-            await ctx.send(
-                template.render(data=json.dumps(
-                    self.source[str(ctx.channel.id)][self.category], indent=2))
-            )
+        self.source[str(channel_id)][self.category]['list'].clear()
 
     async def get_data(self, channel_id):
         if self.category in self.source[str(channel_id)]:
@@ -59,18 +45,18 @@ class InfoController():
 
 
 class InfoWithAlertController(InfoController):
-    def create_if_none(self, ctx):
-        if self.category not in self.source[str(ctx.channel.id)]:
-            self.source[str(ctx.channel.id)][self.category] = {
+    def create_if_none(self, channel_id):
+        if self.category not in self.source[str(channel_id)]:
+            self.source[str(channel_id)][self.category] = {
                 'list': [],
                 'alert': 999
             }
 
-    async def alert(self, ctx, *args):
-        self.create_if_none(ctx)
+    async def alert(self, channel_id, *args):
+        self.create_if_none(channel_id)
 
         if args:
-            self.source[str(ctx.channel.id)][self.category]['alert'] = int(
+            self.source[str(channel_id)][self.category]['alert'] = int(
                 args[0][0])
 
     async def get_data(self, channel_id):
@@ -81,9 +67,9 @@ class InfoWithAlertController(InfoController):
 
 
 class AlertOnlyController(InfoWithAlertController):
-    def create_if_none(self, ctx):
-        if self.category not in self.source[str(ctx.channel.id)]:
-            self.source[str(ctx.channel.id)][self.category] = {'alert': 999}
+    def create_if_none(self, channel_id):
+        if self.category not in self.source[str(channel_id)]:
+            self.source[str(channel_id)][self.category] = {'alert': 999}
 
     async def get_data(self, channel_id):
         if self.category in self.source[str(channel_id)]:

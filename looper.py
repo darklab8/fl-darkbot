@@ -1,7 +1,7 @@
 "module for background tasks in the loop"
 from discord.ext import tasks, commands
 import discord
-from .views import render_all
+from views import render_all
 
 
 class Looper(commands.Cog):

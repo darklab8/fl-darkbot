@@ -1,9 +1,9 @@
 from jinja2 import Template
-from .info_controller import InfoController
+from info_controller import InfoController
 import datetime
 
 
-def render_date(timestamp):
+async def render_date(timestamp):
     with open('templates/date.md') as file_:
         template = Template(file_.read())
         return template.render(date=str(datetime.datetime.utcnow()),
@@ -82,12 +82,12 @@ async def render_players(storage, channel_id, players):
 
 async def render_all(data, storage, channel_id):
     # date stamp
-    info = render_date(data.players['timestamp'])
+    info = await render_date(data.players['timestamp'])
 
     # bases
     rendered_bases = await storage.base.view(channel_id, data.bases)
 
     # players
-    rendered_players = render_players(storage, channel_id, data.players)
+    rendered_players = await render_players(storage, channel_id, data.players)
 
     return info, info + rendered_bases + rendered_players

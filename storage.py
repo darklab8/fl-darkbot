@@ -5,9 +5,9 @@ import json
 from dotenv import load_dotenv
 import requests
 
-from .info_controller import (InfoController, InfoWithAlertController,
-                              AlertOnlyController)
-from .views import BaseViewer
+from info_controller import (InfoController, InfoWithAlertController,
+                             AlertOnlyController)
+from views import BaseViewer
 
 
 class Storage():
