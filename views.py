@@ -78,3 +78,16 @@ async def render_players(storage, channel_id, players):
         rendered_friends = rendering('Friends', friends, friend_alert)
 
         return (rendered_unrecognized + rendered_enemies + rendered_friends)
+
+
+async def render_all(data, storage, channel_id):
+    # date stamp
+    info = render_date(data.players['timestamp'])
+
+    # bases
+    rendered_bases = await storage.base.view(channel_id, data.bases)
+
+    # players
+    rendered_players = render_players(storage, channel_id, data.players)
+
+    return info, info + rendered_bases + rendered_players

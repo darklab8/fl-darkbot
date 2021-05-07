@@ -18,8 +18,11 @@ def looper(bot):
     _ = Looper(bot, storage)
 
 
+@pytest.fixture
 def test_request_game_data(storage):
     game_data = storage.get_game_data()
 
     assert len(game_data.players) > 0
     assert len(game_data.bases) > 0
+
+    return game_data

@@ -1,11 +1,7 @@
 "module for background tasks in the loop"
 from discord.ext import tasks, commands
-from jinja2 import Template
-import datetime
-import json
 import discord
-from storage import render_players
-from .views import render_date
+from .views import render_all
 
 
 class Looper(commands.Cog):
@@ -36,23 +32,15 @@ class Looper(commands.Cog):
                 # delete expired
                 await self.chanell_controller.delete_exp_msgs(channel_id, 40)
 
-                # date stamp
-                info = render_date(data.players['timestamp'])
-
-                # bases
-                rendered_bases = await self.storage.base.view(
-                    channel_id, data.bases)
-
-                # players
-                rendered_players = render_players(self.storage, channel_id,
-                                                  data.players)
+                rendered_date, rendered_all = render_all(
+                    data, self.storage, channel_id)
                 # send final data update
                 try:
                     await self.chanell_controller.update_info(
-                        channel_id, info + rendered_players + rendered_bases)
+                        channel_id, rendered_all)
                 except discord.errors.HTTPException:
                     await self.chanell_controller.update_info(
-                        channel_id, info +
+                        channel_id, rendered_date +
                         '\n**ERROR: you tried to render too much info!**' +
                         '\nremove some of the values from config' +
                         '\nor write them fully instead of tags')
