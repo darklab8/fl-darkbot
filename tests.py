@@ -35,7 +35,7 @@ def test_saving_correctly_and_loading_back(storage, data):
 
 
 @pytest.mark.asyncio
-async def test_ultimate(storage, data):
+async def test_render_all(storage, data):
 
     for i, item in enumerate(data.bases.keys()):
         await storage.base.add(1, (item, ))
