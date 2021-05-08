@@ -36,10 +36,32 @@ Current features
 Plans for the future
 ************************
 
+When `Alex <https://github.com/dsyalex>`_ would process `my code additions <https://github.com/DiscoveryGC/FLHook/pull/160>`_ for Flhook:
+
 * Alerts for base attacks
 * Showing which player bases have ore for sale or for buying
 * Same for devices selling/buying at the player bases
 * Same could be also used to track Food/Water/Oxygen at the bases
+
+Technologies
+************************
+
+* Visual Studio Code as IDE
+* `Python 3.8.5 <https://www.python.org/downloads/release/python-385/>`_
+* `Discord async framework <https://discordpy.readthedocs.io/en/stable/index.html>`_
+* `Pytest for unit testing, coverage <https://docs.pytest.org/en/6.2.x/>`_
+* Pylint/Flake8 for linting, Yapf for style formatting
+* `Sphinx for documentation <https://www.sphinx-doc.org/en/master/contents.html>`_
+* `VPS with Ubuntu 20.04 LTS Server for deployment <https://releases.ubuntu.com/20.04/>`_
+* `Supervisor for running in background with autorestart <http://supervisord.org/>`_
+* `FLhook <https://github.com/DiscoveryGC/FLHook>`_ as source of base and player data
+* Freelancer Discovery API provided by `Alex <https://github.com/dsyalex>`_ as a way to deliver info from Flhook to the bot
+
+Developers
+************************
+
+* `dd84ai <https://github.com/dd84ai>`_ a.k.a `darkwind <https://discoverygc.com/forums/showthread.php?tid=185978>`_ (Python / Testing / Deployment)
+* `Alex <https://github.com/dsyalex>`_ (FLhook and API)
 
 Indices and tables
 ==================

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Player Tracking &#8212; darkbot 0.1 documentation</title>
+    <title>Player Tracking &#8212; darkbot 0.2 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Friends and Foes" href="friends_and_foes.html" />
     <link rel="prev" title="Player Base Tracking" href="bases.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,7 +34,65 @@
             
   <div class="section" id="player-tracking">
 <h1>Player Tracking<a class="headerlink" href="#player-tracking" title="Permalink to this headline">¶</a></h1>
-<p>in order to start</p>
+<p>in order to start tracking players in area
+you need to set systems or regions for tracking</p>
+<ul class="simple">
+<li><p>for a precise list of names <a class="reference external" href="https://discoverygc.com/forums/api_interface.php?action=players_online">look here</a></p></li>
+</ul>
+<p>Examples of commands:</p>
+<div class="section" id="system-add">
+<h2>system add<a class="headerlink" href="#system-add" title="Permalink to this headline">¶</a></h2>
+<p>same rules as to base commands, apply to all <strong>add</strong>, <strong>remove</strong> commands
+regarding multiple adding</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">system</span> <span class="n">add</span> <span class="s2">&quot;New York&quot;</span>
+</pre></div>
+</div>
+<p>multiple additions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">system</span> <span class="n">add</span> <span class="s2">&quot;New York&quot;</span><span class="p">,</span> <span class="s2">&quot;New London&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="system-remove">
+<h2>system remove<a class="headerlink" href="#system-remove" title="Permalink to this headline">¶</a></h2>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">system</span> <span class="n">remove</span> <span class="s2">&quot;New York&quot;</span><span class="p">,</span> <span class="s2">&quot;New London&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="system-clear">
+<h2>system clear<a class="headerlink" href="#system-clear" title="Permalink to this headline">¶</a></h2>
+<p>clears all added systems</p>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">system</span> <span class="n">clear</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="region-add">
+<h2>region add<a class="headerlink" href="#region-add" title="Permalink to this headline">¶</a></h2>
+<p>together with system adding, you could also select additional systems with whole region</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">region</span> <span class="n">add</span> <span class="s2">&quot;Liberty Space&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">region</span> <span class="n">add</span> <span class="s2">&quot;Tau Border Worlds&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="region-remove">
+<h2>region remove<a class="headerlink" href="#region-remove" title="Permalink to this headline">¶</a></h2>
+<p>same as in base commands</p>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">region</span> <span class="n">remove</span> <span class="s2">&quot;Liberty Space&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="region-clear">
+<h2>region clear<a class="headerlink" href="#region-clear" title="Permalink to this headline">¶</a></h2>
+<p>same as in base commands</p>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">region</span> <span class="n">clear</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -58,7 +117,17 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="begining.html">Begining</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bases.html">Player Base Tracking</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Player Tracking</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Player Tracking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#system-add">system add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-remove">system remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-clear">system clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#region-add">region add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#region-remove">region remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#region-clear">region clear</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="friends_and_foes.html">Friends and Foes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alert.html">Alert</a></li>
 </ul>
 </li>
 </ul>
@@ -69,6 +138,7 @@
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="index.html">Commands</a><ul>
       <li>Previous: <a href="bases.html" title="previous chapter">Player Base Tracking</a></li>
+      <li>Next: <a href="friends_and_foes.html" title="next chapter">Friends and Foes</a></li>
   </ul></li>
   </ul></li>
 </ul>

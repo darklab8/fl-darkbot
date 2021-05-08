@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to darkbot’s documentation! &#8212; darkbot 0.1 documentation</title>
+    <title>Welcome to darkbot’s documentation! &#8212; darkbot 0.2 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -50,7 +50,30 @@
 <li class="toctree-l3"><a class="reference internal" href="info/bases.html#base-clear">base clear</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="info/players.html">Player Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="info/players.html">Player Tracking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="info/players.html#system-add">system add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/players.html#system-remove">system remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/players.html#system-clear">system clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/players.html#region-add">region add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/players.html#region-remove">region remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/players.html#region-clear">region clear</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="info/friends_and_foes.html">Friends and Foes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="info/friends_and_foes.html#friend-add">friend add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/friends_and_foes.html#friend-remove">friend remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/friends_and_foes.html#friend-clear">friend clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/friends_and_foes.html#enemy-add">enemy add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/friends_and_foes.html#enemy-remove">enemy remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/friends_and_foes.html#enemy-clear">enemy clear</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="info/alert.html">Alert</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="info/alert.html#unrecognized-alert">unrecognized alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/alert.html#enemy-alert">enemy alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="info/alert.html#friend-alert">friend alert</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -80,11 +103,34 @@
 </div>
 <div class="section" id="plans-for-the-future">
 <h2>Plans for the future<a class="headerlink" href="#plans-for-the-future" title="Permalink to this headline">¶</a></h2>
+<p>When <a class="reference external" href="https://github.com/dsyalex">Alex</a> would process <a class="reference external" href="https://github.com/DiscoveryGC/FLHook/pull/160">my code additions</a> for Flhook:</p>
 <ul class="simple">
 <li><p>Alerts for base attacks</p></li>
 <li><p>Showing which player bases have ore for sale or for buying</p></li>
 <li><p>Same for devices selling/buying at the player bases</p></li>
 <li><p>Same could be also used to track Food/Water/Oxygen at the bases</p></li>
+</ul>
+</div>
+<div class="section" id="technologies">
+<h2>Technologies<a class="headerlink" href="#technologies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Visual Studio Code as IDE</p></li>
+<li><p><a class="reference external" href="https://www.python.org/downloads/release/python-385/">Python 3.8.5</a></p></li>
+<li><p><a class="reference external" href="https://discordpy.readthedocs.io/en/stable/index.html">Discord async framework</a></p></li>
+<li><p><a class="reference external" href="https://docs.pytest.org/en/6.2.x/">Pytest for unit testing, coverage</a></p></li>
+<li><p>Pylint/Flake8 for linting, Yapf for style formatting</p></li>
+<li><p><a class="reference external" href="https://www.sphinx-doc.org/en/master/contents.html">Sphinx for documentation</a></p></li>
+<li><p><a class="reference external" href="https://releases.ubuntu.com/20.04/">VPS with Ubuntu 20.04 LTS Server for deployment</a></p></li>
+<li><p><a class="reference external" href="http://supervisord.org/">Supervisor for running in background with autorestart</a></p></li>
+<li><p><a class="reference external" href="https://github.com/DiscoveryGC/FLHook">FLhook</a> as source of base and player data</p></li>
+<li><p>Freelancer Discovery API provided by <a class="reference external" href="https://github.com/dsyalex">Alex</a> as a way to deliver info from Flhook to the bot</p></li>
+</ul>
+</div>
+<div class="section" id="developers">
+<h2>Developers<a class="headerlink" href="#developers" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/dd84ai">dd84ai</a> a.k.a <a class="reference external" href="https://discoverygc.com/forums/showthread.php?tid=185978">darkwind</a> (Python / Testing / Deployment)</p></li>
+<li><p><a class="reference external" href="https://github.com/dsyalex">Alex</a> (FLhook and API)</p></li>
 </ul>
 </div>
 </div>

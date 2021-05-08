@@ -8,3 +8,5 @@ Commands
     begining
     bases
     players
+    friends_and_foes
+    alert
