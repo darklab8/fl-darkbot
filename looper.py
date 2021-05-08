@@ -45,7 +45,7 @@ class Looper(commands.Cog):
                         '\nremove some of the values from config' +
                         '\nor write them fully instead of tags')
             except discord.errors.DiscordException as error:
-                print("ERR" + str(error))
+                print("ERR " + str(error) + ' for channel: ' + str(channel_id))
 
     @printer.before_loop
     async def before_printer(self):
