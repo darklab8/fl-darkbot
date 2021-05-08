@@ -63,6 +63,11 @@ Developers
 * `dd84ai <https://github.com/dd84ai>`_ a.k.a `darkwind <https://discoverygc.com/forums/showthread.php?tid=185978>`_ (Python / Testing / Deployment)
 * `Alex <https://github.com/dsyalex>`_ (FLhook and API)
 
+Github
+************************
+
+`Can be found here <https://github.com/dd84ai/darkbot>`_
+
 Indices and tables
 ==================
 
