@@ -7,15 +7,19 @@ from channel import ChannelConstroller
 # nice settings loading
 
 
-def create_app():
-    storage = Storage()
-    bot = commands.Bot(command_prefix='.')
-    chanell_controller = ChannelConstroller(bot, storage.unique_tag)
-    bot = attach_commands(bot, storage, chanell_controller)
-    _ = Looper(bot, storage, chanell_controller)
-    return bot, storage.settings.secret_key
+class CreateApp():
+    def __init__(self):
+        self.storage = Storage()
+        self.bot = commands.Bot(command_prefix='.')
+        channel_controller = ChannelConstroller(self.bot,
+                                                self.storage.unique_tag)
+        bot = attach_commands(self.bot, self.storage, channel_controller)
+        _ = Looper(bot, self.storage, channel_controller)
+
+    def run(self):
+        self.bot(self.storage.settings.secret_key)
 
 
 if __name__ == '__main__':
-    bot, secret_key = create_app()
-    bot.run(secret_key)
+    app = CreateApp()
+    app.run()
