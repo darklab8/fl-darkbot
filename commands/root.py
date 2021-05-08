@@ -12,6 +12,8 @@ import json
 
 
 def attach_root(bot, storage, chanell_controller) -> commands.Bot:
+    "attaching root commands to application"
+
     class MyHelpCommand(commands.DefaultHelpCommand):
         async def send_pages(self):
             """A helper utility to send the page output

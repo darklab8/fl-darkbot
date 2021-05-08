@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>commands &#8212; darkbot 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Welcome to darkbot’s documentation!" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="commands">
+<h1>commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="begining">
+<h2>Begining<a class="headerlink" href="#begining" title="Permalink to this headline">¶</a></h2>
+<p>At first you have only four commands available</p>
+<p><strong>wiki</strong> and <strong>help</strong> available for everyone</p>
+<div class="section" id="wiki">
+<h3>wiki<a class="headerlink" href="#wiki" title="Permalink to this headline">¶</a></h3>
+<p>gives link to the current documentation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">wiki</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="help">
+<h3>help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">shows available command for your current user permissions</div>
+<div class="line">it is changed also based on bot being <strong>connect</strong> ed to channel or not</div>
+</div>
+<p>possible usage:</p>
+<p>list all root level commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>list commands from sub category beloning to base for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">help</span> <span class="n">base</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="connect">
+<h3>connect<a class="headerlink" href="#connect" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">initializes bot work for the current channel</div>
+<div class="line"><strong>attention!</strong>: this command and all further commands require having user permissions</div>
+</div>
+<ul class="simple">
+<li><p>being a server owner</p></li>
+<li><p>or having permission to manage channels</p></li>
+<li><p>or having role <strong>bot_controller</strong></p></li>
+</ul>
+<p><strong>warning</strong>: default setting enables auto erasing of all messages
+older than 40 seconds in the connected channel!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">connect</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="disconnect">
+<h3>disconnect<a class="headerlink" href="#disconnect" title="Permalink to this headline">¶</a></h3>
+<p>disconnects the bot from channel. It could be also used for mass setting
+nullification. Disconnect the bot and wait 10 seconds in order for all your
+current channel settings being gone.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">disconnect</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="module-commands.base">
+<span id="player-base-tracking"></span><h2>Player Base Tracking<a class="headerlink" href="#module-commands.base" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="commands.base.attach_base">
+<code class="sig-prename descclassname"><span class="pre">commands.base.</span></code><code class="sig-name descname"><span class="pre">attach_base</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">discord.ext.commands.bot.Bot</span><a class="headerlink" href="#commands.base.attach_base" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>base commands</strong></p>
+<p>Those are command to track status of player bases!
+Example of output below.</p>
+<p>check <a class="reference external" href="https://discoverygc.com/forums/bases.php">the list</a>
+of precised based names before using the commands</p>
+<p>possible usages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">base</span> <span class="n">add</span> <span class="n">MyStation</span>
+</pre></div>
+</div>
+<p>if your base have <strong>spaces</strong> in its name, better be using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">base</span> <span class="n">add</span> <span class="s2">&quot;My Very Long Named Station&quot;</span>
+</pre></div>
+</div>
+<p>you can add multiple bases in one command</p>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">base</span> <span class="n">add</span> <span class="s2">&quot;My station #1&quot;</span><span class="p">,</span> <span class="s2">&quot;My station #2&quot;</span><span class="p">,</span> <span class="s2">&quot;My station #3&quot;</span>
+</pre></div>
+</div>
+<p>also, you could add only sub string that the list of bases have</p>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">base</span> <span class="n">add</span> <span class="n">Depot</span>
+</pre></div>
+</div>
+<p>it will render all bases having Depot in its name</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;48.0885&quot;</span><span class="p">]{</span><span class="s2">&quot;Copper Storage Depot&quot;</span><span class="p">}[</span><span class="s2">&quot;Freelancers&quot;</span><span class="p">]</span>
+<span class="p">[</span><span class="s2">&quot;100&quot;</span><span class="p">]{</span><span class="s2">&quot;Wismar Shipping Depot&quot;</span><span class="p">}[</span><span class="s2">&quot;Kruger Minerals&quot;</span><span class="p">]</span>
+<span class="p">[</span><span class="s2">&quot;83.3811&quot;</span><span class="p">]{</span><span class="s2">&quot;Bristol Depot&quot;</span><span class="p">}[</span><span class="s2">&quot;Freelancers&quot;</span><span class="p">]</span>
+<span class="p">[</span><span class="s2">&quot;100&quot;</span><span class="p">]{</span><span class="s2">&quot;Shiojiri Storage Depot&quot;</span><span class="p">}[</span><span class="s2">&quot;Samura Industries&quot;</span><span class="p">]</span>
+<span class="p">[</span><span class="s2">&quot;4.79464e-26&quot;</span><span class="p">]{</span><span class="s2">&quot;Malfunctioning Depot&quot;</span><span class="p">}[</span><span class="s2">&quot;No Affiliation&quot;</span><span class="p">]</span>
+<span class="p">[</span><span class="s2">&quot;54.6548&quot;</span><span class="p">]{</span><span class="s2">&quot;Howler Depot&quot;</span><span class="p">}[</span><span class="s2">&quot;Junkers&quot;</span><span class="p">]</span>
+<span class="p">[</span><span class="s2">&quot;56.3603&quot;</span><span class="p">]{</span><span class="s2">&quot;Aruba Depot&quot;</span><span class="p">}[</span><span class="s2">&quot;Freelancers&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>additional commands</p>
+<p>for deleting of one base name</p>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">base</span> <span class="n">remove</span> <span class="n">Depot</span>
+</pre></div>
+</div>
+<p>to clear the whole list of bases</p>
+<p>. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">base</span> <span class="n">clear</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="player-tracking">
+<h2>Player Tracking<a class="headerlink" href="#player-tracking" title="Permalink to this headline">¶</a></h2>
+<p>in order to start</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">darkbot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#begining">Begining</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#wiki">wiki</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#help">help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connect">connect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disconnect">disconnect</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-commands.base">Player Base Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#player-tracking">Player Tracking</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to darkbot’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, dd84ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/info/commands.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
