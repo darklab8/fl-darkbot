@@ -1,4 +1,7 @@
 import functools
+from types import SimpleNamespace
+
+timedelta = SimpleNamespace(small=5, medium=10, big=20, super_big=40)
 
 
 def execute_in_storage(storage):

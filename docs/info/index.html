@@ -35,6 +35,38 @@
 <h1>additional info<a class="headerlink" href="#additional-info" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://discord.com/api/oauth2/authorize?client_id=838460303581904949&amp;permissions=8&amp;scope=bot">Deployment invite link</a></p>
 <p><a class="reference external" href="https://discord.com/api/oauth2/authorize?client_id=839849682977161216&amp;permissions=8&amp;scope=bot">Tester invite link</a></p>
+<div class="section" id="permission-levels">
+<h2>Permission levels<a class="headerlink" href="#permission-levels" title="Permalink to this headline">¶</a></h2>
+<p>the bot have three categories of permission levels</p>
+<div class="section" id="global">
+<h3>global:<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>command like <strong>help</strong> or <strong>wiki</strong> which are visible for everyone.</p></li>
+</ul>
+</div>
+<div class="section" id="restricted-to-user-rights">
+<h3>restricted to user rights:<a class="headerlink" href="#restricted-to-user-rights" title="Permalink to this headline">¶</a></h3>
+<p>the rest of commands require possessing at least one of the next permissions:</p>
+<ul class="simple">
+<li><p>being a server owner</p></li>
+<li><p>or having access to <strong>manage channels</strong></p></li>
+<li><p>or having role <strong>bot_controller</strong></p></li>
+</ul>
+<p>meeting one of three criterias above, allows you to use commands:</p>
+<ul class="simple">
+<li><p><strong>connect</strong> to enable bot for this channel</p></li>
+<li><p><strong>disconnect</strong> to disable bot for this channel</p></li>
+</ul>
+<p><strong>warning</strong>: default mod auto erases messages older than 40 seconds in connected channel</p>
+</div>
+<div class="section" id="restricted-to-user-rights-connected-to-channel">
+<h3>restricted to user rights + connected to channel<a class="headerlink" href="#restricted-to-user-rights-connected-to-channel" title="Permalink to this headline">¶</a></h3>
+<p>the last category of commands requires having user permissions
+and for the bot being connected to channel</p>
+<p>so be sure to write <strong>.help</strong> to get updated list of available commands
+based on your user permissions and bot connecting status</p>
+</div>
+</div>
 </div>
 
 
@@ -56,7 +88,10 @@
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">additional info</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">additional info</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#permission-levels">Permission levels</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">

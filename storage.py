@@ -10,7 +10,7 @@ from info_controller import (InfoController, InfoWithAlertController,
 
 
 class Storage():
-    def __init__(self, unique_tag='Dark_info:'):
+    def __init__(self, unique_tag='DarkInfo:'):
         self.unique_tag = unique_tag
         self.settings = self.load_env_settings()
         self.channels = self.load_channel_settings()

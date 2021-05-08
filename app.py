@@ -10,14 +10,13 @@ from channel import ChannelConstroller
 class CreateApp():
     def __init__(self):
         self.storage = Storage()
-        self.bot = commands.Bot(command_prefix='.')
-        channel_controller = ChannelConstroller(self.bot,
-                                                self.storage.unique_tag)
-        bot = attach_commands(self.bot, self.storage, channel_controller)
-        _ = Looper(bot, self.storage, channel_controller)
+        bot = commands.Bot(command_prefix='.')
+        channel_controller = ChannelConstroller(bot, self.storage.unique_tag)
+        self.bot = attach_commands(bot, self.storage, channel_controller)
+        self.looper = Looper(bot, self.storage, channel_controller)
 
     def run(self):
-        self.bot(self.storage.settings.secret_key)
+        self.bot.run(self.storage.settings.secret_key)
 
 
 if __name__ == '__main__':

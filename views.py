@@ -11,7 +11,8 @@ class View():
     async def render_date(self, timestamp):
         with open('templates/date.md') as file_:
             template = Template(file_.read())
-            return template.render(date=str(datetime.datetime.utcnow()),
+            return template.render(tag=self.storage.unique_tag,
+                                   date=str(datetime.datetime.utcnow()),
                                    timestamp=timestamp)
 
     async def base_view(self, base, channel_id, bases):

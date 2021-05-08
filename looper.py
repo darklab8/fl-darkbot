@@ -7,21 +7,19 @@ import datetime
 
 class Looper(commands.Cog):
     def __init__(self, bot, storage, chanell_controller):
-        self.index = 0
         self.bot = bot
         self.printer.start()
         self.storage = storage
         self.chanell_controller = chanell_controller
 
-    def cog_unload(self):
+    async def cog_unload(self):
         self.printer.cancel()
-        print('unloading')
+        print('unloading...')
 
-    @tasks.loop(seconds=5.0)
+    @tasks.loop(seconds=5.0, reconnect=True)
     async def printer(self):
 
-        print(self.index)
-        self.index += 1
+        print(f'{datetime.datetime.utcnow()} OK executing printer loop')
 
         data = self.storage.get_game_data()
         self.storage.save_channel_settings()

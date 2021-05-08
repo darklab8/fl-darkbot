@@ -4,8 +4,11 @@ from app import CreateApp
 
 
 @pytest.fixture
-def app():
-    return CreateApp()
+@pytest.mark.asyncio
+async def app():
+    app = CreateApp()
+    yield app
+    await app.looper.cog_unload()
 
 
 @pytest.fixture

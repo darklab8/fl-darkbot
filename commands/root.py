@@ -6,7 +6,7 @@ from permissions import (
 )
 import random
 
-from .consts import timedelta
+from .universal import timedelta
 from jinja2 import Template
 import json
 
@@ -60,7 +60,7 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
 
     @bot.command(name='config')
     @commands.check_any(connected_to_channel(storage))
-    async def check_number(ctx):
+    async def get_config(ctx):
         "shows you current config"
         with open('templates/json.md') as file_:
             template = Template(file_.read())
@@ -69,42 +69,23 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
                 template.render(data=json.dumps(
                     storage.channels[str(ctx.channel.id)], indent=2)))
 
-    @check_number.error
-    async def check_error(ctx, error):
-        if isinstance(error, commands.CommandError):
-            await ctx.send('incorrect number!', delete_after=timedelta.medium)
-
     @bot.command(name='clear')
     @commands.check_any(connected_to_channel(storage))
     async def clear(ctx):
         "clears all msgs from the current channel"
         await chanell_controller.delete_exp_msgs(ctx.channel.id, 0)
 
-    @bot.command(name='fun')
-    @commands.check_any(connected_to_channel(storage))
-    async def nine_nine(ctx):
-        "says random message"
-        brooklyn_99_quotes = [
-            'I\'m the human form of the 💯 emoji.',
-            'Bingpot!',
-            ('Cool. Cool cool cool cool cool cool cool, '
-             'no doubt no doubt no doubt no doubt.'),
-        ]
-
-        response = random.choice(brooklyn_99_quotes)
-        await ctx.send(response, delete_after=timedelta.medium)
+    @bot.command(name='wiki')
+    @commands.check_any(all_checks())
+    async def more_detailed_info(ctx):
+        "gives link to wiki for a more detailed help"
+        await ctx.send('**wiki**: https://dd84ai.github.io/darkbot/',
+                       delete_after=timedelta.medium)
 
     @bot.command(name='me')
     @commands.check_any(commands.is_owner())
     async def only_me(ctx, ):
         "secret command"
         await ctx.send('Papa!', delete_after=timedelta.big)
-
-    @bot.command(name='info')
-    @commands.check_any(all_checks())
-    async def more_detailed_info(ctx):
-        "more detailed help"
-        with open('templates/info.md') as file_:
-            await ctx.send(file_.read(), delete_after=timedelta.super_big)
 
     return bot
