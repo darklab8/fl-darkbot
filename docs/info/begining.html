@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Begining &#8212; darkbot 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Player Base Tracking" href="bases.html" />
+    <link rel="prev" title="Commands" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="begining">
+<h1>Begining<a class="headerlink" href="#begining" title="Permalink to this headline">¶</a></h1>
+<p>At first you have only four commands available</p>
+<p><strong>wiki</strong> and <strong>help</strong> available for everyone</p>
+<div class="section" id="wiki">
+<h2>wiki<a class="headerlink" href="#wiki" title="Permalink to this headline">¶</a></h2>
+<p>gives link to the current documentation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">wiki</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="help">
+<h2>help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">shows available command for your current user permissions</div>
+<div class="line">it is changed also based on bot being <strong>connect</strong> ed to channel or not</div>
+</div>
+<p>possible usage:</p>
+<p>list all root level commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>list commands from sub category beloning to base for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">help</span> <span class="n">base</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="connect">
+<h2>connect<a class="headerlink" href="#connect" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">initializes bot work for the current channel</div>
+<div class="line"><strong>attention!</strong>: this command and all further commands require having user permissions</div>
+</div>
+<ul class="simple">
+<li><p>being a server owner</p></li>
+<li><p>or having permission to manage channels</p></li>
+<li><p>or having role <strong>bot_controller</strong></p></li>
+</ul>
+<p><strong>warning</strong>: default setting enables auto erasing of all messages
+older than 40 seconds in the connected channel!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">connect</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="disconnect">
+<h2>disconnect<a class="headerlink" href="#disconnect" title="Permalink to this headline">¶</a></h2>
+<p>disconnects the bot from channel. It could be also used for mass setting
+nullification. Disconnect the bot and wait 10 seconds in order for all your
+current channel settings being gone.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">disconnect</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">darkbot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Begining</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#wiki">wiki</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#help">help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connect">connect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disconnect">disconnect</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bases.html">Player Base Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="players.html">Player Tracking</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Commands</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Commands</a></li>
+      <li>Next: <a href="bases.html" title="next chapter">Player Base Tracking</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, dd84ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/info/begining.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

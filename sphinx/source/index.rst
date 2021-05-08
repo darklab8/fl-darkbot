@@ -10,7 +10,7 @@ Welcome to darkbot's documentation!
    :maxdepth: 3
    :caption: Contents:
 
-   info/commands.rst
+   info/index.rst
 
 Getting started
 ******************

@@ -1,6 +1,3 @@
-commands
-======================
-
 Begining
 #####################
 
@@ -64,16 +61,3 @@ current channel settings being gone.
 .. code-block::
 
     .disconnect
-
-Player Base Tracking
-######################
-
-.. automodule:: commands.base
-    :members:
-    :undoc-members:
-
-
-Player Tracking
-#######################
-
-in order to start 
