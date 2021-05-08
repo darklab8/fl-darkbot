@@ -3,22 +3,22 @@ import datetime
 import discord
 
 
-async def deleting_message(message):
+async def msg_deleter(message):
     try:
         await message.delete()
         return True
-    except discord.errors.NotFound:
-        print('channel was already deleted')
-        return False
-    except discord.errors.Forbidden:
-        print('channel was already deleted')
+    except discord.errors.DiscordException as error:
+        print(f"{str(datetime.datetime.utcnow())} "
+              f"ERR  {str(error)} for channel: {str(message.channel.id)}"
+              f"can't delete msg {str(message.content)}")
         return False
 
 
 class ChannelConstroller():
-    def __init__(self, bot, unique_tag: str):
+    def __init__(self, bot, unique_tag: str, deleting_message=msg_deleter):
         self.bot = bot
         self.unique_tag = unique_tag
+        self.deleting_message = deleting_message
 
     async def delete_exp_msgs(self, channel_id: int, time_msg_expiration: int):
         messages = await self.bot.get_channel(channel_id).history(
@@ -29,7 +29,7 @@ class ChannelConstroller():
         for message in messages:
             # if message.author.id == self.bot.user.id:
             if self.unique_tag not in message.content:
-                await deleting_message(message)
+                await self.deleting_message(message)
 
     async def get_tagged_msgs(self, channel_id: int):
         content_search = await self.bot.get_channel(channel_id).history(
@@ -50,7 +50,7 @@ class ChannelConstroller():
             # delete all others
             deleting = messages[1:]
             for message in deleting:
-                await deleting_message(message)
+                await self.deleting_message(message)
         else:
             # edit to apply tag
             await messages[0].edit(content=str(info))

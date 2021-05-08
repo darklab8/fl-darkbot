@@ -2,6 +2,7 @@
 from discord.ext import tasks, commands
 import discord
 from views import View
+import datetime
 
 
 class Looper(commands.Cog):
@@ -41,11 +42,12 @@ class Looper(commands.Cog):
                 except discord.errors.HTTPException:
                     await self.chanell_controller.update_info(
                         channel_id, rendered_date +
-                        '\n**ERROR: you tried to render too much info!**' +
+                        '\n**ERR: you tried to render too much info!**' +
                         '\nremove some of the values from config' +
                         '\nor write them fully instead of tags')
             except discord.errors.DiscordException as error:
-                print("ERR " + str(error) + ' for channel: ' + str(channel_id))
+                print(f"{str(datetime.datetime.utcnow())} "
+                      f"ERR  {str(error)} for channel: {str(channel_id)}")
 
     @printer.before_loop
     async def before_printer(self):
