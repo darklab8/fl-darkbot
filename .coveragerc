@@ -3,3 +3,4 @@ omit = venv/*
         scripts/*
         scripts.py
         commands/*
+        mocks.py

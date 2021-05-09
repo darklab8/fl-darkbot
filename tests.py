@@ -1,7 +1,10 @@
 import pytest
-
+import os
 from app import CreateApp
 from views import View
+from channel import ChannelConstroller
+from mocks import MockDiscordMessageBus
+import asyncio
 
 
 @pytest.fixture
@@ -10,6 +13,16 @@ async def app():
     app = CreateApp()
     yield app
     await app.looper.cog_unload()
+
+
+@pytest.mark.skipif(not bool(os.environ.get("pipline")), reason="long test")
+@pytest.mark.asyncio
+async def test_app_can_run(app):
+    loop = asyncio.get_event_loop()
+    loop.create_task(app.bot.start(app.storage.settings.secret_key))
+    await app.bot.wait_until_ready()
+    await asyncio.sleep(int(os.environ.get('testing_time', '0')))
+    await app.bot.close()
 
 
 @pytest.fixture
@@ -51,3 +64,16 @@ async def test_render_all(app, filled_data):
                                              1).render_all()
     assert len(rendered_date) > 50
     assert len(rendered_all) > 50
+
+
+@pytest.mark.asyncio
+async def test_check_channel_controller(mocker):
+    controller = ChannelConstroller(MockDiscordMessageBus(),
+                                    'self.storage.unique_tag')
+    await controller.delete_exp_msgs(1, 40)
+
+    messages = await controller.get_tagged_msgs(1)
+    for message in messages:
+        controller.message_bus.delete(message)
+
+    await controller.update_info(1, 'info')
