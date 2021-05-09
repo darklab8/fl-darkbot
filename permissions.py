@@ -1,5 +1,6 @@
 "rules for command permissions"
 from discord.ext import commands
+
 from storage import Storage
 # predicates
 

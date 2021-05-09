@@ -1,5 +1,6 @@
-from jinja2 import Template
 import datetime
+
+from jinja2 import Template
 
 
 class View():

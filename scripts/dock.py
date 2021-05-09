@@ -1,5 +1,6 @@
 import click
-from .universal import say, PROJECT_NAME
+
+from .universal import PROJECT_NAME, say
 
 
 @click.group()

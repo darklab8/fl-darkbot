@@ -1,8 +1,10 @@
 "module for background tasks in the loop"
-from discord.ext import tasks, commands
-import discord
-from views import View
 import datetime
+
+import discord
+from discord.ext import commands, tasks
+
+from views import View
 
 
 class Looper(commands.Cog):

@@ -1,10 +1,10 @@
 "starting module"
-from commands import attach_commands
-from storage import Storage
-from looper import Looper
 from discord.ext import commands
+
+from commands import attach_commands
 from channel import ChannelConstroller
-# nice settings loading
+from looper import Looper
+from storage import Storage
 
 
 class CreateApp():

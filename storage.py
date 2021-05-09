@@ -1,12 +1,13 @@
 "module building all data to be stored"
-import os
-from types import SimpleNamespace
 import json
-from dotenv import load_dotenv
+import os
 import requests
+from types import SimpleNamespace
 
-from info_controller import (InfoController, InfoWithAlertController,
-                             AlertOnlyController)
+from dotenv import load_dotenv
+
+from info_controller import (AlertOnlyController, InfoController,
+                             InfoWithAlertController)
 
 
 class Storage():

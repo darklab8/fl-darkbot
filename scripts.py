@@ -1,9 +1,10 @@
 import click
+
 from scripts.dock import dock
-from scripts.test import test
-from scripts.sphinx import sphinx
 from scripts.manage import manage
 from scripts.server import server
+from scripts.sphinx import sphinx
+from scripts.test import test
 
 
 @click.group()

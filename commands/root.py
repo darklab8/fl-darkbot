@@ -1,14 +1,16 @@
 "bot initialization + its commands"
+import json
+
 from discord.ext import commands
+
+from jinja2 import Template
+
 from permissions import (
     all_checks,
     connected_to_channel,
 )
-import random
 
 from .universal import timedelta
-from jinja2 import Template
-import json
 
 
 def attach_root(bot, storage, chanell_controller) -> commands.Bot:
@@ -41,7 +43,7 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
     @bot.command(name='connect')
     @commands.check_any(all_checks())
     async def connect_the_channel(ctx):
-        "connects to channel"
+        """connects to channel"""
         if str(ctx.channel.id) not in storage.channels:
             storage.channels[str(ctx.channel.id)] = {}
             await ctx.send('connected', delete_after=timedelta.medium)

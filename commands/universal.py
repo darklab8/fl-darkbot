@@ -5,9 +5,10 @@ timedelta = SimpleNamespace(small=5, medium=10, big=20, super_big=40)
 
 
 def execute_in_storage(storage):
+    """Move main code being executed from discord.commands
+    to my own code sections, which can be much easily tested
+    """
     def decorator_repeat(func):
-        "useful decorator to preload stuff for unit tests"
-
         @functools.wraps(func)
         async def wrapper_repeat(*args, **kwargs):
             # print('executing '+func.__name__)

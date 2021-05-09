@@ -1,6 +1,7 @@
 import pytest
-from views import View
+
 from app import CreateApp
+from views import View
 
 
 @pytest.fixture
