@@ -48,6 +48,9 @@ class Looper(commands.Cog):
             except discord.errors.DiscordException as error:
                 print(f"{str(datetime.datetime.utcnow())} "
                       f"ERR  {str(error)} for channel: {str(channel_id)}")
+            except AttributeError as error:
+                print(f"{str(datetime.datetime.utcnow())} "
+                      f"ERR  {str(error)} for channel: {str(channel_id)}")
 
     @printer.before_loop
     async def before_printer(self):

@@ -77,7 +77,7 @@ class ChannelConstroller():
 
         if not messages:
             # create first msg
-            await self.message_bus.history(
+            await self.message_bus.send(
                 channel_id, self.unique_tag + ' forming the message')
         elif len(messages) > 1:
             # delete all others

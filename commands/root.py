@@ -36,6 +36,13 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
         print('We have logged in as {0.user}'.format(bot))
 
     @bot.event
+    async def on_guild_join(guild):
+        await guild.system_channel.send(
+            "I am the terror that flaps in the night, I am the bed edge that"
+            " stumbles your fingers! I am DARKWING DUCK!\n"
+            "for a more information, visit https://dd84ai.github.io/darkbot/")
+
+    @bot.event
     async def on_command_error(ctx, error):
         print(f'ERR: {error}')
         await ctx.send(f'ERR: {error}', delete_after=timedelta.medium)
