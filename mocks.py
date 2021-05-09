@@ -26,3 +26,6 @@ class MockDiscordMessageBus(IMessageBus):
 
     async def history(self, channel_id, older_than_n_seconds=0):
         return [MockMessage(), MockMessage(), MockMessage()]
+
+    async def purge(self, channel_id, older_than_n_seconds=0):
+        return [MockMessage(), MockMessage(), MockMessage()]

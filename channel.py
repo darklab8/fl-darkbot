@@ -26,6 +26,10 @@ class IMessageBus(ABC):
     async def history(self, channel_id, older_than_n_seconds=0):
         pass
 
+    @abstractmethod
+    async def purge(self, channel_id, older_than_n_seconds=0):
+        pass
+
 
 class DiscordMessageBus(IMessageBus):
     def __init__(self, bot):
@@ -51,6 +55,18 @@ class DiscordMessageBus(IMessageBus):
             before=datetime.datetime.utcnow() -
             datetime.timedelta(seconds=older_than_n_seconds)).flatten()
 
+    async def purge(self, channel_id, older_than_n_seconds=0):
+        def message_not_unique_tagged(message):
+            if 'DarkInfo:' not in message.content:
+                return True
+            return False
+
+        return await self.bot.get_channel(channel_id).purge(
+            check=message_not_unique_tagged,
+            limit=200,
+            before=datetime.datetime.utcnow() -
+            datetime.timedelta(seconds=older_than_n_seconds))
+
 
 class ChannelConstroller():
     def __init__(self, message_bus: DiscordMessageBus, unique_tag: str):
@@ -58,12 +74,7 @@ class ChannelConstroller():
         self.unique_tag = unique_tag
 
     async def delete_exp_msgs(self, channel_id: int, time_msg_expiration: int):
-        messages = await self.message_bus.history(channel_id,
-                                                  time_msg_expiration)
-
-        for message in messages:
-            if self.unique_tag not in message.content:
-                await self.message_bus.delete(message)
+        await self.message_bus.purge(channel_id, time_msg_expiration)
 
     async def get_tagged_msgs(self, channel_id: int):
         content_search = await self.message_bus.history(channel_id)

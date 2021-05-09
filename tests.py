@@ -15,13 +15,13 @@ async def app():
     await app.looper.cog_unload()
 
 
-@pytest.mark.skipif(not bool(os.environ.get("pipline")), reason="long test")
+# @pytest.mark.skipif(not bool(os.environ.get("pipline")), reason="long test")
 @pytest.mark.asyncio
 async def test_app_can_run(app):
     loop = asyncio.get_event_loop()
     loop.create_task(app.bot.start(app.storage.settings.secret_key))
     await app.bot.wait_until_ready()
-    await asyncio.sleep(int(os.environ.get('testing_time', '0')))
+    await asyncio.sleep(int(os.environ.get('testing_time', '5')))
     await app.bot.close()
 
 
