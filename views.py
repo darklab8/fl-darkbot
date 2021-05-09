@@ -85,8 +85,8 @@ class View():
             rendered_enemies = rendering('Enemies', enemies, enemy_alert)
             rendered_friends = rendering('Friends', friends, friend_alert)
 
-            return (rendered_unrecognized + rendered_enemies +
-                    rendered_friends)
+            return (rendered_friends + rendered_unrecognized +
+                    rendered_enemies)
 
     async def render_all(self):
         # date stamp
