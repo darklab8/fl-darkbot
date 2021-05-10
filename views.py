@@ -71,6 +71,13 @@ class View():
             template = Template(file_.read())
 
             def rendering(title, data, alert_level):
+                # sorting by system and then by name before rendering
+                data = {
+                    item[0]: item[1]
+                    for item in sorted(data.items(),
+                                       key=lambda x: (x[1]['system'], x[0]))
+                }
+
                 if data:
                     alert_needed = False
                     if alert_level is not None:
