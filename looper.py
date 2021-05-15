@@ -40,10 +40,10 @@ class Looper(commands.Cog):
 
             def health_diff(a, b):
                 if a < b:
-                    return '+ '
+                    return 'Repairing'
                 elif a > b:
-                    return '- '
-                return ''
+                    return 'Degrading'
+                return 'Static'
 
             data.bases = {
                 key: dict(

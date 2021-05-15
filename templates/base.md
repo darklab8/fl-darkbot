@@ -1,5 +1,5 @@
 **Bases:** `Health` - `Name` - `Affiliation`
-```diff
+```json
 {% for key, value in data.items() %}
-{{value["diff"]}}{{value["health"]}} - {{ key }}{{value["affiliation"]}}{% endfor %}
+{"{{ value["diff"] }}"}["{{value["health"]}}"]{"{{ key }}"}["{{value["affiliation"]}}"]{% endfor %}
 ```
