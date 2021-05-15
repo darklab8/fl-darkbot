@@ -61,6 +61,10 @@ class Looper(commands.Cog):
 
             for channel_id in channel_ids:
                 try:
+                    print(
+                        f'channel {channel_id} in {self.bot.get_channel(channel_id).guild}'
+                    )
+
                     # delete expired
                     await self.chanell_controller.delete_exp_msgs(
                         channel_id, 40)

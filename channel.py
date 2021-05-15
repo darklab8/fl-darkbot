@@ -49,6 +49,10 @@ class DiscordMessageBus(IMessageBus):
     async def send(self, channel_id, content):
         return await self.bot.get_channel(channel_id).send(content)
 
+    async def send_and_autoerase(self, channel_id, content, expire):
+        return await self.bot.get_channel(channel_id).send(content,
+                                                           delete_after=expire)
+
     async def history(self, channel_id, older_than_n_seconds=0):
         return await self.bot.get_channel(channel_id).history(
             limit=200,
@@ -61,17 +65,27 @@ class DiscordMessageBus(IMessageBus):
                 return True
             return False
 
-        return await self.bot.get_channel(channel_id).purge(
-            check=message_not_unique_tagged,
-            limit=200,
-            before=datetime.datetime.utcnow() -
-            datetime.timedelta(seconds=older_than_n_seconds))
+        try:
+            return await self.bot.get_channel(channel_id).purge(
+                check=message_not_unique_tagged,
+                limit=200,
+                before=datetime.datetime.utcnow() -
+                datetime.timedelta(seconds=older_than_n_seconds))
+        except discord.errors.DiscordException as error:
+            print(
+                f"{str(datetime.datetime.utcnow())} "
+                f"ERR can't purge {str(error)} for channel: {str(channel_id)}")
 
 
 class ChannelConstroller():
     def __init__(self, message_bus: DiscordMessageBus, unique_tag: str):
         self.message_bus = message_bus
         self.unique_tag = unique_tag
+
+    async def send_and_autoerase(self, channel_id: int, content,
+                                 time_msg_expiration: int):
+        await self.message_bus.send_and_autoerase(channel_id, content,
+                                                  time_msg_expiration)
 
     async def delete_exp_msgs(self, channel_id: int, time_msg_expiration: int):
         await self.message_bus.purge(channel_id, time_msg_expiration)
