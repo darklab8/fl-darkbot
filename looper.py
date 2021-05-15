@@ -87,6 +87,9 @@ class Looper(commands.Cog):
                 except AttributeError as error:
                     print(f"{str(datetime.datetime.utcnow())} "
                           f"ERR  {str(error)} for channel: {str(channel_id)}")
+                except Exception as error:
+                    print(f"{str(datetime.datetime.utcnow())} "
+                          f"ERR  {str(error)} for channel: {str(channel_id)}")
         except Exception as error:
             print(f"{str(datetime.datetime.utcnow())} "
                   f"ERR massive {str(error)} for loop task")
