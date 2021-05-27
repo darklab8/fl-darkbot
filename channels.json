@@ -1,0 +1,166 @@
+{
+  "840245085585014835": {
+    "region": {
+      "list": [
+        "Liberty Space"
+      ],
+      "alert": 999
+    },
+    "system": {
+      "list": [
+        "Leeds"
+      ],
+      "alert": 999
+    },
+    "base": {
+      "list": [
+        "Depot"
+      ]
+    }
+  },
+  "838368783172501504": {
+    "system": {
+      "list": [
+        "Burgundy",
+        "Champagne",
+        "Ile-de-France",
+        "Languedoc",
+        "Lorraine",
+        "Orleanais",
+        "Picardy",
+        "Provence",
+        "Tau-23",
+        "Tau-37",
+        "Tau-53",
+        "Zurich"
+      ],
+      "alert": 999
+    },
+    "friend": {
+      "list": [
+        "GSB]-",
+        "MNG|",
+        "GNS-"
+      ],
+      "alert": 999
+    },
+    "enemy": {
+      "list": [
+        "[FLG]",
+        "MdG/-",
+        "[101st]",
+        "-|-",
+        "MNS-",
+        "L\\-",
+        ">ZC|",
+        "HS>",
+        "Ori|"
+      ],
+      "alert": 999
+    }
+  },
+  "567938600692350991": {
+    "base": {
+      "list": [
+        "Osihi Ronin Station",
+        "Tanis Station"
+      ]
+    },
+    "region": {
+      "list": [
+        "space",
+        "Kusari Space",
+        "Sigma Border Worlds",
+        "Liberty Space"
+      ]
+    },
+    "system": {
+      "list": [
+        "Tau-29",
+        "Tau-23",
+        "Omicron Epsilon",
+        "Lorraine",
+        "Kansas"
+      ]
+    },
+    "friend": {
+      "list": [
+        ">BD<",
+        "GC-",
+        "GC|"
+      ],
+      "alert": 999
+    },
+    "enemy": {
+      "list": [
+        "[KNF]",
+        "IKN-",
+        "|Aoi"
+      ],
+      "alert": 1
+    }
+  },
+  "840543530136371210": {
+    "region": {
+      "list": [
+        "Sigma Border Worlds",
+        "Kusari Space"
+      ]
+    },
+    "system": {
+      "list": [
+        "Tau-29",
+        "Tau-23",
+        "Lorraine",
+        "Tau-53",
+        "Omicron Epsilon",
+        "Okinawa",
+        "Kepler",
+        "Galileo"
+      ]
+    },
+    "friend": {
+      "list": [
+        "GC-",
+        "Order|",
+        "[FLG]",
+        ">BD<",
+        "GMG|"
+      ],
+      "alert": 999
+    },
+    "base": {
+      "list": [
+        "Osihi Ronin Station"
+      ]
+    },
+    "enemy": {
+      "list": [
+        "[KNF]",
+        "K'Hara|",
+        "IKN-",
+        "|KSP|",
+        "MdG/-",
+        "Ori|",
+        "Samura|-",
+        "Kishiro|",
+        "|Aoi",
+        "KDS-",
+        "CNS-",
+        "Taurus|",
+        "IE|",
+        "[TBH]",
+        "BFG|",
+        "SC-",
+        "IDF|",
+        "Core|",
+        "BHG|",
+        "GMS|",
+        "RNS-",
+        "MNG|",
+        "GSB]"
+      ],
+      "alert": 2
+    }
+  }
+}

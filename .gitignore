@@ -239,5 +239,5 @@ docs/build/
 secret.json
 .env
 legacy/
-channels.json
+# channels.json
 .env*
