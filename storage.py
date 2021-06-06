@@ -37,7 +37,7 @@ class Storage():
         set by users about channels"""
         output = {}
         try:
-            with open('channels.json', 'r') as file_:
+            with open('data/channels.json', 'r') as file_:
                 output = json.loads(file_.read())
         except FileNotFoundError:
             print('ERR failed to load channels.json')
@@ -47,7 +47,7 @@ class Storage():
         """loadding perssistent settings
         set by users about channels"""
         try:
-            with open('channels.json', 'w') as file_:
+            with open('data/channels.json', 'w') as file_:
                 file_.write(json.dumps(self.channels, indent=2))
         except OSError as error:
             print('ERR failed to save channels.json ' + str(error))
