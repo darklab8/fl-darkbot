@@ -3,6 +3,9 @@ import datetime
 
 import discord
 from discord.ext import commands, tasks
+from threading import Thread
+import asyncio
+import time
 
 from views import View
 
@@ -24,7 +27,6 @@ class Looper(commands.Cog):
         self.printer.cancel()
         print('unloading...')
 
-    @tasks.loop(seconds=5.0, reconnect=True)
     async def printer(self):
 
         try:
@@ -94,7 +96,33 @@ class Looper(commands.Cog):
             print(f"{str(datetime.datetime.utcnow())} "
                   f"ERR massive {str(error)} for loop task")
 
+    def task(self):
+        asyncio.run(self.pinging_cycle())
+
+    def task_creator(self, delay=5):
+        print("starting task creator")
+        while True:
+            thread = Thread(
+                target=self.task,
+                args=(),
+                daemon=True,
+            )
+            thread.start()
+            time.sleep(delay)
+
+
+    def create_task_creator(self):
+        "launch background daemon process"
+        thread = Thread(
+            target=self.task_creator,
+            args=(),
+            daemon=True,
+        )
+        thread.start()
+
+
     @printer.before_loop
     async def before_printer(self):
         print('waiting...')
+        self.create_task_creator()
         await self.bot.wait_until_ready()
