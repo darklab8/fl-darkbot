@@ -27,6 +27,7 @@ class Looper(commands.Cog):
         self.printer.cancel()
         print('unloading...')
 
+    @tasks.loop(seconds=5.0, reconnect=True, count=1)
     async def printer(self):
 
         try:
@@ -96,26 +97,27 @@ class Looper(commands.Cog):
             print(f"{str(datetime.datetime.utcnow())} "
                   f"ERR massive {str(error)} for loop task")
 
-    def task(self):
-        asyncio.run(self.pinging_cycle())
+    def task(self, loop):
+        asyncio.run_coroutine_threadsafe(self.printer(), loop)
+        #asyncio.run(self.printer())
 
-    def task_creator(self, delay=5):
+    def task_creator(self, loop, delay=5):
         print("starting task creator")
         while True:
             thread = Thread(
                 target=self.task,
-                args=(),
+                args=(loop,),
                 daemon=True,
             )
             thread.start()
             time.sleep(delay)
 
 
-    def create_task_creator(self):
+    def create_task_creator(self, loop):
         "launch background daemon process"
         thread = Thread(
             target=self.task_creator,
-            args=(),
+            args=(loop,),
             daemon=True,
         )
         thread.start()
@@ -124,5 +126,5 @@ class Looper(commands.Cog):
     @printer.before_loop
     async def before_printer(self):
         print('waiting...')
-        self.create_task_creator()
+        self.create_task_creator(asyncio.get_running_loop())
         await self.bot.wait_until_ready()
