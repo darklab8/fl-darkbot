@@ -9,4 +9,5 @@ Commands
     bases
     players
     friends_and_foes
+    forum
     alert

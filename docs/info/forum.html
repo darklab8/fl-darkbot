@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forum Message Tracking &#8212; darkbot 0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Alert" href="alert.html" />
+    <link rel="prev" title="Friends and Foes" href="friends_and_foes.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="forum-message-tracking">
+<h1>Forum Message Tracking<a class="headerlink" href="#forum-message-tracking" title="Permalink to this headline">¶</a></h1>
+<p><strong>forum commands</strong></p>
+<p>Those are command to track new forum messages!
+Example of output below.</p>
+<p>check <a class="reference external" href="https://discoverygc.com/forums/search.php?action=getdaily">the list</a>
+of precised forum thread names before using the commands</p>
+<div class="section" id="forum-add">
+<h2>forum add<a class="headerlink" href="#forum-add" title="Permalink to this headline">¶</a></h2>
+<p>possible usages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">forum</span> <span class="n">add</span> <span class="n">WTB</span>
+</pre></div>
+</div>
+<p>if you want all new forum messages shown, use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">forum</span> <span class="n">add</span> <span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>you can add multiple forum tags in one command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">forum</span> <span class="n">add</span> <span class="s2">&quot;[GSB]&quot;</span><span class="p">,</span> <span class="s2">&quot;LN-&quot;</span><span class="p">,</span> <span class="s2">&quot;LSF&quot;</span>
+</pre></div>
+</div>
+<p>it will be rendering all new forum messages in threads having one of those tags</p>
+<img alt="../_images/forum_example.png" src="../_images/forum_example.png" />
+<p>additional commands</p>
+</div>
+<div class="section" id="forum-remove">
+<h2>forum remove<a class="headerlink" href="#forum-remove" title="Permalink to this headline">¶</a></h2>
+<p>for deleting of one forum tags</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">forum</span> <span class="n">remove</span> <span class="s2">&quot;LN-&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="forum-clear">
+<h2>forum clear<a class="headerlink" href="#forum-clear" title="Permalink to this headline">¶</a></h2>
+<p>to clear the whole list of forum tags</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">forum</span> <span class="n">clear</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">darkbot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Commands</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="begining.html">Begining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bases.html">Player Base Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="players.html">Player Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="friends_and_foes.html">Friends and Foes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Forum Message Tracking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#forum-add">forum add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#forum-remove">forum remove</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#forum-clear">forum clear</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="alert.html">Alert</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Commands</a><ul>
+      <li>Previous: <a href="friends_and_foes.html" title="previous chapter">Friends and Foes</a></li>
+      <li>Next: <a href="alert.html" title="next chapter">Alert</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, dd84ai.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/info/forum.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
