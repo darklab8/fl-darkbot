@@ -162,5 +162,48 @@
       ],
       "alert": 2
     }
+  },
+  "768718751549358123": {
+    "base": {
+      "list": [
+        "Artron",
+        "Station",
+        "Zekkz",
+        "little",
+        "cottage"
+      ]
+    }
+  },
+  "856067416576491540": {
+    "base": {
+      "list": [
+        "Saone Research Annex"
+      ]
+    }
+  },
+  "857309596103999508": {
+    "system": {
+      "list": [
+        "Burgundy",
+        "Champagne",
+        "Ile-de-France",
+        "Languedoc",
+        "Lorraine",
+        "Orkney",
+        "Orleanais",
+        "Picardy",
+        "Provence",
+        "Tau-23",
+        "Tau-37",
+        "Zurich"
+      ]
+    }
+  },
+  "859089543491485697": {
+    "base": {
+      "list": [
+        "Saone Research Annex"
+      ]
+    }
   }
 }
