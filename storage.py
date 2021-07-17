@@ -16,6 +16,8 @@ class Storage():
         self.settings = self.load_env_settings()
         self.channels = self.load_channel_settings()
 
+        # forum thread tracker
+        self.forum = InfoController(self.channels, 'forum')
         self.base = InfoController(self.channels, 'base')
         self.system = InfoController(self.channels, 'system')
         self.region = InfoController(self.channels, 'region')
