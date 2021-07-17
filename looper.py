@@ -113,8 +113,6 @@ class Looper(commands.Cog):
                             channel_id,
                             rendered_all,
                             render_forum_records=render_forum_records)
-
-                        self.new_forum_records = []
                     except discord.errors.HTTPException:
                         await self.chanell_controller.update_info(
                             channel_id, rendered_date +
@@ -128,6 +126,7 @@ class Looper(commands.Cog):
                     if isinstance(error, KeyboardInterrupt):
                         raise KeyboardInterrupt(
                             "time to exit, KeyboardInterrupt")
+            self.new_forum_records = []
         except Exception as error:
             print(f"{str(datetime.datetime.utcnow())} "
                   f"ERR massive {str(error)} for loop task")
