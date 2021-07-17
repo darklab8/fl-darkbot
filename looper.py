@@ -8,6 +8,7 @@ import asyncio
 import time
 
 from views import View
+from forum_parser import get_forum_threads
 
 
 class Looper(commands.Cog):
@@ -23,6 +24,29 @@ class Looper(commands.Cog):
         # value from different loop
         self.previous_bases = bases
 
+        self.previous_forum_records = {}
+        # add on start all records
+        self.get_new_forum_records()
+        self.new_forum_records = []
+
+    def get_new_forum_records(self):
+        forum_records = get_forum_threads(
+            forum_acc=self.storage.settings.forum_acc,
+            forum_pass=self.storage.settings.forum_pass,
+        )
+
+        new_records = []
+        for record in forum_records:
+            if record.title not in self.previous_forum_records:
+                self.previous_forum_records[record.title] = record
+                new_records.append(record)
+            else:
+                if record.date != self.previous_forum_records[
+                        record.title].date:
+                    self.previous_forum_records[record.title] = record
+                    new_records.append(record)
+        return new_records
+
     async def cog_unload(self):
         self.printer.cancel()
         print('unloading...')
@@ -34,6 +58,12 @@ class Looper(commands.Cog):
             print(f'{datetime.datetime.utcnow()} OK executing printer loop')
 
             data = self.storage.get_game_data()
+            self.new_forum_records = await asyncio.to_thread(
+                self.get_new_forum_records)
+
+            print(f"to_thread={self.new_forum_records}")
+            # for new_record in new_forum_records:
+            #     print(new_record)
 
             # calculating previous health about bases
             if self.previous_bases != data.bases:
@@ -72,56 +102,60 @@ class Looper(commands.Cog):
                     await self.chanell_controller.delete_exp_msgs(
                         channel_id, 40)
 
-                    rendered_date, rendered_all = await View(
-                        data, self.storage, channel_id).render_all()
+                    rendered_date, rendered_all, render_forum_records = await View(
+                        data, self.storage, channel_id,
+                        self.new_forum_records).render_all()
+
+                    print(f"view_new_records={render_forum_records}")
                     # send final data update
                     try:
                         await self.chanell_controller.update_info(
-                            channel_id, rendered_all)
+                            channel_id,
+                            rendered_all,
+                            render_forum_records=render_forum_records)
+
+                        self.new_forum_records = []
                     except discord.errors.HTTPException:
                         await self.chanell_controller.update_info(
                             channel_id, rendered_date +
                             '\n**ERR: you tried to render too much info!**' +
                             '\nremove some of the values from config' +
                             '\nor write them fully instead of tags')
-                except discord.errors.DiscordException as error:
+                except (discord.errors.DiscordException, AttributeError,
+                        Exception) as error:
                     print(f"{str(datetime.datetime.utcnow())} "
                           f"ERR  {str(error)} for channel: {str(channel_id)}")
-                except AttributeError as error:
-                    print(f"{str(datetime.datetime.utcnow())} "
-                          f"ERR  {str(error)} for channel: {str(channel_id)}")
-                except Exception as error:
-                    print(f"{str(datetime.datetime.utcnow())} "
-                          f"ERR  {str(error)} for channel: {str(channel_id)}")
+                    if isinstance(error, KeyboardInterrupt):
+                        raise KeyboardInterrupt(
+                            "time to exit, KeyboardInterrupt")
         except Exception as error:
             print(f"{str(datetime.datetime.utcnow())} "
                   f"ERR massive {str(error)} for loop task")
+            if isinstance(error, KeyboardInterrupt):
+                print("gracefully exiting")
 
     def task(self, loop):
         asyncio.run_coroutine_threadsafe(self.printer(), loop)
-        #asyncio.run(self.printer())
 
     def task_creator(self, loop, delay=5):
         print("starting task creator")
         while True:
             thread = Thread(
                 target=self.task,
-                args=(loop,),
+                args=(loop, ),
                 daemon=True,
             )
             thread.start()
             time.sleep(delay)
 
-
     def create_task_creator(self, loop):
         "launch background daemon process"
         thread = Thread(
             target=self.task_creator,
-            args=(loop,),
+            args=(loop, ),
             daemon=True,
         )
         thread.start()
-
 
     @printer.before_loop
     async def before_printer(self):

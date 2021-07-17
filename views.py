@@ -1,13 +1,18 @@
 import datetime
+from info_controller import InfoController
 
 from jinja2 import Template
+from forum_parser import forum_record
+from typing import List
 
 
 class View():
-    def __init__(self, data, storage, channel_id):
+    def __init__(self, data, storage, channel_id,
+                 new_forum_records: List[forum_record]):
         self.data = data
         self.storage = storage
         self.channel_id = channel_id
+        self.new_forum_records = new_forum_records
 
     async def render_date(self, timestamp):
         with open('templates/date.md') as file_:
@@ -95,6 +100,26 @@ class View():
             return (rendered_friends + rendered_unrecognized +
                     rendered_enemies)
 
+    async def render_forum_records(self, forum: InfoController,
+                                   channel_id: int) -> List[forum_record]:
+
+        print(f"render_forum_records={self.new_forum_records}")
+
+        system_tags = await forum.get_data(channel_id)
+
+        print(f"system tags={system_tags}")
+        if not system_tags:
+            return []
+
+        for_render = []
+        for record in self.new_forum_records:
+            for tag in system_tags:
+                if tag in record.title:
+                    for_render.append(record)
+                    break
+
+        return for_render
+
     async def render_all(self):
         # date stamp
         info = await self.render_date(self.data.players['timestamp'])
@@ -108,4 +133,7 @@ class View():
                                                      self.channel_id,
                                                      self.data.players)
 
-        return info, info + rendered_bases + rendered_players
+        new_forum_records = await self.render_forum_records(
+            self.storage.forum, self.channel_id)
+
+        return info, info + rendered_bases + rendered_players, new_forum_records

@@ -3,6 +3,8 @@ import datetime
 from abc import ABC, abstractmethod
 
 import discord
+from forum_parser import forum_record
+from typing import List
 
 
 class IMessageBus(ABC):
@@ -61,9 +63,9 @@ class DiscordMessageBus(IMessageBus):
 
     async def purge(self, channel_id, older_than_n_seconds=0):
         def message_not_unique_tagged(message):
-            if 'DarkInfo:' not in message.content:
-                return True
-            return False
+            if 'DarkInfo:' in message.content or message.embeds:
+                return False
+            return True
 
         try:
             return await self.bot.get_channel(channel_id).purge(
@@ -75,6 +77,31 @@ class DiscordMessageBus(IMessageBus):
             print(
                 f"{str(datetime.datetime.utcnow())} "
                 f"ERR can't purge {str(error)} for channel: {str(channel_id)}")
+
+    async def send_forum_records(self, channel_id, render_forum_records):
+
+        print(f"send={render_forum_records}")
+
+        for record in render_forum_records:
+            emb = discord.Embed(title=":mailbox_with_mail:" +
+                                " You've got mail! :mailbox_with_mail:")
+            emb.add_field(name="New post in",
+                          value=f"[{record.title}]({record.url})",
+                          inline=False)
+            emb.add_field(name="written by",
+                          value=f"{record.last_author}",
+                          inline=False)
+            emb.add_field(name="in subforum",
+                          value=record.category,
+                          inline=False)
+            emb.add_field(name="at date", value=record.date, inline=False)
+            emb.add_field(name="in thread started by",
+                          value=record.thread_author,
+                          inline=False)
+            emb.add_field(name="views", value=record.views, inline=True)
+            emb.add_field(name="replies", value=record.replies, inline=True)
+
+            await self.bot.get_channel(channel_id).send(embed=emb)
 
 
 class ChannelConstroller():
@@ -97,7 +124,14 @@ class ChannelConstroller():
             and self.message_bus.bot_user_id() == item.author.id
         ]
 
-    async def update_info(self, channel_id: int, info: str):
+    async def update_info(self,
+                          channel_id: int,
+                          info: str,
+                          render_forum_records: List[forum_record] = []):
+
+        print(f"to bus = {render_forum_records}")
+        await self.message_bus.send_forum_records(channel_id,
+                                                  render_forum_records)
         messages = await self.get_tagged_msgs(channel_id)
 
         if not messages:
