@@ -5,7 +5,6 @@ from abc import ABC, abstractmethod
 import discord
 from forum_parser import forum_record
 from typing import List
-from discord import Colour
 
 
 class IMessageBus(ABC):
@@ -85,8 +84,7 @@ class DiscordMessageBus(IMessageBus):
 
         for record in render_forum_records:
             emb = discord.Embed(title=":mailbox_with_mail:" +
-                                " You've got mail! :mailbox_with_mail:",
-                                colour=Colour.purple)
+                                " You've got mail! :mailbox_with_mail:")
             emb.add_field(name="New post in",
                           value=f"[{record.title}]({record.url})",
                           inline=False)
