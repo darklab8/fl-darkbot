@@ -16,6 +16,11 @@
       "list": [
         "Depot"
       ]
+    },
+    "forum": {
+      "list": [
+        ""
+      ]
     }
   },
   "838368783172501504": {
@@ -63,7 +68,8 @@
     "base": {
       "list": [
         "Osihi Ronin Station",
-        "Tanis Station"
+        "Tanis Station",
+        "Barudoru-eki"
       ]
     },
     "region": {
@@ -116,7 +122,8 @@
         "Omicron Epsilon",
         "Okinawa",
         "Kepler",
-        "Galileo"
+        "Galileo",
+        "Tohoku"
       ]
     },
     "friend": {
@@ -131,7 +138,8 @@
     },
     "base": {
       "list": [
-        "Osihi Ronin Station"
+        "Osihi Ronin Station",
+        "Barudoru-eki"
       ]
     },
     "enemy": {
@@ -163,17 +171,6 @@
       "alert": 2
     }
   },
-  "768718751549358123": {
-    "base": {
-      "list": [
-        "Artron",
-        "Station",
-        "Zekkz",
-        "little",
-        "cottage"
-      ]
-    }
-  },
   "856067416576491540": {
     "base": {
       "list": [
@@ -203,6 +200,568 @@
     "base": {
       "list": [
         "Saone Research Annex"
+      ]
+    }
+  },
+  "857315177669459978": {
+    "forum": {
+      "list": [
+        "GSB"
+      ]
+    }
+  },
+  "866065897771630662": {
+    "base": {
+      "list": [
+        "Salt"
+      ]
+    },
+    "enemy": {
+      "list": [
+        "MNS-",
+        "GC-",
+        "MNS-",
+        "IN|",
+        "XA",
+        "ZC<",
+        "|Aoi",
+        "[Hunter]",
+        "Birdie",
+        "XA",
+        "WV",
+        "WV-",
+        "A/)-",
+        "!Force",
+        "HS>",
+        "CNS-",
+        "K'Hara|",
+        "Order|",
+        "XA-",
+        "-[Fae",
+        "[RHA]",
+        ">ZC|",
+        "RNC-",
+        "IN|",
+        "LH~",
+        "[R]-",
+        "-I-",
+        "GC|",
+        "Vagrant",
+        "HS<",
+        "RM|"
+      ],
+      "alert": 1
+    },
+    "system": {
+      "list": [
+        "New York",
+        "California",
+        "Ontario",
+        "Texas",
+        "Colorado",
+        "Pennsylvania",
+        "Omicron Nu",
+        "Kansas",
+        "Alberta",
+        "Virginia",
+        "Alaska",
+        "Hudson",
+        "Cortez",
+        "Connecticut",
+        "Coronado",
+        "California",
+        "Vespucci",
+        "Vespucci"
+      ]
+    },
+    "friend": {
+      "list": [
+        "5th",
+        "LNS-",
+        "[*USI*]",
+        "Ageira~",
+        "BAF|",
+        "[LN]",
+        "DSE)",
+        "=LSF=",
+        "LPI-",
+        "=CR=",
+        "TCL|",
+        "46th|"
+      ],
+      "alert": 999
+    },
+    "forum": {
+      "list": [
+        "46th|"
+      ]
+    }
+  },
+  "866239406964604949": {
+    "forum": {
+      "list": [
+        "GSB]-",
+        "GSB]",
+        "GSB",
+        "Gallic Security Bureau",
+        "Security Bureau"
+      ]
+    }
+  },
+  "866239783135346718": {
+    "forum": {
+      "list": [
+        "UC/-",
+        "UC",
+        "Unione Corse",
+        "Corse"
+      ]
+    }
+  },
+  "866676232048607273": {
+    "forum": {
+      "list": [
+        "Stepan Zakaryan"
+      ]
+    }
+  },
+  "866048225010253885": {
+    "base": {
+      "list": [
+        "Ulster Station"
+      ]
+    }
+  },
+  "868882395389112340": {
+    "base": {
+      "list": [
+        "Med Force Academy",
+        "Med Force General-B",
+        "Med Force General and Research"
+      ]
+    }
+  },
+  "838802002582175756": {},
+  "831945120571064331": {
+    "forum": {
+      "list": [
+        "Deep Space Engineering",
+        "DSE",
+        "DSE)"
+      ]
+    }
+  },
+  "888298827415699466": {
+    "system": {
+      "list": [
+        "Burgundy",
+        "Champagne",
+        "Ile-de-France",
+        "Languedoc",
+        "Lorraine",
+        "Orkney",
+        "Orleanais",
+        "Picardy",
+        "Provence",
+        "Tau-23",
+        "Tau-37",
+        "Tau-53",
+        "Zurich"
+      ]
+    },
+    "friend": {
+      "list": [
+        "EFL~",
+        "GMS|",
+        "GNS-",
+        "GSB]-",
+        "IDF|",
+        "MNG|"
+      ],
+      "alert": 999
+    },
+    "enemy": {
+      "list": [
+        "GC-",
+        "HS>",
+        "MNS-",
+        "[FLG]"
+      ],
+      "alert": 999
+    },
+    "base": {
+      "list": []
+    }
+  },
+  "888302584446742528": {
+    "forum": {
+      "list": [
+        "GSB]-",
+        "Gallia",
+        "Gallic Union",
+        "MNG|",
+        "UC/-",
+        "Gauloise",
+        "UC/-",
+        "Unione Corse",
+        "Unione Corse",
+        "UC/-",
+        "Corse"
+      ]
+    }
+  },
+  "888302093188886598": {
+    "base": {
+      "list": [
+        "Fort Lune",
+        "Krivi_Stojko",
+        "La Lunar Emporium",
+        "Le Paradis des Chats",
+        "Lunel Sorting Facility",
+        "Mont Blanc Storage Facility",
+        "Perenco Terminal",
+        "Riviera Resort",
+        "Saone Research Annex",
+        "Treyarch Research Facility",
+        "ZhonghuaGuyongJun Fortress"
+      ]
+    }
+  },
+  "768718848526123018": {
+    "base": {
+      "list": [
+        "Artron Station",
+        "Zekkz Little Cottage"
+      ]
+    },
+    "friend": {
+      "list": [
+        "US|",
+        "OSI|",
+        "OSI-",
+        "BMF|"
+      ],
+      "alert": 1
+    }
+  },
+  "890464578759168031": {
+    "region": {
+      "list": [
+        "sirius",
+        "Sirius",
+        "Sirius",
+        "Independent Worlds",
+        "Liberty Space",
+        "Tau Border Worlds",
+        "Kusari",
+        "Space",
+        "Bretonia Space",
+        "Kusari Space",
+        "Gallia Space",
+        "Border Worlds",
+        "Nomad Worlds",
+        "Edge Worlds",
+        "Independent Worlds",
+        "Rheinland Worlds",
+        "All"
+      ]
+    },
+    "system": {
+      "list": [
+        "Conneticut",
+        "Connecticut"
+      ]
+    }
+  },
+  "814689479985594409": {
+    "base": {
+      "list": [
+        "Nebula Shipping Express"
+      ]
+    }
+  },
+  "823964785552392216": {
+    "base": {
+      "list": [
+        "New Hope Research Institute"
+      ]
+    },
+    "enemy": {
+      "list": [
+        "Gateway",
+        "Kishiro",
+        "KV-Myoko",
+        "BAF",
+        "Shukuten.Maru",
+        "Trade",
+        "Yonaka",
+        "Faustus",
+        "Travelling.At.Night",
+        "MNS",
+        "HS",
+        "GNS",
+        "Timbuktu",
+        "GNS",
+        "RNS",
+        "UC"
+      ],
+      "alert": 2
+    },
+    "friend": {
+      "list": [
+        "CNS",
+        "INS",
+        "Order|",
+        "HMS",
+        "FLG",
+        "Lionesque"
+      ],
+      "alert": 999
+    },
+    "system": {
+      "list": [
+        "Omega 7",
+        "New London",
+        "Tau-29",
+        "Tau-53",
+        "Leeds",
+        "Tau-29",
+        "Tau-23",
+        "Tau-31",
+        "Zeta",
+        "Inverness",
+        "Lorraine",
+        "Burgundy",
+        "Burgundy",
+        "'France'",
+        "Orkney",
+        "Languedoc",
+        "Tau-37",
+        "Ile-de-France"
+      ]
+    }
+  },
+  "825427114659807262": {
+    "base": {
+      "list": [
+        "Luxury Liner Maldives"
+      ]
+    }
+  },
+  "716810519276683347": {
+    "base": {
+      "list": [
+        "Riviera resort",
+        "Riviera Resort"
+      ]
+    }
+  },
+  "897773705323761724": {
+    "system": {
+      "list": [
+        "Omega",
+        "11",
+        "Omega",
+        "55"
+      ]
+    },
+    "region": {
+      "list": [
+        "Rhineland space"
+      ]
+    },
+    "friend": {
+      "list": [
+        "SCRA|",
+        "SCEC|",
+        "[RHA]",
+        "VI"
+      ],
+      "alert": 999
+    },
+    "enemy": {
+      "list": [
+        "DTR-",
+        "WV-"
+      ],
+      "alert": 999
+    }
+  },
+  "897773726802776104": {
+    "forum": {
+      "list": [
+        "Die Blutw\u00e4chter",
+        "DB|",
+        "Blood Guards"
+      ]
+    }
+  },
+  "893932252008939520": {
+    "enemy": {
+      "list": [
+        "[RM]"
+      ],
+      "alert": 1
+    },
+    "system": {
+      "list": [
+        "Omega 48"
+      ]
+    }
+  },
+  "899421434571554826": {
+    "forum": {
+      "list": [
+        "I]-",
+        "Battlegroup Inquisition"
+      ]
+    }
+  },
+  "784211656846737419": {
+    "base": {
+      "list": [
+        "Emlenton Storage & Exports",
+        "Houston International",
+        "Trader Hub Port 34",
+        "Salt Lake Station HQ",
+        "Annapolis Station",
+        "Albany Police Academy",
+        "Sabah Research Section",
+        "Chadwick Station"
+      ]
+    },
+    "friend": {
+      "list": [
+        "US|"
+      ],
+      "alert": 999
+    },
+    "system": {
+      "list": [
+        "New York",
+        "California",
+        "Texas",
+        "Colorado",
+        "Pennsylvania",
+        "Magellan",
+        "New York"
+      ]
+    },
+    "region": {
+      "list": [
+        "Liberty Space"
+      ]
+    }
+  },
+  "761629195251220494": {
+    "base": {
+      "list": [
+        "Sirius Teschnology Center"
+      ]
+    },
+    "forum": {
+      "list": []
+    }
+  },
+  "761730372160716810": {
+    "forum": {
+      "list": [
+        "Freelancer",
+        "Freelancers",
+        "FLA)",
+        "FLA",
+        "Freelancer Associates",
+        "Freelancer Association",
+        "FLA)"
+      ]
+    }
+  },
+  "903796652349988916": {
+    "system": {
+      "list": [
+        "Burgundy",
+        "Champagne",
+        "Ile-de-France",
+        "Languedoc",
+        "Lorraine",
+        "Orkney",
+        "Orleanais",
+        "Picardy",
+        "Provence",
+        "Tau-23",
+        "Tau-37",
+        "Zurich"
+      ]
+    },
+    "friend": {
+      "list": [
+        "MNG|",
+        "\\*/~",
+        "GNS-",
+        "GMS|",
+        "EFL~",
+        "IDF|",
+        "UC/-"
+      ],
+      "alert": 999
+    },
+    "enemy": {
+      "list": [
+        "[FLG]",
+        "GC-",
+        "GC|",
+        "-|-",
+        "L\\-",
+        "HS>",
+        "MNS-",
+        "BAF|",
+        "HMS-",
+        "K'Hara|",
+        "Vagrant.",
+        "|Aoi",
+        "-[Fae",
+        "Lionesque",
+        "MdG/-",
+        "Ori|",
+        "GRN|",
+        "GRN!",
+        "RNS-",
+        "Guepard"
+      ],
+      "alert": 4
+    }
+  },
+  "903796983519645756": {
+    "forum": {
+      "list": [
+        "Gallia",
+        "Gallic",
+        "\\*/~",
+        "UC/-",
+        "Unione Corse",
+        "Corse",
+        "UC",
+        "EFL~",
+        "EFL",
+        "Gauloise",
+        "The Gallic Union",
+        "Gallic Union",
+        "Gallic"
+      ]
+    }
+  },
+  "904030342095204422": {
+    "forum": {
+      "list": [
+        "Bowex)",
+        "Bowex",
+        "Bowex",
+        "Rollcall",
+        "Borderworld",
+        "Exports",
+        "Bowex",
+        "Borderworld",
+        "Exports"
       ]
     }
   }
