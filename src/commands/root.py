@@ -75,7 +75,7 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
     @commands.check_any(connected_to_channel(storage))
     async def get_config(ctx):
         "shows you current config"
-        with open('templates/json.md') as file_:
+        with open('src/templates/json.md') as file_:
             template = Template(file_.read())
 
             await ctx.send(

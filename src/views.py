@@ -15,7 +15,7 @@ class View():
         self.new_forum_records = new_forum_records
 
     async def render_date(self, timestamp):
-        with open('templates/date.md') as file_:
+        with open('src/templates/date.md') as file_:
             template = Template(file_.read())
             return template.render(tag=self.storage.unique_tag,
                                    date=str(datetime.datetime.utcnow()),
@@ -38,7 +38,7 @@ class View():
         if not rendering_bases:
             return ''
 
-        with open('templates/base.md') as file_:
+        with open('src/templates/base.md') as file_:
             template = Template(file_.read())
             rendered_bases = template.render(data=rendering_bases)
             return rendered_bases
@@ -72,7 +72,7 @@ class View():
             for key, value in trackable_players.items()
             if key in unrecognized_tags
         }
-        with open('templates/players.md') as file_:
+        with open('src/templates/players.md') as file_:
             template = Template(file_.read())
 
             def rendering(title, data, alert_level):
