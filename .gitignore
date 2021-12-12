@@ -241,3 +241,5 @@ secret.json
 legacy/
 # channels.json
 .env*
+chromedriver
+resp.html

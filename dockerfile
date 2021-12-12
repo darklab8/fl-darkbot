@@ -9,9 +9,15 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 RUN dpkg -i google-chrome-stable_current_amd64.deb; exit 0
 RUN apt-get -y -f install
 
+ENV HOME=/app
+ENV APP_HOME=/app/web
+RUN mkdir $HOME
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD python3 app.py
+CMD python3 -m src.app
