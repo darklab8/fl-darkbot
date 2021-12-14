@@ -18,7 +18,7 @@ class CreateApp():
         self.looper = Looper(bot, self.storage, self.channel_controller)
 
     def run(self):
-        self.bot.run(self.storage.settings.secret_key)
+        self.bot.run(self.storage.settings.discord_bot_key)
 
         # self.bot
 

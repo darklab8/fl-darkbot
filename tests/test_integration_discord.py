@@ -20,7 +20,7 @@ async def app():
 @pytest.mark.discord
 async def test_app_can_run(app):
     loop = asyncio.get_event_loop()
-    loop.create_task(app.bot.start(app.storage.settings.secret_key))
+    loop.create_task(app.bot.start(app.storage.settings.discord_bot_key))
     await app.bot.wait_until_ready()
     await asyncio.sleep(int(os.environ.get('testing_time', '5')))
     await app.bot.close()
