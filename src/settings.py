@@ -24,3 +24,5 @@ def get_debug_status():
 
 load_dotenv()
 DEBUG = bool(os.environ.get("debug", False))
+
+IS_MOCKING_REQUESTS = bool(os.environ.get("IS_MOCKING_REQUESTS", False))

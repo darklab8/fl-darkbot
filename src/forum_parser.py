@@ -21,7 +21,7 @@ class forum_record:
     index: int
 
 
-def get_forum_threads(forum_acc: str, forum_pass: str):
+def get_forum_threads(forum_acc: str, forum_pass: str) -> list[forum_record]:
 
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")

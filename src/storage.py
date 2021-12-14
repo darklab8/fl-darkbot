@@ -6,9 +6,10 @@ from types import SimpleNamespace
 import asyncio
 from dotenv import load_dotenv
 
-from src.forum_parser import get_forum_threads
+from src.forum_parser import forum_record, get_forum_threads
 from src.info_controller import (AlertOnlyController, InfoController,
                                  InfoWithAlertController)
+from src.settings import IS_MOCKING_REQUESTS
 
 
 class Storage():
@@ -55,29 +56,57 @@ class Storage():
         except OSError as error:
             print('ERR failed to save channels.json ' + str(error))
 
-    def get_players_data(self):
+    def get_players_data(self) -> dict:
         return requests.get(self.settings.player_request_url).json()
 
-    def get_base_data(self):
+    def get_base_data(self) -> dict:
         return requests.get(self.settings.base_request_url).json()
 
-    def get_new_forum_records(self, previous_forum_records={}) -> list:
-        forum_records = get_forum_threads(
-            forum_acc=self.settings.forum_acc,
-            forum_pass=self.settings.forum_pass,
-        )
-
+    def get_only_not_repeated_records(self, forum_records,
+                                      previous_forum_records):
         new_records = []
         for record in forum_records:
             if record.title not in previous_forum_records:
                 new_records.append(record)
             else:
                 if record.date != previous_forum_records[record.title].date:
-                    # previous_forum_records[record.title] = record
                     new_records.append(record)
         return new_records
 
+    def get_new_forum_records(self,
+                              previous_forum_records={}) -> list[forum_record]:
+        forum_records = get_forum_threads(
+            forum_acc=self.settings.forum_acc,
+            forum_pass=self.settings.forum_pass,
+        )
+
+        return self.get_only_not_repeated_records(forum_records,
+                                                  previous_forum_records)
+
+    def get_load_test_game_data(self, previous_forum_records):
+        output = SimpleNamespace()
+
+        with open('tests/examples/forum_records.json', 'r') as file_:
+            data = file_.read()
+            loaded = json.loads(data)
+            morfed = [forum_record(**record) for record in loaded]
+
+        output.new_forum_records = self.get_only_not_repeated_records(
+            morfed, previous_forum_records)
+
+        with open('tests/examples/players.json', 'r') as file_:
+            output.players = json.loads(file_.read())
+
+        with open('tests/examples/bases.json', 'r') as file_:
+            output.bases = json.loads(file_.read())
+
+        return output
+
     def get_game_data(self, previous_forum_records) -> SimpleNamespace:
+
+        if IS_MOCKING_REQUESTS:
+            return self.get_load_test_game_data(previous_forum_records)
+
         output = SimpleNamespace()
         output.players = self.get_players_data()
         output.bases = self.get_base_data()
@@ -86,6 +115,7 @@ class Storage():
         return output
 
     async def a_get_game_data(self, previous_forum_records) -> SimpleNamespace:
+
         return await asyncio.to_thread(self.get_game_data,
                                        previous_forum_records)
 
