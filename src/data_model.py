@@ -1,5 +1,5 @@
 class DataModel():
-    def __init__(self, api_data, new_forum_records):
+    def __init__(self, api_data):
         bases = api_data.bases
         # last data about bases different in values
         self.different_bases = bases
@@ -8,10 +8,10 @@ class DataModel():
 
         self.previous_forum_records = {}
 
-        for record in new_forum_records:
+        for record in api_data.new_forum_records:
             self.previous_forum_records[record.title] = record
 
-    def update(self, api_data, new_forum_records):
+    def update(self, api_data):
 
         # calculating previous health about bases
         if self.previous_bases != api_data.bases:
@@ -37,4 +37,3 @@ class DataModel():
         }
 
         self.api_data = api_data
-        self.new_forum_records = new_forum_records

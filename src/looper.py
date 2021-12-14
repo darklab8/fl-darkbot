@@ -10,19 +10,18 @@ import time
 from src.views import View
 from src.data_model import DataModel
 import src.settings as settings
+from src.storage import Storage
 
 
 class Looper(commands.Cog):
-    def __init__(self, bot, storage, chanell_controller):
+    def __init__(self, bot, storage: Storage, chanell_controller):
         self.bot = bot
         self.printer.start()
         self.storage = storage
         self.chanell_controller = chanell_controller
 
-        api_data = self.storage.get_game_data()
-        new_forum_records = self.storage.get_new_forum_records()
-        self.data = DataModel(api_data=api_data,
-                              new_forum_records=new_forum_records)
+        api_data = self.storage.get_game_data({})
+        self.data = DataModel(api_data=api_data)
 
     async def cog_unload(self):
         self.printer.cancel()
@@ -36,14 +35,13 @@ class Looper(commands.Cog):
                 print(
                     f'{datetime.datetime.utcnow()} OK executing printer loop')
 
-            updating_api_data = await self.storage.a_get_game_data()
-            updating_new_forum_records = await self.storage.a_get_new_forum_records(
+            updating_api_data = await self.storage.a_get_game_data(
                 self.data.previous_forum_records)
 
-            for record in updating_new_forum_records:
+            for record in updating_api_data.new_forum_records:
                 self.data.previous_forum_records[record.title] = record
 
-            self.data.update(updating_api_data, updating_new_forum_records)
+            self.data.update(updating_api_data)
 
             self.storage.save_channel_settings()
 
@@ -62,7 +60,7 @@ class Looper(commands.Cog):
 
                     rendered_date, rendered_all, render_forum_records = await View(
                         self.data.api_data, self.storage, channel_id,
-                        self.data.new_forum_records).render_all()
+                        self.data.api_data.new_forum_records).render_all()
 
                     if settings.DEBUG:
                         print(f"view_new_records={render_forum_records}")

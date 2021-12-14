@@ -8,4 +8,4 @@ services:
             - .env.prod
         volumes:
             - ./data:/data
-        restart: always
+        restart: unless-stopped

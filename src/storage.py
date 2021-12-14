@@ -55,16 +55,13 @@ class Storage():
         except OSError as error:
             print('ERR failed to save channels.json ' + str(error))
 
-    def get_game_data(self) -> SimpleNamespace:
-        output = SimpleNamespace()
-        output.players = requests.get(self.settings.player_request_url).json()
-        output.bases = requests.get(self.settings.base_request_url).json()
-        return output
+    def get_players_data(self):
+        return requests.get(self.settings.player_request_url).json()
 
-    async def a_get_game_data(self):
-        return await asyncio.to_thread(self.get_game_data)
+    def get_base_data(self):
+        return requests.get(self.settings.base_request_url).json()
 
-    def get_new_forum_records(self, previous_forum_records={}):
+    def get_new_forum_records(self, previous_forum_records={}) -> list:
         forum_records = get_forum_threads(
             forum_acc=self.settings.forum_acc,
             forum_pass=self.settings.forum_pass,
@@ -80,9 +77,16 @@ class Storage():
                     new_records.append(record)
         return new_records
 
-    async def a_get_new_forum_records(self, previous_forum_records):
+    def get_game_data(self, previous_forum_records) -> SimpleNamespace:
+        output = SimpleNamespace()
+        output.players = self.get_players_data()
+        output.bases = self.get_base_data()
+        output.new_forum_records = self.get_new_forum_records(
+            previous_forum_records)
+        return output
 
-        return await asyncio.to_thread(self.get_new_forum_records,
+    async def a_get_game_data(self, previous_forum_records) -> SimpleNamespace:
+        return await asyncio.to_thread(self.get_game_data,
                                        previous_forum_records)
 
     def base_add(self, name):
