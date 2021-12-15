@@ -54,13 +54,13 @@ class Looper(commands.Cog):
                             f'channel {channel_id} in {self.bot.get_channel(channel_id).guild}'
                         )
 
-                    # delete expired
+                    # delete expired messages
                     await self.chanell_controller.delete_exp_msgs(
                         channel_id, 40)
 
                     rendered_date, rendered_all, render_forum_records = await View(
-                        self.data.api_data, self.storage, channel_id,
-                        self.data.api_data.new_forum_records).render_all()
+                        self.data.api_data, self.storage,
+                        channel_id).render_all()
 
                     if settings.DEBUG:
                         print(f"view_new_records={render_forum_records}")

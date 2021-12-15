@@ -7,12 +7,10 @@ import src.settings as settings
 
 
 class View():
-    def __init__(self, data, storage, channel_id,
-                 new_forum_records: List[forum_record]):
-        self.data = data
+    def __init__(self, api_data, storage, channel_id):
+        self.api_data = api_data
         self.storage = storage
         self.channel_id = channel_id
-        self.new_forum_records = new_forum_records
 
     async def render_date(self, timestamp):
         with open('src/templates/date.md') as file_:
@@ -104,7 +102,7 @@ class View():
                                    channel_id: int) -> List[forum_record]:
 
         if settings.DEBUG:
-            print(f"render_forum_records={self.new_forum_records}")
+            print(f"render_forum_records={self.api_data.new_forum_records}")
 
         system_tags = await forum.get_data(channel_id)
 
@@ -114,7 +112,7 @@ class View():
             return []
 
         for_render = []
-        for record in self.new_forum_records:
+        for record in self.api_data.new_forum_records:
             for tag in system_tags:
                 if tag in record.title:
                     for_render.append(record)
@@ -124,16 +122,17 @@ class View():
 
     async def render_all(self):
         # date stamp
-        info = await self.render_date(self.data.players['timestamp'])
+        info = await self.render_date(self.api_data.players['timestamp'])
 
         # bases
         rendered_bases = await self.base_view(self.storage.base,
-                                              self.channel_id, self.data.bases)
+                                              self.channel_id,
+                                              self.api_data.bases)
 
         # players
         rendered_players = await self.render_players(self.storage,
                                                      self.channel_id,
-                                                     self.data.players)
+                                                     self.api_data.players)
 
         new_forum_records = await self.render_forum_records(
             self.storage.forum, self.channel_id)
