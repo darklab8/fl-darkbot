@@ -62,7 +62,6 @@ async def test_check_base_statuses_dynamically(storage_with_tracked_base,
 
     assert "Static" in rendered_base_data
 
-    print("=====================")
     new_api_data = request_api_data()
     find_tracked_base(new_api_data)["health"] += 0.1
     data_model.update(new_api_data)
