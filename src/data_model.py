@@ -1,3 +1,6 @@
+from src.settings import IS_MOCKING_REQUESTS
+
+
 class DataModel():
     def __init__(self, api_data):
         bases = api_data.bases
@@ -12,6 +15,13 @@ class DataModel():
             self.previous_forum_records[record.title] = record
 
     def update(self, api_data):
+
+        if IS_MOCKING_REQUESTS:
+            """Currently static data is loaded about bases if the setting is enabled.
+            If you wish at every update for basis a bit to change, you need to change them for example here in
+            api_data variable
+            """
+            pass
 
         # calculating previous health about bases
         if self.previous_bases != api_data.bases:
