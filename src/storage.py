@@ -9,14 +9,16 @@ from dotenv import load_dotenv
 from src.forum_parser import forum_record, get_forum_threads
 from src.info_controller import (AlertOnlyController, InfoController,
                                  InfoWithAlertController)
-from src.settings import IS_MOCKING_REQUESTS
+import src.settings as settings
 
 
 class Storage():
-    def __init__(self, unique_tag='DarkInfo:'):
+    def __init__(self, unique_tag='DarkInfo:', IS_MOCKING_REQUESTS=False):
         self.unique_tag = unique_tag
         self.settings = self.load_env_settings()
         self.channels = self.load_channel_settings()
+
+        self.IS_MOCKING_REQUESTS = IS_MOCKING_REQUESTS
 
         # forum thread tracker
         self.forum = InfoController(self.channels, 'forum')
@@ -104,7 +106,7 @@ class Storage():
 
     def get_game_data(self, previous_forum_records) -> SimpleNamespace:
 
-        if IS_MOCKING_REQUESTS:
+        if self.IS_MOCKING_REQUESTS or settings.IS_MOCKING_REQUESTS:
             return self.get_load_test_game_data(previous_forum_records)
 
         output = SimpleNamespace()

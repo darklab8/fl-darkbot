@@ -1,4 +1,5 @@
 import pytest
+from src.settings import IS_MOCKING_REQUESTS
 from src.storage import Storage
 from src.views import View
 from src.data_model import DataModel
@@ -7,7 +8,7 @@ import copy
 
 @pytest.fixture
 def storage():
-    return Storage()
+    return Storage(IS_MOCKING_REQUESTS=True)
 
 
 @pytest.fixture
