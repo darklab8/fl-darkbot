@@ -60,24 +60,29 @@ def get_forum_threads(forum_acc: str, forum_pass: str) -> list[forum_record]:
 
     items = []
     for index, item in enumerate(results):
-        items.append(
-            forum_record(
-                title=next(
-                    title for title in item.find_all("a")
-                    if title.attrs.get("class") is not None
-                    and "subject" in title.attrs.get("class")[0]).get_text(),
-                thread_author=item.find("div", {
-                    "class": "author"
-                }).get_text(),
-                url="https://discoverygc.com/forums/" +
-                item.find_all("td")[6].a.attrs['href'],
-                category=item.find_all("td")[3].a.get_text(),
-                date=item.find_all("td")[6].span.span.attrs['title'],
-                views=item.find_all("td")[5].get_text(),
-                last_author=item.find_all("td")[6].find_all("a")[1].get_text(),
-                replies=item.find_all("td")[4].get_text(),
-                index=index,
-            ))
+        try:
+            items.append(
+                forum_record(
+                    title=next(
+                        title for title in item.find_all("a")
+                        if title.attrs.get("class") is not None and "subject"
+                        in title.attrs.get("class")[0]).get_text(),
+                    thread_author=item.find("div", {
+                        "class": "author"
+                    }).get_text(),
+                    url="https://discoverygc.com/forums/" +
+                    item.find_all("td")[6].a.attrs['href'],
+                    category=item.find_all("td")[3].a.get_text(),
+                    date=item.find_all("td")[6].span.span.attrs['title'],
+                    views=item.find_all("td")[5].get_text(),
+                    last_author=item.find_all("td")[6].find_all(
+                        "a")[1].get_text(),
+                    replies=item.find_all("td")[4].get_text(),
+                    index=index,
+                ))
+        except IndexError as error:
+            print("ERR 3856: unable to read forum record. Index Error" +
+                  str(error))
 
     driver.close()
     return items
