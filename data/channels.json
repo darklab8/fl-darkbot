@@ -270,7 +270,8 @@
       "list": [
         "Med Force General-B",
         "Med Force General and Research",
-        "Med Force General Academy"
+        "Med Force General Academy",
+        "Med Force Omega Hospital"
       ]
     }
   },
@@ -579,25 +580,6 @@
       "alert": 4
     }
   },
-  "903796983519645756": {
-    "forum": {
-      "list": [
-        "Gallia",
-        "Gallic",
-        "Gauloise",
-        "Defense Authority",
-        "\\*/~",
-        "UC/-",
-        "Unione",
-        "Corse",
-        "EFL~",
-        "EFL",
-        "Oil & Machinery",
-        "GMS",
-        "Metal Service"
-      ]
-    }
-  },
   "904030342095204422": {
     "forum": {
       "list": [
@@ -670,89 +652,6 @@
     "base": {
       "list": [
         "Sybaris Harbor"
-      ]
-    }
-  },
-  "912033475475939368": {
-    "system": {
-      "list": [
-        "Omicron Gamma",
-        "Omicron Xi",
-        "Omicron Zeta",
-        "Omicron Delta",
-        "Omicron Rho",
-        "Omicron Nu",
-        "Planet Knossos",
-        "Munich",
-        "Omicron Theta",
-        "Omicron Kappa",
-        "Omega-55",
-        "Omega-41",
-        "Omega-48",
-        "Omega-11",
-        "Omicron Lost",
-        "Omicron Beta",
-        "Omicron Alpha",
-        "Omicron Mu"
-      ]
-    },
-    "base": {
-      "list": [
-        "Reincarnation Outpost",
-        "Zamora Station"
-      ]
-    },
-    "friend": {
-      "list": [
-        "DTR-",
-        "IE|",
-        "Order",
-        "[TBH]",
-        "RagingThunder",
-        "Richards",
-        "~Rudolph",
-        "Order",
-        "[O]",
-        "<o>",
-        "Taurus|"
-      ],
-      "alert": 999
-    },
-    "enemy": {
-      "list": [
-        "HS>",
-        "K'Hara|",
-        "[RM]",
-        "Vagrant",
-        "MNS-",
-        "WV-",
-        "Force!",
-        "Core|",
-        "RNC-",
-        "\\[RM\\]",
-        "[RM]",
-        "Sirosis",
-        "Bounder",
-        "A/)"
-      ],
-      "alert": 2
-    },
-    "forum": {
-      "list": []
-    }
-  },
-  "912345754293641286": {
-    "forum": {
-      "list": [
-        "DTR",
-        "Ravenna",
-        "Nagash",
-        "Knossos",
-        "Reincarnation Outpost",
-        "Reincarnation Outpost",
-        "Deterrence",
-        "Corsair",
-        "Corsairs"
       ]
     }
   },
@@ -859,17 +758,150 @@
       "list": [
         "Hope"
       ]
+    },
+    "system": {
+      "list": [
+        "Cologne",
+        "Stuttgart",
+        "Berlin",
+        "Lorraine",
+        "Zurich",
+        "Rho",
+        "Frankfurt",
+        "Sigma-15",
+        "Frankfurt",
+        "Zurich",
+        "Cortez",
+        "Coronado",
+        "Leeds",
+        "Alaska",
+        "Omega",
+        "Tau",
+        "Hudson",
+        "Hamburg"
+      ]
+    },
+    "enemy": {
+      "list": [
+        "EFL",
+        "GMS",
+        "CaptJake",
+        "IDF|La.Fayette",
+        "Faulkner|"
+      ],
+      "alert": 999
+    },
+    "friend": {
+      "list": [
+        "USC-Rogation"
+      ],
+      "alert": 999
     }
   },
-  "840251517398548521": {
-    "forum": {
+  "912033475475939368": {
+    "system": {
       "list": [
-        "kfjrkefjerlfkrjeflerfjlerfj"
+        "Omicron Gamma",
+        "Omicron Xi",
+        "Omicron Zeta",
+        "Omicron Delta",
+        "Omicron Rho",
+        "Omicron Nu",
+        "Planet Knossos",
+        "Munich",
+        "Omicron Theta",
+        "Omicron Kappa",
+        "Omega-55",
+        "Omega-41",
+        "Omega-48",
+        "Omega-11",
+        "Omicron Lost",
+        "Omicron Beta",
+        "Omicron Alpha",
+        "Omicron Mu",
+        "Frankfurt",
+        "Sigma-15",
+        "New Berlin"
       ]
     },
     "base": {
       "list": [
-        "Shiojiri"
+        "Reincarnation Outpost",
+        "Zamora Station"
+      ]
+    },
+    "friend": {
+      "list": [
+        "DTR-",
+        "IE|",
+        "Order",
+        "[TBH]",
+        "RagingThunder",
+        "Richards",
+        "~Rudolph",
+        "Order",
+        "[O]",
+        "<o>",
+        "Taurus|",
+        "ECG|"
+      ],
+      "alert": 999
+    },
+    "enemy": {
+      "list": [
+        "HS>",
+        "K'Hara|",
+        "[RM]",
+        "Vagrant",
+        "MNS-",
+        "WV-",
+        "Force!",
+        "Core|",
+        "RNC-",
+        "\\[RM\\]",
+        "[RM]",
+        "Sirosis",
+        "Bounder",
+        "A/)",
+        "GS"
+      ],
+      "alert": 2
+    }
+  },
+  "912345754293641286": {
+    "forum": {
+      "list": [
+        "HS>",
+        "DTR",
+        "Deterrence",
+        "Ravenna",
+        "Nagash",
+        "Core",
+        "Order",
+        "Corsairs",
+        "Reincarnation Outpost",
+        "Xi Peace Summit"
+      ]
+    }
+  },
+  "903796983519645756": {
+    "forum": {
+      "list": [
+        "Gallia",
+        "Gallic",
+        "Gauloise",
+        "Defense Authority",
+        "Gallic Union",
+        "*/~",
+        "UC/-",
+        "Unione Corse",
+        "EFL~",
+        "EFL Oil & Machinery",
+        "GMS",
+        "IDF",
+        "Gallic Metal Service",
+        "IDF Shipping",
+        "\\\\*/~"
       ]
     }
   }
