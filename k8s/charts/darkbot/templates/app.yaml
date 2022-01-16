@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: darkbot-pv
+  name: darkbot-{{ .Values.env }}-pv
 spec:
   capacity:
     storage: 1Gi
@@ -10,7 +10,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: my-local-storage
   local:
-    path: /mnt/darkbot
+    path: /mnt/darkbot-{{ .Values.env }}
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -23,7 +23,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: darkbot-claim
+  name: darkbot-{{ .Values.env }}-claim
 spec:
   accessModes:
   - ReadWriteOnce
@@ -32,20 +32,45 @@ spec:
     requests:
       storage: 1Gi
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: volumetest
+  name: dind-deploy
 spec:
-  containers:
-  - name: www
-    image: "ubuntu:20.04"
-    command: [ "/bin/bash", "-c", "--" ]
-    args: [ "while true; do sleep 30; done;" ]
-    volumeMounts:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      imagePullSecrets:
+        - name: dockercred
+      volumes:
       - name: www-persistent-storage
-        mountPath: /mnt/test
-  volumes:
-    - name: www-persistent-storage
-      persistentVolumeClaim:
-        claimName: darkbot-claim
+        persistentVolumeClaim:
+          claimName: darkbot-{{ .Values.env }}-claim
+      containers:
+        - name: {{ .Values.name }}-pod
+          image: localhost:32000/darklab-darkbot:v1.0.0
+          volumeMounts:
+            - name: www-persistent-storage
+              mountPath: /app/data
+          env:
+            - name: discord_bot_key
+              value: {{ .Values.discord_bot_key }}
+            - name: player_request_url
+              value: {{ .Values.player_request_url }}
+            - name: base_request_url
+              value: {{ .Values.base_request_url }}
+            - name: forum_acc
+              value: {{ .Values.forum_acc }}
+            - name: forum_pass
+              value: {{ .Values.forum_pass }}

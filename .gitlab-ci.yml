@@ -1,0 +1,13 @@
+variables:
+  docker_image: docker:20.10.12-dind
+
+stages:
+  - deploy1
+
+dev_init_kube:
+  image: ${docker_image}
+  stage: deploy1
+  script:
+    - echo 123
+  rules:
+      when: manual
