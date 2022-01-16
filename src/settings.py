@@ -3,6 +3,10 @@ import os
 from dotenv import load_dotenv
 from io import StringIO
 
+import logging
+logging.basicConfig(format='%(levelname)s: %(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
+logging.info("init logging")
+
 
 def testing_enable_debug_in_env_and_get_status():
     config = StringIO("debug=true")

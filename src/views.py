@@ -4,6 +4,7 @@ from typing import List
 from src.forum_parser import forum_record
 from src.info_controller import InfoController
 import src.settings as settings
+import logging
 
 
 class View():
@@ -101,13 +102,11 @@ class View():
     async def render_forum_records(self, forum: InfoController,
                                    channel_id: int) -> List[forum_record]:
 
-        if settings.DEBUG:
-            print(f"render_forum_records={self.api_data.new_forum_records}")
+        logging.info(f"render_forum_records={self.api_data.new_forum_records}")
 
         system_tags = await forum.get_data(channel_id)
 
-        if settings.DEBUG:
-            print(f"system tags={system_tags}")
+        logging.info(f"channel_id={channel_id}, system_tags={system_tags}")
         if not system_tags:
             return []
 

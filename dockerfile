@@ -8,12 +8,15 @@ RUN apt install -y wget
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN dpkg -i google-chrome-stable_current_amd64.deb; exit 0
 RUN apt-get -y -f install
+RUN apt install -y unzip
 
 ENV HOME=/app
-ENV APP_HOME=/app/web
 RUN mkdir $HOME
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
+WORKDIR $HOME
+
+RUN wget https://chromedriver.storage.googleapis.com/96.0.4664.45/chromedriver_linux64.zip
+RUN unzip chromedriver_linux64.zip
+RUN rm chromedriver_linux64.zip
 
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt

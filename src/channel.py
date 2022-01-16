@@ -6,7 +6,7 @@ import discord
 from typing import List
 from src.forum_parser import forum_record
 import src.settings as settings
-
+import logging
 
 class IMessageBus(ABC):
     @abstractmethod
@@ -45,9 +45,7 @@ class DiscordMessageBus(IMessageBus):
         try:
             await message.delete()
         except discord.errors.DiscordException as error:
-            if settings.DEBUG:
-                print(
-                    f"{str(datetime.datetime.utcnow())} "
+            logging.error(
                     f"ERR  {str(error)} for channel: {str(message.channel.id)}"
                     f"can't delete msg {str(message.content)}")
 
@@ -77,15 +75,9 @@ class DiscordMessageBus(IMessageBus):
                 before=datetime.datetime.utcnow() -
                 datetime.timedelta(seconds=older_than_n_seconds))
         except discord.errors.DiscordException as error:
-            if settings.DEBUG:
-                print(
-                    f"{str(datetime.datetime.utcnow())} "
-                    f"ERR can't purge {str(error)} for channel: {str(channel_id)}"
-                )
+            logging.error(f"ERR DiscordException context=cant_purge_msg channel_id={str(channel_id)}, error={str(error)}")
 
     async def send_forum_records(self, channel_id, render_forum_records):
-        if settings.DEBUG:
-            print(f"send={render_forum_records}")
 
         for record in render_forum_records:
             emb = discord.Embed(title=":mailbox_with_mail:" +
@@ -134,7 +126,9 @@ class ChannelConstroller():
                           info: str,
                           render_forum_records: List[forum_record] = []):
 
-        print(f"to bus = {render_forum_records}")
+        if render_forum_records:
+            logging.info(f"channel_id={channel_id}, info={info}, render_forum_records = {render_forum_records}")
+
         await self.message_bus.send_forum_records(channel_id,
                                                   render_forum_records)
         messages = await self.get_tagged_msgs(channel_id)

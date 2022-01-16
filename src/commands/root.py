@@ -12,6 +12,7 @@ from .permissions import (
 
 from .universal import timedelta
 import src.settings as settings
+import logging
 
 
 def attach_root(bot, storage, chanell_controller) -> commands.Bot:
@@ -45,8 +46,7 @@ def attach_root(bot, storage, chanell_controller) -> commands.Bot:
 
     @bot.event
     async def on_command_error(ctx, error):
-        if settings.DEBUG:
-            print(f'ERR: {error}')
+        logging.error(f'ERR: {error}')
         await ctx.send(f'ERR: {error}', delete_after=timedelta.medium)
 
     @bot.command(name='connect')

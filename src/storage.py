@@ -10,7 +10,7 @@ from src.forum_parser import forum_record, get_forum_threads
 from src.info_controller import (AlertOnlyController, InfoController,
                                  InfoWithAlertController)
 import src.settings as settings
-
+import logging
 
 class Storage():
     def __init__(self, unique_tag='DarkInfo:', IS_MOCKING_REQUESTS=False):
@@ -45,8 +45,8 @@ class Storage():
         try:
             with open('data/channels.json', 'r') as file_:
                 output = json.loads(file_.read())
-        except FileNotFoundError:
-            print('ERR failed to load channels.json')
+        except FileNotFoundError as error:
+            logging.error(f'ERR failed to load channels.json, {str(error)}')
         return output
 
     def save_channel_settings(self) -> None:
@@ -56,7 +56,7 @@ class Storage():
             with open('data/channels.json', 'w') as file_:
                 file_.write(json.dumps(self.channels, indent=2))
         except OSError as error:
-            print('ERR failed to save channels.json ' + str(error))
+            logging.error('ERR failed to save channels.json ' + str(error))
 
     def get_players_data(self) -> dict:
         return requests.get(self.settings.player_request_url).json()

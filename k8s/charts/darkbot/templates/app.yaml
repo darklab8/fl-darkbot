@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: darkbot-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: my-local-storage
+  local:
+    path: /mnt/darkbot
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - darklab-cluster
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: darkbot-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: my-local-storage
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volumetest
+spec:
+  containers:
+  - name: www
+    image: "ubuntu:20.04"
+    command: [ "/bin/bash", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+    volumeMounts:
+      - name: www-persistent-storage
+        mountPath: /mnt/test
+  volumes:
+    - name: www-persistent-storage
+      persistentVolumeClaim:
+        claimName: darkbot-claim

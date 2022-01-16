@@ -11,6 +11,7 @@ from src.views import View
 from src.data_model import DataModel
 import src.settings as settings
 from src.storage import Storage
+import logging
 
 
 class Looper(commands.Cog):
@@ -31,9 +32,7 @@ class Looper(commands.Cog):
     async def printer(self):
 
         try:
-            if settings.DEBUG:
-                print(
-                    f'{datetime.datetime.utcnow()} OK executing printer loop')
+            logging.info('OK executing printer loop')
 
             updating_api_data = await self.storage.a_get_game_data(
                 self.data.previous_forum_records)
@@ -47,12 +46,24 @@ class Looper(commands.Cog):
 
             channel_ids = [int(item) for item in self.storage.channels.keys()]
 
+            forbidden_channels = []
+            allowed_channels = []
+
             for channel_id in channel_ids:
+                channel_info = self.bot.get_channel(channel_id)
+
+                if channel_info is None:
+                    forbidden_channels.append(channel_id)
+                else:
+                    allowed_channels.append(channel_id)
+
+            logging.info(f'context=allowed_channels, allowed_channels={allowed_channels}')
+            logging.info(f'context=forbidden_channels, forbidden_channels={forbidden_channels}')
+
+            for channel_id in allowed_channels:
                 try:
-                    if settings.DEBUG:
-                        print(
-                            f'channel {channel_id} in {self.bot.get_channel(channel_id).guild}'
-                        )
+                    channel_info = self.bot.get_channel(channel_id)
+                    logging.info(f'context=loop_begins_for_channel channel={channel_id} in guild={self.bot.get_channel(channel_id).guild}')
 
                     # delete expired messages
                     await self.chanell_controller.delete_exp_msgs(
@@ -62,8 +73,6 @@ class Looper(commands.Cog):
                         self.data.api_data, self.storage,
                         channel_id).render_all()
 
-                    if settings.DEBUG:
-                        print(f"view_new_records={render_forum_records}")
                     # send final data update
                     try:
                         await self.chanell_controller.update_info(
@@ -78,19 +87,12 @@ class Looper(commands.Cog):
                             '\nor write them fully instead of tags')
                 except (discord.errors.DiscordException, AttributeError,
                         Exception) as error:
-                    if settings.DEBUG:
-                        print(
-                            f"{str(datetime.datetime.utcnow())} "
-                            f"ERR  {str(error)} for channel: {str(channel_id)}"
-                        )
+                    logging.error(f"ERR, loop_cycle, channel_id={str(channel_id)}, error={str(error)}")
                     if isinstance(error, KeyboardInterrupt):
                         raise KeyboardInterrupt(
                             "time to exit, KeyboardInterrupt")
         except Exception as error:
-            if settings.DEBUG:
-                print(f"{str(datetime.datetime.utcnow())} "
-                      f"ERR massive {str(error)} for loop task")
-                raise Exception("detailed_exception") from error
+            logging.error(f"ERR, context=whole_loop, error={str(error)}")
             if isinstance(error, KeyboardInterrupt):
                 print("gracefully exiting")
 
