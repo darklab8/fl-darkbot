@@ -59,7 +59,7 @@ spec:
           claimName: darkbot-{{ .Values.env }}-claim
       containers:
         - name: {{ .Values.name }}-pod
-          image: localhost:32000/darklab-darkbot:v1.0.0
+          image: localhost:32000/darklab-darkbot:v1.0.1
           volumeMounts:
             - name: www-persistent-storage
               mountPath: /app/data
