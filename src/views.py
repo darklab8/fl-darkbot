@@ -102,7 +102,7 @@ class View():
     async def render_forum_records(self, forum: InfoController,
                                    channel_id: int) -> List[forum_record]:
 
-        logging.info(f"render_forum_records={self.api_data.new_forum_records}")
+        logging.info(f"render_forum_records, len={len(self.api_data.new_forum_records)}")
 
         system_tags = await forum.get_data(channel_id)
 

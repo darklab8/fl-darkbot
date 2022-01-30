@@ -67,29 +67,16 @@ class Storage():
     def get_base_data(self) -> dict:
         return requests.get(self.settings.base_request_url).json()
 
-    def get_only_not_repeated_records(self, forum_records,
-                                      previous_forum_records):
-        new_records = []
-        for record in forum_records:
-            if record.title not in previous_forum_records:
-                new_records.append(record)
-            else:
-                if record.date != previous_forum_records[record.title].date:
-                    new_records.append(record)
-        return new_records
-
-    def get_new_forum_records(self,
-                              previous_forum_records={}) -> List[forum_record]:
+    def get_new_forum_records(self) -> List[forum_record]:
         forum_records = get_forum_threads(
             forum_acc=self.settings.forum_acc,
             forum_pass=self.settings.forum_pass,
         )
 
-        return self.get_only_not_repeated_records(forum_records,
-                                                  previous_forum_records)
+        return forum_records
 
     
-    def get_load_test_game_data(self, previous_forum_records):
+    def get_load_test_game_data(self):
         output = SimpleNamespace()
 
         with open('tests/examples/forum_records.json', 'r') as file_:
@@ -100,8 +87,7 @@ class Storage():
             selected = morfed[:10+self.IS_MOCKING_ROUND]
             self.IS_MOCKING_ROUND += 1
 
-        output.new_forum_records = self.get_only_not_repeated_records(
-            selected, previous_forum_records)
+        output.new_forum_records = selected
 
         with open('tests/examples/players.json', 'r') as file_:
             output.players = json.loads(file_.read())
@@ -111,25 +97,28 @@ class Storage():
 
         return output
 
-    def get_game_data(self, previous_forum_records) -> SimpleNamespace:
+    def get_game_data(self) -> SimpleNamespace:
 
         if self.IS_MOCKING_REQUESTS or settings.IS_MOCKING_REQUESTS:
-            return self.get_load_test_game_data(previous_forum_records)
+            return self.get_load_test_game_data()
 
         output = SimpleNamespace()
         output.players = self.get_players_data()
         output.bases = self.get_base_data()
-        output.new_forum_records = self.get_new_forum_records(
-            previous_forum_records)
+        output.new_forum_records = self.get_new_forum_records()
         return output
 
-    async def a_get_game_data(self, previous_forum_records) -> SimpleNamespace:
+    async def a_get_game_data(self) -> SimpleNamespace:
 
-        return await asyncio.to_thread(self.get_game_data,
-                                       previous_forum_records)
+        return await asyncio.to_thread(self.get_game_data)
 
     def base_add(self, name):
         print('adding the base')
+
+    def get_channels_id(self):
+
+        return [int(item) for item in self.channels.keys()]
+
 
     # def get_channel_data(self, key) -> SimpleNamespace:
     #     return deepcopy(self.storage.channels[key])

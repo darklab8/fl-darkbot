@@ -7,6 +7,8 @@ from typing import List
 from src.forum_parser import forum_record
 import src.settings as settings
 import logging
+from .message_sent_history import message_history
+import secrets
 
 class IMessageBus(ABC):
     @abstractmethod
@@ -80,25 +82,42 @@ class DiscordMessageBus(IMessageBus):
     async def send_forum_records(self, channel_id, render_forum_records):
 
         for record in render_forum_records:
-            emb = discord.Embed(title=":mailbox_with_mail:" +
-                                " You've got mail! :mailbox_with_mail:")
-            emb.add_field(name="New post in",
-                          value=f"[{record.title}]({record.url})",
-                          inline=False)
-            emb.add_field(name="written by",
-                          value=f"{record.last_author}",
-                          inline=False)
-            emb.add_field(name="in subforum",
-                          value=record.category,
-                          inline=False)
-            emb.add_field(name="at date", value=record.date, inline=False)
-            emb.add_field(name="in thread started by",
-                          value=record.thread_author,
-                          inline=False)
-            emb.add_field(name="views", value=record.views, inline=True)
-            emb.add_field(name="replies", value=record.replies, inline=True)
+            
+            if message_history.exists(channel_id=channel_id, record=record):
+                continue
+            
+            token = secrets.token_hex(8)
+            
+            try:
+                logging.info(f"send_forum_records, type=start, channel_id={channel_id}, record={record}, token={token}")
 
-            await self.bot.get_channel(channel_id).send(embed=emb)
+                message_history.add_message(channel_id=channel_id, record=record)
+                emb = discord.Embed(title=":mailbox_with_mail:" +
+                                    " You've got mail! :mailbox_with_mail:")
+                emb.add_field(name="New post in",
+                            value=f"[{record.title}]({record.url})",
+                            inline=False)
+                emb.add_field(name="written by",
+                            value=f"{record.last_author}",
+                            inline=False)
+                emb.add_field(name="in subforum",
+                            value=record.category,
+                            inline=False)
+                emb.add_field(name="at date", value=record.date, inline=False)
+                emb.add_field(name="in thread started by",
+                            value=record.thread_author,
+                            inline=False)
+                emb.add_field(name="views", value=record.views, inline=True)
+                emb.add_field(name="replies", value=record.replies, inline=True)
+
+                await self.bot.get_channel(channel_id).send(embed=emb)
+
+                logging.info(f"send_forum_records, type=finish, channel_id={channel_id}, record={record}, token={token}")
+            except:
+                logging.info(f"send_forum_records, type=ERROR, delete_message, channel_id={channel_id}, record={record}, token={token}")
+                message_history.delete_message(channel_id=channel_id, record=record)
+            
+            
 
 
 class ChannelConstroller():
@@ -127,7 +146,7 @@ class ChannelConstroller():
                           render_forum_records: List[forum_record] = []):
 
         if render_forum_records:
-            logging.info(f"channel_id={channel_id}, info={info}, render_forum_records = {render_forum_records}")
+            logging.info(f"channel_id={channel_id}, info={info}, len(render_forum_records) = {len(render_forum_records)}")
 
         await self.message_bus.send_forum_records(channel_id,
                                                   render_forum_records)

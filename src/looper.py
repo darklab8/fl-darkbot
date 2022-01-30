@@ -12,7 +12,7 @@ from src.data_model import DataModel
 import src.settings as settings
 from src.storage import Storage
 import logging
-
+from .message_sent_history import message_history
 
 class Looper(commands.Cog):
     def __init__(self, bot, storage: Storage, chanell_controller):
@@ -21,7 +21,14 @@ class Looper(commands.Cog):
         self.storage = storage
         self.chanell_controller = chanell_controller
 
-        api_data = self.storage.get_game_data({})
+        api_data = self.storage.get_game_data()
+
+        channels_ids = self.storage.get_channels_id()
+
+        for record in api_data.new_forum_records:
+            for channel_id in channels_ids:
+                message_history.add_message(channel_id=channel_id, record=record)
+
         self.data = DataModel(api_data=api_data)
 
     async def cog_unload(self):
@@ -34,19 +41,15 @@ class Looper(commands.Cog):
         try:
             logging.info('OK executing printer loop')
 
-            updating_api_data = await self.storage.a_get_game_data(
-                self.data.previous_forum_records)
-
-            for record in updating_api_data.new_forum_records:
-                self.data.previous_forum_records[record.title] = record
+            updating_api_data = await self.storage.a_get_game_data()
 
             self.data.update(updating_api_data)
 
-            logging.info(f"context=new_forum_records type=looper, data={self.data.api_data.new_forum_records}")
+            # logging.info(f"context=new_forum_records type=looper, data={self.data.api_data.new_forum_records}")
 
             self.storage.save_channel_settings()
 
-            channel_ids = [int(item) for item in self.storage.channels.keys()]
+            channel_ids = self.storage.get_channels_id()
 
             forbidden_channels = []
             allowed_channels = {}

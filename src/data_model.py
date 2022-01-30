@@ -9,11 +9,6 @@ class DataModel():
         # value from different loop
         self.previous_bases = bases
 
-        self.previous_forum_records = {}
-
-        for record in api_data.new_forum_records:
-            self.previous_forum_records[record.title] = record
-
     def update(self, api_data):
 
         if IS_MOCKING_REQUESTS:
