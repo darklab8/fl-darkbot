@@ -11,6 +11,8 @@ from src.info_controller import (AlertOnlyController, InfoController,
                                  InfoWithAlertController)
 import src.settings as settings
 import logging
+from typing import List
+import random
 
 class Storage():
     def __init__(self, unique_tag='DarkInfo:', IS_MOCKING_REQUESTS=False):
@@ -19,6 +21,7 @@ class Storage():
         self.channels = self.load_channel_settings()
 
         self.IS_MOCKING_REQUESTS = IS_MOCKING_REQUESTS
+        self.IS_MOCKING_ROUND = 0
 
         # forum thread tracker
         self.forum = InfoController(self.channels, 'forum')
@@ -76,7 +79,7 @@ class Storage():
         return new_records
 
     def get_new_forum_records(self,
-                              previous_forum_records={}) -> list[forum_record]:
+                              previous_forum_records={}) -> List[forum_record]:
         forum_records = get_forum_threads(
             forum_acc=self.settings.forum_acc,
             forum_pass=self.settings.forum_pass,
@@ -85,6 +88,7 @@ class Storage():
         return self.get_only_not_repeated_records(forum_records,
                                                   previous_forum_records)
 
+    
     def get_load_test_game_data(self, previous_forum_records):
         output = SimpleNamespace()
 
@@ -92,9 +96,12 @@ class Storage():
             data = file_.read()
             loaded = json.loads(data)
             morfed = [forum_record(**record) for record in loaded]
+            
+            selected = morfed[:10+self.IS_MOCKING_ROUND]
+            self.IS_MOCKING_ROUND += 1
 
         output.new_forum_records = self.get_only_not_repeated_records(
-            morfed, previous_forum_records)
+            selected, previous_forum_records)
 
         with open('tests/examples/players.json', 'r') as file_:
             output.players = json.loads(file_.read())

@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import bs4
 from dataclasses import dataclass
-
+from typing import List
 
 @dataclass
 class forum_record:
@@ -21,7 +21,7 @@ class forum_record:
     index: int
 
 
-def get_forum_threads(forum_acc: str, forum_pass: str) -> list[forum_record]:
+def get_forum_threads(forum_acc: str, forum_pass: str) -> List[forum_record]:
 
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")

@@ -244,3 +244,5 @@ legacy/
 chromedriver
 resp.html
 data/channels.json
+
+data/*

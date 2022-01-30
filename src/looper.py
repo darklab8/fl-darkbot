@@ -42,6 +42,8 @@ class Looper(commands.Cog):
 
             self.data.update(updating_api_data)
 
+            logging.info(f"context=new_forum_records type=looper, data={self.data.api_data.new_forum_records}")
+
             self.storage.save_channel_settings()
 
             channel_ids = [int(item) for item in self.storage.channels.keys()]
