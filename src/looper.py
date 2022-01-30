@@ -49,7 +49,7 @@ class Looper(commands.Cog):
             channel_ids = [int(item) for item in self.storage.channels.keys()]
 
             forbidden_channels = []
-            allowed_channels = []
+            allowed_channels = {}
 
             for channel_id in channel_ids:
                 channel_info = self.bot.get_channel(channel_id)
@@ -57,23 +57,26 @@ class Looper(commands.Cog):
                 if channel_info is None:
                     forbidden_channels.append(channel_id)
                 else:
-                    allowed_channels.append(channel_id)
+                    allowed_channels[channel_id] = channel_info
 
-            logging.info(f'context=allowed_channels, allowed_channels={allowed_channels}')
+            logging.info(f'context=allowed_channels, allowed_channels={allowed_channels.keys()}')
             logging.info(f'context=forbidden_channels, forbidden_channels={forbidden_channels}')
 
-            for channel_id in allowed_channels:
+            for channel_id, channel_info in allowed_channels.items():
                 try:
-                    channel_info = self.bot.get_channel(channel_id)
                     logging.info(f'context=loop_begins_for_channel channel={channel_id} in guild={self.bot.get_channel(channel_id).guild}')
 
                     # delete expired messages
                     await self.chanell_controller.delete_exp_msgs(
                         channel_id, 40)
 
+                    logging.info(f'context=channel_loop, channel={channel_id}, msg=deleting_old_msgs')
+
                     rendered_date, rendered_all, render_forum_records = await View(
                         self.data.api_data, self.storage,
                         channel_id).render_all()
+
+                    logging.info(f'context=channel_loop, channel={channel_id}, msg=rendered_all')
 
                     # send final data update
                     try:
@@ -81,6 +84,8 @@ class Looper(commands.Cog):
                             channel_id,
                             rendered_all,
                             render_forum_records=render_forum_records)
+
+                        logging.info(f'context=channel_loop, channel={channel_id}, msg=update_info_is_done')
                     except discord.errors.HTTPException:
                         await self.chanell_controller.update_info(
                             channel_id, rendered_date +

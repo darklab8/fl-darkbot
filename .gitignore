@@ -246,3 +246,5 @@ resp.html
 data/channels.json
 
 data/*
+
+secret_*.yaml

@@ -9,4 +9,4 @@ def shell(cmd):
         exit(status_code)
 
 
-shell('helm upgrade --install --create-namespace --namespace darkbot-dev darkbot . --values=darkbot_dev.yaml')
+shell('helm upgrade --install --create-namespace --namespace darkbot-dev darkbot . --values=darkbot_dev.yaml --values=secret_dev.yaml')

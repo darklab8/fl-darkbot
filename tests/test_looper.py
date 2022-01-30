@@ -32,6 +32,22 @@ async def test_no_repeated_msgs_mocked():
     print(data.api_data.new_forum_records)
 
 
+# async def test_getting_channel_permissions():
+#     storage = Storage(IS_MOCKING_REQUESTS=True)
+
+#     channel_ids = [int(item) for item in storage.channels.keys()]
+
+#     forbidden_channels = []
+#     allowed_channels = []
+
+#     for channel_id in channel_ids:
+#         channel_info = self.bot.get_channel(channel_id)
+
+#         if channel_info is None:
+#             forbidden_channels.append(channel_id)
+#         else:
+#             allowed_channels.append(channel_id)
+
 # @pytest.mark.asyncio
 # async def test_no_repeated_msgs_live_testing():
 #     storage = Storage()
