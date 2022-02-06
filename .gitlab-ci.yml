@@ -1,13 +1,16 @@
 variables:
-  docker_image: docker:20.10.12-dind
+  PIPELINE_RUNNER: registry.gitlab.com/darklab2/darklab_pipeliner/darklab-pipeliner:kubectl-v1.0.3
 
 stages:
-  - deploy1
+  - deploy-dev
 
 dev_init_kube:
-  image: ${docker_image}
-  stage: deploy1
+  image: ${PIPELINE_RUNNER}
+  stage: deploy-dev
   script:
-    - echo 123
-  rules:
-    - when: manual
+    - mkdir ~/.kube
+    - echo "${kubectl_config}" > ~/.kube/config
+    - echo "${darkbot_secret_dev_yml}" > k8s/charts/darkbot/secret_dev.yaml
+    # - echo "${darkbot_secret_prod_yml}" > k8s/charts/darkbot/secret_prod.yaml
+    - cd k8s/charts/darkbot
+    - python3 install-dev.py
