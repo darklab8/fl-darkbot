@@ -3,6 +3,7 @@ variables:
 
 stages:
   - deploy-dev
+  - deploy-prod
 
 dev_init_kube:
   image: ${PIPELINE_RUNNER}
@@ -11,8 +12,19 @@ dev_init_kube:
     - mkdir ~/.kube
     - echo "${kubectl_config}" > ~/.kube/config
     - echo "${darkbot_secret_dev_yml}" > k8s/charts/darkbot/secret_dev.yaml
-    # - echo "${darkbot_secret_prod_yml}" > k8s/charts/darkbot/secret_prod.yaml
     - cd k8s/charts/darkbot
     - python3 install-dev.py
     - kubectl scale deploy dind-deploy --namespace=darkbot-dev --replicas 0
     - kubectl scale deploy dind-deploy --namespace=darkbot-dev --replicas 1
+
+prod_init_kube:
+  image: ${PIPELINE_RUNNER}
+  stage: deploy-prod
+  script:
+    - mkdir ~/.kube
+    - echo "${kubectl_config}" > ~/.kube/config
+    - echo "${darkbot_secret_prod_yml}" > k8s/charts/darkbot/secret_prod.yaml
+    - cd k8s/charts/darkbot
+    - python3 install-prod.py
+  rules:
+    - when: manual
