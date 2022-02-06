@@ -10,4 +10,4 @@ dev_init_kube:
   script:
     - echo 123
   rules:
-      when: manual
+    - when: manual
