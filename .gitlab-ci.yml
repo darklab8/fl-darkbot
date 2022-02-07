@@ -29,8 +29,8 @@ dev_init_kube:
     - echo "${darkbot_secret_dev_yml}" > k8s/charts/darkbot/secret_dev.yaml
     - cd k8s/charts/darkbot
     - python3 install-dev.py --darkbot_image=$IMAGE_DEV
-    - kubectl scale deploy dind-deploy --namespace=darkbot-dev --replicas 0
-    - kubectl scale deploy dind-deploy --namespace=darkbot-dev --replicas 1
+    - kubectl scale deploy darkbot-deploy --namespace=darkbot-dev --replicas 0
+    - kubectl scale deploy darkbot-deploy --namespace=darkbot-dev --replicas 1
 
 prod_init_kube:
   image: ${PIPELINE_RUNNER}
