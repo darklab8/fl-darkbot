@@ -13,6 +13,8 @@ stages:
 dev_build_and_push:
   image: ${PIPELINE_RUNNER}
   stage: deploy-dev-docker
+  variables:
+    DOCKER_HOST: tcp://dind-service:2375
   script:
     - docker build --tag $TARGET_DEV .
     - echo "${darklab_registry_key}" > /etc/docker/daemon.json
