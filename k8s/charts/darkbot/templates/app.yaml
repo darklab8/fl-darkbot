@@ -51,8 +51,8 @@ spec:
       labels:
         app: {{ .Values.name }}
     spec:
-      imagePullSecrets:
-        - name: dockercred
+      # imagePullSecrets:
+      #   - name: dockercred
       volumes:
       - name: www-persistent-storage
         persistentVolumeClaim:
