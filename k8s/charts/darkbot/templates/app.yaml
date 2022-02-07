@@ -35,7 +35,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dind-deploy
+  name: darkbot-deploy
 spec:
   replicas: 1
   selector:
