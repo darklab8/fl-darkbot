@@ -1,8 +1,8 @@
 variables:
   PIPELINE_RUNNER: registry.gitlab.com/darklab2/darklab_pipeliner/darklab-pipeliner:kubectl-v1.0.3
-  TARGET_DEV: darklab.dedyn.io:32000:32000/darklab-darkbot:latest
+  TARGET_DEV: darklab.dedyn.io:32000/darklab-darkbot:latest
   IMAGE_DEV: localhost:32000/darklab-darkbot:latest
-  TARGET_PROD: darklab.dedyn.io:32000:32000/darklab-darkbot:v1.0.4
+  TARGET_PROD: darklab.dedyn.io:32000/darklab-darkbot:v1.0.4
   IMAGE_PROD: localhost:32000/darklab-darkbot:v1.0.4
 
 stages:
