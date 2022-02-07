@@ -1,4 +1,5 @@
 import os
+import argparse
 
 
 def shell(cmd):
@@ -9,4 +10,10 @@ def shell(cmd):
         exit(status_code)
 
 
-shell('helm upgrade --install --create-namespace --namespace darkbot-dev darkbot . --values=darkbot_dev.yaml --values=secret_dev.yaml')
+my_parser = argparse.ArgumentParser(description='')
+my_parser.add_argument('--darkbot_image',
+                       type=str,
+                       help='darkbot_image',)
+args = my_parser.parse_args()
+
+shell(f'helm upgrade --install --create-namespace --namespace darkbot-dev darkbot . --values=darkbot_dev.yaml --values=secret_dev.yaml --set darkbot_image={args.darkbot_image}')
