@@ -16,9 +16,8 @@ dev_build_and_push:
   variables:
     DOCKER_HOST: tcp://dind-service:2375
   script:
-    - docker build --tag $TARGET_DEV .
-    - echo "${darklab_registry_key}" > /etc/docker/daemon.json
-    - docker push $TARGET_DEV
+    - docker build --tag $IMAGE_DEV .
+    - docker push $IMAGE_DEV
 
 dev_init_kube:
   image: ${PIPELINE_RUNNER}
