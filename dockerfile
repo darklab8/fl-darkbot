@@ -14,7 +14,7 @@ ENV HOME=/app
 RUN mkdir $HOME
 WORKDIR $HOME
 
-RUN wget https://chromedriver.storage.googleapis.com/96.0.4664.45/chromedriver_linux64.zip
+RUN wget https://chromedriver.storage.googleapis.com/98.0.4758.102/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
 RUN rm chromedriver_linux64.zip
 
