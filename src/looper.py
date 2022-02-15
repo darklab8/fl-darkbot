@@ -13,6 +13,7 @@ import src.settings as settings
 from src.storage import Storage
 import logging
 from .message_sent_history import message_history
+from .shuffler import shuffled_dict
 
 class Looper(commands.Cog):
     def __init__(self, bot, storage: Storage, chanell_controller):
@@ -64,8 +65,9 @@ class Looper(commands.Cog):
 
             logging.info(f'context=allowed_channels, allowed_channels={allowed_channels.keys()}')
             logging.info(f'context=forbidden_channels, forbidden_channels={forbidden_channels}')
-
-            for channel_id, channel_info in allowed_channels.items():
+            
+            shuffled_allowed_channels = shuffled_dict(allowed_channels)
+            for channel_id, channel_info in shuffled_allowed_channels.items():
                 try:
                     logging.info(f'context=loop_begins_for_channel channel={channel_id} in guild={self.bot.get_channel(channel_id).guild}')
 
