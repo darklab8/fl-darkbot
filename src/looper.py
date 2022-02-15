@@ -97,8 +97,8 @@ class Looper(commands.Cog):
                             '\n**ERR: you tried to render too much info!**' +
                             '\nremove some of the values from config' +
                             '\nor write them fully instead of tags')
-                except (discord.errors.DiscordException, AttributeError,
-                        Exception) as error:
+                except Exception as error:
+                    logging.info("channel_id={str(channel_id)}, entering exception situation for the channel")
                     error_msg = f"ERR, loop_cycle, channel_id={str(channel_id)}, error={str(error)}"
                     
                     searched_error = "error=403 Forbidden (error code: 50001): Missing Access"
