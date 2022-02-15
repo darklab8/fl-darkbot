@@ -40,5 +40,7 @@ prod_init_kube:
     - echo "${darkbot_secret_prod_yml}" > k8s/charts/darkbot/secret_prod.yaml
     - cd k8s/charts/darkbot
     - python3 install-prod.py --darkbot_image=$IMAGE_PROD
+    - kubectl scale deploy darkbot-deploy --namespace=darkbot-prod --replicas 0
+    - kubectl scale deploy darkbot-deploy --namespace=darkbot-prod --replicas 1
   rules:
     - when: manual
