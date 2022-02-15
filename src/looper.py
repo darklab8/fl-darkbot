@@ -98,14 +98,14 @@ class Looper(commands.Cog):
                             '\nremove some of the values from config' +
                             '\nor write them fully instead of tags')
                 except Exception as error:
-                    logging.info("channel_id={str(channel_id)}, entering exception situation for the channel")
+                    logging.info(f"channel_id={str(channel_id)}, entering exception situation for the channel")
                     error_msg = f"ERR, loop_cycle, channel_id={str(channel_id)}, error={str(error)}"
                     
-                    searched_error = "error=403 Forbidden (error code: 50001): Missing Access"
-                    is_access_to_channel_forbidden_and_bot_removed = searched_error in error_msg
-                    if is_access_to_channel_forbidden_and_bot_removed:
-                        self.storage.channels.pop(channel_id)
-                        logging.info(f"channel_id={str(channel_id)}, msg=removed channel which had {searched_error}")
+                    # searched_error = "error=403 Forbidden (error code: 50001): Missing Access"
+                    # is_access_to_channel_forbidden_and_bot_removed = searched_error in error_msg
+                    # if is_access_to_channel_forbidden_and_bot_removed:
+                    #     self.storage.channels.pop(channel_id)
+                    #     logging.info(f"channel_id={str(channel_id)}, msg=removed channel which had {searched_error}")
 
                     logging.info(error_msg)
                     if isinstance(error, KeyboardInterrupt):
