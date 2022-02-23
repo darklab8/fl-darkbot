@@ -67,6 +67,8 @@ class Looper(commands.Cog):
             logging.info(f'context=forbidden_channels, forbidden_channels={forbidden_channels}')
             
             shuffled_allowed_channels = shuffled_dict(allowed_channels)
+
+            logging.info(f'context=shuffled_allowed_channels, shuffled_allowed_channels={shuffled_allowed_channels}')
             for channel_id, channel_info in shuffled_allowed_channels.items():
                 try:
                     logging.info(f'context=loop_begins_for_channel channel={channel_id} in guild={self.bot.get_channel(channel_id).guild}')
