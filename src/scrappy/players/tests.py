@@ -1,5 +1,5 @@
 import databases as databases
-from . import crud
+from . import repository
 from . import schemas
 import pytest
 
@@ -19,7 +19,7 @@ def db():
 
 
 def test_check_db(db):
-    player_repo = crud.PlayerRepository()
+    player_repo = repository.PlayerRepository()
 
     players = player_repo.get_all(db)
 

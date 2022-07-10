@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from typing import Dict
 from pydantic.dataclasses import dataclass
-from . import crud
+from . import repository
 from .. import databases
 from fastapi import Depends
 from sqlalchemy.orm import Session
@@ -28,7 +28,7 @@ async def get_ping2():
 
 @router.get("/players")
 async def get_players(db: Session = Depends(databases.default.get_db)):
-    player_storage = crud.PlayerRepository()
+    player_storage = repository.PlayerRepository()
 
     players = player_storage.get_all(db)
     return players
