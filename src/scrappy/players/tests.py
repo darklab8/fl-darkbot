@@ -10,8 +10,8 @@ import pytest
 def db():
     database = databases.Database(url="sqlite:///./test_sql_app.db")
 
-    models.databases.default.Base.metadata.drop_all(bind=database.engine)
-    models.databases.default.Base.metadata.create_all(bind=database.engine)
+    databases.default.Base.metadata.drop_all(bind=database.engine)
+    databases.default.Base.metadata.create_all(bind=database.engine)
 
     with database.manager_to_get_db() as db:
         yield db
