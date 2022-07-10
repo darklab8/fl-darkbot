@@ -1,21 +1,5 @@
-import databases as databases
 from . import repository
 from . import schemas
-import pytest
-
-
-@pytest.fixture
-def db():
-    database = databases.Database(
-        # url="sqlite:///./test_sql_app.db"
-        url="postgresql://postgres:postgres@localhost/default"
-    )
-
-    databases.default.Base.metadata.drop_all(bind=database.engine)
-    databases.default.Base.metadata.create_all(bind=database.engine)
-
-    with database.manager_to_get_db() as db:
-        yield db
 
 
 def test_check_db(db):

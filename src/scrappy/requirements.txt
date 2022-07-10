@@ -3,7 +3,8 @@ uvicorn[standard]
 black
 factory-boy
 SQLAlchemy
+SQLAlchemy-Utils
+alembic
 pytest
 pytest-pythonpath
-alembic
 psycopg2-binary
