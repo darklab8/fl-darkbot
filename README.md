@@ -9,5 +9,7 @@ And having this time more reliable and scalable archirecture. Scalable in a code
 - FastAPI
 - Celery
 - Kafka
+- Click
 - Helm
 - Docker-compose for dev env
+- Black (auto format on save)
