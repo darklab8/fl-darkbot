@@ -8,9 +8,7 @@
     "python.linting.pylamaEnabled": false,
     "python.linting.prospectorEnabled": false,
     "python.linting.banditEnabled": false,
-    "python.testing.pytestArgs": [
-        "."
-    ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestPath": "./src/scrappy/venv/bin/pytest"
 }

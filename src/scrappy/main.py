@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic.dataclasses import dataclass
+
 from .players import views
 
 app = FastAPI()
