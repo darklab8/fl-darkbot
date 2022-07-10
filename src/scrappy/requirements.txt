@@ -4,3 +4,4 @@ black
 factory-boy
 SQLAlchemy
 pytest
+pytest-pythonpath

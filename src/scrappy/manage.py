@@ -1,4 +1,4 @@
-from .database import engine
-from .players.models import Base
+import database as database
+import players.models as models
 
-Base.metadata.create_all(bind=engine)
+models.database.Base.metadata.create_all(bind=database.engine)

@@ -8,7 +8,7 @@ class PlayerRepository:
         self,
         db: Session,
     ):
-        return db.query(models.User).all()
+        return db.query(models.Player).all()
 
     def create_one(
         self,
