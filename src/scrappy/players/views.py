@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from typing import Dict
 from pydantic.dataclasses import dataclass
 from . import repository
-from .. import databases
+import databases
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
