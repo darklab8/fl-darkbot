@@ -1,0 +1,7 @@
+.env*
+__pycache__/
+*.bkp
+*.dtmp
+venv/
+sql_app.db
+test_sql_app.db

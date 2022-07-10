@@ -27,7 +27,7 @@ async def get_ping2():
 
 
 @router.get("/players")
-async def get_players(db: Session = Depends(databases.default.get_db)):
+async def get_players(db: Session = Depends(databases.default.get_session)):
     player_storage = repository.PlayerRepository()
 
     players = player_storage.get_all(db)

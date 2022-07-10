@@ -17,3 +17,23 @@ services:
       PGADMIN_DEFAULT_PASSWORD: postgres
     ports:
       - "5050:80"
+  broker:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+  scrappy_base:
+    &scrappy_base
+    build: src/scrappy
+    depends_on:
+      - "db"
+      - "broker"
+      - "pgadmin"
+    links:
+      - db
+      - broker
+      - pgadmin
+    volumes:
+      - "./src/scrappy:/code"
+  scrappy_web:
+    <<: *scrappy_base
+    command: python3 manage.py --action=run_web

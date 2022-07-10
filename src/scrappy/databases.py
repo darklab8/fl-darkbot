@@ -24,7 +24,7 @@ class Database:
         self.Base = declarative_base()
 
     @contextmanager
-    def manager_to_get_db(self):
+    def manager_to_get_session(self):
         db = self.SessionLocal()
         try:
             yield db
@@ -32,7 +32,7 @@ class Database:
             db.close()
 
     # Dependency
-    def get_db(self):
+    def get_session(self):
         db = self.SessionLocal()
         try:
             yield db

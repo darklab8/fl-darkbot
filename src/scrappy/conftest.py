@@ -29,5 +29,5 @@ def db():
     databases.default.Base.metadata.drop_all(bind=database.engine)
     databases.default.Base.metadata.create_all(bind=database.engine)
 
-    with database.manager_to_get_db() as db:
-        yield db
+    with database.manager_to_get_session() as session:
+        yield session
