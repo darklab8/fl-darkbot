@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from typing import Dict
 from pydantic.dataclasses import dataclass
 import src.scrappy.players.crud as crud
-import src.scrappy.database as database
+import src.scrappy.databases as databases
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -27,7 +27,7 @@ async def get_ping2():
 
 
 @router.get("/players")
-async def get_players(db: Session = Depends(database.get_db)):
+async def get_players(db: Session = Depends(databases.default.get_db)):
     player_storage = crud.PlayerRepository()
 
     players = player_storage.get_all(db)

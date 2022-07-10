@@ -4,3 +4,4 @@ __pycache__/
 *.dtmp
 venv/
 sql_app.db
+test_sql_app.db

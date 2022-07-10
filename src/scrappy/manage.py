@@ -1,4 +1,4 @@
-import database as database
+import src.scrappy.databases as databases
 import players.models as models
 
-models.database.Base.metadata.create_all(bind=database.engine)
+models.databases.Base.metadata.create_all(bind=databases.engine)
