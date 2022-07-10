@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-import src.scrappy.databases as databases
+import databases
 
 
 class Player(databases.default.Base):

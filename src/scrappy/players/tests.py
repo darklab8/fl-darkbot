@@ -1,14 +1,15 @@
-from unicodedata import decimal
-import src.scrappy.databases as databases
-import src.scrappy.players.crud as crud
-import src.scrappy.players.schemas as schemas
-import src.scrappy.players.models as models
+import databases as databases
+from . import crud
+from . import schemas
 import pytest
 
 
 @pytest.fixture
 def db():
-    database = databases.Database(url="sqlite:///./test_sql_app.db")
+    database = databases.Database(
+        # url="sqlite:///./test_sql_app.db"
+        url="postgresql://postgres:postgres@localhost/default"
+    )
 
     databases.default.Base.metadata.drop_all(bind=database.engine)
     databases.default.Base.metadata.create_all(bind=database.engine)

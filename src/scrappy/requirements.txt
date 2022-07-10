@@ -5,3 +5,5 @@ factory-boy
 SQLAlchemy
 pytest
 pytest-pythonpath
+alembic
+psycopg2-binary

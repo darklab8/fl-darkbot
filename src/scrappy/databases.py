@@ -9,9 +9,14 @@ class Database:
         self.SQLALCHEMY_DATABASE_URL = url
         # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
-        self.engine = create_engine(
-            self.SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-        )
+        if "postgresql" in url:
+            self.engine = create_engine(
+                self.SQLALCHEMY_DATABASE_URL, pool_pre_ping=False
+            )
+        else:
+            self.engine = create_engine(
+                self.SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+            )
         self.SessionLocal = sessionmaker(
             autocommit=False, autoflush=False, bind=self.engine
         )
@@ -35,4 +40,7 @@ class Database:
             db.close()
 
 
-default = Database(url="sqlite:///./sql_app.db")
+default = Database(
+    # url="sqlite:///./sql_app.db"
+    url="postgresql://postgres:postgres@localhost/default"
+)

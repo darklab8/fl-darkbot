@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from typing import Dict
 from pydantic.dataclasses import dataclass
-import src.scrappy.players.crud as crud
-import src.scrappy.databases as databases
+from . import crud
+from .. import databases
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
