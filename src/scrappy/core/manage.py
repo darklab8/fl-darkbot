@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 match args.action:
     case "run_web":
-        os.system("uvicorn main:app")
+        os.system("uvicorn core.main:app")
     case "drop":
         databases.default.Base.metadata.drop_all(bind=databases.default.engine)
     case "create":

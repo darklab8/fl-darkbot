@@ -17,23 +17,35 @@ services:
       PGADMIN_DEFAULT_PASSWORD: postgres
     ports:
       - "5050:80"
-  broker:
-    image: rabbitmq
+  redis:
+    image: redis
     ports:
-      - "5672:5672"
+      - "6379:6379"
   scrappy_base:
     &scrappy_base
     build: src/scrappy
     depends_on:
       - "db"
-      - "broker"
       - "pgadmin"
+      - "redis"
     links:
       - db
-      - broker
       - pgadmin
+      - redis
     volumes:
       - "./src/scrappy:/code"
+    command: tail -F /dev/null
   scrappy_web:
     <<: *scrappy_base
-    command: python3 manage.py --action=run_web
+    command: uvicorn core.main:app
+  scrappy_geat:
+    <<: *scrappy_base
+    command: celery -A core.broker beat
+  scrappy_worker:
+    <<: *scrappy_base
+    command: celery -A core.broker worker
+  scrappy_flower:
+    <<: *scrappy_base
+    command: celery -A core.broker flower
+    ports:
+      - "5555:5555"
