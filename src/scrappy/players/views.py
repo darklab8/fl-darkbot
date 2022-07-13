@@ -1,10 +1,11 @@
 from fastapi import APIRouter
 from typing import Dict
 from pydantic.dataclasses import dataclass
-from . import repository
-import scrappy.core.databases as databases
 from fastapi import Depends
 from sqlalchemy.orm import Session
+
+from scrappy.players.repository import PlayerRepository
+import scrappy.core.databases as databases
 
 
 router = APIRouter(
@@ -28,7 +29,7 @@ async def get_ping2():
 
 @router.get("/players")
 async def get_players(db: Session = Depends(databases.default.get_session)):
-    player_storage = repository.PlayerRepository()
+    player_storage = PlayerRepository()
 
     players = player_storage.get_all(db)
     return players

@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 
-import scrappy.players as players
+import scrappy.players.views as player_views
 
 
 def app_factory():
     app = FastAPI()
 
-    app.include_router(players.views.router)
+    app.include_router(player_views.router)
 
     @app.get("/")
     async def get_ping():
