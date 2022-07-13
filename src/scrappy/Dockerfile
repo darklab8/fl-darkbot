@@ -5,7 +5,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 WORKDIR /code
 
-COPY ./requirements.txt ./constraints.txt ./
+COPY scrappy/requirements.txt scrappy/constraints.txt ./
 RUN pip install -r requirements.txt -c constraints.txt
 
-COPY . .
+COPY scrappy /code/scrappy

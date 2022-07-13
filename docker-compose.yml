@@ -23,7 +23,9 @@ services:
       - "6379:6379"
   scrappy_base:
     &scrappy_base
-    build: src/scrappy
+    build: 
+      context: src
+      dockerfile: scrappy/Dockerfile
     depends_on:
       - "db"
       - "pgadmin"
@@ -33,19 +35,19 @@ services:
       - pgadmin
       - redis
     volumes:
-      - "./src/scrappy:/code"
+      - "./src/scrappy:/code/scrappy"
     command: tail -F /dev/null
   scrappy_web:
     <<: *scrappy_base
-    command: uvicorn core.main:app
+    command: uvicorn scrappy.core.main:app
   scrappy_geat:
     <<: *scrappy_base
-    command: celery -A core.broker beat
+    command: celery -A scrappy.core.broker beat
   scrappy_worker:
     <<: *scrappy_base
-    command: celery -A core.broker worker
+    command: celery -A scrappy.core.broker worker
   scrappy_flower:
     <<: *scrappy_base
-    command: celery -A core.broker flower
+    command: celery -A scrappy.core.broker flower
     ports:
       - "5555:5555"

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-import players
+import scrappy.players as players
 
 
 def app_factory():
