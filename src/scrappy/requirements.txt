@@ -10,3 +10,4 @@ pytest-pythonpath
 psycopg2-binary
 celery[redis]
 flower
+Faker
