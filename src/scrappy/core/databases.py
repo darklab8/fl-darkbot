@@ -3,6 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 
+from scrappy.core.settings import DEFAULT_DATABASE
+
 
 class Database:
     def __init__(self, url):
@@ -42,5 +44,5 @@ class Database:
 
 default = Database(
     # url="sqlite:///./sql_app.db"
-    url="postgresql://postgres:postgres@localhost/default"
+    url=DEFAULT_DATABASE
 )

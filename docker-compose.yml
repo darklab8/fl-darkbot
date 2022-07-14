@@ -36,6 +36,7 @@ services:
       - redis
     volumes:
       - "./src/scrappy:/code/scrappy"
+      - "./src/utils:/code/utils"
     command: tail -F /dev/null
   scrappy_web:
     <<: *scrappy_base

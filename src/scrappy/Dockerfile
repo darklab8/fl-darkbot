@@ -9,3 +9,4 @@ COPY scrappy/requirements.txt scrappy/constraints.txt ./
 RUN pip install -r requirements.txt -c constraints.txt
 
 COPY scrappy /code/scrappy
+COPY utils /code/utils
