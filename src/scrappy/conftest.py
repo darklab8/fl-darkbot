@@ -1,6 +1,6 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database, drop_database
+from sqlalchemy_utils import database_exists, create_database
 
 from fastapi.testclient import TestClient
 
