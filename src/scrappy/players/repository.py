@@ -16,9 +16,9 @@ class PlayerRepository:
     def create_one(
         self,
         player: schemas.PlayerSchema,
-    ):
-        db_user = models.Player(description=player.description)
+    ) -> schemas.PlayerSchema:
+        db_user = models.Player(**player.dict())
         self.db.add(db_user)
         self.db.commit()
         self.db.refresh(db_user)
-        return db_user
+        return schemas.PlayerSchema(**db_user.__dict__)

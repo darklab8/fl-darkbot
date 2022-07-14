@@ -1,14 +1,14 @@
-from . import repository
-from . import schemas
-
+from .repository import PlayerRepository
+from .schemas import PlayerSchema
 
 def test_check_db(db):
-    player_repo = repository.PlayerRepository(db)
+    player_repo = PlayerRepository(db)
 
     players = player_repo.get_all()
 
     assert players == []
 
-    players = player_repo.create_one(schemas.PlayerSchema(description="abc"))
+    player = player_repo.create_one(PlayerSchema(description="abc"))
 
-    assert len(player_repo.get_all()) == 1
+    assert player.id == 1
+    assert player.description == "abc"
