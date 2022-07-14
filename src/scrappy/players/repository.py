@@ -15,9 +15,10 @@ class PlayerRepository:
 
     def create_one(
         self,
-        player: schemas.PlayerSchema,
+        **kwargs: dict,
     ) -> schemas.PlayerSchema:
-        db_user = models.Player(**player.dict())
+        validated_data = schemas.PlayerSchema(**kwargs)
+        db_user = models.Player(**validated_data.dict())
         self.db.add(db_user)
         self.db.commit()
         self.db.refresh(db_user)

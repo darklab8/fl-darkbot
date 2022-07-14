@@ -8,7 +8,7 @@ def test_check_db(db):
 
     assert players == []
 
-    player = player_repo.create_one(PlayerSchema(description="abc"))
+    player = player_repo.create_one(description="abc")
 
     assert player.id == 1
     assert player.description == "abc"
