@@ -13,23 +13,9 @@ router = APIRouter(
     tags=["items"],
 )
 
-
-pong = {"message": "pong!"}
-
-
-@dataclass
-class Pong:
-    message: str = "pong!"
-
-
-@router.get("/", response_model=Pong)
-async def get_ping2():
-    return pong
-
-
-@router.get("/players")
+@router.get("/")
 async def get_players(db: Session = Depends(databases.default.get_session)):
-    player_storage = PlayerRepository()
+    player_storage = PlayerRepository(db)
 
-    players = player_storage.get_all(db)
+    players = player_storage.get_all()
     return players

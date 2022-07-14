@@ -37,5 +37,5 @@ def test_check_test_factory(db):
     assert isinstance(player.description, str)
 
 
-def test_check_endpoint_to_get_players(db):
-    pass
+def test_check_endpoint_to_get_players(db, client):
+    assert client.get("/players/").json() == []

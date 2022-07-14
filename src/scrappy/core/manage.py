@@ -30,6 +30,6 @@ if "manage" in __name__:
         case "makemigrations":
             makemigrations(args.migration_name)
         case "drop":
-            databases.default.Base.metadata.drop_all(bind=databases.default.engine)
+            databases.default.Base.metadata.drop_all(bind=databases.default._engine)
         case "create":
-            databases.default.Base.metadata.create_all(bind=databases.default.engine)
+            databases.default.Base.metadata.create_all(bind=databases.default._engine)

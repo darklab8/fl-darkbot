@@ -6,7 +6,10 @@ from fastapi.testclient import TestClient
 
 import scrappy.core.databases as databases
 from scrappy.core.main import app_factory
-from scrappy.core.settings import get_database_url
+import scrappy.core.settings as settings
+
+from unittest.mock import patch
+
 
 @pytest.fixture()
 def client():
@@ -16,22 +19,27 @@ def client():
 
 
 @pytest.fixture
-def db():
-    database_url = get_database_url("test_database")
+def db(mocker):
+    test_database_name = "test_database"
+
+    database_url = settings.DATABASE_URL + test_database_name
+
     engine = create_engine(database_url)
     if not database_exists(engine.url):
         create_database(engine.url)
 
     database = databases.Database(
         # url="sqlite:///./test_sql_app.db"
-        url=database_url
+        url=settings.DATABASE_URL,
+        name=test_database_name,
     )
 
     databases.default.Base.metadata.drop_all(bind=database.engine)
     databases.default.Base.metadata.create_all(bind=database.engine)
 
     with database.manager_to_get_session() as session:
-        yield session
+        with patch.object(databases.default, "_get_database_name", return_value=test_database_name):
+            yield session
 
     databases.default.Base.metadata.drop_all(bind=database.engine)
 
