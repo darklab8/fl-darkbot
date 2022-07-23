@@ -19,7 +19,7 @@ def client():
 
 
 @pytest.fixture
-def db(mocker):
+def db():
     test_database_name = "test_database"
 
     database_url = settings.DATABASE_URL + test_database_name
