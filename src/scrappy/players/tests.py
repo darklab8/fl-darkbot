@@ -9,6 +9,7 @@ import datetime
 from . import actions as player_actions
 from celery import shared_task
 from .tasks import update_players
+from unittest.mock import MagicMock, patch
 
 fake = Faker()
 
@@ -59,7 +60,7 @@ def mocked_request_url_data():
     return dict_
 
 
-from unittest.mock import MagicMock, patch
+
 
 
 def test_players_check(session, mocked_request_url_data: dict):
