@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class PlayerSchema(BaseModel):
@@ -7,3 +8,4 @@ class PlayerSchema(BaseModel):
     region: str
     system: str
     time: str
+    timestamp: datetime
