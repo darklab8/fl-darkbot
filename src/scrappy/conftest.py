@@ -44,3 +44,7 @@ def db():
             yield session
 
     databases.default.Base.metadata.drop_all(bind=database.engine)
+
+@pytest.fixture(scope="session")
+def celery_config():
+    return {"broker_url": "memory://", "result_backend": "redis://redis:6379/0"}

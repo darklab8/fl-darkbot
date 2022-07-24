@@ -1,9 +1,10 @@
 from utils.porto import AbstractAction
 from .repository import PlayerRepository
 from .schemas import PlayerSchema
+import requests
+import scrappy.core.settings as settings
 
-
-class ActionParsePlayers(AbstractAction):
+class SubTaskParsePlayers(AbstractAction):
     def __init__(self, data: dict):
         self._data = data
 
@@ -14,7 +15,7 @@ class ActionParsePlayers(AbstractAction):
         ]
 
 
-class ActionSavePlayersToStorage(AbstractAction):
+class SubTaskSavePlayersToStorage(AbstractAction):
     def __init__(self, players: list[PlayerSchema], db):
         self._players = players
         self._db = db
@@ -24,3 +25,27 @@ class ActionSavePlayersToStorage(AbstractAction):
         for player in self._players:
             player_repo.create_one(**(player.dict()))
         return True
+
+
+class SubTaskGetPlayerData(AbstractAction):
+    def __init__(self):
+        self._url = settings.API_PLAYER_URL
+
+    def run(self):
+        response = requests.get(settings.API_PLAYER_URL)
+        data = response.json()
+        return data
+
+
+class ActionGetAndParseAndSavePlayers(AbstractAction):
+    task_get = SubTaskGetPlayerData
+    task_parse = SubTaskParsePlayers
+    task_save = SubTaskSavePlayersToStorage
+
+    def __init__(self, db):
+        self._db = db
+
+    def run(self):
+        player_data = self.task_get()
+        players = self.task_parse(player_data)
+        self.task_save(players=players, db=self._db)

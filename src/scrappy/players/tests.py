@@ -1,13 +1,14 @@
+from utils.porto import AbstractAction
 from .repository import PlayerRepository
 from faker import Faker
 from .schemas import PlayerSchema
-import requests
-import scrappy.core.settings as settings
+
 import pytest
 import json
 import os
 import datetime
 from . import actions as player_actions
+from celery import shared_task
 
 fake = Faker()
 
@@ -44,8 +45,7 @@ file_with_data_example = os.path.join(
 
 @pytest.mark.integration
 def test_get_player_data():
-    response = requests.get(settings.API_PLAYER_URL)
-    data = response.json()
+
     with open(file_with_data_example, "w") as file_:
         file_.write(json.dumps(data, indent=2))
 
@@ -59,16 +59,20 @@ def mocked_request_url_data():
     return dict_
 
 
+from unittest.mock import MagicMock
+
+
 def test_players_check(db, mocked_request_url_data: dict):
 
-    players = player_actions.ActionParsePlayers(mocked_request_url_data)
-    player_actions.ActionSavePlayersToStorage(players=players, db=db)
+    action = player_actions.ActionGetAndParseAndSavePlayers
+    action.task_get.run = MagicMock(return_value=mocked_request_url_data)
+    action(db=db)
 
     player_repo = PlayerRepository(db)
     assert len(player_repo.get_all()) > 0
 
 
-def test_repeated_players_override_previous_players(db, mocked_request_url_data: dict):
+def test_repeated_players_override_previous_players(db):
     fixed_player_name = "Alpha"
     player = PlayerTestFactory(db, name=fixed_player_name)
 
@@ -84,3 +88,15 @@ def test_repeated_players_override_previous_players(db, mocked_request_url_data:
     assert players_amount == players_amount2
     assert player.name == player_in_db.name
     assert player.region == player_in_db.region
+
+
+@shared_task
+def mul(x, y):
+    return x * y
+
+
+@pytest.mark.usefixtures("celery_session_app")
+@pytest.mark.usefixtures("celery_session_worker")
+def test_try_testing_celery():
+    task_handle = mul.delay(2, 3)
+    assert task_handle.get() == 6

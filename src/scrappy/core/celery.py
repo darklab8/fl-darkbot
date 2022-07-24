@@ -1,10 +1,12 @@
 from celery import Celery
 from celery.schedules import crontab
 import os
+from scrappy.players.tasks import test
 
 app = Celery(
     "core",
     broker=os.environ.get("SCRAPPY_CELERY_BROKER", "redis://redis:6379/0"),
+    backend=os.environ.get("SCRAPPY_CELERY_BROKER", "redis://redis:6379/0"),
 )
 
 
@@ -22,13 +24,3 @@ def setup_periodic_tasks(sender, **kwargs):
         test.s("Happy Mondays!"),
     )
 
-
-@app.task
-def test(arg):
-    print(arg)
-
-
-@app.task
-def add(x, y):
-    z = x + y
-    print(z)
