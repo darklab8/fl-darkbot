@@ -4,18 +4,14 @@ from .schemas import PlayerSchema
 
 fake = Faker()
 
+
 class PlayerTestFactory:
     repo_model = PlayerRepository
 
-    def __new__(
-        cls, 
-        db,
-        **kwargs: dict
-    ) -> PlayerSchema:
+    def __new__(cls, db, **kwargs: dict) -> PlayerSchema:
         repo = cls.repo_model(db)
-        return repo.create_one(
-            description=kwargs.get("description", fake.name())
-        )
+        return repo.create_one(description=kwargs.get("description", fake.name()))
+
 
 def test_check_db(db):
     player_repo = PlayerRepository(db)

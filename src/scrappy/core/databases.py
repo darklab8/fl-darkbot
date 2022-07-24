@@ -16,7 +16,7 @@ class Database:
     def _get_database_url(self):
         return self.DATABASE_URL + self._get_database_name()
 
-    def __init__(self, url, name = None):
+    def __init__(self, url, name=None):
         self.DATABASE_URL = url
 
         if name is not None:
@@ -29,15 +29,12 @@ class Database:
         self._delated_init()
         return self._engine
 
-
     def _delated_init(self):
         if self.initialzed:
             return
 
         if "postgresql" in self.DATABASE_URL:
-            self._engine = create_engine(
-                self._get_database_url(), pool_pre_ping=False
-            )
+            self._engine = create_engine(self._get_database_url(), pool_pre_ping=False)
         else:
             self._engine = create_engine(
                 self._get_database_url(), connect_args={"check_same_thread": False}
@@ -47,7 +44,6 @@ class Database:
         )
 
         self.initialzed = True
-
 
     @contextmanager
     def manager_to_get_session(self):

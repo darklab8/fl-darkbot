@@ -38,9 +38,9 @@ def db():
     databases.default.Base.metadata.create_all(bind=database.engine)
 
     with database.manager_to_get_session() as session:
-        with patch.object(databases.default, "_get_database_name", return_value=test_database_name):
+        with patch.object(
+            databases.default, "_get_database_name", return_value=test_database_name
+        ):
             yield session
 
     databases.default.Base.metadata.drop_all(bind=database.engine)
-
-

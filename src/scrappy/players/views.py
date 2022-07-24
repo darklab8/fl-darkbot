@@ -13,6 +13,7 @@ router = APIRouter(
     tags=["items"],
 )
 
+
 @router.get("/")
 async def get_players(db: Session = Depends(databases.default.get_session)):
     player_storage = PlayerRepository(db)

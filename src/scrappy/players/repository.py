@@ -5,7 +5,7 @@ import scrappy.players.models as models
 
 
 class PlayerRepository:
-    def __init__(self,db: Session):
+    def __init__(self, db: Session):
         self.db: Session = db
 
     def get_all(
