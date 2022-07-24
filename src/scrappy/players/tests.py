@@ -6,6 +6,8 @@ import scrappy.core.settings as settings
 import pytest
 import json
 import os
+import datetime
+from . import actions as player_actions
 
 fake = Faker()
 
@@ -15,27 +17,20 @@ class PlayerTestFactory:
 
     def __new__(cls, db, **kwargs: dict) -> PlayerSchema:
         repo = cls.repo_model(db)
-        return repo.create_one(description=kwargs.get("description", fake.name()))
-
-
-def test_check_db(db):
-    player_repo = PlayerRepository(db)
-
-    players = player_repo.get_all()
-
-    assert players == []
-
-    player = player_repo.create_one(description="abc")
-
-    assert player.id == 1
-    assert player.description == "abc"
+        return repo.create_one(
+            name=kwargs.get("name", fake.name()),
+            region=kwargs.get("region", fake.name()),
+            system=kwargs.get("system", fake.name()),
+            time=kwargs.get("time", fake.name()),
+            timestamp=kwargs.get("timestamp", datetime.datetime.utcnow()),
+        )
 
 
 def test_check_test_factory(db):
 
     player = PlayerTestFactory(db)
     assert player.id == 1
-    assert isinstance(player.description, str)
+    assert isinstance(player.name, str)
 
 
 def test_check_endpoint_to_get_players(db, client):
@@ -55,19 +50,19 @@ def test_get_player_data():
         file_.write(json.dumps(data, indent=2))
 
 
-def test_players_check(db):
+@pytest.fixture
+def mocked_request_url_data():
     with open(file_with_data_example, "r") as file_:
         data = file_.read()
 
     dict_ = json.loads(data)
+    return dict_
 
-    players = [
-        PlayerSchema(**player, timestamp=dict_["timestamp"])
-        for player in dict_["players"]
-    ]
+
+def test_players_check(db, mocked_request_url_data: dict):
+
+    players = player_actions.ActionParsePlayers(mocked_request_url_data)
+    player_actions.ActionSavePlayersToStorage(players=players, db=db)
 
     player_repo = PlayerRepository(db)
-    for player in players:
-        player_repo.create_one(**(players[0].dict()))
-
     assert len(player_repo.get_all()) > 0
