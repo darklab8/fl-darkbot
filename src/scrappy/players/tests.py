@@ -1,6 +1,10 @@
 from .repository import PlayerRepository
 from faker import Faker
 from .schemas import PlayerSchema
+import requests
+import scrappy.core.settings as settings
+import pytest
+import json
 
 fake = Faker()
 
@@ -35,3 +39,10 @@ def test_check_test_factory(db):
 
 def test_check_endpoint_to_get_players(db, client):
     assert client.get("/players/").json() == []
+
+@pytest.mark.integration
+def test_get_player_data():
+    response = requests.get(settings.API_PLAYER_URL)
+    data = response.json()
+    with open("scrappy/players/test_example/players.json", "w") as file_:
+        file_.write(json.dumps(data, indent=2))

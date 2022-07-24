@@ -11,4 +11,7 @@ DATABASE_URL = config.get(
 
 DATABASE_NAME = "default"
 
-API_PLAYER_URL = config.get("api_player_url")
+API_PLAYER_URL = config.get("player.url")
+API_BASE_URL = config.get("base.url")
+FORUM_USERNAME = config.get("forum.username")
+FORUMN_PASSWORD = config.get("forum.password")

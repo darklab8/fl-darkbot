@@ -1,0 +1,120 @@
+{
+  "error": null,
+  "players": [
+    {
+      "time": "1h29",
+      "name": "Rejinaldo_de_Alencar",
+      "system": "Pennsylvania",
+      "region": "Liberty Space"
+    },
+    {
+      "time": "1h21",
+      "name": "Ur.Chisisi",
+      "system": "Omicron Minor",
+      "region": "Nomad Worlds"
+    },
+    {
+      "time": "1h03",
+      "name": "OS&C|ONE-Longhaul",
+      "system": "Colorado",
+      "region": "Liberty Space"
+    },
+    {
+      "time": "55m",
+      "name": "Flash.Weber",
+      "system": "New York",
+      "region": "Liberty Space"
+    },
+    {
+      "time": "40m",
+      "name": "Vykk_Draygo",
+      "system": "New York",
+      "region": "Liberty Space"
+    },
+    {
+      "time": "39m",
+      "name": "WickedFox",
+      "system": "New York",
+      "region": "Liberty Space"
+    },
+    {
+      "time": "38m",
+      "name": "DTR-CCS>Marraco",
+      "system": "Omicron Xi",
+      "region": "South Edge Worlds"
+    },
+    {
+      "time": "33m",
+      "name": "Kai.Gurke",
+      "system": "Pennsylvania",
+      "region": "Liberty Space"
+    },
+    {
+      "time": "16m",
+      "name": "Steve-Austin",
+      "system": "Omega-55",
+      "region": "Omega Border Worlds"
+    },
+    {
+      "time": "13m",
+      "name": "AWES-Logistics.Gamma",
+      "system": "New London",
+      "region": "Bretonia Space"
+    },
+    {
+      "time": "11m",
+      "name": "SDF-Valkyrie",
+      "system": "New Berlin",
+      "region": "Rheinland Space"
+    },
+    {
+      "time": "5m",
+      "name": "OCV-Dulce.et.Decorum",
+      "system": "Omicron Zeta",
+      "region": "Nomad Worlds"
+    },
+    {
+      "time": "4m",
+      "name": "Stolen.Miracle",
+      "system": "Omicron Theta",
+      "region": "South Edge Worlds"
+    },
+    {
+      "time": "4m",
+      "name": "46th|LNS-Savannah",
+      "system": "Kansas",
+      "region": "Independent Worlds"
+    },
+    {
+      "time": "3m",
+      "name": "Marshals|S-Hummingbird",
+      "system": "New York",
+      "region": "Liberty Space"
+    },
+    {
+      "time": "3m",
+      "name": "|RPPS|CNS|Sol-Invictus",
+      "system": "Omicron Xi",
+      "region": "South Edge Worlds"
+    },
+    {
+      "time": "3m",
+      "name": "Botlenose",
+      "system": "Omicron Delta",
+      "region": "Nomad Worlds"
+    },
+    {
+      "time": "1m",
+      "name": "AiviA",
+      "system": "Omicron Lost",
+      "region": "Nomad Worlds"
+    },
+    {
+      "time": "0m",
+      "name": "Silent-Spring",
+      "system": "Shikoku",
+      "region": "Kusari Space"
+    }
+  ],
+  "timestamp": "2022-07-24T00:37:01"
+}
