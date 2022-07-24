@@ -11,3 +11,4 @@ psycopg2-binary
 celery[redis]
 flower
 Faker
+darklab-utils

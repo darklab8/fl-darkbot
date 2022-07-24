@@ -13,3 +13,10 @@ And having this time more reliable and scalable archirecture. Scalable in a code
 - Helm
 - Docker-compose for dev env
 - Black (auto format on save)
+
+# Running dev test env:
+
+### Scrappy
+
+- docker-compose run scrappy_base /bin/bash # launching dev env
+- pytest # launching tests
