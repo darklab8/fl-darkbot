@@ -19,7 +19,7 @@ def client():
 
 
 @pytest.fixture
-def db():
+def database():
     test_database_name = "test_database"
 
     database_url = settings.DATABASE_URL + test_database_name
@@ -37,13 +37,19 @@ def db():
     databases.default.Base.metadata.drop_all(bind=database.engine)
     databases.default.Base.metadata.create_all(bind=database.engine)
 
-    with database.manager_to_get_session() as session:
-        with patch.object(
-            databases.default, "_get_database_name", return_value=test_database_name
-        ):
-            yield session
+    with patch.object(
+        databases.default, "_get_database_name", return_value=test_database_name
+    ):
+        yield database
 
     databases.default.Base.metadata.drop_all(bind=database.engine)
+
+
+@pytest.fixture
+def session(database):
+    with database.manager_to_get_session() as session:
+        yield session
+
 
 @pytest.fixture(scope="session")
 def celery_config():

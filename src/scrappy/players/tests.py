@@ -1,4 +1,3 @@
-from utils.porto import AbstractAction
 from .repository import PlayerRepository
 from faker import Faker
 from .schemas import PlayerSchema
@@ -9,6 +8,7 @@ import os
 import datetime
 from . import actions as player_actions
 from celery import shared_task
+from .tasks import update_players
 
 fake = Faker()
 
@@ -16,8 +16,8 @@ fake = Faker()
 class PlayerTestFactory:
     repo_model = PlayerRepository
 
-    def __new__(cls, db, **kwargs: dict) -> PlayerSchema:
-        repo = cls.repo_model(db)
+    def __new__(cls, session, **kwargs: dict) -> PlayerSchema:
+        repo = cls.repo_model(session)
         return repo.create_one(
             name=kwargs.get("name", fake.name()),
             region=kwargs.get("region", fake.name()),
@@ -27,14 +27,14 @@ class PlayerTestFactory:
         )
 
 
-def test_check_test_factory(db):
+def test_check_test_factory(session):
 
-    player = PlayerTestFactory(db)
+    player = PlayerTestFactory(session)
     assert player.id == 1
     assert isinstance(player.name, str)
 
 
-def test_check_endpoint_to_get_players(db, client):
+def test_check_endpoint_to_get_players(session, client):
     assert client.get("/players/").json() == []
 
 
@@ -45,7 +45,7 @@ file_with_data_example = os.path.join(
 
 @pytest.mark.integration
 def test_get_player_data():
-
+    data = player_actions.SubTaskGetPlayerData()
     with open(file_with_data_example, "w") as file_:
         file_.write(json.dumps(data, indent=2))
 
@@ -59,27 +59,27 @@ def mocked_request_url_data():
     return dict_
 
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 
-def test_players_check(db, mocked_request_url_data: dict):
+def test_players_check(session, mocked_request_url_data: dict):
 
     action = player_actions.ActionGetAndParseAndSavePlayers
     action.task_get.run = MagicMock(return_value=mocked_request_url_data)
-    action(db=db)
+    action(session=session)
 
-    player_repo = PlayerRepository(db)
+    player_repo = PlayerRepository(session)
     assert len(player_repo.get_all()) > 0
 
 
-def test_repeated_players_override_previous_players(db):
+def test_repeated_players_override_previous_players(session):
     fixed_player_name = "Alpha"
-    player = PlayerTestFactory(db, name=fixed_player_name)
+    player = PlayerTestFactory(session, name=fixed_player_name)
 
-    player_repo = PlayerRepository(db)
+    player_repo = PlayerRepository(session)
     players_amount = len(player_repo.get_all())
 
-    player = PlayerTestFactory(db, name=fixed_player_name)
+    player = PlayerTestFactory(session, name=fixed_player_name)
 
     players_amount2 = len(player_repo.get_all())
     player_in_db = player_repo.get_all()[0]
@@ -100,3 +100,20 @@ def mul(x, y):
 def test_try_testing_celery():
     task_handle = mul.delay(2, 3)
     assert task_handle.get() == 6
+
+
+@pytest.mark.usefixtures("celery_session_app")
+@pytest.mark.usefixtures("celery_session_worker")
+def test_trying_players_update(session, mocked_request_url_data):
+    with patch.object(
+        player_actions.ActionGetAndParseAndSavePlayers.task_get,
+        "run",
+        return_value=mocked_request_url_data,
+    ) as mock_method:
+        task_handle = update_players.delay()
+        task_handle.get()
+
+    player_repo = PlayerRepository(session)
+    players_amount = len(player_repo.get_all())
+
+    assert players_amount > 0

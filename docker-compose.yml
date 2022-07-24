@@ -36,7 +36,7 @@ services:
       - redis
     volumes:
       - "./src:/code"
-    command: tail -F /dev/null
+    command: python3 scripts_scrappy.py migrate_all
     environment:
       SCRAPPY_DATABASE_USERNAME: "postgres"
       SCRAPPY_DATABASE_PASSWORD: "postgres"

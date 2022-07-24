@@ -4,6 +4,7 @@ from .schemas import PlayerSchema
 import requests
 import scrappy.core.settings as settings
 
+
 class SubTaskParsePlayers(AbstractAction):
     def __init__(self, data: dict):
         self._data = data
@@ -16,12 +17,12 @@ class SubTaskParsePlayers(AbstractAction):
 
 
 class SubTaskSavePlayersToStorage(AbstractAction):
-    def __init__(self, players: list[PlayerSchema], db):
+    def __init__(self, players: list[PlayerSchema], session):
         self._players = players
-        self._db = db
+        self._session = session
 
     def run(self):
-        player_repo = PlayerRepository(self._db)
+        player_repo = PlayerRepository(self._session)
         for player in self._players:
             player_repo.create_one(**(player.dict()))
         return True
@@ -34,6 +35,7 @@ class SubTaskGetPlayerData(AbstractAction):
     def run(self):
         response = requests.get(settings.API_PLAYER_URL)
         data = response.json()
+        print("CALL IS MADE")
         return data
 
 
@@ -42,10 +44,10 @@ class ActionGetAndParseAndSavePlayers(AbstractAction):
     task_parse = SubTaskParsePlayers
     task_save = SubTaskSavePlayersToStorage
 
-    def __init__(self, db):
-        self._db = db
+    def __init__(self, session):
+        self._session = session
 
     def run(self):
         player_data = self.task_get()
         players = self.task_parse(player_data)
-        self.task_save(players=players, db=self._db)
+        self.task_save(players=players, session=self._session)
