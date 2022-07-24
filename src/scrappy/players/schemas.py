@@ -9,3 +9,10 @@ class PlayerSchema(BaseModel):
     system: str
     time: str
     timestamp: datetime
+
+    @property
+    def fields(self):
+        fields = [value for value in self if value != ("id", None)]
+
+        for field in fields:
+            yield field

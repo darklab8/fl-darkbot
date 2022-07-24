@@ -66,3 +66,21 @@ def test_players_check(db, mocked_request_url_data: dict):
 
     player_repo = PlayerRepository(db)
     assert len(player_repo.get_all()) > 0
+
+
+def test_repeated_players_override_previous_players(db, mocked_request_url_data: dict):
+    fixed_player_name = "Alpha"
+    player = PlayerTestFactory(db, name=fixed_player_name)
+
+    player_repo = PlayerRepository(db)
+    players_amount = len(player_repo.get_all())
+
+    player = PlayerTestFactory(db, name=fixed_player_name)
+
+    players_amount2 = len(player_repo.get_all())
+    player_in_db = player_repo.get_all()[0]
+
+    assert players_amount > 0
+    assert players_amount == players_amount2
+    assert player.name == player_in_db.name
+    assert player.region == player_in_db.region
