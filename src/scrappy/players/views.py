@@ -20,13 +20,11 @@ query_default_values = player_actions.PlayerQuery()
 @router.get("/")
 async def get_players(
     session: Session = Depends(databases.default.get_session),
-    page: int = query_default_values.page,
-    player_tag: list[str] = Query(
-        default=query_default_values.player_whitelist_tags
-    ),
-    region_tag: list[str] = query_default_values.region_whitelist_tags,
-    system_tag: list[str] = query_default_values.system_whitelist_tags,
-    is_online: bool = query_default_values.is_online,
+    page: int = Query(default=query_default_values.page),
+    player_tag: list[str] = Query(default=query_default_values.player_whitelist_tags),
+    region_tag: list[str] = Query(default=query_default_values.region_whitelist_tags),
+    system_tag: list[str] = Query(default=query_default_values.system_whitelist_tags),
+    is_online: bool = Query(default=query_default_values.is_online),
 ):
 
     players = player_actions.ActionGetFilteredPlayers(

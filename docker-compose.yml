@@ -45,7 +45,9 @@ services:
       - .env.scrappy
   scrappy_web:
     <<: *scrappy_base
-    command: uvicorn scrappy.core.main:app
+    command: uvicorn scrappy.core.main:app --host 0.0.0.0
+    ports:
+      - "8000:8000"
   scrappy_geat:
     <<: *scrappy_base
     command: celery -A scrappy.core.celery beat
