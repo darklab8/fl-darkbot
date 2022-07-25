@@ -60,9 +60,6 @@ def mocked_request_url_data():
     return dict_
 
 
-
-
-
 def test_players_check(session, mocked_request_url_data: dict):
 
     action = player_actions.ActionGetAndParseAndSavePlayers
@@ -118,3 +115,26 @@ def test_trying_players_update(session, mocked_request_url_data):
     players_amount = len(player_repo.get_all())
 
     assert players_amount > 0
+
+
+@pytest.fixture
+def loaded_players(session, mocked_request_url_data):
+    action = player_actions.ActionGetAndParseAndSavePlayers
+    action.task_get.run = MagicMock(return_value=mocked_request_url_data)
+    return action(session=session)
+
+
+def test_filter_players(loaded_players, session):
+    assert len(player_actions.ActionGetFilteredPlayers(session)) == 19
+
+    assert len(
+        player_actions.ActionGetFilteredPlayers(
+            session, player_whitelist_tags=["AWES", "Aiv"]
+        )
+    )
+
+
+def test_get_players_from_endpoint(
+    session, mocked_request_url_data: dict, client, loaded_players
+):
+    assert len(client.get("/players/?player_tag=AWES&player_tag=Aiv").json()) == 2

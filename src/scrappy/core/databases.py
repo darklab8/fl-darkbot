@@ -37,7 +37,8 @@ class Database:
             self._engine = create_engine(self._get_database_url(), pool_pre_ping=False)
         else:
             self._engine = create_engine(
-                self._get_database_url(), connect_args={"check_same_thread": False}
+                self._get_database_url(),
+                connect_args={"check_same_thread": False},
             )
         self.SessionLocal = sessionmaker(
             autocommit=False, autoflush=False, bind=self._engine

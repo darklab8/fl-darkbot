@@ -10,5 +10,5 @@ class Player(databases.default.Base):
     name = Column(String)
     region = Column(String)
     system = Column(String)
-    time = Column(String)
+    time = Column(String)  # time online
     timestamp = Column(DateTime)
