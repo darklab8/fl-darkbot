@@ -2,6 +2,7 @@ import argparse
 import os
 import secrets
 from enum import Enum, auto, EnumMeta
+from types import SimpleNamespace
 
 class _EnumDirectValueMeta(EnumMeta):
     def __getattribute__(cls, name):
@@ -39,29 +40,42 @@ class Parser:
         self._parser.add_argument('service', type=str, choices=Services.get_keys())
 
     def parse_all(self):
-        args = self._parser.parse_args()
-        return args
+        self._args = self._parser.parse_args()
+        return self
 
     def parse_service_only(self):
         args, argv = self._parser.parse_known_args()
-        return args
+        self._args = args
+        return self
+
+    @property
+    def args(self) -> SimpleNamespace:
+        return self._args
 
     def registher_actions(self, *actions):
         self._parser.add_argument('action', type=str, choices=actions)
         return self
 
-def run_inside_container(service, command):
-    return_code = os.system(
-        f"docker-compose -f docker-compose.{service}.yml -p {args.job_id} build && "
-        f"docker-compose -f docker-compose.{service}.yml  -p {args.job_id}"
-        f" {command}"
-    )
-    os.system(
-        f"docker-compose -f docker-compose.{service}.yml  -p {args.job_id} down"
-    )
-    print(return_code)
-    if return_code != 0:
-        raise Exception(f"non zero returned code={return_code}")
+class CommandExecutor:
+    def __init__(self, parser: Parser):
+        self._parser = parser
+
+    @property
+    def args(self):
+        return self._parser.args
+
+    def run_inside_container(self, command):        
+        return_code = os.system(
+            f"docker-compose -f docker-compose.{self.args.service}.yml -p {self.args.job_id} build && "
+            f"docker-compose -f docker-compose.{self.args.service}.yml  -p {self.args.job_id}"
+            f" {command}"
+        )
+        os.system(
+            f"docker-compose -f docker-compose.{self.args.service}.yml  -p {self.args.job_id} down"
+        )
+        print(return_code)
+        if return_code != 0:
+            raise Exception(f"non zero returned code={return_code}")
 
 class CommonCommands:
     test = "run --rm service_base pytest"
@@ -70,21 +84,22 @@ class CommonCommands:
     lint = "run --rm service_base black --check ."
 
 def main():
-    args = Parser().parse_service_only()
+    args = Parser().parse_service_only().args
 
     match args.service:
         case Services.scrappy:
-            args = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse_all()
+            parser = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse_all()
+            executor = CommandExecutor(parser)
 
-    match (args.service, args.action):
+    match (parser.args.service, parser.args.action):
         case (Services.scrappy, Actions.test):
-            run_inside_container(service=args.service, command=CommonCommands.test)
+            executor.run_inside_container(CommonCommands.test)
         case (Services.scrappy, Actions.shell):
-            run_inside_container(service=args.service, command=CommonCommands.shell)
+            executor.run_inside_container(CommonCommands.shell)
         case (Services.scrappy, Actions.run):
-            run_inside_container(service=args.service, command=CommonCommands.run)
+            executor.run_inside_container(CommonCommands.run)
         case (Services.scrappy, Actions.lint):
-            run_inside_container(service=args.service, command=CommonCommands.lint)
+            executor.run_inside_container(CommonCommands.lint)
         case _:
             raise Exception("Not registered command for this service")
 
