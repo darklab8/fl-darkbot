@@ -30,13 +30,25 @@ class Services(EnumWithValues):
 def shell(cmd):
     exit(os.system(cmd))
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--job_id', type=str, default=secrets.token_hex(4),
-    help="optional parameter random by default, ensures to run docker-compose with random -p parameter for no conflicts in parallel runs",
-)
-parser.add_argument('service', type=str, choices=Services.get_keys())
-parser.add_argument('action', type=str, choices=Actions.get_keys())
-args = parser.parse_args()
+class Parser:
+    def __init__(self):
+        self._parser = argparse.ArgumentParser()
+        self._parser.add_argument('--job_id', type=str, default=secrets.token_hex(4),
+            help="optional parameter random by default, ensures to run docker-compose with random -p parameter for no conflicts in parallel runs",
+        )
+        self._parser.add_argument('service', type=str, choices=Services.get_keys())
+
+    def parse(self):
+        args = self._parser.parse_args()
+        return args
+
+    def parse_known_args(self):
+        args, argv = self._parser.parse_known_args()
+        return args
+
+    def registher_actions(self, *actions):
+        self._parser.add_argument('action', type=str, choices=actions)
+        return self
 
 def run_inside_container(service, command):
     return_code = os.system(
@@ -56,6 +68,12 @@ class CommonCommands:
     shell = "run --rm service_base /bin/bash"
     run = "up"
     lint = "run --rm service_base black --check ."
+
+args = Parser().parse_known_args()
+
+match args.service:
+    case Services.scrappy:
+        args = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse()
 
 match (args.service, args.action):
     case (Services.scrappy, Actions.test):

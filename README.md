@@ -20,7 +20,8 @@ Warning: docker-compose needs to be installed
 Warning: python3.10 is supposed to be installed
 
 - python3 make.py {service_name} {action_name}
-- python3 make.py --help # to discovery other available services and commands
+- python3 make.py --help # to discovery other available services
+- python3 make.py {service_name} # to discovery available actions to server
 
 ### examples:
 
