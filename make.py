@@ -39,22 +39,20 @@ class Parser:
         )
         self._parser.add_argument('service', type=str, choices=Services.get_keys())
 
-    def parse_all(self):
-        self._args = self._parser.parse_args()
-        return self
-
-    def parse_service_only(self):
+    @property
+    def service(self):
         args, argv = self._parser.parse_known_args()
+        return args.service
+
+    def register_actions(self, *actions):
+        self._parser.add_argument('action', type=str, choices=actions)
+        args = self._parser.parse_args()
         self._args = args
         return self
-
+    
     @property
     def args(self) -> SimpleNamespace:
         return self._args
-
-    def registher_actions(self, *actions):
-        self._parser.add_argument('action', type=str, choices=actions)
-        return self
 
 class CommandExecutor:
     def __init__(self, parser: Parser):
@@ -77,6 +75,20 @@ class CommandExecutor:
         if return_code != 0:
             raise Exception(f"non zero returned code={return_code}")
 
+    def run(self):
+        match (self.args.service, self.args.action):
+            case (Services.scrappy, Actions.test):
+                self.run_inside_container(CommonCommands.test)
+            case (Services.scrappy, Actions.shell):
+                self.run_inside_container(CommonCommands.shell)
+            case (Services.scrappy, Actions.run):
+                self.run_inside_container(CommonCommands.run)
+            case (Services.scrappy, Actions.lint):
+                self.run_inside_container(CommonCommands.lint)
+            case _:
+                raise Exception("Not registered command for this service")
+
+
 class CommonCommands:
     test = "run --rm service_base pytest"
     shell = "run --rm service_base /bin/bash"
@@ -84,24 +96,10 @@ class CommonCommands:
     lint = "run --rm service_base black --check ."
 
 def main():
-    args = Parser().parse_service_only().args
-
-    match args.service:
+    service = Parser().service
+    match service:
         case Services.scrappy:
-            parser = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse_all()
-            executor = CommandExecutor(parser)
-
-    match (parser.args.service, parser.args.action):
-        case (Services.scrappy, Actions.test):
-            executor.run_inside_container(CommonCommands.test)
-        case (Services.scrappy, Actions.shell):
-            executor.run_inside_container(CommonCommands.shell)
-        case (Services.scrappy, Actions.run):
-            executor.run_inside_container(CommonCommands.run)
-        case (Services.scrappy, Actions.lint):
-            executor.run_inside_container(CommonCommands.lint)
-        case _:
-            raise Exception("Not registered command for this service")
+            CommandExecutor(parser=Parser().register_actions(Actions.test, Actions.shell, Actions.run, Actions.lint)).run()    
 
 if __name__=="__main__":
     main()
