@@ -38,11 +38,11 @@ class Parser:
         )
         self._parser.add_argument('service', type=str, choices=Services.get_keys())
 
-    def parse(self):
+    def parse_all(self):
         args = self._parser.parse_args()
         return args
 
-    def parse_known_args(self):
+    def parse_service_only(self):
         args, argv = self._parser.parse_known_args()
         return args
 
@@ -69,11 +69,11 @@ class CommonCommands:
     run = "up"
     lint = "run --rm service_base black --check ."
 
-args = Parser().parse_known_args()
+args = Parser().parse_service_only()
 
 match args.service:
     case Services.scrappy:
-        args = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse()
+        args = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse_all()
 
 match (args.service, args.action):
     case (Services.scrappy, Actions.test):
