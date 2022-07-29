@@ -10,6 +10,7 @@ from . import actions as player_actions
 from celery import shared_task
 from .tasks import update_players
 from unittest.mock import MagicMock, patch
+from fastapi.testclient import TestClient
 
 fake = Faker()
 
@@ -103,13 +104,11 @@ def test_try_testing_celery():
 @pytest.mark.usefixtures("celery_session_app")
 @pytest.mark.usefixtures("celery_session_worker")
 def test_trying_players_update(session, mocked_request_url_data):
-    with patch.object(
-        player_actions.ActionGetAndParseAndSavePlayers.task_get,
-        "run",
-        return_value=mocked_request_url_data,
-    ) as mock_method:
-        task_handle = update_players.delay()
-        task_handle.get()
+
+    action = player_actions.ActionGetAndParseAndSavePlayers
+    action.task_get = lambda self: mocked_request_url_data
+
+    action(session)
 
     player_repo = PlayerRepository(session)
     players_amount = len(player_repo.get_all())
@@ -135,6 +134,6 @@ def test_filter_players(loaded_players, session):
 
 
 def test_get_players_from_endpoint(
-    session, mocked_request_url_data: dict, client, loaded_players
+    session, mocked_request_url_data: dict, client: TestClient, loaded_players
 ):
     assert len(client.get("/players/?player_tag=AWES&player_tag=Aiv").json()) == 2

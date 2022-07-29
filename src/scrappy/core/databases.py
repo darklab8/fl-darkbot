@@ -1,5 +1,4 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 
@@ -13,7 +12,8 @@ class Database:
     def _get_database_name(self):
         return self.DATABASE_NAME
 
-    def _get_database_url(self):
+    @property
+    def full_url(self):
         return self.DATABASE_URL + self._get_database_name()
 
     def __init__(self, url, name=None):
@@ -21,8 +21,6 @@ class Database:
 
         if name is not None:
             self.DATABASE_NAME = name
-
-        self.Base = declarative_base()
 
     @property
     def engine(self):
@@ -34,10 +32,10 @@ class Database:
             return
 
         if "postgresql" in self.DATABASE_URL:
-            self._engine = create_engine(self._get_database_url(), pool_pre_ping=False)
+            self._engine = create_engine(self.full_url, pool_pre_ping=False)
         else:
             self._engine = create_engine(
-                self._get_database_url(),
+                self.full_url,
                 connect_args={"check_same_thread": False},
             )
         self.SessionLocal = sessionmaker(

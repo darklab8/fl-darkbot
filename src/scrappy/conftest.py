@@ -1,48 +1,51 @@
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database
+from sqlalchemy_utils import database_exists, create_database, drop_database
 
 from fastapi.testclient import TestClient
 
 import scrappy.core.databases as databases
 from scrappy.core.main import app_factory
 import scrappy.core.settings as settings
-
+from scrappy.core.declared_base import Model
 from unittest.mock import patch
+import secrets
 
 
 @pytest.fixture()
-def client():
+def app(database: databases.Database):
+
     app = app_factory()
+    app.dependency_overrides[databases.default.get_session] = database.get_session
+
+    return app
+
+
+@pytest.fixture()
+def client(app):
     client = TestClient(app)
     return client
 
 
-@pytest.fixture
+@pytest.fixture()
 def database():
-    test_database_name = "test_database"
-
-    database_url = settings.DATABASE_URL + test_database_name
-
-    engine = create_engine(database_url)
-    if not database_exists(engine.url):
-        create_database(engine.url)
-
     database = databases.Database(
-        # url="sqlite:///./test_sql_app.db"
         url=settings.DATABASE_URL,
-        name=test_database_name,
+        name=f"test_database_{secrets.token_hex(10)}",
     )
 
-    databases.default.Base.metadata.drop_all(bind=database.engine)
-    databases.default.Base.metadata.create_all(bind=database.engine)
+    if not database_exists(database.full_url):
+        create_database(database.full_url)
 
-    with patch.object(
-        databases.default, "_get_database_name", return_value=test_database_name
-    ):
-        yield database
+    Model.metadata.drop_all(bind=database.engine)
 
-    databases.default.Base.metadata.drop_all(bind=database.engine)
+    Model.metadata.create_all(bind=database.engine)
+
+    yield database
+
+    Model.metadata.drop_all(bind=database.engine)
+
+    if database_exists(database.full_url):
+        drop_database(database.full_url)
 
 
 @pytest.fixture
