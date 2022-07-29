@@ -69,20 +69,24 @@ class CommonCommands:
     run = "up"
     lint = "run --rm service_base black --check ."
 
-args = Parser().parse_service_only()
+def main():
+    args = Parser().parse_service_only()
 
-match args.service:
-    case Services.scrappy:
-        args = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse_all()
+    match args.service:
+        case Services.scrappy:
+            args = Parser().registher_actions(Actions.test, Actions.shell, Actions.run, Actions.lint).parse_all()
 
-match (args.service, args.action):
-    case (Services.scrappy, Actions.test):
-        run_inside_container(service=args.service, command=CommonCommands.test)
-    case (Services.scrappy, Actions.shell):
-        run_inside_container(service=args.service, command=CommonCommands.shell)
-    case (Services.scrappy, Actions.run):
-        run_inside_container(service=args.service, command=CommonCommands.run)
-    case (Services.scrappy, Actions.lint):
-        run_inside_container(service=args.service, command=CommonCommands.lint)
-    case _:
-        raise Exception("Not registered command for this service")
+    match (args.service, args.action):
+        case (Services.scrappy, Actions.test):
+            run_inside_container(service=args.service, command=CommonCommands.test)
+        case (Services.scrappy, Actions.shell):
+            run_inside_container(service=args.service, command=CommonCommands.shell)
+        case (Services.scrappy, Actions.run):
+            run_inside_container(service=args.service, command=CommonCommands.run)
+        case (Services.scrappy, Actions.lint):
+            run_inside_container(service=args.service, command=CommonCommands.lint)
+        case _:
+            raise Exception("Not registered command for this service")
+
+if __name__=="__main__":
+    main()
