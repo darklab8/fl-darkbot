@@ -14,9 +14,16 @@ And having this time more reliable and scalable archirecture. Scalable in a code
 - Docker-compose for dev env
 - Black (auto format on save)
 
-# Running dev test env:
+# Commands
 
-### Scrappy
+Warning: docker-compose needs to be installed
 
-- docker-compose run scrappy_base /bin/bash # launching dev env
-- pytest # launching tests
+- python3 make.py {service_name} {action_name}
+- python3 make.py --help # to discovery other available services and commands
+
+### examples:
+
+- python3 make.py scrappy shell # Running dev env
+- python3 make.py scrappy test # Running tests
+
+

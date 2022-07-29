@@ -2,15 +2,14 @@ version: '3.8'
 services:
   db:
     image: postgres:13
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: default
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
   pgadmin:
-    container_name: pgadmin4_container
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: postgres@postgres.com
@@ -19,20 +18,18 @@ services:
       - "5050:80"
   redis:
     image: redis
-    ports:
-      - "6379:6379"
-  scrappy_base:
-    &scrappy_base
+    expose:
+      - "6379"
+  service_base:
+    &service_base
     build: 
       context: src
       dockerfile: scrappy/Dockerfile
     depends_on:
       - "db"
-      - "pgadmin"
       - "redis"
     links:
       - db
-      - pgadmin
       - redis
     volumes:
       - "./src:/code"
@@ -44,18 +41,18 @@ services:
     env_file:
       - .env.scrappy
   scrappy_web:
-    <<: *scrappy_base
+    <<: *service_base
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
     ports:
       - "8000:8000"
   scrappy_geat:
-    <<: *scrappy_base
+    <<: *service_base
     command: celery -A scrappy.core.celery beat
   scrappy_worker:
-    <<: *scrappy_base
+    <<: *service_base
     command: celery -A scrappy.core.celery worker
   scrappy_flower:
-    <<: *scrappy_base
+    <<: *service_base
     command: celery -A scrappy.core.celery flower
     ports:
       - "5555:5555"
