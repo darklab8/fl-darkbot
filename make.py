@@ -35,8 +35,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--job_id', type=str, default=secrets.token_hex(4),
     help="optional parameter random by default, ensures to run docker-compose with random -p parameter for no conflicts in parallel runs",
 )
-parser.add_argument('service', type=str, choices=[Services.scrappy])
-parser.add_argument('action', type=str, choices=[Actions.test, Actions.shell, Actions.run, Actions.lint])
+parser.add_argument('service', type=str, choices=Services.get_keys())
+parser.add_argument('action', type=str, choices=Actions.get_keys())
 args = parser.parse_args()
 
 def run_inside_container(command):
