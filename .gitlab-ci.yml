@@ -1,5 +1,5 @@
 variables:
-  IMAGE_PIPELINE_RUNNER: darkwind8/pipeline_images:kubectl-v1.23
+  IMAGE_PIPELINE_RUNNER: darkwind8/pipeline_images:kubectl-v1.23_v1
   DOCKER_HOST: tcp://dind-service:2375
 
 stages:
