@@ -1,6 +1,6 @@
 from utils.porto import AbstractAction
 from .repository import PlayerRepository
-from .schemas import PlayerSchema
+from . import schemas as player_schemas
 import requests
 import scrappy.core.settings as settings
 from pydantic import BaseModel
@@ -10,15 +10,15 @@ class SubTaskParsePlayers(AbstractAction):
     def __init__(self, data: dict):
         self._data = data
 
-    def run(self) -> list[PlayerSchema]:
+    def run(self) -> list[player_schemas.PlayerIn]:
         return [
-            PlayerSchema(**player, timestamp=self._data["timestamp"])
+            player_schemas.PlayerIn(**player, timestamp=self._data["timestamp"])
             for player in self._data["players"]
         ]
 
 
 class SubTaskSavePlayersToStorage(AbstractAction):
-    def __init__(self, players: list[PlayerSchema], session):
+    def __init__(self, players: list[player_schemas.PlayerIn], session):
         self._players = players
         self._session = session
 

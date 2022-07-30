@@ -22,8 +22,8 @@ class PlayerRepository:
     def create_one(
         self,
         **kwargs: dict,
-    ) -> schemas.PlayerSchema:
-        validated_data = schemas.PlayerSchema(**kwargs)
+    ) -> schemas.PlayerIn:
+        validated_data = schemas.PlayerIn(**kwargs)
 
         db_user = (
             self.db.query(models.Player)
@@ -32,7 +32,7 @@ class PlayerRepository:
         )
 
         if db_user:
-            for key, value in validated_data.fields:
+            for key, value in validated_data:
                 setattr(db_user, key, value)
 
         if db_user is None:
@@ -41,11 +41,11 @@ class PlayerRepository:
 
         self.db.commit()
         self.db.refresh(db_user)
-        return schemas.PlayerSchema(**db_user.__dict__)
+        return schemas.PlayerOut(**db_user.__dict__)
 
     page_size = 20
 
-    def get_players_by_query(self, query: "PlayerQuery") -> list[schemas.PlayerSchema]:
+    def get_players_by_query(self, query: "PlayerQuery") -> list[schemas.PlayerOut]:
         queryset = self.db.query(models.Player)
 
         if query.is_online:
@@ -70,4 +70,4 @@ class PlayerRepository:
         queryset = queryset.limit(self.page_size).offset(query.page * self.page_size)
         players = queryset.all()
 
-        return list([schemas.PlayerSchema(**player.__dict__) for player in players])
+        return list([schemas.PlayerOut(**player.__dict__) for player in players])

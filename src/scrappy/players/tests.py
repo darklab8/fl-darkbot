@@ -1,6 +1,6 @@
 from .repository import PlayerRepository
 from faker import Faker
-from .schemas import PlayerSchema
+from . import schemas as player_schemas
 
 import pytest
 import json
@@ -18,7 +18,7 @@ fake = Faker()
 class PlayerTestFactory:
     repo_model = PlayerRepository
 
-    def __new__(cls, session, **kwargs: dict) -> PlayerSchema:
+    def __new__(cls, session, **kwargs: dict) -> player_schemas.PlayerOut:
         repo = cls.repo_model(session)
         return repo.create_one(
             name=kwargs.get("name", fake.name()),
