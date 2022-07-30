@@ -1,6 +1,7 @@
 import darklab_utils as utils
 import os
 
+
 class InputDataFactory(utils.AbstractInputDataFactory):
     @staticmethod
     def register_cli_arguments(
@@ -49,12 +50,17 @@ class MyScripts(utils.AbstractScripts):
 
     @utils.registered_action
     def migrate_all(self):
-        files = os.listdir(os.path.join(os.path.dirname(__file__), "scrappy", "alembic", "versions"))
+        files = os.listdir(
+            os.path.join(os.path.dirname(__file__), "scrappy", "alembic", "versions")
+        )
         approved_files = [file for file in files if ".py" in file]
 
-        sorted_revisions = {file.split("_")[1].replace(".py",""): file.split("_")[0] for file in approved_files}
-        last_revision_id = sorted_revisions[str(len(sorted_revisions)-1)]
-        
+        sorted_revisions = {
+            file.split("_")[1].replace(".py", ""): file.split("_")[0]
+            for file in approved_files
+        }
+        last_revision_id = sorted_revisions[str(len(sorted_revisions) - 1)]
+
         os.system(f"python3 scripts_scrappy.py migrate --id={last_revision_id}")
 
     @utils.registered_action

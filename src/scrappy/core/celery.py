@@ -14,4 +14,3 @@ app = Celery(
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('world') every 30 seconds
     sender.add_periodic_task(30.0, update_players.s(), expires=10)
-

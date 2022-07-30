@@ -5,7 +5,7 @@ from fastapi import Query
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-import scrappy.core.databases as databases
+from scrappy.core.databases import DatabaseFactory
 from . import actions as player_actions
 
 
@@ -19,7 +19,7 @@ query_default_values = player_actions.PlayerQuery()
 
 @router.get("/")
 async def get_players(
-    session: Session = Depends(databases.default.get_session),
+    session: Session = Depends(DatabaseFactory.get_default_session),
     page: int = Query(default=query_default_values.page),
     player_tag: list[str] = Query(default=query_default_values.player_whitelist_tags),
     region_tag: list[str] = Query(default=query_default_values.region_whitelist_tags),

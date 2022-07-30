@@ -93,7 +93,7 @@ class CommonCommands:
     test = "run --rm service_base pytest"
     shell = "run --rm service_base /bin/bash"
     run = "up"
-    lint = "run --rm service_base black --check ."
+    lint = 'run --rm service_base black --exclude="alembic/.*/*.py" --check .'
 
 def main():
     service = Parser().service

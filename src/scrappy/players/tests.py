@@ -116,6 +116,26 @@ def test_trying_players_update(session, mocked_request_url_data):
     assert players_amount > 0
 
 
+@pytest.mark.usefixtures("celery_session_app")
+@pytest.mark.usefixtures("celery_session_worker")
+def test_trying_players_update_with_celery_integration(
+    session, database, mocked_request_url_data
+):
+
+    with patch.object(
+        player_actions.ActionGetAndParseAndSavePlayers,
+        "task_get",
+        return_value=mocked_request_url_data,
+    ) as mock_method:
+        task_handle = update_players.delay(database_name=database.name)
+        task_handle.get()
+
+    player_repo = PlayerRepository(session)
+    players_amount = len(player_repo.get_all())
+
+    assert players_amount > 0
+
+
 @pytest.fixture
 def loaded_players(session, mocked_request_url_data):
     action = player_actions.ActionGetAndParseAndSavePlayers
