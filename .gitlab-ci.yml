@@ -9,10 +9,10 @@ unit-testing:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
   script:
-    - python3 make.py test
+    - python3 make.py scrappy test
 
 linting:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
   script:
-    - python3 make.py lint
+    - python3 make.py scrappy lint
