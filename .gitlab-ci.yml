@@ -8,15 +8,11 @@ stages:
 unit-testing:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
-  before_script:
-    - *activate_docker
   script:
     - python3 make.py test
 
 linting:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
-  before_script:
-    - *activate_docker
   script:
     - python3 make.py lint
