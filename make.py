@@ -91,7 +91,7 @@ class CommandExecutor:
 
 class CommonCommands:
     test = "run --rm service_base pytest"
-    shell = "run --rm service_base /bin/bash"
+    shell = "run --rm scrappy_shell"
     run = "up"
     lint = 'run --rm service_base black --exclude="alembic/.*/*.py" --check .'
 

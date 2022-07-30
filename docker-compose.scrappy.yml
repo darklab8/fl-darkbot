@@ -31,8 +31,6 @@ services:
     links:
       - db
       - redis
-    volumes:
-      - "./src:/code"
     command: python3 scripts_scrappy.py migrate_all
     environment:
       SCRAPPY_DATABASE_USERNAME: "postgres"
@@ -56,3 +54,8 @@ services:
     command: celery -A scrappy.core.celery flower
     ports:
       - "5555:5555"
+  scrappy_shell:
+    <<: *service_base
+    command: /bin/bash
+    volumes:
+      - "./src:/code"
