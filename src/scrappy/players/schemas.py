@@ -9,6 +9,7 @@ class PlayerIn(BaseModel):
     time: str
     timestamp: datetime
 
+
 class PlayerOut(BaseModel):
     id: int
     name: str
