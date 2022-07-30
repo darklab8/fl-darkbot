@@ -1,0 +1,22 @@
+variables:
+  IMAGE_PIPELINE_RUNNER: darkwind8/pipeline_images:kubectl-v1.23
+  DOCKER_HOST: tcp://dind-service:2375
+
+stages:
+  - test
+
+unit-testing:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *activate_docker
+  script:
+    - python3 make.py test
+
+linting:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *activate_docker
+  script:
+    - python3 make.py lint
