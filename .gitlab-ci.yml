@@ -5,14 +5,21 @@ variables:
 stages:
   - test
 
+.env_scrappy_staging: &env_scrappy_staging
+  - echo "$env_scrappy_staging" > .env.scrappy
+
 unit-testing:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
+  before_script:
+    - *env_scrappy_staging
   script:
     - python3 make.py scrappy test
 
 linting:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
+  before_script:
+    - *env_scrappy_staging
   script:
     - python3 make.py scrappy lint
