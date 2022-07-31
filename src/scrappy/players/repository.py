@@ -1,13 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from sqlalchemy.orm.query import Query
-from sqlalchemy.sql import select
-from sqlalchemy.sql import text
-from sqlalchemy.orm import aliased
-from sqlalchemy import subquery
 import scrappy.players.schemas as schemas
 import scrappy.players.models as models
-from sqlalchemy.dialects import postgresql
 
 
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
