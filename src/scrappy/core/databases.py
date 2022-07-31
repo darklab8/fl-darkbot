@@ -7,14 +7,6 @@ from sqlalchemy.orm import Session
 import scrappy.core.settings as settings
 
 
-class SessionWrapper:
-    def __init__(self, session: Session):
-        self._session = session
-
-    def execute(self, stmt):
-        return self._session.execute(stmt)
-
-
 class Database:
     def __init__(self, name, url):
         self._name = name
@@ -60,7 +52,7 @@ class Database:
     @contextmanager
     def get_core_session(self) -> Generator[Session, None, None]:
         with Session(self.engine, future=True) as session:
-            yield SessionWrapper(session)
+            yield session
 
     def get_self(self):
         return self
