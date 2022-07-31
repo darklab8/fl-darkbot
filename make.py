@@ -23,7 +23,7 @@ class EnumWithValues(_EnumGetKey, metaclass=_EnumDirectValueMeta):
 class Actions(EnumWithValues):
     test = auto()
     shell = auto()
-    run = auto()
+    up = auto()
     lint = auto()
 
 class Services(EnumWithValues):
@@ -40,6 +40,7 @@ class Parser:
             help="optional parameter random by default, ensures to run docker-compose with random -p parameter for no conflicts in parallel runs",
         )
         self._parser.add_argument('service', type=str, choices=Services.get_keys())
+        self._parser.add_argument('--envfile', type=str, default=None)
 
     @property
     def service(self):
@@ -64,10 +65,12 @@ class CommandExecutor:
     def args(self):
         return self._parser.args
 
-    def run_inside_container(self, command):        
+    def run_inside_container(self, command): 
+        envfile = f"--env-file {self.args.envfile}" if self.args.envfile else ""
+
         return_code = os.system(
             f"docker-compose -f docker-compose.{self.args.service}.yml -p {self.args.job_id} build && "
-            f"docker-compose -f docker-compose.{self.args.service}.yml  -p {self.args.job_id}"
+            f"docker-compose -f docker-compose.{self.args.service}.yml -p {self.args.job_id} {envfile}"
             f" {command}"
         )
         os.system(
@@ -83,12 +86,12 @@ class CommandExecutor:
                 self.run_inside_container(CommonCommands.test)
             case (Services.scrappy, Actions.shell):
                 self.run_inside_container(CommonCommands.shell)
-            case (Services.scrappy, Actions.run):
-                self.run_inside_container(CommonCommands.run)
+            case (Services.scrappy, Actions.up):
+                self.run_inside_container(CommonCommands.up)
             case (Services.scrappy, Actions.lint):
                 self.run_inside_container(CommonCommands.lint)
-            case (Services.pgadmin, Actions.run):
-                self.run_inside_container(CommonCommands.run)
+            case (Services.pgadmin, Actions.up):
+                self.run_inside_container(CommonCommands.up)
             case _:
                 raise Exception("Not registered command for this service")
 
@@ -98,16 +101,16 @@ env_file = "--env-file ./env.scrappy.staging" if path.exists(".env.scrappy.stagi
 class CommonCommands:
     test = "run --rm service_base pytest"
     shell = f"-f docker-compose.shared.yml {env_file} run --rm service_shell"
-    run = "up"
+    up = "up"
     lint = 'run --rm service_base black --exclude="alembic/.*/*.py" --check .'
 
 def main():
     service = Parser().service
     match service:
         case Services.scrappy:
-            CommandExecutor(parser=Parser().register_actions(Actions.test, Actions.shell, Actions.run, Actions.lint)).run()    
+            CommandExecutor(parser=Parser().register_actions(Actions.test, Actions.shell, Actions.up, Actions.lint)).run()    
         case Services.pgadmin:
-            CommandExecutor(parser=Parser().register_actions(Actions.run)).run()
+            CommandExecutor(parser=Parser().register_actions(Actions.up)).run()
 
 if __name__=="__main__":
     main()

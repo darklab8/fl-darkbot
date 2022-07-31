@@ -38,7 +38,7 @@ services:
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
     ports:
       - "8000:8000"
-  service_geat:
+  service_beat:
     <<: *service_base
     command: celery -A scrappy.core.celery beat
   service_worker:
