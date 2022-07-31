@@ -76,7 +76,7 @@ class PlayerRepository:
 
             extracted_info = IsOnlineQuery.from_query_row_to_schema(db_row)
 
-            session._session.commit()
+            session.commit()
 
         return extracted_info
 
