@@ -163,6 +163,6 @@ def test_filter_players(loaded_players, database):
 
 
 def test_get_players_from_endpoint(
-    session, mocked_request_url_data: dict, client: TestClient, loaded_players
+    database, mocked_request_url_data: dict, client: TestClient, loaded_players
 ):
     assert len(client.get("/players/?player_tag=AWES&player_tag=Aiv").json()) == 2

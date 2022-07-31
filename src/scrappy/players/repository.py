@@ -107,20 +107,25 @@ class PlayerRepository:
                     IsOnlineQuery.latest_timestamp == Player.timestamp
                 )
 
-            # if query.player_whitelist_tags:
-            #     queryset = filter_by_contains_in_list(
-            #         queryset, models.Player.name, query.player_whitelist_tags
-            #     )
+            def contains_any(queryset, attribute, tags):
+                return queryset.where(
+                    or_(*[attribute.like(rf"%{tag}%") for tag in tags])
+                )
 
-            # if query.region_whitelist_tags:
-            #     queryset = filter_by_contains_in_list(
-            #         queryset, models.Player.region, query.region_whitelist_tags
-            #     )
+            if query.player_whitelist_tags:
+                queryset = contains_any(
+                    queryset, Player.name, query.player_whitelist_tags
+                )
 
-            # if query.system_whitelist_tags:
-            #     queryset = filter_by_contains_in_list(
-            #         queryset, models.Player.system, query.system_whitelist_tags
-            #     )
+            if query.region_whitelist_tags:
+                queryset = queryset = contains_any(
+                    queryset, Player.region, query.region_whitelist_tags
+                )
+
+            if query.system_whitelist_tags:
+                queryset = queryset = contains_any(
+                    queryset, Player.system, query.system_whitelist_tags
+                )
 
             queryset = queryset.limit(self.page_size).offset(
                 query.page * self.page_size
