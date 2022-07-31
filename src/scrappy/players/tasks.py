@@ -6,6 +6,5 @@ import scrappy.core.settings as settings
 
 @shared_task
 def update_players(database_name: str = settings.DATABASE_NAME):
-    with DatabaseFactory(name=database_name).manager_to_get_session() as session:
-        ActionGetAndParseAndSavePlayers(session=session)
+    ActionGetAndParseAndSavePlayers(database=DatabaseFactory(name=database_name))
     return True

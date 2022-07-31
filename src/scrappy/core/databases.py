@@ -55,6 +55,9 @@ class Database:
         finally:
             session.close()
 
+    def get_self(self):
+        return self
+
 
 class DatabaseFactory:
     def __new__(
@@ -69,6 +72,6 @@ class DatabaseFactory:
         return instance
 
     @staticmethod
-    def get_default_session() -> Generator[orm.Session, None, None]:
+    def get_default_database() -> Database:
         database = DatabaseFactory()
-        yield database.get_session()
+        return database

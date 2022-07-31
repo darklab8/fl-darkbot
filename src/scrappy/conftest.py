@@ -15,7 +15,7 @@ import secrets
 def app(database: Database):
 
     app = app_factory()
-    app.dependency_overrides[DatabaseFactory.get_default_session] = database.get_session
+    app.dependency_overrides[DatabaseFactory.get_default_database] = database.get_self
 
     return app
 

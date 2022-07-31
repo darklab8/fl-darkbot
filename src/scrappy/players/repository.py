@@ -1,8 +1,12 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, SessionTransaction
 from sqlalchemy import func, or_
 from sqlalchemy.orm.query import Query
+from sqlalchemy import select, insert, update
 import scrappy.players.schemas as schemas
 import scrappy.players.models as models
+from scrappy.core.databases import Database
+from scrappy.players.models import Player
+from contextlib import contextmanager
 
 
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
@@ -10,12 +14,29 @@ def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
     return queryset.filter(or_(*filter_list))
 
 
+class SessionWrapper:
+    def __init__(self, session: Session):
+        self._session = session
+
+    def execute(self, stmt):
+        return self._session.execute(stmt)
+
+
+@contextmanager
+def SessionManager(database: Database):
+    with Session(database.engine, future=True) as session:
+        yield SessionWrapper(session)
+
+
 class IsOnlineQuery:
-    def __new__(cls, db):
-        statement = db.query(func.max(models.Player.timestamp)).subquery()
-        return db.query(
-            models.Player, (statement == models.Player.timestamp).label("is_online")
+    latest_timestamp = select(func.max(Player.timestamp)).scalar_subquery()
+
+    def __new__(cls):
+        stmt = select(
+            Player, (cls.latest_timestamp == Player.timestamp).label("is_online")
         )
+
+        return stmt
 
     @staticmethod
     def from_query_row_to_schema(one_row):
@@ -26,71 +47,85 @@ class IsOnlineQuery:
 
 
 class PlayerRepository:
-    def __init__(self, db: Session):
-        self.db: Session = db
+    def __init__(self, db: Database):
+        self.db: Database = db
 
     def get_all(
         self,
     ):
-        return IsOnlineQuery.from_many_rows_to_schemas(IsOnlineQuery(self.db).all())
+        with SessionManager(self.db) as session:
+            statement = IsOnlineQuery()
+            db_rows = session.execute(statement).all()
+            players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
+            return players
 
     def create_one(
         self,
         **kwargs: dict,
-    ) -> schemas.PlayerIn:
+    ) -> schemas.PlayerOut:
         validated_data = schemas.PlayerIn(**kwargs)
 
-        db_user = (
-            self.db.query(models.Player)
-            .filter(models.Player.name == validated_data.name)
-            .first()
-        )
+        with SessionManager(self.db) as session:
 
-        if db_user:
-            for key, value in validated_data:
-                setattr(db_user, key, value)
+            get_player = select(Player).where(Player.name == validated_data.name)
+            already_present_user = session.execute(get_player).scalar()
 
-        if db_user is None:
-            db_user = models.Player(**validated_data.dict())
-            self.db.add(db_user)
+            if already_present_user:
+                add_or_update_user_query = (
+                    update(Player)
+                    .where(Player.id == already_present_user.id)
+                    .values(**validated_data.dict())
+                )
+            else:
+                add_or_update_user_query = insert(Player).values(
+                    **validated_data.dict()
+                )
 
-        self.db.commit()
-        self.db.refresh(db_user)
+            session.execute(add_or_update_user_query)
 
-        db_user = (
-            IsOnlineQuery(self.db)
-            .filter(models.Player.name == validated_data.name)
-            .first()
-        )
+            get_refreshed_player = IsOnlineQuery().where(
+                IsOnlineQuery.latest_timestamp == Player.timestamp
+            )
 
-        return IsOnlineQuery.from_query_row_to_schema(db_user)
+            db_row = session.execute(get_refreshed_player).first()
+
+            extracted_info = IsOnlineQuery.from_query_row_to_schema(db_row)
+
+            session._session.commit()
+
+        return extracted_info
 
     page_size = 20
 
     def get_players_by_query(self, query: "PlayerQuery") -> list[schemas.PlayerOut]:
 
-        queryset = IsOnlineQuery(self.db)
+        with SessionManager(self.db) as session:
+            queryset = IsOnlineQuery()
 
-        if query.is_online:
-            maximum = self.db.query(func.max(models.Player.timestamp)).subquery()
-            queryset = queryset.filter(models.Player.timestamp == maximum)
+            if query.is_online:
+                queryset = queryset.where(
+                    IsOnlineQuery.latest_timestamp == Player.timestamp
+                )
 
-        if query.player_whitelist_tags:
-            queryset = filter_by_contains_in_list(
-                queryset, models.Player.name, query.player_whitelist_tags
+            # if query.player_whitelist_tags:
+            #     queryset = filter_by_contains_in_list(
+            #         queryset, models.Player.name, query.player_whitelist_tags
+            #     )
+
+            # if query.region_whitelist_tags:
+            #     queryset = filter_by_contains_in_list(
+            #         queryset, models.Player.region, query.region_whitelist_tags
+            #     )
+
+            # if query.system_whitelist_tags:
+            #     queryset = filter_by_contains_in_list(
+            #         queryset, models.Player.system, query.system_whitelist_tags
+            #     )
+
+            queryset = queryset.limit(self.page_size).offset(
+                query.page * self.page_size
             )
 
-        if query.region_whitelist_tags:
-            queryset = filter_by_contains_in_list(
-                queryset, models.Player.region, query.region_whitelist_tags
-            )
+            db_rows = session.execute(queryset).all()
 
-        if query.system_whitelist_tags:
-            queryset = filter_by_contains_in_list(
-                queryset, models.Player.system, query.system_whitelist_tags
-            )
-
-        queryset = queryset.limit(self.page_size).offset(query.page * self.page_size)
-        players = queryset.all()
-
-        return IsOnlineQuery.from_many_rows_to_schemas(players)
+        return IsOnlineQuery.from_many_rows_to_schemas(db_rows)

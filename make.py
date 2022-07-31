@@ -3,6 +3,7 @@ import os
 import secrets
 from enum import Enum, auto, EnumMeta
 from types import SimpleNamespace
+from os import path
 
 class _EnumDirectValueMeta(EnumMeta):
     def __getattribute__(cls, name):
@@ -92,9 +93,11 @@ class CommandExecutor:
                 raise Exception("Not registered command for this service")
 
 
+env_file = "--env-file ./env.scrappy.staging" if path.exists(".env.scrappy.staging") else ""
+
 class CommonCommands:
     test = "run --rm service_base pytest"
-    shell = "-f docker-compose.shared.yml run --rm service_shell"
+    shell = f"-f docker-compose.shared.yml {env_file} run --rm service_shell"
     run = "up"
     lint = 'run --rm service_base black --exclude="alembic/.*/*.py" --check .'
 

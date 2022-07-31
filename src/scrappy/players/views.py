@@ -3,9 +3,7 @@ from typing import Dict
 from fastapi import Query
 
 from fastapi import Depends
-from sqlalchemy.orm import Session
-
-from scrappy.core.databases import DatabaseFactory
+from scrappy.core.databases import DatabaseFactory, Database
 from . import actions as player_actions
 
 
@@ -19,7 +17,7 @@ query_default_values = player_actions.PlayerQuery()
 
 @router.get("/")
 async def get_players(
-    session: Session = Depends(DatabaseFactory.get_default_session),
+    database: Database = Depends(DatabaseFactory.get_default_database),
     page: int = Query(default=query_default_values.page),
     player_tag: list[str] = Query(default=query_default_values.player_whitelist_tags),
     region_tag: list[str] = Query(default=query_default_values.region_whitelist_tags),
@@ -28,7 +26,7 @@ async def get_players(
 ):
 
     players = player_actions.ActionGetFilteredPlayers(
-        session=session,
+        database=database,
         page=page,
         player_whitelist_tags=player_tag,
         region_whitelist_tags=region_tag,

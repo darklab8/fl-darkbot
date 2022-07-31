@@ -18,12 +18,12 @@ class SubTaskParsePlayers(AbstractAction):
 
 
 class SubTaskSavePlayersToStorage(AbstractAction):
-    def __init__(self, players: list[player_schemas.PlayerIn], session):
+    def __init__(self, players: list[player_schemas.PlayerIn], database):
         self._players = players
-        self._session = session
+        self._database = database
 
     def run(self):
-        player_repo = PlayerRepository(self._session)
+        player_repo = PlayerRepository(self._database)
         for player in self._players:
             player_repo.create_one(**(player.dict()))
         return True
@@ -45,13 +45,13 @@ class ActionGetAndParseAndSavePlayers(AbstractAction):
     task_parse = SubTaskParsePlayers
     task_save = SubTaskSavePlayersToStorage
 
-    def __init__(self, session):
-        self._session = session
+    def __init__(self, database):
+        self._database = database
 
     def run(self):
         player_data = self.task_get()
         players = self.task_parse(player_data)
-        self.task_save(players=players, session=self._session)
+        self.task_save(players=players, database=self._database)
         return players
 
 
@@ -64,11 +64,11 @@ class PlayerQuery(BaseModel):
 
 
 class ActionGetFilteredPlayers(AbstractAction):
-    def __init__(self, session, **kwargs):
-        self._session = session
+    def __init__(self, database, **kwargs):
+        self._database = database
         self.query = PlayerQuery(**kwargs)
 
     def run(self):
-        player_storage = PlayerRepository(self._session)
+        player_storage = PlayerRepository(self._database)
         players = player_storage.get_players_by_query(self.query)
         return players

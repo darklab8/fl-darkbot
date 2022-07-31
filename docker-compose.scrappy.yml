@@ -29,10 +29,10 @@ services:
       SCRAPPY_DATABASE_USERNAME: "postgres"
       SCRAPPY_DATABASE_PASSWORD: "postgres"
       SCRAPPY_DATABASE_HOST: "db"
-      SCRAPPY_PLAYER_URL: "example"
-      SCRAPPY_BASE_URL: "example"
-      SCRAPPY_FORUM_USERNAME: "example"
-      SCRAPPY_FORUM_PASSWORD: "example"
+      SCRAPPY_PLAYER_URL: "${SCRAPPY_PLAYER_URL:-example}"  
+      SCRAPPY_BASE_URL: "${SCRAPPY_BASE_URL:-example}"
+      SCRAPPY_FORUM_USERNAME: "${SCRAPPY_FORUM_USERNAME:-example}"
+      SCRAPPY_FORUM_PASSWORD: "${SCRAPPY_FORUM_PASSWORD:-example}"
   service_web:
     <<: *service_base
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
