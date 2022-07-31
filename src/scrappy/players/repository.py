@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Session, SessionTransaction
 from sqlalchemy import func, or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy import select, insert, update
@@ -12,20 +11,6 @@ from contextlib import contextmanager
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
     filter_list = [attribute_.contains(x) for x in list_]
     return queryset.filter(or_(*filter_list))
-
-
-class SessionWrapper:
-    def __init__(self, session: Session):
-        self._session = session
-
-    def execute(self, stmt):
-        return self._session.execute(stmt)
-
-
-@contextmanager
-def SessionManager(database: Database):
-    with Session(database.engine, future=True) as session:
-        yield SessionWrapper(session)
 
 
 class IsOnlineQuery:
@@ -53,7 +38,7 @@ class PlayerRepository:
     def get_all(
         self,
     ):
-        with SessionManager(self.db) as session:
+        with self.db.get_core_session() as session:
             statement = IsOnlineQuery()
             db_rows = session.execute(statement).all()
             players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
@@ -65,7 +50,7 @@ class PlayerRepository:
     ) -> schemas.PlayerOut:
         validated_data = schemas.PlayerIn(**kwargs)
 
-        with SessionManager(self.db) as session:
+        with self.db.get_core_session() as session:
 
             get_player = select(Player).where(Player.name == validated_data.name)
             already_present_user = session.execute(get_player).scalar()
@@ -99,7 +84,7 @@ class PlayerRepository:
 
     def get_players_by_query(self, query: "PlayerQuery") -> list[schemas.PlayerOut]:
 
-        with SessionManager(self.db) as session:
+        with self.db.get_core_session() as session:
             queryset = IsOnlineQuery()
 
             if query.is_online:

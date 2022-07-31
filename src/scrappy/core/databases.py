@@ -2,8 +2,17 @@ from typing import Generator
 from sqlalchemy import create_engine
 import sqlalchemy.orm as orm
 from contextlib import contextmanager
+from sqlalchemy.orm import Session
 
 import scrappy.core.settings as settings
+
+
+class SessionWrapper:
+    def __init__(self, session: Session):
+        self._session = session
+
+    def execute(self, stmt):
+        return self._session.execute(stmt)
 
 
 class Database:
@@ -18,10 +27,6 @@ class Database:
                 self.full_url,
                 connect_args={"check_same_thread": False},
             )
-
-        self._session_maker = orm.sessionmaker(
-            autocommit=False, autoflush=False, bind=self._engine
-        )
 
     @property
     def url(self) -> str:
@@ -40,20 +45,22 @@ class Database:
         return self._engine
 
     @contextmanager
-    def manager_to_get_session(self) -> Generator[orm.Session, None, None]:
-        session = self._session_maker()
+    def get_orm_sessiom(self) -> Generator[orm.Session, None, None]:
+
+        session_maker = orm.sessionmaker(
+            autocommit=False, autoflush=False, bind=self._engine
+        )
+
+        session = session_maker()
         try:
             yield session
         finally:
             session.close()
 
-    # Dependency
-    def get_session(self) -> Generator[orm.Session, None, None]:
-        session = self._session_maker()
-        try:
-            yield session
-        finally:
-            session.close()
+    @contextmanager
+    def get_core_session(self) -> Generator[Session, None, None]:
+        with Session(self.engine, future=True) as session:
+            yield SessionWrapper(session)
 
     def get_self(self):
         return self
