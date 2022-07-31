@@ -9,13 +9,6 @@ services:
       POSTGRES_DB: default
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: postgres@postgres.com
-      PGADMIN_DEFAULT_PASSWORD: postgres
-    ports:
-      - "5050:80"
   redis:
     image: redis
     expose:
@@ -38,23 +31,23 @@ services:
       SCRAPPY_DATABASE_HOST: "db"
     env_file:
       - .env.scrappy
-  scrappy_web:
+  service_web:
     <<: *service_base
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
     ports:
       - "8000:8000"
-  scrappy_geat:
+  service_geat:
     <<: *service_base
     command: celery -A scrappy.core.celery beat
-  scrappy_worker:
+  service_worker:
     <<: *service_base
     command: celery -A scrappy.core.celery worker
-  scrappy_flower:
+  service_flower:
     <<: *service_base
     command: celery -A scrappy.core.celery flower
     ports:
       - "5555:5555"
-  scrappy_shell:
+  service_shell:
     <<: *service_base
     command: /bin/bash
     volumes:

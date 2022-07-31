@@ -1,13 +1,33 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from sqlalchemy.orm.query import Query
+from sqlalchemy.sql import select
+from sqlalchemy.sql import text
+from sqlalchemy.orm import aliased
+from sqlalchemy import subquery
 import scrappy.players.schemas as schemas
 import scrappy.players.models as models
+from sqlalchemy.dialects import postgresql
 
 
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
     filter_list = [attribute_.contains(x) for x in list_]
     return queryset.filter(or_(*filter_list))
+
+
+class IsOnlineQuery:
+    def __new__(cls, db):
+        statement = db.query(func.max(models.Player.timestamp)).subquery()
+        return db.query(
+            models.Player, (statement == models.Player.timestamp).label("is_online")
+        )
+
+    @staticmethod
+    def from_query_row_to_schema(one_row):
+        return schemas.PlayerOut(**one_row[0].__dict__, is_online=one_row[1])
+
+    def from_many_rows_to_schemas(many_row):
+        return [IsOnlineQuery.from_query_row_to_schema(db_row) for db_row in many_row]
 
 
 class PlayerRepository:
@@ -17,7 +37,7 @@ class PlayerRepository:
     def get_all(
         self,
     ):
-        return self.db.query(models.Player).all()
+        return IsOnlineQuery.from_many_rows_to_schemas(IsOnlineQuery(self.db).all())
 
     def create_one(
         self,
@@ -41,16 +61,24 @@ class PlayerRepository:
 
         self.db.commit()
         self.db.refresh(db_user)
-        return schemas.PlayerOut(**db_user.__dict__)
+
+        db_user = (
+            IsOnlineQuery(self.db)
+            .filter(models.Player.name == validated_data.name)
+            .first()
+        )
+
+        return IsOnlineQuery.from_query_row_to_schema(db_user)
 
     page_size = 20
 
     def get_players_by_query(self, query: "PlayerQuery") -> list[schemas.PlayerOut]:
-        queryset = self.db.query(models.Player)
+
+        queryset = IsOnlineQuery(self.db)
 
         if query.is_online:
-            timedate_when_online = self.db.query(func.max(models.Player.timestamp))
-            queryset = queryset.filter(models.Player.timestamp == timedate_when_online)
+            maximum = self.db.query(func.max(models.Player.timestamp)).subquery()
+            queryset = queryset.filter(models.Player.timestamp == maximum)
 
         if query.player_whitelist_tags:
             queryset = filter_by_contains_in_list(
@@ -70,4 +98,4 @@ class PlayerRepository:
         queryset = queryset.limit(self.page_size).offset(query.page * self.page_size)
         players = queryset.all()
 
-        return list([schemas.PlayerOut(**player.__dict__) for player in players])
+        return IsOnlineQuery.from_many_rows_to_schemas(players)

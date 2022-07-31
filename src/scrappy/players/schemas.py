@@ -17,3 +17,4 @@ class PlayerOut(BaseModel):
     system: str
     time: str
     timestamp: datetime
+    is_online: bool

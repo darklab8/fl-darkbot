@@ -27,6 +27,7 @@ class Actions(EnumWithValues):
 
 class Services(EnumWithValues):
     scrappy = auto()
+    pgadmin = auto()
 
 def shell(cmd):
     exit(os.system(cmd))
@@ -85,13 +86,15 @@ class CommandExecutor:
                 self.run_inside_container(CommonCommands.run)
             case (Services.scrappy, Actions.lint):
                 self.run_inside_container(CommonCommands.lint)
+            case (Services.pgadmin, Actions.run):
+                self.run_inside_container(CommonCommands.run)
             case _:
                 raise Exception("Not registered command for this service")
 
 
 class CommonCommands:
     test = "run --rm service_base pytest"
-    shell = "run --rm scrappy_shell"
+    shell = "-f docker-compose.shared.yml run --rm service_shell"
     run = "up"
     lint = 'run --rm service_base black --exclude="alembic/.*/*.py" --check .'
 
@@ -100,6 +103,8 @@ def main():
     match service:
         case Services.scrappy:
             CommandExecutor(parser=Parser().register_actions(Actions.test, Actions.shell, Actions.run, Actions.lint)).run()    
+        case Services.pgadmin:
+            CommandExecutor(parser=Parser().register_actions(Actions.run)).run()
 
 if __name__=="__main__":
     main()

@@ -34,6 +34,8 @@ def test_check_test_factory(session):
     player = PlayerTestFactory(session)
     assert player.id == 1
     assert isinstance(player.name, str)
+    assert isinstance(player.is_online, bool)
+    print(player)
 
 
 def test_check_endpoint_to_get_players(session, client):
@@ -68,7 +70,9 @@ def test_players_check(session, mocked_request_url_data: dict):
     action(session=session)
 
     player_repo = PlayerRepository(session)
-    assert len(player_repo.get_all()) > 0
+    players = player_repo.get_all()
+    assert len(players) > 0
+    print(players)
 
 
 def test_repeated_players_override_previous_players(session):
@@ -146,10 +150,13 @@ def loaded_players(session, mocked_request_url_data):
 def test_filter_players(loaded_players, session):
     assert len(player_actions.ActionGetFilteredPlayers(session)) == 19
 
-    assert len(
-        player_actions.ActionGetFilteredPlayers(
-            session, player_whitelist_tags=["AWES", "Aiv"]
+    assert (
+        len(
+            player_actions.ActionGetFilteredPlayers(
+                session, player_whitelist_tags=["AWES", "Aiv"]
+            )
         )
+        > 0
     )
 
 
