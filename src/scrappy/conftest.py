@@ -20,12 +20,6 @@ def app(database: Database):
 
 
 @pytest.fixture()
-def async_app(async_database: Database):
-    app = app_factory()
-    app.dependency_overrides[DatabaseFactory.get_default_database] = async_database.get_self
-    return app
-
-@pytest.fixture()
 def client(app):
     client = TestClient(app)
     return client
@@ -54,24 +48,6 @@ def database():
     Model.metadata.drop_all(bind=database.engine)
     if database_exists(database.full_url):
         drop_database(database.full_url)
-
-@pytest.fixture()
-def async_database():
-    database = DatabaseFactory(
-        url=settings.DATABASE_URL,
-        name=f"test_database_{secrets.token_hex(10)}",
-    )
-
-    if not database_exists(database.full_url):
-        create_database(database.full_url)
-
-    Model.metadata.drop_all(bind=database.engine)
-
-    Model.metadata.create_all(bind=database.engine)
-    yield database
-    if database_exists(database.full_url):
-        drop_database(database.full_url)
-
 
 @pytest.fixture
 def session(database):
