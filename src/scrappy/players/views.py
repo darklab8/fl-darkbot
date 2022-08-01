@@ -47,4 +47,3 @@ async def get_async(
         repo = PlayerRepository(database)
         players = await repo.a_get_all()
         return players
-        

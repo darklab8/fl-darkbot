@@ -49,6 +49,7 @@ def database():
     if database_exists(database.full_url):
         drop_database(database.full_url)
 
+
 @pytest.fixture
 def session(database):
     with database.manager_to_get_session() as session:

@@ -171,11 +171,15 @@ def test_get_players_from_endpoint(
 
 from httpx import AsyncClient
 
+
 @pytest.mark.asyncio
-async def test_async_try(database, mocked_request_url_data: dict, app, loaded_players, async_client):
+async def test_async_try(
+    database, mocked_request_url_data: dict, app, loaded_players, async_client
+):
     response = await async_client.get("/players/async")
     players = response.json()
     assert len(players) > 0
+
 
 @pytest.mark.asyncio
 async def test_asyncio_stuff():
