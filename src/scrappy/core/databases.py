@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, AsyncGenerator
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 import sqlalchemy.orm as orm
@@ -67,7 +67,7 @@ class Database:
             yield session
 
     @asynccontextmanager
-    async def get_async_session(self) -> Generator[AsyncSession, None, None]:
+    async def get_async_session(self) -> AsyncGenerator[AsyncSession, None, None]:
         try:
             connection = AsyncSession(self.async_engine)
             yield connection
