@@ -44,6 +44,15 @@ class PlayerRepository:
             players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
             return players
 
+    async def a_get_all(
+        self,
+    ):
+        async with self.db.get_async_session() as session:
+            statement = IsOnlineQuery()
+            db_rows = (await session.execute(statement)).all()
+            players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
+            return players
+
     def create_one(
         self,
         **kwargs: dict,

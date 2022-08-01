@@ -6,7 +6,7 @@ from fastapi import Depends
 from scrappy.core.databases import DatabaseFactory, Database
 from . import actions as player_actions
 from sqlalchemy import select
-from .models import Player
+from .repository import PlayerRepository
 
 router = APIRouter(
     prefix="/players",
@@ -43,8 +43,8 @@ async def get_async(
     database: Database = Depends(DatabaseFactory.get_default_database),
 ):
     async with database.get_async_session() as session:
-        stmt = select(Player)
 
-        result = (await session.execute(stmt)).all()
-        return {"ping": "pong"}
+        repo = PlayerRepository(database)
+        players = await repo.a_get_all()
+        return players
         
