@@ -7,8 +7,13 @@ SQLAlchemy-Utils
 alembic
 pytest
 pytest-pythonpath
+pytest-asyncio
 psycopg2-binary
 celery[redis]
 flower
 Faker
 darklab-utils
+asyncpg
+uvicorn
+httpx
+trio

@@ -29,7 +29,8 @@ class PlayerTestFactory:
         )
 
 
-def test_check_test_factory(database):
+@pytest.mark.asyncio
+async def test_check_test_factory(database):
 
     player = PlayerTestFactory(database)
     assert player.id == 1
@@ -166,3 +167,18 @@ def test_get_players_from_endpoint(
     database, mocked_request_url_data: dict, client: TestClient, loaded_players
 ):
     assert len(client.get("/players/?player_tag=AWES&player_tag=Aiv").json()) == 2
+
+
+from httpx import AsyncClient
+
+@pytest.mark.asyncio
+async def test_async_try(async_database, mocked_request_url_data: dict, async_app, loaded_players):
+    async with AsyncClient(app=async_app, base_url="http://test") as async_client:
+        response = await async_client.get("/players/async")
+        assert len(response.json())
+        assert response.json() == {"ping": "pong"}
+
+
+@pytest.mark.asyncio
+async def test_asyncio_stuff():
+    pass

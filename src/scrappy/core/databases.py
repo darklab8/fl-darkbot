@@ -1,8 +1,10 @@
 from typing import Generator
 from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 import sqlalchemy.orm as orm
-from contextlib import contextmanager
+from contextlib import contextmanager, asynccontextmanager
 from sqlalchemy.orm import Session
+import asyncio
 
 import scrappy.core.settings as settings
 
@@ -12,13 +14,15 @@ class Database:
         self._name = name
         self._url = url
 
-        if "postgresql" in self.url:
-            self._engine = create_engine(self.full_url, pool_pre_ping=False)
-        else:
-            self._engine = create_engine(
-                self.full_url,
-                connect_args={"check_same_thread": False},
-            )
+        self._engine = create_engine(self.full_url, pool_pre_ping=False)
+
+        self._async_engine = create_async_engine(
+            self.async_full_url,
+            future=True,
+            pool_size=20,
+            pool_pre_ping=True,
+            pool_use_lifo=True,
+        )
 
     @property
     def url(self) -> str:
@@ -30,11 +34,19 @@ class Database:
 
     @property
     def full_url(self) -> str:
-        return self._url + self._name
+        return "postgresql://" + self._url + self._name
+
+    @property
+    def async_full_url(self) -> str:
+        return "postgresql+asyncpg://" + self._url + self._name
 
     @property
     def engine(self):
         return self._engine
+
+    @property
+    def async_engine(self):
+        return self._async_engine
 
     @contextmanager
     def get_orm_sessiom(self) -> Generator[orm.Session, None, None]:
@@ -53,6 +65,14 @@ class Database:
     def get_core_session(self) -> Generator[Session, None, None]:
         with Session(self.engine, future=True) as session:
             yield session
+
+    @asynccontextmanager
+    async def get_async_session(self) -> Generator[AsyncSession, None, None]:
+        try:
+            connection = AsyncSession(self.async_engine)
+            yield connection
+        finally:
+            await connection.close()
 
     def get_self(self):
         return self

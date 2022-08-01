@@ -9,7 +9,7 @@ def app_factory():
     app.include_router(player_views.router)
 
     @app.get("/")
-    async def get_ping():
+    def get_ping():
         return {"message": "pong!"}
 
     return app
