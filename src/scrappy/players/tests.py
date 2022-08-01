@@ -172,11 +172,10 @@ def test_get_players_from_endpoint(
 from httpx import AsyncClient
 
 @pytest.mark.asyncio
-async def test_async_try(database, mocked_request_url_data: dict, app, loaded_players):
-    async with AsyncClient(app=app, base_url="http://test") as async_client:
-        response = await async_client.get("/players/async")
-        assert len(response.json())
-        assert response.json() == {"ping": "pong"}
+async def test_async_try(database, mocked_request_url_data: dict, app, loaded_players, async_client):
+    response = await async_client.get("/players/async")
+    assert len(response.json())
+    assert response.json() == {"ping": "pong"}
 
 
 @pytest.mark.asyncio

@@ -37,6 +37,7 @@ async def get_players(
     return players
 
 
+# purely test to try async
 @router.get("/async")
 async def get_async(
     database: Database = Depends(DatabaseFactory.get_default_database),

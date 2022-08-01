@@ -26,8 +26,8 @@ def client(app):
 
 
 @pytest.fixture()
-async def async_client(async_app):
-    async with AsyncClient(app=async_app, base_url="http://test") as async_client:
+async def async_client(app):
+    async with AsyncClient(app=app, base_url="http://test") as async_client:
         yield async_client
 
 
