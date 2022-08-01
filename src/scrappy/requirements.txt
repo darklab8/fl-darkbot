@@ -16,4 +16,3 @@ darklab-utils
 asyncpg
 uvicorn
 httpx
-trio
