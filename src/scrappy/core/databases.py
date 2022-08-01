@@ -67,7 +67,7 @@ class Database:
             yield session
 
     @asynccontextmanager
-    async def get_async_session(self) -> AsyncGenerator[AsyncSession, None, None]:
+    async def get_async_session(self) -> AsyncGenerator[AsyncSession, None]:
         try:
             connection = AsyncSession(self.async_engine)
             yield connection
