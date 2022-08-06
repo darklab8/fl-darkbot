@@ -2,11 +2,12 @@ from celery import Celery
 from celery.schedules import crontab
 import os
 from scrappy.players.tasks import update_players
+from . import settings as settings
 
 app = Celery(
     "core",
-    broker=os.environ.get("SCRAPPY_CELERY_BROKER", "redis://redis:6379/0"),
-    backend=os.environ.get("SCRAPPY_CELERY_BROKER", "redis://redis:6379/0"),
+    broker=settings.CELERY_BROKER,
+    backend=settings.CELERY_BACKEND,
 )
 
 

@@ -10,6 +10,9 @@ DATABASE_URL = config.get(
 )
 
 DATABASE_NAME = "default"
+CELERY_BROKER = config.get("celery.broker", "redis://redis:6379/0")
+CELERY_BACKEND = config.get("celery.backend", "redis://redis:6379/0")
+
 
 API_PLAYER_URL = config.get("player.url")
 API_BASE_URL = config.get("base.url")

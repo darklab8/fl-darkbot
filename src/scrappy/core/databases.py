@@ -1,10 +1,10 @@
 from typing import Generator, AsyncGenerator
+from contextlib import contextmanager, asynccontextmanager
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 import sqlalchemy.orm as orm
-from contextlib import contextmanager, asynccontextmanager
 from sqlalchemy.orm import Session
-import asyncio
 
 import scrappy.core.settings as settings
 
