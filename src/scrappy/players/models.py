@@ -12,14 +12,3 @@ class Player(Model):
     system = Column(String)
     time = Column(String)  # time online
     timestamp = Column(DateTime)
-
-
-class Thing(Model):
-    __tablename__ = "things"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    region = Column(String)
-    system = Column(String)
-    time = Column(String)  # time online
-    timestamp = Column(DateTime)

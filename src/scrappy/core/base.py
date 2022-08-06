@@ -1,3 +1,3 @@
-from sqlalchemy.ext.declarative import declarative_base
+from utils.database.sql import ORMBase
 
-Model = declarative_base()
+Model = ORMBase()
