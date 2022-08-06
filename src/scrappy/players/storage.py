@@ -31,7 +31,7 @@ class IsOnlineQuery:
         return [IsOnlineQuery.from_query_row_to_schema(db_row) for db_row in many_row]
 
 
-class PlayerRepository:
+class PlayerStorage:
     def __init__(self, db: Database):
         self.db: Database = db
 

@@ -1,5 +1,5 @@
 from utils.porto import AbstractAction
-from .repository import PlayerRepository
+from .storage import PlayerStorage
 from . import schemas as player_schemas
 import requests
 import scrappy.core.settings as settings
@@ -23,9 +23,9 @@ class SubTaskSavePlayersToStorage(AbstractAction):
         self._database = database
 
     def run(self):
-        player_repo = PlayerRepository(self._database)
+        player_storage = PlayerStorage(self._database)
         for player in self._players:
-            player_repo.create_one(**(player.dict()))
+            player_storage.create_one(**(player.dict()))
         return True
 
 
@@ -69,6 +69,6 @@ class ActionGetFilteredPlayers(AbstractAction):
         self.query = PlayerQuery(**kwargs)
 
     def run(self):
-        player_storage = PlayerRepository(self._database)
+        player_storage = PlayerStorage(self._database)
         players = player_storage.get_players_by_query(self.query)
         return players

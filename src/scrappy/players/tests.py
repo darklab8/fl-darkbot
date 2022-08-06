@@ -1,4 +1,4 @@
-from .repository import PlayerRepository
+from .storage import PlayerStorage
 from faker import Faker
 from . import schemas as player_schemas
 
@@ -16,7 +16,7 @@ fake = Faker()
 
 
 class PlayerTestFactory:
-    repo_model = PlayerRepository
+    repo_model = PlayerStorage
 
     def __new__(cls, database, **kwargs: dict) -> player_schemas.PlayerOut:
         repo = cls.repo_model(database)
@@ -72,8 +72,8 @@ def test_players_check(database, mocked_request_url_data: dict):
 
     player = PlayerTestFactory(database)
 
-    player_repo = PlayerRepository(database)
-    players = player_repo.get_all()
+    player_storage = PlayerStorage(database)
+    players = player_storage.get_all()
     assert len(players) > 0
     print(players)
 
@@ -82,13 +82,13 @@ def test_repeated_players_override_previous_players(database):
     fixed_player_name = "Alpha"
     player = PlayerTestFactory(database, name=fixed_player_name)
 
-    player_repo = PlayerRepository(database)
-    players_amount = len(player_repo.get_all())
+    player_storage = PlayerStorage(database)
+    players_amount = len(player_storage.get_all())
 
     player = PlayerTestFactory(database, name=fixed_player_name)
 
-    players_amount2 = len(player_repo.get_all())
-    player_in_db = player_repo.get_all()[0]
+    players_amount2 = len(player_storage.get_all())
+    player_in_db = player_storage.get_all()[0]
 
     assert players_amount > 0
     assert players_amount == players_amount2
@@ -117,8 +117,8 @@ def test_trying_players_update(database, mocked_request_url_data):
 
     action(database)
 
-    player_repo = PlayerRepository(database)
-    players_amount = len(player_repo.get_all())
+    player_storage = PlayerStorage(database)
+    players_amount = len(player_storage.get_all())
 
     assert players_amount > 0
 
@@ -137,8 +137,8 @@ def test_trying_players_update_with_celery_integration(
         task_handle = update_players.delay(database_name=database.name)
         task_handle.get()
 
-    player_repo = PlayerRepository(database)
-    players_amount = len(player_repo.get_all())
+    player_storage = PlayerStorage(database)
+    players_amount = len(player_storage.get_all())
 
     assert players_amount > 0
 
