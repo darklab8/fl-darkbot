@@ -4,6 +4,9 @@ from . import schemas as player_schemas
 import requests
 import scrappy.core.settings as settings
 from pydantic import BaseModel
+from scrappy.core.logger import base_logger
+
+logger = base_logger.getChild(__name__)
 
 
 class SubTaskParsePlayers(AbstractAction):
@@ -11,10 +14,12 @@ class SubTaskParsePlayers(AbstractAction):
         self._data = data
 
     def run(self) -> list[player_schemas.PlayerIn]:
-        return [
+        players = [
             player_schemas.PlayerIn(**player, timestamp=self._data["timestamp"])
             for player in self._data["players"]
         ]
+        logger.debug(f"{self.__class__.__name__} is done")
+        return players
 
 
 class SubTaskSavePlayersToStorage(AbstractAction):
@@ -26,6 +31,7 @@ class SubTaskSavePlayersToStorage(AbstractAction):
         player_storage = PlayerStorage(self._database)
         for player in self._players:
             player_storage.create_one(**(player.dict()))
+        logger.debug(f"{self.__class__.__name__} is done")
         return True
 
 
@@ -34,9 +40,10 @@ class SubTaskGetPlayerData(AbstractAction):
         self._url = settings.API_PLAYER_URL
 
     def run(self):
+        logger.info(f"{self.__class__.__name__} is started")
         response = requests.get(settings.API_PLAYER_URL)
         data = response.json()
-        print("CALL IS MADE")
+        logger.debug(f"{self.__class__.__name__} is done")
         return data
 
 
@@ -52,6 +59,7 @@ class ActionGetAndParseAndSavePlayers(AbstractAction):
         player_data = self.task_get()
         players = self.task_parse(player_data)
         self.task_save(players=players, database=self._database)
+        logger.debug(f"{self.__class__.__name__} is done")
         return players
 
 

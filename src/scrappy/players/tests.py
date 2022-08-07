@@ -11,6 +11,9 @@ from celery import shared_task
 from .tasks import update_players
 from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
+from scrappy.core.logger import base_logger
+
+logger = base_logger.getChild(__name__)
 
 fake = Faker()
 
@@ -36,7 +39,7 @@ async def test_check_test_factory(database):
     assert player.id == 1
     assert isinstance(player.name, str)
     assert isinstance(player.is_online, bool)
-    print(player)
+    logger.debug(repr(player))
 
 
 def test_check_endpoint_to_get_players(database, client):

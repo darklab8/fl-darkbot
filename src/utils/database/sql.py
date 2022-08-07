@@ -7,6 +7,7 @@ import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 
+
 class ORMBase:
     def __new__(cls):
         return declarative_base()
@@ -88,8 +89,8 @@ class DatabaseFactoryBase:
         name: str | None = None,
     ) -> Database:
         instance = Database(
-            url = cls.settings.DATABASE_URL if url is None else url,
-            name = cls.settings.DATABASE_NAME if name is None else name,
+            url=cls.settings.DATABASE_URL if url is None else url,
+            name=cls.settings.DATABASE_NAME if name is None else name,
         )
         return instance
 
@@ -97,4 +98,3 @@ class DatabaseFactoryBase:
     def get_default_database(cls) -> Database:
         database = cls()
         return database
-

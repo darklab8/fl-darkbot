@@ -1,6 +1,6 @@
 from utils.config_parser import ConfigParser
 
-config = ConfigParser(settings_prefix="SCRAPPY")
+config = ConfigParser(settings_prefix="scrappy")
 
 DATABASE_USER = config.get("database_username")
 DATABASE_PASSWORD = config.get("database_password")
@@ -18,3 +18,5 @@ API_PLAYER_URL = config.get("player.url")
 API_BASE_URL = config.get("base.url")
 FORUM_USERNAME = config.get("forum.username")
 FORUMN_PASSWORD = config.get("forum.password")
+
+LOGGER_CONSOLE_LEVEL = config.get("logger.console.level", "INFO")
