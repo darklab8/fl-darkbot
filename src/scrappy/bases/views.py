@@ -4,7 +4,6 @@ from fastapi import Query
 from fastapi import Depends
 from scrappy.core.databases import DatabaseFactory, Database
 from . import actions as base_actions
-from .storage import PlayerStorage
 from .schemas import BaseQueryParams
 
 router = APIRouter(
