@@ -2,10 +2,13 @@ from sqlalchemy import func, or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy import select, insert, update
 import scrappy.players.schemas as schemas
-import scrappy.players.models as models
 from scrappy.core.databases import Database
 from scrappy.players.models import Player
-from contextlib import contextmanager
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .actions import PlayerQueryParams
 
 
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
@@ -91,7 +94,9 @@ class PlayerStorage:
 
     page_size = 20
 
-    def get_players_by_query(self, query: "PlayerQuery") -> list[schemas.PlayerOut]:
+    def get_players_by_query(
+        self, query: "PlayerQueryParams"
+    ) -> list[schemas.PlayerOut]:
 
         with self.db.get_core_session() as session:
             queryset = IsOnlineQuery()

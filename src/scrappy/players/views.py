@@ -13,7 +13,7 @@ router = APIRouter(
     tags=["items"],
 )
 
-query_default_values = player_actions.PlayerQuery()
+query_default_values = player_actions.PlayerQueryParams()
 
 
 @router.get("/")
