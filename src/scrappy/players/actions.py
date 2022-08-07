@@ -4,9 +4,16 @@ from . import schemas as player_schemas
 import requests
 import scrappy.core.settings as settings
 from pydantic import BaseModel
+from scrappy.commons.subtasks import SubTaskGetItemsData, SubTaskSaveItemsToStorage
+from scrappy.commons.actions import ActionGetAndParseAndSaveItems
 from scrappy.core.logger import base_logger
 
 logger = base_logger.getChild(__name__)
+
+
+class SubTaskGetPlayerData(SubTaskGetItemsData):
+    def _url(self):
+        return settings.API_PLAYER_URL
 
 
 class SubTaskParsePlayers(AbstractAction):
@@ -22,45 +29,17 @@ class SubTaskParsePlayers(AbstractAction):
         return players
 
 
-class SubTaskSavePlayersToStorage(AbstractAction):
+class SubTaskSavePlayersToStorage(SubTaskSaveItemsToStorage):
+    storage = PlayerStorage
+
     def __init__(self, players: list[player_schemas.PlayerIn], database):
-        self._players = players
-        self._database = database
-
-    def run(self):
-        player_storage = PlayerStorage(self._database)
-        for player in self._players:
-            player_storage.create_one(**(player.dict()))
-        logger.debug(f"{self.__class__.__name__} is done")
-        return True
+        super().__init__(items=players, database=database)
 
 
-class SubTaskGetPlayerData(AbstractAction):
-    def __init__(self):
-        self._url = settings.API_PLAYER_URL
-
-    def run(self):
-        logger.info(f"{self.__class__.__name__} is started")
-        response = requests.get(settings.API_PLAYER_URL)
-        data = response.json()
-        logger.debug(f"{self.__class__.__name__} is done")
-        return data
-
-
-class ActionGetAndParseAndSavePlayers(AbstractAction):
+class ActionGetAndParseAndSavePlayers(ActionGetAndParseAndSaveItems):
     task_get = SubTaskGetPlayerData
     task_parse = SubTaskParsePlayers
     task_save = SubTaskSavePlayersToStorage
-
-    def __init__(self, database):
-        self._database = database
-
-    def run(self):
-        player_data = self.task_get()
-        players = self.task_parse(player_data)
-        self.task_save(players=players, database=self._database)
-        logger.debug(f"{self.__class__.__name__} is done")
-        return players
 
 
 class PlayerQuery(BaseModel):
