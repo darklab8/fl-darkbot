@@ -27,7 +27,7 @@ class EnumWithValues(_EnumGetKey, metaclass=_EnumDirectValueMeta):
 class Actions(EnumWithValues):
     test = auto()
     shell = auto()
-    up = auto()
+    run = auto()
     lint = auto()
 
 
@@ -75,15 +75,17 @@ class CommandExecutor:
     def args(self):
         return self._parser.args
 
-    def run_inside_container(self, command):
+    def run_inside_container(self, command, job_id=None):
+        job_id_ = job_id if job_id is not None else self.args.job_id
+
         main_command = (
-            f"docker-compose -f docker-compose.{self.args.service}.yml -p {self.args.job_id} build && "
-            f"docker-compose -f docker-compose.{self.args.service}.yml -p {self.args.job_id}"
+            f"docker-compose -f docker-compose.{self.args.service}.yml -p {job_id_} build && "
+            f"docker-compose -f docker-compose.{self.args.service}.yml -p {job_id_}"
             f" {command}"
         )
         print(f"running: {main_command}")
         return_code = os.system(main_command)
-        eixiting_command = f"docker-compose -f docker-compose.{self.args.service}.yml  -p {self.args.job_id} down"
+        eixiting_command = f"docker-compose -f docker-compose.{self.args.service}.yml  -p {job_id_} down"
         print(f"running: {eixiting_command}")
         os.system(eixiting_command)
         print(return_code)
@@ -102,23 +104,25 @@ class CommandExecutor:
                 self.run_inside_container(CommonCommands.test)
             case (Services.scrappy, Actions.shell):
                 self.run_inside_container(
-                    f"{scrappy_env_file_command} run --rm service_shell"
+                    f"{scrappy_env_file_command} run --rm service_shell",
+                    job_id="scrappy_shell",
                 )
-            case (Services.scrappy, Actions.up):
+            case (Services.scrappy, Actions.run):
                 self.run_inside_container(
-                    f"-f docker-compose.scrappy-network.yml {scrappy_env_file_command} up"
+                    f"-f docker-compose.scrappy-network.yml {scrappy_env_file_command} up",
+                    job_id="scrappy_run",
                 )
             case (Services.scrappy, Actions.lint):
                 self.run_inside_container(CommonCommands.lint)
-            case (Services.pgadmin, Actions.up):
-                self.run_inside_container(CommonCommands.up)
+            case (Services.pgadmin, Actions.run):
+                self.run_inside_container(CommonCommands.run)
             case _:
                 raise Exception("Not registered command for this service")
 
 
 class CommonCommands:
     test = "run --rm service_base pytest"
-    up = "up"
+    run = "up"
     lint = 'run --rm service_base black --exclude="alembic/.*/*.py" --check .'
 
 
@@ -128,11 +132,11 @@ def main():
         case Services.scrappy:
             CommandExecutor(
                 parser=Parser().register_actions(
-                    Actions.test, Actions.shell, Actions.up, Actions.lint
+                    Actions.test, Actions.shell, Actions.run, Actions.lint
                 )
             ).run()
         case Services.pgadmin:
-            CommandExecutor(parser=Parser().register_actions(Actions.up)).run()
+            CommandExecutor(parser=Parser().register_actions(Actions.run)).run()
 
 
 if __name__ == "__main__":
