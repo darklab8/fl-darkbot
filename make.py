@@ -94,7 +94,7 @@ class CommandExecutor:
         scrappy_env_file_command = (
             "--env-file ./.env.scrappy.staging"
             if path.exists(".env.scrappy.staging")
-            else "--env-file ./.env.scrappy.dev"
+            else ""
         )
 
         match (self.args.service, self.args.action):
