@@ -33,5 +33,5 @@ class ActionGetFilteredPlayers(AbstractAction):
 
     def run(self):
         player_storage = PlayerStorage(self._database)
-        players = player_storage.get_players_by_query(self.query)
+        players = player_storage.get(self.query)
         return players

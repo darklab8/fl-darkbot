@@ -28,7 +28,7 @@ class SubTaskGetItemsData(AbstractAction):
 
 class StubStorage(abc.ABC):
     @abc.abstractmethod
-    def create_one(self):
+    def create(self, *items):
         pass
 
 
@@ -43,7 +43,6 @@ class SubTaskSaveItemsToStorage(AbstractAction):
 
     def run(self):
         storage = self.storage(self._database)
-        for item in self._items:
-            storage.create_one(**(item.dict()))
+        storage.create(*(self._items))
         logger.debug(f"{self.__class__.__name__} is done")
         return True

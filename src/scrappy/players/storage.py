@@ -38,7 +38,7 @@ class PlayerStorage:
     def __init__(self, db: Database):
         self.db: Database = db
 
-    def get_all(
+    def _get_all(
         self,
     ):
         with self.db.get_core_session() as session:
@@ -47,7 +47,7 @@ class PlayerStorage:
             players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
             return players
 
-    async def a_get_all(
+    async def _a_get_all(
         self,
     ):
         async with self.db.get_async_session() as session:
@@ -56,27 +56,31 @@ class PlayerStorage:
             players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
             return players
 
-    def create_one(
+    def create(
         self,
-        **kwargs: dict,
+        *players: list[schemas.PlayerIn],
+    ):
+        for player in players:
+            self._create_one(player)
+
+    def _create_one(
+        self,
+        player: schemas.PlayerIn,
     ) -> schemas.PlayerOut:
-        validated_data = schemas.PlayerIn(**kwargs)
 
         with self.db.get_core_session() as session:
 
-            get_player = select(Player).where(Player.name == validated_data.name)
+            get_player = select(Player).where(Player.name == player.name)
             already_present_user = session.execute(get_player).scalar()
 
             if already_present_user:
                 add_or_update_user_query = (
                     update(Player)
                     .where(Player.id == already_present_user.id)
-                    .values(**validated_data.dict())
+                    .values(**player.dict())
                 )
             else:
-                add_or_update_user_query = insert(Player).values(
-                    **validated_data.dict()
-                )
+                add_or_update_user_query = insert(Player).values(**player.dict())
 
             session.execute(add_or_update_user_query)
 
@@ -94,9 +98,7 @@ class PlayerStorage:
 
     page_size = 20
 
-    def get_players_by_query(
-        self, query: "PlayerQueryParams"
-    ) -> list[schemas.PlayerOut]:
+    def get(self, query: "PlayerQueryParams") -> list[schemas.PlayerOut]:
 
         with self.db.get_core_session() as session:
             queryset = IsOnlineQuery()

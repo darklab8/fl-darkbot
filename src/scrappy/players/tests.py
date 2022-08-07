@@ -23,12 +23,14 @@ class PlayerTestFactory:
 
     def __new__(cls, database, **kwargs: dict) -> player_schemas.PlayerOut:
         repo = cls.repo_model(database)
-        return repo.create_one(
-            name=kwargs.get("name", fake.name()),
-            region=kwargs.get("region", fake.name()),
-            system=kwargs.get("system", fake.name()),
-            time=kwargs.get("time", fake.name()),
-            timestamp=kwargs.get("timestamp", datetime.datetime.utcnow()),
+        return repo._create_one(
+            player_schemas.PlayerIn(
+                name=kwargs.get("name", fake.name()),
+                region=kwargs.get("region", fake.name()),
+                system=kwargs.get("system", fake.name()),
+                time=kwargs.get("time", fake.name()),
+                timestamp=kwargs.get("timestamp", datetime.datetime.utcnow()),
+            )
         )
 
 
@@ -76,7 +78,7 @@ def test_players_check(database, mocked_request_url_data: dict):
     player = PlayerTestFactory(database)
 
     player_storage = PlayerStorage(database)
-    players = player_storage.get_all()
+    players = player_storage._get_all()
     assert len(players) > 0
     print(players)
 
@@ -86,12 +88,12 @@ def test_repeated_players_override_previous_players(database):
     player = PlayerTestFactory(database, name=fixed_player_name)
 
     player_storage = PlayerStorage(database)
-    players_amount = len(player_storage.get_all())
+    players_amount = len(player_storage._get_all())
 
     player = PlayerTestFactory(database, name=fixed_player_name)
 
-    players_amount2 = len(player_storage.get_all())
-    player_in_db = player_storage.get_all()[0]
+    players_amount2 = len(player_storage._get_all())
+    player_in_db = player_storage._get_all()[0]
 
     assert players_amount > 0
     assert players_amount == players_amount2
@@ -121,7 +123,7 @@ def test_trying_players_update(database, mocked_request_url_data):
     action(database)
 
     player_storage = PlayerStorage(database)
-    players_amount = len(player_storage.get_all())
+    players_amount = len(player_storage._get_all())
 
     assert players_amount > 0
 
@@ -141,7 +143,7 @@ def test_trying_players_update_with_celery_integration(
         task_handle.get()
 
     player_storage = PlayerStorage(database)
-    players_amount = len(player_storage.get_all())
+    players_amount = len(player_storage._get_all())
 
     assert players_amount > 0
 

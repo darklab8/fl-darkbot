@@ -45,5 +45,5 @@ async def get_async(
     async with database.get_async_session() as session:
 
         repo = PlayerStorage(database)
-        players = await repo.a_get_all()
+        players = await repo._a_get_all()
         return players
