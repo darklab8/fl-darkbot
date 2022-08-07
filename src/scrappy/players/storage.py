@@ -1,14 +1,11 @@
 from sqlalchemy import func, or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy import select, insert, update
+import sqlalchemy.sql.selectable as selectable
 import scrappy.players.schemas as schemas
 from scrappy.core.databases import Database
 from scrappy.players.models import Player
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from .actions import PlayerQueryParams
+from .schemas import PlayerQueryParams
 
 
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
@@ -19,11 +16,10 @@ def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
 class IsOnlineQuery:
     latest_timestamp = select(func.max(Player.timestamp)).scalar_subquery()
 
-    def __new__(cls):
+    def __new__(cls) -> selectable.Select:
         stmt = select(
             Player, (cls.latest_timestamp == Player.timestamp).label("is_online")
         )
-
         return stmt
 
     @staticmethod
@@ -59,9 +55,12 @@ class PlayerStorage:
     def create(
         self,
         *players: list[schemas.PlayerIn],
-    ):
+    ) -> list[schemas.PlayerOut]:
+
+        result = []
         for player in players:
-            self._create_one(player)
+            result.append(self._create_one(player))
+        return result
 
     def _create_one(
         self,
@@ -98,7 +97,7 @@ class PlayerStorage:
 
     page_size = 20
 
-    def get(self, query: "PlayerQueryParams") -> list[schemas.PlayerOut]:
+    def get(self, query: PlayerQueryParams) -> list[schemas.PlayerOut]:
 
         with self.db.get_core_session() as session:
             queryset = IsOnlineQuery()

@@ -18,3 +18,11 @@ class PlayerOut(BaseModel):
     time: str
     timestamp: datetime
     is_online: bool
+
+
+class PlayerQueryParams(BaseModel):
+    page: int = 0
+    player_whitelist_tags: list[str] = []
+    region_whitelist_tags: list[str] = []
+    system_whitelist_tags: list[str] = []
+    is_online: bool = True

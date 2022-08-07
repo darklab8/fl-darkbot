@@ -27,3 +27,22 @@ class ActionGetAndParseAndSaveItems(AbstractAction):
         self.task_save(players=players, database=self._database)
         logger.debug(f"{self.__class__.__name__} is done")
         return players
+
+
+class ActionGetFilteredItems(AbstractAction):
+    @abc.abstractproperty
+    def queryparams(self):
+        pass
+
+    @abc.abstractproperty
+    def storage(self):
+        pass
+
+    def __init__(self, database, **kwargs):
+        self._database = database
+        self.query = self.queryparams(**kwargs)
+
+    def run(self):
+        storage = self.storage(self._database)
+        players = storage.get(self.query)
+        return players
