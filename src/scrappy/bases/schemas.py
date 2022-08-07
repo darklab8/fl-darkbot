@@ -1,14 +1,24 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 
 
 class BaseIn(BaseModel):
-    pass
+    name: str
+    affiliation: str
+    health: float
+    tid: int
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 
 class BaseOut(BaseModel):
-    pass
+    id: int
+    name: str
+    affiliation: str
+    health: float
+    tid: int
+    timestamp: datetime
 
 
 class BaseQueryParams(BaseModel):
-    pass
+    page: int = 0
+    name_tags: list[str] = []

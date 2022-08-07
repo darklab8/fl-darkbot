@@ -14,6 +14,9 @@ class StubSchema(BaseModel):
 
 
 class SubTaskGetItemsData(AbstractAction):
+    def __init__(self):
+        pass
+
     @abc.abstractproperty
     def _url(self):
         pass

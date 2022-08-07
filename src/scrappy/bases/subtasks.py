@@ -9,6 +9,7 @@ logger = base_logger.getChild(__name__)
 
 
 class SubTaskGetBaseData(SubTaskGetItemsData):
+    @property
     def _url(self):
         return settings.API_BASE_URL
 
@@ -20,8 +21,13 @@ class SubTaskParseBases(AbstractAction):
     def run(self) -> list[base_schemas.BaseIn]:
         # ALL YOUR BASE BELONG TO US
         bases = [
-            # player_schemas.PlayerIn(**player, timestamp=self._data["timestamp"])
-            # for player in self._data["players"]
+            base_schemas.BaseIn(
+                name=base_name,
+                affiliation=base_data.get("affiliation", "unknown"),
+                health=float(base_data.get("health", -1.0)),
+                tid=int(base_data.get("tid", "-1")),
+            )
+            for base_name, base_data in self._data.items()
         ]
         logger.debug(f"{self.__class__.__name__} is done")
         return bases

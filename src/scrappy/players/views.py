@@ -1,19 +1,18 @@
 from fastapi import APIRouter
-from typing import Dict
 from fastapi import Query
 
 from fastapi import Depends
 from scrappy.core.databases import DatabaseFactory, Database
 from . import actions as player_actions
-from sqlalchemy import select
 from .storage import PlayerStorage
+from .schemas import PlayerQueryParams
 
 router = APIRouter(
     prefix="/players",
     tags=["items"],
 )
 
-query_default_values = player_actions.PlayerQueryParams()
+query_default_values = PlayerQueryParams()
 
 
 @router.get("/")
