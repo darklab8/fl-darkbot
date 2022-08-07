@@ -2,20 +2,11 @@ import logging
 
 
 class LoggerLevels:
-    # purely for diagnostics
-    DEBUG = logging.DEBUG
-
-    # confirming normal flow of program
-    INFO = logging.INFO
-
-    # a thing nice to fix like deprecation warning
-    WARN = logging.WARNING
-
-    # handled error
-    ERROR = logging.ERROR
-
-    # fatal unhandled error
-    FATAL = logging.CRITICAL
+    DEBUG = logging.DEBUG  # purely for diagnostics
+    INFO = logging.INFO  # confirming normal flow of program
+    WARN = logging.WARNING  # a thing nice to fix like deprecation warning
+    ERROR = logging.ERROR  # minor handled error of app, program continues to run
+    FATAL = logging.CRITICAL  # a error that disrupted program workflow completely
 
 
 class CustomFilter(logging.Filter):
@@ -39,20 +30,27 @@ import logging.handlers
 class Logger:
 
     levels = LoggerLevels
+    _parent: "Logger" = None
 
-    def __init__(self, console_level: str, name: str | None = None):
-        self._name = self._generate_name(name)
+    def __init__(
+        self,
+        console_level: str,
+        _parent: "Logger" = None,
+        name: str = "",
+    ):
+        self._name = name
         self._console_level = console_level
-        self._logger = self._get_logger()
+        self._parent = _parent
+        self._logger = self._configure_logger(
+            logging.getLogger("").getChild(self._name)
+            if _parent is None
+            else _parent._logger.getChild(self._name)
+        )
 
     def _transform_level_to_logging_lib(self, level: str) -> int:
         return getattr(LoggerLevels, level)
 
-    def _get_logger(self) -> logging.Logger:
-        # create logger with 'spam_application'
-        logger = logging.getLogger("")
-        # making sure we don't see third party dependencies debug logging
-        logger = logger.getChild(self._name)
+    def _configure_logger(self, logger: logging.Logger) -> logging.Logger:
         # global level, controlling available levels in handlers
         logger.setLevel(logging.DEBUG)
 
@@ -66,7 +64,7 @@ class Logger:
                     "time:%(asctime)s",
                     "color:%(color)s",
                     "level:%(levelname)s",
-                    "path:%(name)s.%(filename)s",
+                    "name:%(name)s",
                     "msg:%(message)s",
                 ]
             )
@@ -76,13 +74,11 @@ class Logger:
         logger.addHandler(ch)
         return logger
 
-    def _generate_name(self, name: str is None) -> str:
-        return __name__ if name is None else name
-
     def getChild(self, name: str):
         return self.__class__(
             console_level=self._console_level,
             name=name,
+            _parent=self,
         )
 
     def debug(self, msg):
