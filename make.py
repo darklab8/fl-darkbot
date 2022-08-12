@@ -252,12 +252,15 @@ class Makefile:
 
             case (Service.scrappy, ScrappyActions.test):
                 self.run_in_compose(
-                    command=ComposeCommands.test.format(optional_cmd=self.unread_cmd),
+                    command=ComposeCommands.base.format(
+                        service=Service.scrappy,
+                        cmd=ShellCommands.test.format(optional_cmd=self.unread_cmd),
+                    ),
                     session_id=self.session_id,
                 )
             case (Service.scrappy, ScrappyActions.shell):
                 self.run_in_compose(
-                    command=f"{scrappy_env} {ComposeCommands.shell}",
+                    command=f"{scrappy_env} {ComposeCommands.shell.format(service=Service.scrappy)}",
                 )
             case (Service.scrappy, ScrappyActions.run):
                 self.run_in_compose(
@@ -266,7 +269,11 @@ class Makefile:
                 )
             case (Service.scrappy, ScrappyActions.lint):
                 self.run_in_compose(
-                    command=ComposeCommands.lint, session_id=self.session_id
+                    command=ComposeCommands.base.format(
+                        service=Service.scrappy,
+                        cmd=ShellCommands.lint,
+                    ),
+                    session_id=self.session_id,
                 )
             case (Service.scrappy, ScrappyActions.manage):
                 self.run_in_compose(
@@ -357,10 +364,8 @@ class ShellCommands:
 
 
 class ComposeCommands:
-    base = "run --rm service_base {cmd}"
-    test = f"run --rm service_base {ShellCommands.test}"
-    lint = f"run --rm service_base {ShellCommands.lint}"
-    shell = 'run --user 0 --rm -v "$(pwd):/code" service_base bash'
+    base = "run --rm {service}_base {cmd}"
+    shell = 'run --user 0 --rm -v "$(pwd):/code" {service} bash'
     run = "up"
 
 
