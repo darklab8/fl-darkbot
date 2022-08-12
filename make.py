@@ -36,7 +36,8 @@ logger = get_logger()
 class Service(Enum):
     scrappy = auto()
     pgadmin = auto()
-    ping = auto()
+    shell = auto()
+    check = auto()
 
 
 class Action(Enum):
@@ -55,11 +56,19 @@ class ScrappyActions(Action):
     shell = auto()
     run = auto()
     lint = auto()
-    ping = auto()
 
 
 class PgadminActions(Action):
     run = auto()
+
+
+class ShellActions(Action):
+    test = auto()
+    lint = auto()
+    format = auto()
+    makemigrations = auto()
+    migrate = auto()
+    check = auto()
 
 
 @dataclass
@@ -156,6 +165,10 @@ class Makefile:
         finally:
             subprocess.run(eixiting_command, shell=True, check=True)
 
+    def shell(command):
+        logger.info(f"command={command}")
+        subprocess.run(command, shell=True, check=True)
+
     def run_action(self, args=None):
         self._parser.parse_known_args(args=args)
 
@@ -165,38 +178,63 @@ class Makefile:
             else ""
         )
 
+        logger.debug(f"running action = {(self.args.service, self.args.action)}")
         match (self.args.service, self.args.action):
-            case (Service.scrappy.name, ScrappyActions.ping.name):
-                logger.info("pong!")
+
             case (Service.scrappy.name, ScrappyActions.test.name):
                 self.run_in_compose(
-                    command=CommonCommands.test,
+                    command=ComposeCommands.test,
                     session_id=self.session_id,
                 )
             case (Service.scrappy.name, ScrappyActions.shell.name):
                 self.run_in_compose(
-                    command=f"{scrappy_env} {CommonCommands.shell}",
+                    command=f"{scrappy_env} {ComposeCommands.shell}",
                 )
             case (Service.scrappy.name, ScrappyActions.run.name):
                 self.run_in_compose(
-                    command=f"{scrappy_env} {CommonCommands.run}",
+                    command=f"{scrappy_env} {ComposeCommands.run}",
                     compose_overrides=[f"{Service.scrappy.name}-network"],
                 )
-            case (Service.scrappy, ScrappyActions.lint.name):
+            case (Service.scrappy.name, ScrappyActions.lint.name):
                 self.run_in_compose(
-                    command=CommonCommands.lint, session_id=self.session_id
+                    command=ComposeCommands.lint, session_id=self.session_id
                 )
             case (Service.pgadmin.name, PgadminActions.run.name):
-                self.run_in_compose(command=CommonCommands.run)
+                self.run_in_compose(command=ComposeCommands.run)
+            case (Service.shell.name, ShellActions.test.name):
+                self.shell(ShellCommands.test)
+            case (Service.shell.name, ShellActions.lint.name):
+                self.shell(ShellCommands.lint)
+            case (Service.shell.name, ShellActions.format.name):
+                self.shell(ShellCommands.format)
+            case (Service.shell.name, ShellActions.makemigrations.name):
+                pass
+            case (Service.shell.name, ShellActions.migrate.name):
+                pass
+            case (Service.shell.name, ShellActions.check.name):
+                logger.info("pong!")
             case _:
                 raise Exception("Not registered command for this service")
 
 
-class CommonCommands:
-    test = "run --rm service_base pytest"
-    shell = 'run --user 0 --rm -v "$(pwd)/src:/code" service_base bash'
+class ShellCommands:
+    lint = 'black --exclude="alembic/.*/*.py" --check .'
+    format = "black . --exclude=alembic/*"
+    test = "pytest"
+
+    makemigrations = (
+        'alembic -c {service}/alembic.ini revision --autogenerate -m "{name}"'
+    )
+    migrate = ""
+    upgrade = 'alembic -c scrappy/alembic.ini upgrade "{id}"'
+    downgrade = 'alembic -c scrappy/alembic.ini downgrade "{id}"'
+
+
+class ComposeCommands:
+    test = f"run --rm service_base {ShellCommands.test}"
+    lint = f"run --rm service_base {ShellCommands.lint}"
+    shell = 'run --user 0 --rm -v "$(pwd):/code" service_base bash'
     run = "up"
-    lint = 'run --rm service_base black --exclude="alembic/.*/*.py" --check .'
 
 
 def main():
@@ -206,7 +244,9 @@ def main():
             Makefile(actions=ScrappyActions.values).run_action()
         case Service.pgadmin.name:
             Makefile(actions=PgadminActions.values).run_action()
-        case Service.ping.name:
+        case Service.shell.name:
+            Makefile(actions=ShellActions.values).run_action()
+        case Service.check.name:
             logger.info("pong!")
         case _:
             raise Exception("not registed service")

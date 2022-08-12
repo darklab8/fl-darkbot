@@ -16,7 +16,7 @@ services:
   service_base:
     &service_base
     build: 
-      context: src
+      context: .
       dockerfile: scrappy/Dockerfile
     depends_on:
       - scrappy_db

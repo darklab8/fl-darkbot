@@ -7,3 +7,4 @@ venv_*/
 sql_app.db
 test_sql_app.db
 celerybeat-schedule
+.pytest_cache/

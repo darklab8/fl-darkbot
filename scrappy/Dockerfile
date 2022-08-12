@@ -10,4 +10,4 @@ RUN pip install -r scrappy/requirements.txt -c scrappy/constraints.txt
 
 COPY scrappy /code/scrappy
 COPY utils /code/utils
-COPY pytest.ini conftest.py scripts_scrappy.py ./
+COPY pytest.ini conftest.py make.py ./
