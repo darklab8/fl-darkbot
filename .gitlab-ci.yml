@@ -23,3 +23,11 @@ linting:
     - *env_scrappy_staging
   script:
     - python3 make.py scrappy lint
+
+migrate-scrappy:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *env_scrappy_staging
+  script:
+    - python3 make.py scrappy migrate

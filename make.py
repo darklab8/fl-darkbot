@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 import secrets
-from enum import Enum, auto
+from enum import Enum, auto, EnumMeta
 from types import SimpleNamespace
 from dataclasses import dataclass
 import logging
@@ -34,13 +34,25 @@ def get_logger():
 logger = get_logger()
 
 
-class EnumValues(Enum):
+class _EnumDirectValueMeta(EnumMeta):
+    def __getattribute__(cls, name):
+        value = super().__getattribute__(name)
+        if isinstance(value, cls):
+            value = value.name
+        return value
+
+
+class _EnumGetKey(Enum):
     @classmethod
     @property
     def values(self) -> list[str]:
         values = [a.name for a in self]
         logger.info(f"actions.values={values}")
         return values
+
+
+class EnumValues(_EnumGetKey, metaclass=_EnumDirectValueMeta):
+    pass
 
 
 class Service(EnumValues):
@@ -59,6 +71,8 @@ class ScrappyActions(Action):
     shell = auto()
     run = auto()
     lint = auto()
+    migrate = auto()
+    manage = auto()
 
 
 class PgadminActions(Action):
@@ -89,14 +103,12 @@ class Parser:
             default=secrets.token_hex(4),
             help="ensures to run docker-compose with persistent random -p parameter for no conflicts in parallel runs",
         )
-        self._parser.add_argument(
-            "service", type=str, choices=[service.name for service in Service]
-        )
+        self._parser.add_argument("service", type=str, choices=Service.values)
         if actions:
             self._parser.add_argument(
                 "action",
                 type=str,
-                choices=[action for action in actions],
+                choices=actions,
             )
 
     def add_argument(self, *args, **kwargs):
@@ -121,7 +133,11 @@ class Parser:
     def unread_args(self) -> SimpleNamespace:
         if not hasattr(self, "_unread_args"):
             self.parse_known_args()
-        return self._args
+        return self._unread_args
+
+    @property
+    def unread_cmd(self) -> str:
+        return " " + " ".join(self.unread_args)
 
 
 class MigrationFile:
@@ -182,6 +198,10 @@ class Makefile:
     def session_id(self) -> str:
         return self.args.session_id
 
+    @property
+    def unread_cmd(self) -> str:
+        return self._parser.unread_cmd
+
     def run_in_compose(
         self, command, session_id=None, compose_file=None, compose_overrides=[]
     ):
@@ -230,33 +250,46 @@ class Makefile:
         logger.debug(f"running action = {(self.args.service, self.args.action)}")
         match (self.args.service, self.args.action):
 
-            case (Service.scrappy.name, ScrappyActions.test.name):
+            case (Service.scrappy, ScrappyActions.test):
                 self.run_in_compose(
-                    command=ComposeCommands.test,
+                    command=ComposeCommands.test.format(optional_cmd=self.unread_cmd),
                     session_id=self.session_id,
                 )
-            case (Service.scrappy.name, ScrappyActions.shell.name):
+            case (Service.scrappy, ScrappyActions.shell):
                 self.run_in_compose(
                     command=f"{scrappy_env} {ComposeCommands.shell}",
                 )
-            case (Service.scrappy.name, ScrappyActions.run.name):
+            case (Service.scrappy, ScrappyActions.run):
                 self.run_in_compose(
                     command=f"{scrappy_env} {ComposeCommands.run}",
-                    compose_overrides=[f"{Service.scrappy.name}-network"],
+                    compose_overrides=[f"{Service.scrappy}-network"],
                 )
-            case (Service.scrappy.name, ScrappyActions.lint.name):
+            case (Service.scrappy, ScrappyActions.lint):
                 self.run_in_compose(
                     command=ComposeCommands.lint, session_id=self.session_id
                 )
-            case (Service.pgadmin.name, PgadminActions.run.name):
+            case (Service.scrappy, ScrappyActions.manage):
+                self.run_in_compose(
+                    command=ComposeCommands.base.format(cmd=self.unread_cmd),
+                    session_id=self.session_id,
+                )
+            case (Service.scrappy, ScrappyActions.migrate):
+                self.run_in_compose(
+                    command=ComposeCommands.base.format(
+                        cmd='sh -c "python3 utils/scripts/await_db.py --host=scrappy_db && python3 make.py shell migrate scrappy"'
+                    ),
+                    session_id=self.session_id,
+                )
+            case (Service.pgadmin, PgadminActions.run):
                 self.run_in_compose(command=ComposeCommands.run)
-            case (Service.shell.name, ShellActions.test.name):
-                self.shell(ShellCommands.test)
-            case (Service.shell.name, ShellActions.lint.name):
+            case (Service.shell, ShellActions.test):
+                print(f"unreadargs={self._parser.unread_args}")
+                self.shell(ShellCommands.test.format(optional_cmd=self.unread_cmd))
+            case (Service.shell, ShellActions.lint):
                 self.shell(ShellCommands.lint)
-            case (Service.shell.name, ShellActions.format.name):
+            case (Service.shell, ShellActions.format):
                 self.shell(ShellCommands.format)
-            case (Service.shell.name, ShellActions.makemigrations.name):
+            case (Service.shell, ShellActions.makemigrations):
                 app = self._parser.add_argument("app", type=str).parse_args().args.app
                 max_migration = MigrationFile.get_max_migration(app=app)
 
@@ -265,7 +298,7 @@ class Makefile:
                 )
                 logger.info(f"command={command}")
                 self.shell(command)
-            case (Service.shell.name, ShellActions.migrate.name):
+            case (Service.shell, ShellActions.migrate):
                 parser = (
                     self._parser.add_argument(
                         "app",
@@ -304,16 +337,16 @@ class Makefile:
                 else:
                     raise Exception("not registered type of migration_id")
 
-            case (Service.shell.name, ShellActions.check.name):
+            case (Service.shell, ShellActions.check):
                 logger.info("pong!")
             case _:
                 raise Exception("Not registered command for this service")
 
 
 class ShellCommands:
-    lint = 'black --exclude="alembic/.*/*.py" --check .'
-    format = "black . --exclude=alembic/*"
-    test = "pytest"
+    lint = 'black --exclude="alembic/.*/*.py|OLD_CODE/|venv/" --check .'
+    format = 'black . -exclude="alembic/.*/*.py|OLD_CODE/|venv/"'
+    test = "pytest {optional_cmd}"
 
     makemigrations = (
         'alembic -c {app}/alembic.ini revision --autogenerate -m "{number:0>4}"'
@@ -324,6 +357,7 @@ class ShellCommands:
 
 
 class ComposeCommands:
+    base = "run --rm service_base {cmd}"
     test = f"run --rm service_base {ShellCommands.test}"
     lint = f"run --rm service_base {ShellCommands.lint}"
     shell = 'run --user 0 --rm -v "$(pwd):/code" service_base bash'
@@ -333,13 +367,13 @@ class ComposeCommands:
 def main():
     service = Makefile().service
     match service:
-        case Service.scrappy.name:
+        case Service.scrappy:
             Makefile(actions=ScrappyActions.values).run_action()
-        case Service.pgadmin.name:
+        case Service.pgadmin:
             Makefile(actions=PgadminActions.values).run_action()
-        case Service.shell.name:
+        case Service.shell:
             Makefile(actions=ShellActions.values).run_action()
-        case Service.check.name:
+        case Service.check:
             logger.info("pong!")
         case _:
             raise Exception("not registed service")
