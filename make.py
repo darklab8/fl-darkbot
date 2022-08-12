@@ -140,25 +140,25 @@ class MigrationFile:
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.number}, name={self.id})"
 
-    @property
-    def isNull(self):
+    def __bool__(self):
         return self.fullname == ""
 
-
-class MaxMigrationFactory:
-    def __new__(cls, app: str) -> MigrationFile | None:
+    @classmethod
+    def get_max_migration(cls, app) -> "MigrationFile":
         app = app
         path = pathlib.Path(".") / app / "alembic" / "versions"
         migrations: list[MigrationFile] = [
             MigrationFile(file.name)
             for file in path.iterdir()
-            if not MigrationFile(file.name).isNull
+            if not MigrationFile(file.name)
         ]
 
         if not migrations:
-            return None
+            return MigrationFile(None)
 
-        max_migration = max(migrations, key=lambda migration: int(migration.number))
+        max_migration: MigrationFile = max(
+            migrations, key=lambda migration: int(migration.number)
+        )
         return max_migration
 
 
@@ -256,7 +256,7 @@ class Makefile:
                 self.shell(ShellCommands.format)
             case (Service.shell.name, ShellActions.makemigrations.name):
                 app = self._parser.add_argument("app", type=str).parse_args().args.app
-                max_migration = MaxMigrationFactory(app=app)
+                max_migration = MigrationFile.get_max_migration(app=app)
 
                 command = ShellCommands.makemigrations.format(
                     app=app, number=int(max_migration.number) + 1
@@ -264,14 +264,24 @@ class Makefile:
                 logger.info(f"command={command}")
                 self.shell(command)
             case (Service.shell.name, ShellActions.migrate.name):
-                app = self._parser.add_argument("app", type=str).parse_args().args.app
+                args = (
+                    self._parser.add_argument("app", type=str)
+                    .add_argument("migration_id", type=str, default="head", nargs="?")
+                    .parse_args()
+                    .args
+                )
+                migration_id = args.migration_id.replace("zero", "base")
 
-                max_migration = MaxMigrationFactory(app=app)
-                logger.info(f"migration_file={max_migration}")
-
-                if not max_migration:
-                    logger.info("no migrations to migrate")
-                self.shell(ShellCommands.upgrade.format(app=app, id=max_migration.id))
+                if "+" in migration_id or "head" == migration_id:
+                    self.shell(
+                        ShellCommands.upgrade.format(app=args.app, id=migration_id)
+                    )
+                elif "-" in migration_id or "base" == migration_id:
+                    self.shell(
+                        ShellCommands.downgrade.format(app=args.app, id=migration_id)
+                    )
+                else:
+                    raise Exception("not registered type of migration_id")
 
             case (Service.shell.name, ShellActions.check.name):
                 logger.info("pong!")
