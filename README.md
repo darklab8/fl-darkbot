@@ -8,7 +8,7 @@ This project is a discord bot for open source game community [Freelancer Discove
 
 ![](docs/_images/general.png)
 
-User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track
+User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track.
 Darkbot repeatedly updates information to discord channel
 
 The project has 4 microservice parts:
