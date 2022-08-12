@@ -247,9 +247,7 @@ class Makefile:
         self._parser.parse_known_args(args=args)
 
         staging_env = (
-            "--env-file ./.env.staging"
-            if pathlib.Path(".env.staging").exists()
-            else ""
+            "--env-file ./.env.staging" if pathlib.Path(".env.staging").exists() else ""
         )
 
         logger.debug(f"running action = {(self.args.service, self.args.action)}")
