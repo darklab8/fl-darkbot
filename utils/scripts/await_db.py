@@ -11,7 +11,7 @@ parser.add_argument("--user", type=str, default="postgres")
 parser.add_argument("--password", type=str, default="postgres")
 parser.add_argument("--host", type=str, default="db")
 parser.add_argument("--port", type=str, default="5432")
-parser.add_argument("--timeout", type=int, default=12)
+parser.add_argument("--timeout", type=int, default=30)
 args = parser.parse_args()
 
 
