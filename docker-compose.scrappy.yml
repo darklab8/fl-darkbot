@@ -24,7 +24,7 @@ services:
     links:
       - scrappy_db
       - scrappy_redis
-    command: python3 scripts_scrappy.py migrate_all
+    command: python3 make.py shell migrate scrappy
     environment:
       SCRAPPY_DATABASE_USERNAME: "postgres"
       SCRAPPY_DATABASE_PASSWORD: "postgres"

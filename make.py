@@ -3,9 +3,10 @@ import subprocess
 import secrets
 from enum import Enum, auto
 from types import SimpleNamespace
-from os import path
 from dataclasses import dataclass
 import logging
+import pathlib
+import re
 
 
 def get_logger():
@@ -96,11 +97,17 @@ class Parser:
                 choices=[action for action in actions],
             )
 
+    def add_argument(self, *args, **kwargs):
+        self._parser.add_argument(*args, **kwargs)
+        return self
+
     def parse_known_args(self, args=None):
         self._args, self._unread_args = self._parser.parse_known_args(args=args)
+        return self
 
     def parse_args(self, args=None):
-        self._args, self._unread_args = self._parser.parse_args(args=args)
+        self._args = self._parser.parse_args(args=args)
+        return self
 
     @property
     def args(self) -> SimpleNamespace:
@@ -113,6 +120,46 @@ class Parser:
         if not hasattr(self, "_unread_args"):
             self.parse_known_args()
         return self._args
+
+
+class MigrationFile:
+    fullname = ""
+    number = ""
+    id = ""
+
+    def __init__(self, filename: str):
+        logger.debug(f"MigrationFile.filename={filename}")
+        found = re.search("([0-9]+)_([0-9a-z]+)\.py", filename)
+        if found is None:
+            return
+
+        self.fullname = found.group(0)
+        self.number = found.group(1)
+        self.id = found.group(2)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(id={self.number}, name={self.id})"
+
+    @property
+    def isNull(self):
+        return self.fullname == ""
+
+
+class MaxMigrationFactory:
+    def __new__(cls, app: str) -> MigrationFile | None:
+        app = app
+        path = pathlib.Path(".") / app / "alembic" / "versions"
+        migrations: list[MigrationFile] = [
+            MigrationFile(file.name)
+            for file in path.iterdir()
+            if not MigrationFile(file.name).isNull
+        ]
+
+        if not migrations:
+            return None
+
+        max_migration = max(migrations, key=lambda migration: int(migration.number))
+        return max_migration
 
 
 class Makefile:
@@ -165,7 +212,7 @@ class Makefile:
         finally:
             subprocess.run(eixiting_command, shell=True, check=True)
 
-    def shell(command):
+    def shell(self, command):
         logger.info(f"command={command}")
         subprocess.run(command, shell=True, check=True)
 
@@ -174,7 +221,7 @@ class Makefile:
 
         scrappy_env = (
             "--env-file ./.env.scrappy.staging"
-            if path.exists(".env.scrappy.staging")
+            if pathlib.Path(".env.scrappy.staging").exists()
             else ""
         )
 
@@ -208,9 +255,24 @@ class Makefile:
             case (Service.shell.name, ShellActions.format.name):
                 self.shell(ShellCommands.format)
             case (Service.shell.name, ShellActions.makemigrations.name):
-                pass
+                app = self._parser.add_argument("app", type=str).parse_args().args.app
+                max_migration = MaxMigrationFactory(app=app)
+
+                command = ShellCommands.makemigrations.format(
+                    app=app, number=int(max_migration.number) + 1
+                )
+                logger.info(f"command={command}")
+                self.shell(command)
             case (Service.shell.name, ShellActions.migrate.name):
-                pass
+                app = self._parser.add_argument("app", type=str).parse_args().args.app
+
+                max_migration = MaxMigrationFactory(app=app)
+                logger.info(f"migration_file={max_migration}")
+
+                if not max_migration:
+                    logger.info("no migrations to migrate")
+                self.shell(ShellCommands.upgrade.format(app=app, id=max_migration.id))
+
             case (Service.shell.name, ShellActions.check.name):
                 logger.info("pong!")
             case _:
@@ -223,11 +285,11 @@ class ShellCommands:
     test = "pytest"
 
     makemigrations = (
-        'alembic -c {service}/alembic.ini revision --autogenerate -m "{name}"'
+        'alembic -c {app}/alembic.ini revision --autogenerate -m "{number:0>4}"'
     )
     migrate = ""
-    upgrade = 'alembic -c scrappy/alembic.ini upgrade "{id}"'
-    downgrade = 'alembic -c scrappy/alembic.ini downgrade "{id}"'
+    upgrade = 'alembic -c {app}/alembic.ini upgrade "{id}"'
+    downgrade = 'alembic -c {app}/alembic.ini downgrade "{id}"'
 
 
 class ComposeCommands:
