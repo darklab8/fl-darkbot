@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  db:
+  scrappy_db:
     image: postgres:13
     expose:
       - "5432"
@@ -9,7 +9,7 @@ services:
       POSTGRES_DB: default
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-  redis:
+  scrappy_redis:
     image: redis
     expose:
       - "6379"
@@ -19,21 +19,23 @@ services:
       context: src
       dockerfile: scrappy/Dockerfile
     depends_on:
-      - "db"
-      - "redis"
+      - scrappy_db
+      - scrappy_redis
     links:
-      - db
-      - redis
+      - scrappy_db
+      - scrappy_redis
     command: python3 scripts_scrappy.py migrate_all
     environment:
       SCRAPPY_DATABASE_USERNAME: "postgres"
       SCRAPPY_DATABASE_PASSWORD: "postgres"
-      SCRAPPY_DATABASE_HOST: "db"
+      SCRAPPY_DATABASE_HOST: "scrappy_db"
       SCRAPPY_LOGGER_CONSOLE_LEVEL: "DEBUG"
       SCRAPPY_PLAYER_URL: "${SCRAPPY_PLAYER_URL:-example}"  
       SCRAPPY_BASE_URL: "${SCRAPPY_BASE_URL:-example}"
       SCRAPPY_FORUM_USERNAME: "${SCRAPPY_FORUM_USERNAME:-example}"
       SCRAPPY_FORUM_PASSWORD: "${SCRAPPY_FORUM_PASSWORD:-example}"
+      SCRAPPY_CELERY_BROKER: "redis://scrappy_redis:6379/0"
+      SCRAPPY_CELERY_BACKEND: "redis://scrappy_redis:6379/0"
   service_web:
     <<: *service_base
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
@@ -50,8 +52,3 @@ services:
     command: celery -A scrappy.core.celery flower
     ports:
       - "5555:5555"
-  service_shell:
-    <<: *service_base
-    command: /bin/bash
-    volumes:
-      - "./src:/code"

@@ -58,4 +58,4 @@ def session(database):
 
 @pytest.fixture(scope="session")
 def celery_config():
-    return {"broker_url": "memory://", "result_backend": "redis://redis:6379/0"}
+    return {"broker_url": "memory://", "result_backend": settings.CELERY_BACKEND}

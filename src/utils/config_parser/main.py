@@ -10,12 +10,12 @@ class ConfigParser:
 
     def __getitem__(self, variable_name):
         return self._env_storage[
-            self._transform_to_env_var_name(f"{self.settings_prefix}_{variable_name}")
+            self._transform_to_env_var_name(f"{self.settings_prefix}.{variable_name}")
         ]
 
     def get(self, variable_name, default=None):
         return self._env_storage.get(
-            self._transform_to_env_var_name(f"{self.settings_prefix}_{variable_name}"),
+            self._transform_to_env_var_name(f"{self.settings_prefix}.{variable_name}"),
             default,
         )
 
