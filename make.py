@@ -60,6 +60,7 @@ class Service(EnumValues):
     pgadmin = auto()
     shell = auto()
     check = auto()
+    listener = auto()
 
 
 class Action(EnumValues):
@@ -73,6 +74,10 @@ class ScrappyActions(Action):
     lint = auto()
     migrate = auto()
     manage = auto()
+
+
+class ListenerActions(Action):
+    shell = auto()
 
 
 class PgadminActions(Action):
@@ -350,6 +355,10 @@ class Makefile:
 
             case (Service.shell, ShellActions.check):
                 logger.info("pong!")
+            case (Service.listener, ScrappyActions.shell):
+                self.run_in_compose(
+                    command=ComposeCommands.shell.format(service=self.service),
+                )
             case _:
                 raise Exception("Not registered command for this service")
 
@@ -369,7 +378,7 @@ class ShellCommands:
 
 class ComposeCommands:
     base = "run --rm {service}_base {cmd}"
-    shell = 'run --user 0 --rm -v "$(pwd):/code" {service} bash'
+    shell = 'run --user 0 --rm -v "$(pwd):/code" {service}_base bash'
     run = "up"
 
 
@@ -382,6 +391,8 @@ def main():
             Makefile(actions=PgadminActions.values).run_action()
         case Service.shell:
             Makefile(actions=ShellActions.values).run_action()
+        case Service.listener:
+            Makefile(actions=ListenerActions.values).run_action()
         case Service.check:
             logger.info("pong!")
         case _:

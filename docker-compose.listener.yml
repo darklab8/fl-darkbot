@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  listener_base:
+    &listener_base
+    build: 
+      context: .
+      dockerfile: listener/Dockerfile
