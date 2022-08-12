@@ -1,3 +1,10 @@
+# Badges
+
+
+| [Gitlab CI](https://gitlab.com/darklab2/darklab_darkbot)                                                            |
+| --------------------------------------------------------------------------------------------------------------------- |
+| ![](https://gitlab.com/darklab2/darklab_darkbot/badges/master/pipeline.svg?key_text=GitlabCIPipeline&key_width=150) |
+
 # Name
 
 Darkbot 2.0
@@ -12,6 +19,7 @@ User connects darkbot to some discord channel, and sets settings which space bas
 Darkbot repeatedly updates information to discord channel
 
 The project has 4 microservice parts:
+
 - scrappy scraps third party REST APIs and web forum for data. Stores in database. Outputs at REST API or gRPC endpoints.
 - configurator is a REST API or gRPC application. That stores all possible user settings
 - listener is Discord API connected application, that accepts user commands from channel and sends to configurator
@@ -20,13 +28,16 @@ The project has 4 microservice parts:
 [First version of project had wiki](https://darklab8.github.io/darklab_darkbot/)
 
 # Project status:
+
 Old code is declared as old, and will be refacorized fully to new version with considering all gathered experience in this application
 And having this time more reliable and scalable archirecture. Scalable in a code growth and workload performance.
 
 # Architecture of the project
+
 ![](architecture/architecture.drawio.svg)
 
 # Tech stack
+
 - FastAPI
 - Celery
 - Kafka
@@ -50,5 +61,3 @@ Warning: python3.10 is supposed to be installed
 
 - python3 make.py scrappy shell # Running dev env
 - python3 make.py scrappy test # Running tests
-
-
