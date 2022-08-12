@@ -34,22 +34,24 @@ def get_logger():
 logger = get_logger()
 
 
-class Service(Enum):
-    scrappy = auto()
-    pgadmin = auto()
-    shell = auto()
-    check = auto()
-
-
-class Action(Enum):
-    pass
-
+class EnumValues(Enum):
     @classmethod
     @property
     def values(self) -> list[str]:
         values = [a.name for a in self]
         logger.info(f"actions.values={values}")
         return values
+
+
+class Service(EnumValues):
+    scrappy = auto()
+    pgadmin = auto()
+    shell = auto()
+    check = auto()
+
+
+class Action(EnumValues):
+    pass
 
 
 class ScrappyActions(Action):
@@ -264,12 +266,31 @@ class Makefile:
                 logger.info(f"command={command}")
                 self.shell(command)
             case (Service.shell.name, ShellActions.migrate.name):
-                args = (
-                    self._parser.add_argument("app", type=str)
-                    .add_argument("migration_id", type=str, default="head", nargs="?")
+                parser = (
+                    self._parser.add_argument(
+                        "app",
+                        type=str,
+                        choices=Service.values + ["help"],
+                        help="app: positional_argument[str] = application to migrate. Choices `scrappy` and others above",
+                        nargs="?",
+                        default="help",
+                    )
+                    .add_argument(
+                        "migration_id",
+                        type=str,
+                        default="head",
+                        nargs="?",
+                        help="migrating destination. default/`head` to latest, "
+                        "`zero` to zero, `-1` and `+1` are steps back and forward",
+                    )
                     .parse_args()
-                    .args
                 )
+                args = parser.args
+
+                if args.app == "help":
+                    parser._parser.print_help()
+                    return
+
                 migration_id = args.migration_id.replace("zero", "base")
 
                 if "+" in migration_id or "head" == migration_id:
