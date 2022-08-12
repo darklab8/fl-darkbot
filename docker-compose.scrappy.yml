@@ -17,7 +17,10 @@ services:
     &scrappy_base
     build: 
       context: .
-      dockerfile: scrappy/Dockerfile
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: dev
+        SERVICE: scrappy
     depends_on:
       - scrappy_db
       - scrappy_redis

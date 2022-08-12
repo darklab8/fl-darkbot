@@ -4,4 +4,7 @@ services:
     &listener_base
     build: 
       context: .
-      dockerfile: listener/Dockerfile
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: dev
+        SERVICE: listener
