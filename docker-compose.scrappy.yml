@@ -13,8 +13,8 @@ services:
     image: redis
     expose:
       - "6379"
-  service_base:
-    &service_base
+  scrappy_base:
+    &scrappy_base
     build: 
       context: .
       dockerfile: scrappy/Dockerfile
@@ -36,19 +36,19 @@ services:
       SCRAPPY_FORUM_PASSWORD: "${SCRAPPY_FORUM_PASSWORD:-example}"
       SCRAPPY_CELERY_BROKER: "redis://scrappy_redis:6379/0"
       SCRAPPY_CELERY_BACKEND: "redis://scrappy_redis:6379/0"
-  service_web:
-    <<: *service_base
+  scrappy_web:
+    <<: *scrappy_base
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
     ports:
       - "8000:8000"
-  service_beat:
-    <<: *service_base
+  scrappy_beat:
+    <<: *scrappy_base
     command: celery -A scrappy.core.celery beat
-  service_worker:
-    <<: *service_base
+  scrappy_worker:
+    <<: *scrappy_base
     command: celery -A scrappy.core.celery worker
-  service_flower:
-    <<: *service_base
+  scrappy_flower:
+    <<: *scrappy_base
     command: celery -A scrappy.core.celery flower
     ports:
       - "5555:5555"
