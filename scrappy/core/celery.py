@@ -1,8 +1,8 @@
 from celery import Celery
-from celery.schedules import crontab
-import os
 from scrappy.players.tasks import update_players
+from scrappy.bases.tasks import update_bases
 from . import settings as settings
+from pydantic import BaseModel
 
 app = Celery(
     "core",
@@ -11,7 +11,11 @@ app = Celery(
 )
 
 
+class Time(BaseModel):
+    seconds: float
+
+
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    # Calls test('world') every 30 seconds
-    sender.add_periodic_task(30.0, update_players.s(), expires=10)
+    sender.add_periodic_task(Time(seconds=30.0).seconds, update_players.s(), expires=10)
+    sender.add_periodic_task(Time(seconds=30.0).seconds, update_bases.s(), expires=10)
