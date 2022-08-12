@@ -8,3 +8,5 @@ services:
       args:
         ENVIRONMENT: dev
         SERVICE: listener
+    environment:
+      LISTENER_DISCORD_TOKEN: "${LISTENER_DISCORD_TOKEN:-example}"

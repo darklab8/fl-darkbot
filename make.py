@@ -246,9 +246,9 @@ class Makefile:
     def run_action(self, args=None):
         self._parser.parse_known_args(args=args)
 
-        scrappy_env = (
-            "--env-file ./.env.scrappy.staging"
-            if pathlib.Path(".env.scrappy.staging").exists()
+        staging_env = (
+            "--env-file ./.env.staging"
+            if pathlib.Path(".env.staging").exists()
             else ""
         )
 
@@ -265,11 +265,11 @@ class Makefile:
                 )
             case (Service.scrappy, ScrappyActions.shell):
                 self.run_in_compose(
-                    command=f"{scrappy_env} {ComposeCommands.shell.format(service=Service.scrappy)}",
+                    command=f"{staging_env} {ComposeCommands.shell.format(service=Service.scrappy)}",
                 )
             case (Service.scrappy, ScrappyActions.run):
                 self.run_in_compose(
-                    command=f"{scrappy_env} {ComposeCommands.run}",
+                    command=f"{staging_env} {ComposeCommands.run}",
                     compose_overrides=["network-override"],
                 )
             case (Service.scrappy, ScrappyActions.lint):
@@ -357,7 +357,7 @@ class Makefile:
                 logger.info("pong!")
             case (Service.listener, ScrappyActions.shell):
                 self.run_in_compose(
-                    command=ComposeCommands.shell.format(service=self.service),
+                    command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
                 )
             case _:
                 raise Exception("Not registered command for this service")
