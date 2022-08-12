@@ -262,7 +262,7 @@ class Makefile:
             case (Service.scrappy, ScrappyActions.run):
                 self.run_in_compose(
                     command=f"{scrappy_env} {ComposeCommands.run}",
-                    compose_overrides=[f"{Service.scrappy}-network"],
+                    compose_overrides=["network-override"],
                 )
             case (Service.scrappy, ScrappyActions.lint):
                 self.run_in_compose(
