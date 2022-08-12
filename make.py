@@ -277,13 +277,17 @@ class Makefile:
                 )
             case (Service.scrappy, ScrappyActions.manage):
                 self.run_in_compose(
-                    command=ComposeCommands.base.format(cmd=self.unread_cmd),
+                    command=ComposeCommands.base.format(
+                        service=Service.scrappy,
+                        cmd=self.unread_cmd,
+                    ),
                     session_id=self.session_id,
                 )
             case (Service.scrappy, ScrappyActions.migrate):
                 self.run_in_compose(
                     command=ComposeCommands.base.format(
-                        cmd='sh -c "python3 utils/scripts/await_db.py --host=scrappy_db && python3 make.py shell migrate scrappy"'
+                        service=Service.scrappy,
+                        cmd='sh -c "python3 utils/scripts/await_db.py --host=scrappy_db && python3 make.py shell migrate scrappy"',
                     ),
                     session_id=self.session_id,
                 )
