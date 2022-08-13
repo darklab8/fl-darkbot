@@ -157,13 +157,17 @@ class Parser:
 
 class MigrationFile:
     fullname = ""
-    number = ""
+    number = "-1"
     id = ""
 
     def __init__(self, filename: str):
         logger.debug(f"MigrationFile.filename={filename}")
+
+        if filename is None:
+            return
+
         found = re.search("([0-9]+)_([0-9a-z]+)\.py", filename)
-        if found is None:
+        if not found:
             return
 
         self.fullname = found.group(0)
@@ -180,6 +184,7 @@ class MigrationFile:
     def get_max_migration(cls, app) -> "MigrationFile":
         app = app
         path = pathlib.Path(".") / app / "alembic" / "versions"
+
         migrations: list[MigrationFile] = [
             MigrationFile(file.name)
             for file in path.iterdir()
