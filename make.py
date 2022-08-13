@@ -62,6 +62,7 @@ class Service(EnumValues):
     check = auto()
     listener = auto()
     discorder = auto()
+    configurator = auto()
 
 
 class Action(EnumValues):
@@ -82,6 +83,10 @@ class ListenerActions(Action):
 
 
 class ViewerActions(Action):
+    shell = auto()
+
+
+class ConfiguratorActions(Action):
     shell = auto()
 
 
@@ -366,6 +371,10 @@ class Makefile:
                 self.run_in_compose(
                     command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
                 )
+            case (Service.configurator, ScrappyActions.shell):
+                self.run_in_compose(
+                    command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
+                )
             case _:
                 raise Exception("Not registered command for this service")
 
@@ -402,6 +411,8 @@ def main():
             Makefile(actions=ListenerActions.values).run_action()
         case Service.discorder:
             Makefile(actions=ViewerActions.values).run_action()
+        case Service.configurator:
+            Makefile(actions=ConfiguratorActions.values).run_action()
         case Service.check:
             logger.info("pong!")
         case _:

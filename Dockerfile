@@ -22,6 +22,8 @@ FROM branch-shared-env-${ENVIRONMENT} as branch-app-listener
 
 FROM branch-shared-env-${ENVIRONMENT} as branch-app-discorder
 
+FROM branch-shared-env-${ENVIRONMENT} as branch-app-configurator
+
 FROM branch-app-${SERVICE} AS final
 ARG SERVICE
 

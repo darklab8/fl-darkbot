@@ -1,0 +1,15 @@
+fastapi[all]
+uvicorn[standard]
+black
+factory-boy
+SQLAlchemy
+SQLAlchemy-Utils
+alembic
+pytest
+pytest-pythonpath
+pytest-asyncio
+psycopg2-binary
+Faker
+asyncpg
+uvicorn
+httpx
