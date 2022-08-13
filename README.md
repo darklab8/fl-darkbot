@@ -22,7 +22,8 @@ The project has 4 microservice parts:
 
 - scrappy scraps third party REST APIs and web forum for data. Stores in database. Outputs at REST API or gRPC endpoints.
 - configurator is a REST API or gRPC application. That stores all possible user settings
-- listener is Discord API connected application, that accepts user commands from channel and sends to configurator
+- listener is Discord API connected application, that accepts user commands from channel and sends to consoler, and gives from it answer
+- consoler is a CLI interface to accept input from listener and render it CLI answer back
 - viewer is main celery-beat application that in a loop gets user settings and connected channels, and rerenders to them view
 
 [First version of project had wiki](https://darklab8.github.io/darklab_darkbot/)

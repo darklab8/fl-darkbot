@@ -1,6 +1,7 @@
 import subprocess
 import asyncio
 
+
 def run_command_sync(args=[]):
     result = subprocess.run(
         ["python3", "-m" "consoler"] + args,
@@ -10,6 +11,7 @@ def run_command_sync(args=[]):
     if result.returncode != 0:
         return result.stderr
     return result.stdout
+
 
 async def run_command_async(*args):
     """Run command in subprocess.
@@ -23,6 +25,7 @@ async def run_command_async(*args):
 
     stdout, stderr = await process.communicate()
     return stdout.decode() + stderr.decode()
+
 
 if __name__ == "__main__":
     # print(run_command_sync(args=["ping"]))
