@@ -6,6 +6,7 @@ import time
 import logging
 from utils.logger import Logger
 from viewer.core import settings
+import secrets
 
 logger = Logger(console_level="DEBUG")
 
@@ -58,7 +59,7 @@ class Looper(commands.Cog):
 
 class CreateApp:
     def __init__(self):
-        self.bot = commands.Bot(command_prefix=".")
+        self.bot = commands.Bot(command_prefix=secrets.token_hex(16))
         self.looper = Looper(self.bot)
 
     def run(self):
