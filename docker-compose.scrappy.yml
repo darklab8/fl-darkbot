@@ -9,10 +9,20 @@ services:
       POSTGRES_DB: default
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    logging:
+      driver: "json-file"
+      options:
+        max-buffer-size: "4m"
+        mode: "non-blocking"
   scrappy_redis:
     image: redis
     expose:
       - "6379"
+    logging:
+      driver: "json-file"
+      options:
+        max-buffer-size: "4m"
+        mode: "non-blocking"
   scrappy_base:
     &scrappy_base
     build: 
@@ -21,6 +31,11 @@ services:
       args:
         ENVIRONMENT: dev
         SERVICE: scrappy
+    logging:
+      driver: "json-file"
+      options:
+        max-buffer-size: "4m"
+        mode: "non-blocking"
     depends_on:
       - scrappy_db
       - scrappy_redis
