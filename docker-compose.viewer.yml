@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  viewer_base:
+    &viewer_base
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: dev
+        SERVICE: viewer
+    environment:
+      VIEWER_DISCORD_TOKEN: "${VIEWER_DISCORD_TOKEN:-example}"

@@ -61,6 +61,7 @@ class Service(EnumValues):
     shell = auto()
     check = auto()
     listener = auto()
+    viewer = auto()
 
 
 class Action(EnumValues):
@@ -77,6 +78,10 @@ class ScrappyActions(Action):
 
 
 class ListenerActions(Action):
+    shell = auto()
+
+
+class ViewerActions(Action):
     shell = auto()
 
 
@@ -263,7 +268,7 @@ class Makefile:
                 )
             case (Service.scrappy, ScrappyActions.shell):
                 self.run_in_compose(
-                    command=f"{staging_env} {ComposeCommands.shell.format(service=Service.scrappy)}",
+                    command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
                 )
             case (Service.scrappy, ScrappyActions.run):
                 self.run_in_compose(
@@ -273,7 +278,7 @@ class Makefile:
             case (Service.scrappy, ScrappyActions.lint):
                 self.run_in_compose(
                     command=ComposeCommands.base.format(
-                        service=Service.scrappy,
+                        service=self.service,
                         cmd=ShellCommands.lint,
                     ),
                     session_id=self.session_id,
@@ -281,7 +286,7 @@ class Makefile:
             case (Service.scrappy, ScrappyActions.manage):
                 self.run_in_compose(
                     command=ComposeCommands.base.format(
-                        service=Service.scrappy,
+                        service=self.service,
                         cmd=self.unread_cmd,
                     ),
                     session_id=self.session_id,
@@ -289,7 +294,7 @@ class Makefile:
             case (Service.scrappy, ScrappyActions.migrate):
                 self.run_in_compose(
                     command=ComposeCommands.base.format(
-                        service=Service.scrappy,
+                        service=self.service,
                         cmd='sh -c "python3 utils/scripts/await_db.py --host=scrappy_db && python3 make.py shell migrate scrappy"',
                     ),
                     session_id=self.session_id,
@@ -357,6 +362,10 @@ class Makefile:
                 self.run_in_compose(
                     command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
                 )
+            case (Service.viewer, ScrappyActions.shell):
+                self.run_in_compose(
+                    command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
+                )
             case _:
                 raise Exception("Not registered command for this service")
 
@@ -391,6 +400,8 @@ def main():
             Makefile(actions=ShellActions.values).run_action()
         case Service.listener:
             Makefile(actions=ListenerActions.values).run_action()
+        case Service.viewer:
+            Makefile(actions=ViewerActions.values).run_action()
         case Service.check:
             logger.info("pong!")
         case _:
