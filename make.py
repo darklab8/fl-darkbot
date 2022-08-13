@@ -61,7 +61,7 @@ class Service(EnumValues):
     shell = auto()
     check = auto()
     listener = auto()
-    viewer = auto()
+    discorder = auto()
 
 
 class Action(EnumValues):
@@ -362,7 +362,7 @@ class Makefile:
                 self.run_in_compose(
                     command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
                 )
-            case (Service.viewer, ScrappyActions.shell):
+            case (Service.discorder, ScrappyActions.shell):
                 self.run_in_compose(
                     command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
                 )
@@ -400,7 +400,7 @@ def main():
             Makefile(actions=ShellActions.values).run_action()
         case Service.listener:
             Makefile(actions=ListenerActions.values).run_action()
-        case Service.viewer:
+        case Service.discorder:
             Makefile(actions=ViewerActions.values).run_action()
         case Service.check:
             logger.info("pong!")

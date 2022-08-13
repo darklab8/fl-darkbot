@@ -20,7 +20,7 @@ FROM branch-shared-env-${ENVIRONMENT} as branch-app-scrappy
 
 FROM branch-shared-env-${ENVIRONMENT} as branch-app-listener
 
-FROM branch-shared-env-${ENVIRONMENT} as branch-app-viewer
+FROM branch-shared-env-${ENVIRONMENT} as branch-app-discorder
 
 FROM branch-app-${SERVICE} AS final
 ARG SERVICE

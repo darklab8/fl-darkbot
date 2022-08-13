@@ -1,0 +1,6 @@
+discord.py
+black
+pytest
+pytest-pythonpath
+pytest-asyncio
+aiohttp
