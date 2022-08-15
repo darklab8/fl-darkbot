@@ -32,5 +32,6 @@ RUN pip install -r ${SERVICE}/requirements.txt -c ${SERVICE}/constraints.txt
 
 COPY ${SERVICE} /code/${SERVICE}
 COPY utils /code/utils
-COPY listener /code/listener
+# consoler needs to be added for listener. Rewrite dockerfile si it would not be added anywhere else
+COPY consoler /code/consoler 
 COPY pytest.ini conftest.py make.py ./
