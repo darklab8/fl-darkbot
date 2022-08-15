@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 import secrets
-from enum import Enum, auto, EnumMeta
+from enum import Enum, auto
 from types import SimpleNamespace
 from dataclasses import dataclass
 import logging
