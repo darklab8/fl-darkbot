@@ -34,42 +34,23 @@ def get_logger():
 logger = get_logger()
 
 
-class _EnumDirectValueMeta(EnumMeta):
-    def __getattribute__(cls, name):
-        value = super().__getattribute__(name)
-        if isinstance(value, cls):
-            value = value.name
-        return value
+class AugmentedEnum(Enum):
+    @classmethod
+    @property
+    def names(self) -> list[str]:
+        names = [a.name for a in self]
+        logger.info(f"actions.names={names}")
+        return names
 
-
-class _EnumGetKey(Enum):
     @classmethod
     @property
     def values(self) -> list[str]:
-        values = [a.name for a in self]
+        values = [a.value for a in self]
         logger.info(f"actions.values={values}")
         return values
 
 
-class EnumValues(_EnumGetKey, metaclass=_EnumDirectValueMeta):
-    pass
-
-
-class Service(EnumValues):
-    scrappy = auto()
-    pgadmin = auto()
-    shell = auto()
-    check = auto()
-    listener = auto()
-    discorder = auto()
-    configurator = auto()
-
-
-class Action(EnumValues):
-    pass
-
-
-class ScrappyActions(Action):
+class ScrappyActions(AugmentedEnum):
     test = auto()
     shell = auto()
     run = auto()
@@ -78,29 +59,39 @@ class ScrappyActions(Action):
     manage = auto()
 
 
-class ListenerActions(Action):
+class ListenerActions(AugmentedEnum):
     shell = auto()
 
 
-class ViewerActions(Action):
+class DiscorderActions(AugmentedEnum):
     shell = auto()
 
 
-class ConfiguratorActions(Action):
+class ConfiguratorActions(AugmentedEnum):
     shell = auto()
+    migrate = auto()
 
 
-class PgadminActions(Action):
+class PgadminActions(AugmentedEnum):
     run = auto()
 
 
-class ShellActions(Action):
+class ShellActions(AugmentedEnum):
     test = auto()
     lint = auto()
     format = auto()
     makemigrations = auto()
     migrate = auto()
     check = auto()
+
+
+class Services(AugmentedEnum):
+    scrappy = ScrappyActions
+    pgadmin = PgadminActions
+    shell = ShellActions
+    listener = ListenerActions
+    discorder = DiscorderActions
+    configurator = ConfiguratorActions
 
 
 @dataclass
@@ -110,21 +101,25 @@ class EnumType:
 
 
 class Parser:
-    def __init__(self, actions: list[str] = []):
-        self._parser = argparse.ArgumentParser()
+    def __init__(self, _parser=None):
+        self._parser = argparse.ArgumentParser() if _parser is None else _parser
         self._parser.add_argument(
             "--session_id",
             type=str,
             default=secrets.token_hex(4),
             help="ensures to run docker-compose with persistent random -p parameter for no conflicts in parallel runs",
         )
-        self._parser.add_argument("service", type=str, choices=Service.values)
-        if actions:
-            self._parser.add_argument(
-                "action",
-                type=str,
-                choices=actions,
-            )
+
+    def register_group(self, *args, name, **kwargs):
+        group = self._parser.add_subparsers(*args, dest=name, required=True, **kwargs)
+        self.group = group
+        return self
+
+    def add_group_choice(self, *args, name, **kwargs):
+        setattr(
+            self, name, Parser(_parser=self.group.add_parser(*args, name, **kwargs))
+        )
+        return self
 
     def add_argument(self, *args, **kwargs):
         self._parser.add_argument(*args, **kwargs)
@@ -203,8 +198,39 @@ class MigrationFile:
 class Makefile:
     parser_cls = Parser
 
-    def __init__(self, actions=[]):
-        self._parser = self.parser_cls(actions=actions)
+    def __init__(self, services: Enum):
+        self._parser = self.parser_cls()
+
+        self._parser.register_group(name="service")
+        for service in services:
+            self._parser.add_group_choice(name=service.name)
+            service_parser: Parser = getattr(self._parser, service.name)
+
+            service_parser.register_group(name="action")
+            for action in service.value:
+                service_parser.add_group_choice(name=action.name)
+                action_parser: Parser = getattr(service_parser, action.name)
+
+                match (service.name, action.name):
+                    case (Services.shell.name, ShellActions.migrate.name):
+                        action_parser.add_argument(
+                            "app",
+                            type=str,
+                            choices=[Services.scrappy.name, Services.configurator.name],
+                            help="app: positional_argument[str] = application to migrate. Choices `scrappy` and others above",
+                        )
+                        action_parser.add_argument(
+                            "migration_id",
+                            type=str,
+                            default="head",
+                            nargs="?",
+                            help="migrating destination. default/`head` to latest, "
+                            "`zero` to zero, `-1` and `+1` are steps back and forward",
+                        )
+
+    @property
+    def parser(self):
+        return self._parser
 
     @property
     def args(self):
@@ -259,66 +285,25 @@ class Makefile:
         subprocess.run(command, shell=True, check=True)
 
     def run_action(self, args=None):
+
         self._parser.parse_known_args(args=args)
 
         staging_env = (
             "--env-file ./.env.staging" if pathlib.Path(".env.staging").exists() else ""
         )
 
-        logger.debug(f"running action = {(self.args.service, self.args.action)}")
-        match (self.args.service, self.args.action):
+        logger.debug(
+            f"running command with args={self.args}, unread_args={self._parser.unread_args}"
+        )
 
-            case (Service.scrappy, ScrappyActions.test):
-                self.run_in_compose(
-                    command=ComposeCommands.base.format(
-                        service=Service.scrappy,
-                        cmd=ShellCommands.test.format(optional_cmd=self.unread_cmd),
-                    ),
-                    session_id=self.session_id,
-                )
-            case (Service.scrappy, ScrappyActions.shell):
-                self.run_in_compose(
-                    command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
-                )
-            case (Service.scrappy, ScrappyActions.run):
-                self.run_in_compose(
-                    command=f"{staging_env} {ComposeCommands.run}",
-                    compose_overrides=["network-override"],
-                )
-            case (Service.scrappy, ScrappyActions.lint):
-                self.run_in_compose(
-                    command=ComposeCommands.base.format(
-                        service=self.service,
-                        cmd=ShellCommands.lint,
-                    ),
-                    session_id=self.session_id,
-                )
-            case (Service.scrappy, ScrappyActions.manage):
-                self.run_in_compose(
-                    command=ComposeCommands.base.format(
-                        service=self.service,
-                        cmd=self.unread_cmd,
-                    ),
-                    session_id=self.session_id,
-                )
-            case (Service.scrappy, ScrappyActions.migrate):
-                self.run_in_compose(
-                    command=ComposeCommands.base.format(
-                        service=self.service,
-                        cmd='sh -c "python3 utils/scripts/await_db.py --host=scrappy_db && python3 make.py shell migrate scrappy"',
-                    ),
-                    session_id=self.session_id,
-                )
-            case (Service.pgadmin, PgadminActions.run):
-                self.run_in_compose(command=ComposeCommands.run)
-            case (Service.shell, ShellActions.test):
-                print(f"unreadargs={self._parser.unread_args}")
+        match (self.args.service, self.args.action):
+            case (Services.shell.name, ShellActions.test.name):
                 self.shell(ShellCommands.test.format(optional_cmd=self.unread_cmd))
-            case (Service.shell, ShellActions.lint):
+            case (Services.shell.name, ShellActions.lint.name):
                 self.shell(ShellCommands.lint)
-            case (Service.shell, ShellActions.format):
+            case (Services.shell.name, ShellActions.format.name):
                 self.shell(ShellCommands.format)
-            case (Service.shell, ShellActions.makemigrations):
+            case (Services.shell.name, ShellActions.makemigrations.name):
                 app = self._parser.add_argument("app", type=str).parse_args().args.app
                 max_migration = MigrationFile.get_max_migration(app=app)
 
@@ -327,61 +312,70 @@ class Makefile:
                 )
                 logger.info(f"command={command}")
                 self.shell(command)
-            case (Service.shell, ShellActions.migrate):
-                parser = (
-                    self._parser.add_argument(
-                        "app",
-                        type=str,
-                        choices=Service.values + ["help"],
-                        help="app: positional_argument[str] = application to migrate. Choices `scrappy` and others above",
-                        nargs="?",
-                        default="help",
-                    )
-                    .add_argument(
-                        "migration_id",
-                        type=str,
-                        default="head",
-                        nargs="?",
-                        help="migrating destination. default/`head` to latest, "
-                        "`zero` to zero, `-1` and `+1` are steps back and forward",
-                    )
-                    .parse_args()
-                )
-                args = parser.args
-
-                if args.app == "help":
-                    parser._parser.print_help()
-                    return
-
-                migration_id = args.migration_id.replace("zero", "base")
+            case (Services.shell.name, ShellActions.migrate.name):
+                migration_id = self.args.migration_id.replace("zero", "base")
 
                 if "+" in migration_id or "head" == migration_id:
                     self.shell(
-                        ShellCommands.upgrade.format(app=args.app, id=migration_id)
+                        ShellCommands.upgrade.format(app=self.args.app, id=migration_id)
                     )
                 elif "-" in migration_id or "base" == migration_id:
                     self.shell(
-                        ShellCommands.downgrade.format(app=args.app, id=migration_id)
+                        ShellCommands.downgrade.format(
+                            app=self.args.app, id=migration_id
+                        )
                     )
                 else:
                     raise Exception("not registered type of migration_id")
 
-            case (Service.shell, ShellActions.check):
+            case (Services.shell.name, ShellActions.check.name):
                 logger.info("pong!")
-            case (Service.listener, ScrappyActions.shell):
+            case (service, "test"):
+                self.run_in_compose(
+                    command=ComposeCommands.base.format(
+                        service=self.service,
+                        cmd=ShellCommands.test.format(optional_cmd=self.unread_cmd),
+                    ),
+                    session_id=self.session_id,
+                )
+            case (service, "shell"):
                 self.run_in_compose(
                     command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
                 )
-            case (Service.discorder, ScrappyActions.shell):
+            case (service, "run"):
                 self.run_in_compose(
-                    command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
+                    command=f"{staging_env} {ComposeCommands.run}",
+                    compose_overrides=["network-override"],
                 )
-            case (Service.configurator, ScrappyActions.shell):
+            case (service, "lint"):
                 self.run_in_compose(
-                    command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
+                    command=ComposeCommands.base.format(
+                        service=self.service,
+                        cmd=ShellCommands.lint,
+                    ),
+                    session_id=self.session_id,
+                )
+            case (service, "manage"):
+                self.run_in_compose(
+                    command=ComposeCommands.base.format(
+                        service=self.service,
+                        cmd=self.unread_cmd,
+                    ),
+                    session_id=self.session_id,
+                )
+            case (service, "migrate"):
+                self.run_in_compose(
+                    command=ComposeCommands.base.format(
+                        service=self.service,
+                        cmd='sh -c "python3 utils/scripts/await_db.py '
+                        f'--host={self.service}_db && python3 make.py shell migrate {self.service}"',
+                    ),
+                    session_id=self.session_id,
                 )
             case _:
-                raise Exception("Not registered command for this service")
+                raise Exception(
+                    "Code that will never run. Not registered command for this service"
+                )
 
 
 class ShellCommands:
@@ -404,24 +398,7 @@ class ComposeCommands:
 
 
 def main():
-    service = Makefile().service
-    match service:
-        case Service.scrappy:
-            Makefile(actions=ScrappyActions.values).run_action()
-        case Service.pgadmin:
-            Makefile(actions=PgadminActions.values).run_action()
-        case Service.shell:
-            Makefile(actions=ShellActions.values).run_action()
-        case Service.listener:
-            Makefile(actions=ListenerActions.values).run_action()
-        case Service.discorder:
-            Makefile(actions=ViewerActions.values).run_action()
-        case Service.configurator:
-            Makefile(actions=ConfiguratorActions.values).run_action()
-        case Service.check:
-            logger.info("pong!")
-        case _:
-            raise Exception("not registed service")
+    Makefile(services=Services).run_action()
 
 
 if __name__ == "__main__":
