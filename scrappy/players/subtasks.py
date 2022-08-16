@@ -30,5 +30,5 @@ class SubTaskParsePlayers(AbstractAction):
 class SubTaskSavePlayersToStorage(SubTaskSaveItemsToStorage):
     storage = PlayerStorage
 
-    def __init__(self, players: list[player_schemas.PlayerIn], database):
-        super().__init__(items=players, database=database)
+    def __init__(self, items: list[player_schemas.PlayerIn], database):
+        super().__init__(items=items, database=database)
