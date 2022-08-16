@@ -2,7 +2,7 @@ fastapi[all]
 uvicorn[standard]
 black
 factory-boy
-SQLAlchemy
+SQLAlchemy[mypy]
 SQLAlchemy-Utils
 alembic
 pytest
@@ -16,3 +16,5 @@ darklab-utils
 asyncpg
 uvicorn
 httpx
+mypy
+celery-types

@@ -53,8 +53,3 @@ def database():
 def session(database):
     with database.manager_to_get_session() as session:
         yield session
-
-
-@pytest.fixture(scope="session")
-def celery_config():
-    return {"broker_url": "memory://", "result_backend": settings.CELERY_BACKEND}

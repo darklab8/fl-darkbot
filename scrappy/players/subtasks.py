@@ -10,7 +10,7 @@ logger = base_logger.getChild(__name__)
 
 class SubTaskGetPlayerData(SubTaskGetItemsData):
     @property
-    def _url(self):
+    def _url(self) -> str:
         return settings.API_PLAYER_URL
 
 

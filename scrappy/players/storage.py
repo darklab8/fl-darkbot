@@ -23,10 +23,10 @@ class IsOnlineQuery:
         return stmt
 
     @staticmethod
-    def from_query_row_to_schema(one_row):
+    def from_query_row_to_schema(one_row) -> schemas.PlayerOut:
         return schemas.PlayerOut(**one_row[0].__dict__, is_online=one_row[1])
 
-    def from_many_rows_to_schemas(many_row):
+    def from_many_rows_to_schemas(many_row) -> list[schemas.PlayerOut]:
         return [IsOnlineQuery.from_query_row_to_schema(db_row) for db_row in many_row]
 
 
@@ -45,7 +45,7 @@ class PlayerStorage:
 
     async def _a_get_all(
         self,
-    ):
+    ) -> list[schemas.PlayerOut]:
         async with self.db.get_async_session() as session:
             statement = IsOnlineQuery()
             db_rows = (await session.execute(statement)).all()

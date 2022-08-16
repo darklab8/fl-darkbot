@@ -1,4 +1,5 @@
 import abc
+from typing import Any
 
 
 class AbstractAction(abc.ABC):
@@ -9,5 +10,5 @@ class AbstractAction(abc.ABC):
         return result
 
     @abc.abstractmethod
-    def run(self):
+    def run(self) -> Any:
         pass

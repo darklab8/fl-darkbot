@@ -22,11 +22,11 @@ class ActionGetAndParseAndSaveItems(AbstractAction):
         self._database = database
 
     def run(self):
-        player_data = self.task_get()
-        players = self.task_parse(player_data)
-        self.task_save(players=players, database=self._database)
+        item_data = self.task_get()
+        items = self.task_parse(item_data)
+        self.task_save(items=items, database=self._database)
         logger.debug(f"{self.__class__.__name__} is done")
-        return players
+        return items
 
 
 class ActionGetFilteredItems(AbstractAction):
