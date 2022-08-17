@@ -19,7 +19,7 @@ class SubTaskGetItemsData(AbstractAction):
     def _url(self) -> str:
         pass
 
-    def run(self) -> str[str, Any]:
+    def run(self) -> dict[str, Any]:
         logger.info(f"{self.__class__.__name__} is started")
         response = requests.get(self._url)
         data = response.json()
