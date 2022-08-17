@@ -1,0 +1,12 @@
+# tests
+black
+factory-boy
+
+pytest
+pytest-pythonpath
+pytest-asyncio
+Faker
+httpx
+
+mypy
+celery-types

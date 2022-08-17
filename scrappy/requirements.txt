@@ -1,20 +1,13 @@
 fastapi[all]
 uvicorn[standard]
-black
-factory-boy
+
+# sql
 SQLAlchemy[mypy]
 SQLAlchemy-Utils
 alembic
-pytest
-pytest-pythonpath
-pytest-asyncio
 psycopg2-binary
+asyncpg
+
+# celery
 celery[redis]
 flower
-Faker
-darklab-utils
-asyncpg
-uvicorn
-httpx
-mypy
-celery-types

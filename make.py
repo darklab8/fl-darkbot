@@ -83,6 +83,7 @@ class ShellActions(AugmentedEnum):
     makemigrations = auto()
     migrate = auto()
     check = auto()
+    install = auto()
 
 
 class Services(AugmentedEnum):
@@ -227,6 +228,19 @@ class Makefile:
                             help="migrating destination. default/`head` to latest, "
                             "`zero` to zero, `-1` and `+1` are steps back and forward",
                         )
+                    case (Services.shell.name, ShellActions.install.name):
+                        action_parser.add_argument(
+                            "--environment",
+                            type=str,
+                            choices=["dev", "prod"],
+                            help="building with dev or prod set of deps",
+                            required=True,
+                        )
+                        action_parser.add_argument(
+                            "--app",
+                            type=str,
+                            required=True,
+                        )
 
     @property
     def parser(self):
@@ -330,6 +344,24 @@ class Makefile:
 
             case (Services.shell.name, ShellActions.check.name):
                 logger.info("pong!")
+            case (Services.shell.name, ShellActions.install.name):
+                env = self.args.environment
+                app = self.args.app
+                base_cmd = "pip install --no-cache-dir"
+                shared = "-r {app}/requirements.txt"
+                dev_only = "-r {app}/requirements.dev.txt"
+                end_cmd = "-c {app}/constraints.txt"
+                match env:
+                    case "dev":
+                        self.shell(
+                            " ".join([base_cmd, shared, dev_only, end_cmd]).format(
+                                app=app
+                            )
+                        )
+                    case "prod":
+                        self.shell(
+                            " ".join([base_cmd, shared, end_cmd]).format(app=app)
+                        )
             case (service, "test"):
                 self.run_in_compose(
                     command=ComposeCommands.base.format(

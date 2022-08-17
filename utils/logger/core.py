@@ -86,24 +86,24 @@ class Logger:
         logger.addHandler(ch)
         return logger
 
-    def getChild(self, name: str):
+    def getChild(self, name: str) -> "Logger":
         return self.__class__(
             console_level=self._console_level,
             name=name,
             _parent=self,
         )
 
-    def debug(self, msg):
+    def debug(self, msg: object) -> None:
         self._logger.debug(msg)
 
-    def info(self, msg):
+    def info(self, msg: object) -> None:
         self._logger.info(msg)
 
-    def warn(self, msg):
+    def warn(self, msg: object) -> None:
         self._logger.warning(msg)
 
-    def error(self, msg):
+    def error(self, msg: object) -> None:
         self._logger.error(msg)
 
-    def fatal(self, msg):
+    def fatal(self, msg: object) -> None:
         self._logger.critical(msg)

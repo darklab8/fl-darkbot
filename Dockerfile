@@ -6,6 +6,8 @@ FROM python:3.10.5-slim-buster as base
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
+WORKDIR /install
+
 WORKDIR /code
 
 FROM base AS branch-shared-env-dev
@@ -26,9 +28,11 @@ FROM branch-shared-env-${ENVIRONMENT} as branch-app-configurator
 
 FROM branch-app-${SERVICE} AS final
 ARG SERVICE
+ARG ENVIRONMENT
 
-COPY ${SERVICE}/requirements.txt ${SERVICE}/constraints.txt ${SERVICE}/
-RUN pip install -r ${SERVICE}/requirements.txt -c ${SERVICE}/constraints.txt 
+COPY ${SERVICE}/requirements.txt ${SERVICE}/requirements.dev.txt ${SERVICE}/constraints.txt ${SERVICE}/
+COPY make.py ./
+RUN python3 make.py shell install --environment=${ENVIRONMENT} --app=${SERVICE}
 
 COPY ${SERVICE} /code/${SERVICE}
 COPY utils /code/utils
