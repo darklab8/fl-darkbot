@@ -1,7 +1,22 @@
 import logging
+from enum import Enum, EnumMeta
 
 
-class LoggerLevels:
+class _EnumDirectValueMeta(EnumMeta):
+    def __getattribute__(cls, name: str) -> int:
+        value = super().__getattribute__(name)
+        if isinstance(value, cls):
+            value = value.value
+        return value
+
+    def __getitem__(cls, name: str) -> int:
+        value = super().__getattribute__(name)
+        if isinstance(value, cls):
+            value = value.value
+        return value
+
+
+class LoggerLevels(Enum, metaclass=_EnumDirectValueMeta):
     DEBUG = logging.DEBUG  # purely for diagnostics
     INFO = logging.INFO  # confirming normal flow of program
     WARN = logging.WARNING  # a thing nice to fix like deprecation warning
@@ -47,9 +62,6 @@ class Logger:
             else _parent._logger.getChild(self._name)
         )
 
-    def _transform_level_to_logging_lib(self, level: str) -> int:
-        return getattr(LoggerLevels, level)
-
     def _configure_logger(self, logger: logging.Logger) -> logging.Logger:
         # global level, controlling available levels in handlers
         logger.setLevel(logging.DEBUG)
@@ -57,7 +69,7 @@ class Logger:
         # create console handler with a higher log level
         ch = logging.StreamHandler()
         ch.addFilter(CustomFilter())
-        ch.setLevel(self._transform_level_to_logging_lib(self._console_level))
+        ch.setLevel(LoggerLevels[self._console_level])
         formatter = logging.Formatter(
             " - ".join(
                 [

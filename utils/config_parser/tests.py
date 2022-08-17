@@ -1,3 +1,4 @@
+# type: ignore
 import unittest
 from utils.config_parser.main import ConfigParser
 

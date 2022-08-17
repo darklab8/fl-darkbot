@@ -6,10 +6,12 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeMeta
+from typing import Callable
 
 
 class ORMBase:
-    def __new__(cls):
+    def __new__(cls) -> Callable[[], DeclarativeMeta]:
         return declarative_base()
 
 

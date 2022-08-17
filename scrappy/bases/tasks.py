@@ -8,7 +8,7 @@ logger = base_logger.getChild(__name__)
 
 
 @shared_task
-def update_bases(database_name: str = settings.DATABASE_NAME):
+def update_bases(database_name: str = settings.DATABASE_NAME) -> bool:
     ActionGetAndParseAndSaveBases(database=DatabaseFactory(name=database_name))
     logger.info(f"task={'update_bases'.upper()} is done")
     return True

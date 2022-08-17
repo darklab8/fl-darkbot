@@ -1,11 +1,10 @@
 from fastapi import APIRouter
 from fastapi import Query
-
-from fastapi import Depends
+from fastapi import Depends, Response
 from scrappy.core.databases import DatabaseFactory, Database
 from . import actions as player_actions
 from .storage import PlayerStorage
-from .schemas import PlayerQueryParams
+from .schemas import PlayerQueryParams, PlayerOut
 
 router = APIRouter(
     prefix="/players",
@@ -23,7 +22,7 @@ async def get_players(
     region_tag: list[str] = Query(default=query_default_values.region_whitelist_tags),
     system_tag: list[str] = Query(default=query_default_values.system_whitelist_tags),
     is_online: bool = Query(default=query_default_values.is_online),
-):
+) -> list[PlayerOut]:
 
     players = player_actions.ActionGetFilteredPlayers(
         database=database,
@@ -40,7 +39,7 @@ async def get_players(
 @router.get("/async")
 async def get_async(
     database: Database = Depends(DatabaseFactory.get_default_database),
-):
+) -> list[PlayerOut]:
     async with database.get_async_session() as session:
 
         repo = PlayerStorage(database)

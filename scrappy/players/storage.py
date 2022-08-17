@@ -6,6 +6,7 @@ import scrappy.players.schemas as schemas
 from scrappy.core.databases import Database
 from scrappy.players.models import Player
 from .schemas import PlayerQueryParams
+from typing import Callable
 
 
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
@@ -16,7 +17,7 @@ def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
 class IsOnlineQuery:
     latest_timestamp = select(func.max(Player.timestamp)).scalar_subquery()
 
-    def __new__(cls) -> selectable.Select:
+    def __new__(cls) -> Callable[[], selectable.Select]:
         stmt = select(
             Player, (cls.latest_timestamp == Player.timestamp).label("is_online")
         )
