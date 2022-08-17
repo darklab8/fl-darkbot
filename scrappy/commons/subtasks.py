@@ -1,16 +1,14 @@
 from utils.porto import AbstractAction
-from pydantic import BaseModel
 import abc
 import requests
 import scrappy.core.settings as settings
 from typing import Type
 from scrappy.core.logger import base_logger
+from typing import Any
+from utils.database.sql import Database
+from .stubs import StubSchema
 
 logger = base_logger.getChild(__name__)
-
-
-class StubSchema(BaseModel):
-    pass
 
 
 class SubTaskGetItemsData(AbstractAction):
@@ -18,10 +16,10 @@ class SubTaskGetItemsData(AbstractAction):
         pass
 
     @abc.abstractproperty
-    def _url(self):
+    def _url(self) -> str:
         pass
 
-    def run(self):
+    def run(self) -> str[str, Any]:
         logger.info(f"{self.__class__.__name__} is started")
         response = requests.get(self._url)
         data = response.json()
@@ -40,11 +38,11 @@ class SubTaskSaveItemsToStorage(AbstractAction):
     def storage(self) -> Type[StubStorage]:
         pass
 
-    def __init__(self, items: list[StubSchema], database):
+    def __init__(self, items: list[StubSchema], database: Database):
         self._items = items
         self._database = database
 
-    def run(self):
+    def run(self) -> bool:
         storage = self.storage(self._database)
         storage.create(*(self._items))
         logger.debug(f"{self.__class__.__name__} is done")

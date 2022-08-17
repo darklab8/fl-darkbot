@@ -16,6 +16,6 @@ class Time(BaseModel):
 
 
 @app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
+def setup_periodic_tasks(sender, **kwargs) -> None:
     sender.add_periodic_task(Time(seconds=30.0).seconds, update_players.s(), expires=10)
     sender.add_periodic_task(Time(seconds=30.0).seconds, update_bases.s(), expires=10)
