@@ -29,7 +29,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        ENVIRONMENT: prod
+        ENVIRONMENT: dev
         SERVICE: scrappy
       target: final
     logging:
