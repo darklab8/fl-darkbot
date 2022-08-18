@@ -1,0 +1,7 @@
+black
+factory-boy
+pytest
+pytest-pythonpath
+pytest-asyncio
+Faker
+httpx

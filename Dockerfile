@@ -32,10 +32,14 @@ ARG ENVIRONMENT
 
 COPY ${SERVICE}/requirements.txt ${SERVICE}/requirements.dev.txt ${SERVICE}/constraints.txt ${SERVICE}/
 COPY make.py ./
+
 RUN python3 make.py shell install --environment=${ENVIRONMENT} --app=${SERVICE}
 
 COPY ${SERVICE} /code/${SERVICE}
 COPY utils /code/utils
-# consoler needs to be added for listener. Rewrite dockerfile si it would not be added anywhere else
-COPY consoler /code/consoler 
+
 COPY pytest.ini conftest.py make.py ./
+
+FROM final as final-listener
+COPY --from=final /code /code
+COPY consoler /code/consoler

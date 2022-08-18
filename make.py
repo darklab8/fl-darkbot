@@ -425,7 +425,7 @@ class ShellCommands:
 
 class ComposeCommands:
     base = "run --rm {service}_base {cmd}"
-    shell = 'run --user 0 --rm -v "$(pwd):/code" {service}_base bash'
+    shell = 'run --user 0 --rm -v "$(pwd):/code" {service}_base sh'
     run = "up"
 
 

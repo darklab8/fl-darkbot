@@ -1,6 +1,4 @@
 discord.py
-black
-pytest
-pytest-pythonpath
-pytest-asyncio
+
+# rest api 
 aiohttp

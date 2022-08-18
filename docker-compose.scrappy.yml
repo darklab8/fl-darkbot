@@ -29,8 +29,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        ENVIRONMENT: dev
+        ENVIRONMENT: prod
         SERVICE: scrappy
+      target: final
     logging:
       driver: "json-file"
       options:
