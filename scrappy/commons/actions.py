@@ -1,26 +1,26 @@
 from utils.porto import AbstractAction
 import abc
 from scrappy.core.logger import base_logger
-from typing import Callable, Any
+from typing import Any
 from utils.database.sql import Database
-from .stubs import StubSchema
 
 logger = base_logger.getChild(__name__)
 
 
 class ActionGetAndParseAndSaveItems(AbstractAction):
-    @abc.abstractproperty
-    def task_get(self) -> Callable[[], dict[str, Any]]:
+    @abc.abstractmethod
+    def task_get(self) -> dict[str, Any]:
         pass
 
-    @abc.abstractproperty
+    @abc.abstractmethod
     def task_parse(
         self,
-    ) -> Callable[[dict[str, Any]], list[StubSchema]]:
+        data: dict[str, Any],
+    ) -> list[Any]:
         pass
 
-    @abc.abstractproperty
-    def task_save(self) -> Callable[[list[StubSchema], Database], bool]:
+    @abc.abstractmethod
+    def task_save(self, items: list[Any], database: Database) -> bool:
         pass
 
     def __init__(self, database: Database):
@@ -47,7 +47,7 @@ class ActionGetFilteredItems(AbstractAction):
         self._database = database
         self.query = self.queryparams(**kwargs)
 
-    def run(self) -> list[StubSchema]:
+    def run(self) -> list[Any]:
         storage = self.storage(self._database)
         players = storage.get(self.query)
         return players

@@ -7,6 +7,7 @@ from scrappy.core.databases import Database
 from scrappy.players.models import Player
 from .schemas import PlayerQueryParams
 from typing import Callable
+from scrappy.commons.storage import AbstractStorage
 
 
 def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
@@ -31,9 +32,9 @@ class IsOnlineQuery:
         return [IsOnlineQuery.from_query_row_to_schema(db_row) for db_row in many_row]
 
 
-class PlayerStorage:
+class PlayerStorage(AbstractStorage):
     def __init__(self, db: Database):
-        self.db: Database = db
+        super().__init__(db=db)
 
     def _get_all(
         self,

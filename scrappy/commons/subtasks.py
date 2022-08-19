@@ -1,12 +1,11 @@
 from utils.porto import AbstractAction
 import abc
 import requests
-import scrappy.core.settings as settings
 from typing import Type
 from scrappy.core.logger import base_logger
 from typing import Any
 from utils.database.sql import Database
-from .stubs import StubSchema
+from scrappy.commons.storage import AbstractStorage
 
 logger = base_logger.getChild(__name__)
 
@@ -24,18 +23,12 @@ class SubTaskGetItemsData(AbstractAction):
         return data
 
 
-class StubStorage(abc.ABC):
-    @abc.abstractmethod
-    def create(self, *items):
-        pass
-
-
 class SubTaskSaveItemsToStorage(AbstractAction):
     @abc.abstractproperty
-    def storage(self) -> Type[StubStorage]:
+    def storage(self) -> Type[AbstractStorage]:
         pass
 
-    def __init__(self, items: list[StubSchema], database: Database):
+    def __init__(self, items: list[Any], database: Database):
         self._items = items
         self._database = database
 

@@ -10,3 +10,4 @@ httpx
 
 mypy
 celery-types
+types-requests
