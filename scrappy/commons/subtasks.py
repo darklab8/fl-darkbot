@@ -12,9 +12,6 @@ logger = base_logger.getChild(__name__)
 
 
 class SubTaskGetItemsData(AbstractAction):
-    def __init__(self):
-        pass
-
     @abc.abstractproperty
     def _url(self) -> str:
         pass
@@ -22,7 +19,7 @@ class SubTaskGetItemsData(AbstractAction):
     def run(self) -> dict[str, Any]:
         logger.info(f"{self.__class__.__name__} is started")
         response = requests.get(self._url)
-        data = response.json()
+        data = dict(response.json())
         logger.debug(f"{self.__class__.__name__} is done")
         return data
 
