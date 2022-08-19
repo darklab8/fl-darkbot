@@ -1,5 +1,6 @@
 import logging
 from enum import Enum, EnumMeta
+from typing import Union
 
 
 class _EnumDirectValueMeta(EnumMeta):
@@ -7,13 +8,13 @@ class _EnumDirectValueMeta(EnumMeta):
         value = super().__getattribute__(name)
         if isinstance(value, cls):
             value = value.value
-        return value
+        return value  # type: ignore
 
-    def __getitem__(cls, name: str) -> int:
+    def __getitem__(cls, name: str) -> int:  # type: ignore
         value = super().__getattribute__(name)
         if isinstance(value, cls):
             value = value.value
-        return value
+        return value  # type: ignore
 
 
 class LoggerLevels(Enum, metaclass=_EnumDirectValueMeta):
@@ -34,7 +35,7 @@ class CustomFilter(logging.Filter):
         "CRITICAL": "RED",
     }
 
-    def filter(self, record):
+    def filter(self, record: logging.LogRecord) -> bool:
         record.color = CustomFilter.COLOR[record.levelname]
         return True
 
@@ -45,12 +46,12 @@ import logging.handlers
 class Logger:
 
     levels = LoggerLevels
-    _parent: "Logger" = None
+    _parent: Union["Logger", None] = None
 
     def __init__(
         self,
         console_level: str,
-        _parent: "Logger" = None,
+        _parent: Union["Logger", None] = None,
         name: str = "",
     ):
         self._name = name
@@ -59,7 +60,7 @@ class Logger:
         self._logger = self._configure_logger(
             logging.getLogger("").getChild(self._name)
             if _parent is None
-            else _parent._logger.getChild(self._name)
+            else _parent._logger.getChild(self._name)  # type: ignore
         )
 
     def _configure_logger(self, logger: logging.Logger) -> logging.Logger:
@@ -69,7 +70,7 @@ class Logger:
         # create console handler with a higher log level
         ch = logging.StreamHandler()
         ch.addFilter(CustomFilter())
-        ch.setLevel(LoggerLevels[self._console_level])
+        ch.setLevel(LoggerLevels[self._console_level])  # type: ignore
         formatter = logging.Formatter(
             " - ".join(
                 [

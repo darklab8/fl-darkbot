@@ -4,6 +4,7 @@ from . import schemas as player_schemas
 import scrappy.core.settings as settings
 from scrappy.commons.subtasks import SubTaskGetItemsData, SubTaskSaveItemsToStorage
 from scrappy.core.logger import base_logger
+from utils.database.sql import Database
 
 logger = base_logger.getChild(__name__)
 
@@ -30,5 +31,7 @@ class SubTaskParsePlayers(AbstractAction):
 class SubTaskSavePlayersToStorage(SubTaskSaveItemsToStorage):
     storage = PlayerStorage
 
-    def __init__(self, items: list[player_schemas.PlayerIn], database):
+    def __init__(
+        self, items: list[player_schemas.PlayerIn], database: Database
+    ) -> None:
         super().__init__(items=items, database=database)

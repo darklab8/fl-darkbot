@@ -7,16 +7,20 @@ import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeMeta
-from typing import Callable
+from typing import Any
+from types import ModuleType
+from sqlalchemy.engine import Engine
+from sqlalchemy.ext.asyncio import AsyncEngine
+import abc
 
 
 class ORMBase:
-    def __new__(cls) -> Callable[[], DeclarativeMeta]:
+    def __new__(cls) -> Any:
         return declarative_base()
 
 
 class Database:
-    def __init__(self, name, url):
+    def __init__(self, name: str, url: str):
         self._name = name
         self._url = url
 
@@ -47,11 +51,11 @@ class Database:
         return "postgresql+asyncpg://" + self._url + self._name
 
     @property
-    def engine(self):
+    def engine(self) -> Engine:
         return self._engine
 
     @property
-    def async_engine(self):
+    def async_engine(self) -> AsyncEngine:
         return self._async_engine
 
     @contextmanager
@@ -80,23 +84,28 @@ class Database:
         finally:
             await connection.close()
 
-    def get_self(self):
+    def get_self(self) -> "Database":
         return self
 
 
-class DatabaseFactoryBase:
-    def __new__(
+class DatabaseFactoryBase(abc.ABC):
+    @classmethod
+    @abc.abstractproperty
+    def settings(self) -> ModuleType:
+        pass
+
+    def __new__(  # type: ignore
         cls,
         url: str | None = None,
         name: str | None = None,
     ) -> Database:
         instance = Database(
-            url=cls.settings.DATABASE_URL if url is None else url,
-            name=cls.settings.DATABASE_NAME if name is None else name,
+            url=cls.settings.DATABASE_URL if url is None else url,  # type: ignore
+            name=cls.settings.DATABASE_NAME if name is None else name,  # type: ignore
         )
         return instance
 
     @classmethod
     def get_default_database(cls) -> Database:
-        database = cls()
+        database: Database = cls()  # type: ignore
         return database

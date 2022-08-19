@@ -42,8 +42,7 @@ class SubTaskSaveItemsToStorage(AbstractAction):
         self._items = items
         self._database = database
 
-    def run(self) -> bool:
+    def run(self) -> None:
         storage = self.storage(self._database)
         storage.create(*(self._items))
         logger.debug(f"{self.__class__.__name__} is done")
-        return True
