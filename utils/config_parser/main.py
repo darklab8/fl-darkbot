@@ -13,11 +13,16 @@ class ConfigParser:
             self._transform_to_env_var_name(f"{self.settings_prefix}.{variable_name}")
         ]
 
-    def get(self, variable_name: str, default: str | None = None) -> str | None:
-        return self._env_storage.get(
+    def get(self, variable_name: str, default: str | None = None) -> str:
+        result = self._env_storage.get(
             self._transform_to_env_var_name(f"{self.settings_prefix}.{variable_name}"),
             default,
         )
+
+        if result is None:
+            raise KeyError("No value is discovered, and no default value is supplied")
+
+        return result
 
     @staticmethod
     def _transform_to_env_var_name(variable_name: str) -> str:
