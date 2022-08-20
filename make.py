@@ -413,7 +413,7 @@ class Makefile:
 class ShellCommands:
     lint = 'black --exclude="alembic/.*/*.py|OLD_CODE/|venv/" --check .'
     format = 'black . -exclude="alembic/.*/*.py|OLD_CODE/|venv/"'
-    test = "coverage run -m pytest --cov=. --cov-report=xml {optional_cmd} "
+    test = "sh -c 'coverage run -m pytest {optional_cmd} && coverage report'"
 
     makemigrations = (
         'alembic -c {app}/alembic.ini revision --autogenerate -m "{number:0>4}"'
