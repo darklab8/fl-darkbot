@@ -3,7 +3,7 @@ from sqlalchemy.orm.query import Query
 from sqlalchemy import select, insert, update
 import sqlalchemy.sql.selectable as selectable
 import scrappy.players.schemas as schemas
-from scrappy.core.databases import Database
+from utils.database.sql import Database
 from scrappy.players.models import Player
 from .schemas import PlayerQueryParams
 from typing import Callable

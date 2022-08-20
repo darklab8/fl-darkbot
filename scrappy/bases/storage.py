@@ -1,11 +1,11 @@
-from scrappy.core.databases import Database
+from utils.database.sql import Database
 from .schemas import BaseIn, BaseOut, BaseQueryParams
 from scrappy.commons.storage import AbstractStorage
 
 
 class BaseStorage(AbstractStorage):
     def __init__(self, db: Database):
-        super.__init__(db=db)
+        super().__init__(db=db)
 
     def create(
         self,

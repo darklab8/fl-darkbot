@@ -2,7 +2,8 @@ from fastapi import APIRouter
 from fastapi import Query
 
 from fastapi import Depends
-from scrappy.core.databases import DatabaseFactory, Database
+from scrappy.core.databases import DatabaseFactory
+from utils.database.sql import Database
 from . import actions as player_actions
 from .storage import PlayerStorage
 from .schemas import PlayerQueryParams

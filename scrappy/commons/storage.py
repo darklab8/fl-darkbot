@@ -13,5 +13,5 @@ class AbstractStorage(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get(self, query: BaseModel) -> list[Any]:
+    def get(self, query: Any) -> list[Any]:
         pass

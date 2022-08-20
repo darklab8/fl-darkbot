@@ -1,4 +1,4 @@
-from utils.database.sql import Database, DatabaseFactoryBase
+from utils.database.sql import DatabaseFactoryBase
 
 import scrappy.core.settings as settings
 

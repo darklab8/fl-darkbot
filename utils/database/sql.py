@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Generator, AsyncGenerator
 from contextlib import contextmanager, asynccontextmanager
 
@@ -88,24 +89,28 @@ class Database:
         return self
 
 
-class DatabaseFactoryBase(abc.ABC):
-    @classmethod
-    @abc.abstractproperty
-    def settings(self) -> ModuleType:
-        pass
+@dataclass
+class SettingStub:
+    DATABASE_URL: str = "example"
+    DATABASE_NAME: str = "example"
 
-    def __new__(  # type: ignore
+
+class DatabaseFactoryBase(Database):
+    @property
+    def settings(self) -> SettingStub:
+        raise NotImplementedError("define settings")
+
+    def __init__(
         cls,
         url: str | None = None,
         name: str | None = None,
-    ) -> Database:
-        instance = Database(
-            url=cls.settings.DATABASE_URL if url is None else url,  # type: ignore
-            name=cls.settings.DATABASE_NAME if name is None else name,  # type: ignore
+    ):
+        super().__init__(
+            url=cls.settings.DATABASE_URL if url is None else url,
+            name=cls.settings.DATABASE_NAME if name is None else name,
         )
-        return instance
 
     @classmethod
     def get_default_database(cls) -> Database:
-        database: Database = cls()  # type: ignore
+        database: Database = cls()
         return database

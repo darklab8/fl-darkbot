@@ -4,13 +4,14 @@ from . import schemas as base_schemas
 import scrappy.core.settings as settings
 from scrappy.commons.subtasks import SubTaskGetItemsData, SubTaskSaveItemsToStorage
 from scrappy.core.logger import base_logger
+from utils.database.sql import Database
 
 logger = base_logger.getChild(__name__)
 
 
 class SubTaskGetBaseData(SubTaskGetItemsData):
     @property
-    def _url(self):
+    def _url(self) -> str:
         return settings.API_BASE_URL
 
 
@@ -36,5 +37,5 @@ class SubTaskParseBases(AbstractAction):
 class SubTaskSaveBasesToStorage(SubTaskSaveItemsToStorage):
     storage = BaseStorage
 
-    def __init__(self, players: list[base_schemas.BaseIn], database):
+    def __init__(self, players: list[base_schemas.BaseIn], database: Database):
         super().__init__(items=players, database=database)

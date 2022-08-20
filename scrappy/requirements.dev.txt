@@ -5,6 +5,7 @@ factory-boy
 pytest
 pytest-pythonpath
 pytest-asyncio
+pytest-cov
 Faker
 httpx
 
