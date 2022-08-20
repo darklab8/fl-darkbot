@@ -6,7 +6,7 @@ from utils.database.sql import Database
 
 class AbstractStorage(abc.ABC):
     def __init__(self, db: Database):
-        pass
+        self.db = db
 
     @abc.abstractmethod
     def create(self, *items: list[Any]) -> list[Any]:
