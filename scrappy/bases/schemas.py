@@ -22,3 +22,8 @@ class BaseOut(BaseModel):
 class BaseQueryParams(BaseModel):
     page: int = 0
     name_tags: list[str] = []
+
+
+def check_thing2() -> None:
+    thing = BaseQueryParams()
+    print(thing.not_existing)

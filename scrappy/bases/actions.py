@@ -10,6 +10,7 @@ from .subtasks import (
     SubTaskSaveBasesToStorage,
 )
 from scrappy.core.logger import base_logger
+from scrappy.bases.schemas import BaseQueryParams
 
 logger = base_logger.getChild(__name__)
 
@@ -20,11 +21,11 @@ class ActionGetAndParseAndSaveBases(ActionGetAndParseAndSaveItems):
     task_save = SubTaskSaveBasesToStorage
 
 
-class BaseQueryParams(BaseModel):
-    page: int = 0
-    tags: list[str] = []
-
-
 class ActionGetFilteredBases(ActionGetFilteredItems):
     queryparams = BaseQueryParams
     storage = BaseStorage
+
+
+def check_thing():
+    thing = BaseQueryParams()
+    print(thing.not_existing)
