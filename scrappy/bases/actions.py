@@ -24,8 +24,3 @@ class ActionGetAndParseAndSaveBases(ActionGetAndParseAndSaveItems):
 class ActionGetFilteredBases(ActionGetFilteredItems):
     queryparams = BaseQueryParams
     storage = BaseStorage
-
-
-def check_thing():
-    thing = BaseQueryParams()
-    print(thing.not_existing)
