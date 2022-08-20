@@ -1,8 +1,10 @@
 from utils.porto import AbstractAction
 import abc
 from scrappy.core.logger import base_logger
-from typing import Any
+from typing import Any, Type
 from utils.database.sql import Database
+from scrappy.commons.storage import AbstractStorage
+from pydantic import BaseModel
 
 logger = base_logger.getChild(__name__)
 
@@ -36,11 +38,11 @@ class ActionGetAndParseAndSaveItems(AbstractAction):
 
 class ActionGetFilteredItems(AbstractAction):
     @abc.abstractproperty
-    def queryparams(self):
+    def queryparams(self) -> Type[BaseModel]:
         pass
 
     @abc.abstractproperty
-    def storage(self):
+    def storage(self) -> Type[AbstractStorage]:
         pass
 
     def __init__(self, database: Database, **kwargs: dict[str, Any]):

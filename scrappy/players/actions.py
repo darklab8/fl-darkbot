@@ -3,7 +3,7 @@ from scrappy.commons.actions import (
     ActionGetAndParseAndSaveItems,
     ActionGetFilteredItems,
 )
-from .subtasks import (
+from .subtasks import (  # type: ignore
     SubTaskGetPlayerData,
     SubTaskParsePlayers,
     SubTaskSavePlayersToStorage,

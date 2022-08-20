@@ -1,7 +1,7 @@
-from utils.database.sql import DatabaseFactoryBase
+from utils.database.sql import DatabaseFactoryBase, SettingStub
 
 import scrappy.core.settings as settings
 
 
 class DatabaseFactory(DatabaseFactoryBase):
-    settings = settings
+    settings = settings  # type: ignore

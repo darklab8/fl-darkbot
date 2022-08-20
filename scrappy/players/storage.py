@@ -1,34 +1,33 @@
 from sqlalchemy import func, or_
-from sqlalchemy.orm.query import Query
 from sqlalchemy import select, insert, update
-import sqlalchemy.sql.selectable as selectable
+from sqlalchemy.sql import Select, Insert
 import scrappy.players.schemas as schemas
 from utils.database.sql import Database
 from scrappy.players.models import Player
 from .schemas import PlayerQueryParams
-from typing import Callable
 from scrappy.commons.storage import AbstractStorage
-
-
-def filter_by_contains_in_list(queryset: Query, attribute_, list_: list[str]):
-    filter_list = [attribute_.contains(x) for x in list_]
-    return queryset.filter(or_(*filter_list))
+from sqlalchemy.engine import Row
+from sqlalchemy import Column, String
 
 
 class IsOnlineQuery:
     latest_timestamp = select(func.max(Player.timestamp)).scalar_subquery()
 
-    def __new__(cls) -> Callable[[], selectable.Select]:
+    @classmethod
+    def create(cls) -> Select:
         stmt = select(
             Player, (cls.latest_timestamp == Player.timestamp).label("is_online")
         )
         return stmt
 
     @staticmethod
-    def from_query_row_to_schema(one_row) -> schemas.PlayerOut:
+    def from_query_row_to_schema(one_row: Row) -> schemas.PlayerOut:
         return schemas.PlayerOut(**one_row[0].__dict__, is_online=one_row[1])
 
-    def from_many_rows_to_schemas(many_row) -> list[schemas.PlayerOut]:
+    @staticmethod
+    def from_many_rows_to_schemas(
+        many_row: list[Row],
+    ) -> list[schemas.PlayerOut]:
         return [IsOnlineQuery.from_query_row_to_schema(db_row) for db_row in many_row]
 
 
@@ -38,9 +37,9 @@ class PlayerStorage(AbstractStorage):
 
     def _get_all(
         self,
-    ):
+    ) -> list[schemas.PlayerOut]:
         with self.db.get_core_session() as session:
-            statement = IsOnlineQuery()
+            statement = IsOnlineQuery.create()
             db_rows = session.execute(statement).all()
             players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
             return players
@@ -49,14 +48,14 @@ class PlayerStorage(AbstractStorage):
         self,
     ) -> list[schemas.PlayerOut]:
         async with self.db.get_async_session() as session:
-            statement = IsOnlineQuery()
+            statement: Select = IsOnlineQuery.create()
             db_rows = (await session.execute(statement)).all()
             players = IsOnlineQuery.from_many_rows_to_schemas(db_rows)
             return players
 
     def create(
         self,
-        *players: list[schemas.PlayerIn],
+        *players: schemas.PlayerIn,
     ) -> list[schemas.PlayerOut]:
 
         result = []
@@ -81,16 +80,20 @@ class PlayerStorage(AbstractStorage):
                     .values(**player.dict())
                 )
             else:
-                add_or_update_user_query = insert(Player).values(**player.dict())
+                add_or_update_user_query: Insert = insert(Player).values(  # type: ignore
+                    **player.dict()
+                )
 
             session.execute(add_or_update_user_query)
 
-            get_refreshed_player = IsOnlineQuery().where(
+            get_refreshed_player: Select = IsOnlineQuery.create().where(
                 IsOnlineQuery.latest_timestamp == Player.timestamp
             )
 
             db_row = session.execute(get_refreshed_player).first()
-
+            if db_row is None:
+                raise Exception("no player")
+            db_row: Row = db_row  # type: ignore
             extracted_info = IsOnlineQuery.from_query_row_to_schema(db_row)
 
             session.commit()
@@ -102,14 +105,16 @@ class PlayerStorage(AbstractStorage):
     def get(self, query: PlayerQueryParams) -> list[schemas.PlayerOut]:
 
         with self.db.get_core_session() as session:
-            queryset = IsOnlineQuery()
+            queryset = IsOnlineQuery.create()
 
             if query.is_online:
                 queryset = queryset.where(
                     IsOnlineQuery.latest_timestamp == Player.timestamp
                 )
 
-            def contains_any(queryset, attribute, tags):
+            def contains_any(
+                queryset: Select, attribute: Column[String], tags: list[str]
+            ) -> Select:
                 return queryset.where(
                     or_(*[attribute.like(rf"%{tag}%") for tag in tags])
                 )

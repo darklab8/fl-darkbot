@@ -25,7 +25,7 @@ async def get_players(
     is_online: bool = Query(default=query_default_values.is_online),
 ) -> list[PlayerOut]:
 
-    players = player_actions.ActionGetFilteredPlayers(
+    players = player_actions.ActionGetFilteredPlayers(  # type: ignore
         database=database,
         page=page,
         player_whitelist_tags=player_tag,
