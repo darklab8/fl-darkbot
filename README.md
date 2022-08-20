@@ -1,9 +1,9 @@
 # Badges
 
 
-| [Gitlab CI](https://gitlab.com/darklab2/darklab_darkbot)                                                            |
-| --------------------------------------------------------------------------------------------------------------------- |
-| ![](https://gitlab.com/darklab2/darklab_darkbot/badges/master/pipeline.svg?key_text=GitlabCIPipeline&key_width=150) |
+| [Gitlab Pipeline Status](https://gitlab.com/darklab2/darklab_darkbot)                                               | Coverage                                                                                      |
+| --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| ![](https://gitlab.com/darklab2/darklab_darkbot/badges/master/pipeline.svg?key_text=GitlabCIPipeline&key_width=150) | ![](https://gitlab.com/darklab2/darklab_darkbot/badges/master/coverage.svg?key_text=Coverage) |
 
 # Name
 
