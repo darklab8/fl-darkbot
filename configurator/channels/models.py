@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from ..core.base import Model
+import datetime
 
 
 class Channel(Model):
@@ -11,7 +12,7 @@ class Channel(Model):
 
 
 class ChannelOwner(Model):
-    __tablename__ = ""
+    __tablename__ = "owner"
     id = Column(Integer, primary_key=True, index=True)
     channel = Column(Integer, ForeignKey("channel.id"))
-    created = Column(DateTime)
+    created = Column(DateTime, default=datetime.datetime.utcnow)

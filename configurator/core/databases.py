@@ -1,6 +1,6 @@
 from utils.database.sql import DatabaseFactoryBase
 
-import scrappy.core.settings as settings
+from . import settings
 
 
 class DatabaseFactory(DatabaseFactoryBase):

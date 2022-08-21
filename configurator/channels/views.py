@@ -1,49 +1,51 @@
 from fastapi import APIRouter
-from fastapi import Query
+from fastapi import Query, Path, Body
 
 from fastapi import Depends
-from scrappy.core.databases import DatabaseFactory
+from ..core.databases import DatabaseFactory
 from utils.database.sql import Database
-from . import actions as player_actions
-from .storage import PlayerStorage
-from .schemas import PlayerQueryParams
+from . import actions
+from . import storage
+from . import schemas
+from typing import Union
 
 router = APIRouter(
-    prefix="/players",
+    prefix="/channels",
     tags=["items"],
 )
 
-query_default_values = PlayerQueryParams()
+query_default_values = schemas.ChannelQueryParams(channel_id=0)
 
 
-@router.get("/")
-async def get_players(
-    database: Database = Depends(DatabaseFactory.get_default_database),
-    page: int = Query(default=query_default_values.page),
-    player_tag: list[str] = Query(default=query_default_values.player_whitelist_tags),
-    region_tag: list[str] = Query(default=query_default_values.region_whitelist_tags),
-    system_tag: list[str] = Query(default=query_default_values.system_whitelist_tags),
-    is_online: bool = Query(default=query_default_values.is_online),
-):
-
-    players = player_actions.ActionGetFilteredPlayers(
-        database=database,
-        page=page,
-        player_whitelist_tags=player_tag,
-        region_whitelist_tags=region_tag,
-        system_whitelist_tags=system_tag,
-        is_online=is_online,
-    )
-    return players
-
-
-# purely test to try async
-@router.get("/async")
+@router.post("/{channel_id}", response_model=schemas.ChannelQueryParams)
 async def register_channel(
     database: Database = Depends(DatabaseFactory.get_default_database),
+    channel_id: int = Path(),
+    owner_id: Union[int, None] = Body(default=query_default_values.owner_id),
+    owner_name: Union[str, None] = Body(default=query_default_values.owner_name),
 ):
-    async with database.get_async_session() as session:
 
-        repo = PlayerStorage(database)
-        players = await repo._a_get_all()
-        return players
+    query_params = schemas.ChannelQueryParams(
+        channel_id=channel_id,
+        owner_id=owner_id,
+        owner_name=owner_name,
+    )
+    print(f"DEBUG!!!!!!!!!!!!!! query_params={query_params}")
+    return query_params
+
+
+@router.delete("/{channel_id}", response_model=schemas.ChannelQueryParams)
+async def delete_channel(
+    database: Database = Depends(DatabaseFactory.get_default_database),
+    channel_id: int = Path(),
+    owner_id: Union[int, None] = query_default_values.owner_id,
+    owner_name: Union[str, None] = query_default_values.owner_name,
+):
+
+    query_params = schemas.ChannelQueryParams(
+        channel_id=channel_id,
+        owner_id=owner_id,
+        owner_name=owner_name,
+    )
+    print(f"DEBUG!!!!!!!!!!!!!! query_params={query_params}")
+    return query_params

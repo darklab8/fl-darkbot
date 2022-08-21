@@ -70,6 +70,9 @@ class DiscorderActions(AugmentedEnum):
 class ConfiguratorActions(AugmentedEnum):
     shell = auto()
     migrate = auto()
+    run = auto()
+    test = auto()
+    lint = auto()
 
 
 class PgadminActions(AugmentedEnum):

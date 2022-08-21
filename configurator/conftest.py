@@ -4,11 +4,11 @@ from sqlalchemy_utils import database_exists, create_database, drop_database
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
-from scrappy.core.databases import DatabaseFactory
+from configurator.core.databases import DatabaseFactory
 from utils.database.sql import Database
-from scrappy.core.main import app_factory
-import scrappy.core.settings as settings
-from scrappy.core.declared_base import Model
+from configurator.core.main import app_factory
+import configurator.core.settings as settings
+from configurator.core.declared_base import Model
 import secrets
 
 

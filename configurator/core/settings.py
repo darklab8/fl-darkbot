@@ -4,9 +4,9 @@ from utils.logger import Logger
 logger = Logger(console_level="DEBUG", name=__name__)
 config = ConfigParser(settings_prefix="configurator")
 
-DATABASE_USER = config.get("database_username")
-DATABASE_PASSWORD = config.get("database_password")
-DATABASE_HOST = config.get("database_host")
+DATABASE_USER = config["database_username"]
+DATABASE_PASSWORD = config["database_password"]
+DATABASE_HOST = config["database_host"]
 DATABASE_URL = config.get(
     "database_url", f"{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/"
 )
