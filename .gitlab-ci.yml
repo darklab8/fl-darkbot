@@ -40,7 +40,7 @@ lint-scrappy:
   script:
     - python3 make.py scrappy lint
 
-ling-configurator:
+lint-configurator:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
   before_script:
