@@ -7,6 +7,8 @@ from .models import Base
 from sqlalchemy.sql import Select
 from sqlalchemy.engine import Row
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import Column, String
+from sqlalchemy import or_
 
 
 class BaseQuerySet:
@@ -55,4 +57,25 @@ class BaseStorage(AbstractStorage):
             session.commit()
 
     def get(self, query: BaseQueryParams) -> list[BaseOut]:
-        pass
+        with self.db.get_core_session() as session:
+            queryset = BaseQuerySet.create()
+
+            def contains_any(
+                queryset: Select, attribute: Column[String], tags: list[str]
+            ) -> Select:
+                return queryset.where(
+                    or_(*[attribute.like(rf"%{tag}%") for tag in tags])
+                )
+
+            if query.name_tags:
+                queryset = contains_any(queryset, Base.name, query.name_tags)
+
+            queryset = queryset.limit(query.page_size).offset(
+                query.page * query.page_size
+            )
+
+            db_rows = session.execute(queryset).all()
+
+            bases = BaseQuerySet.from_many_rows_to_schemas(db_rows)
+
+            return bases

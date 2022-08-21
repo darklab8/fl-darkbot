@@ -22,3 +22,4 @@ class BaseOut(BaseModel):
 class BaseQueryParams(BaseModel):
     page: int = 0
     name_tags: list[str] = []
+    page_size: int = 20

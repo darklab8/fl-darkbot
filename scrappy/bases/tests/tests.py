@@ -7,6 +7,7 @@ from .. import actions
 from .. import subtasks
 from unittest.mock import MagicMock
 from .. import storage
+from fastapi.testclient import TestClient
 
 file_with_data_example = pathlib.Path(__file__).parent / "data" / "bases.json"
 
@@ -53,3 +54,32 @@ def test_base_action(mocked_request_url_data, database):
     assert len(items) == len(items2)
 
     print(items)
+
+
+@pytest.fixture
+def loaded_items(database, mocked_request_url_data):
+    action = actions.ActionGetAndParseAndSaveBases
+    action.task_get = MagicMock(return_value=mocked_request_url_data)
+    return action(database=database)
+
+
+def test_get_bases_from_action(
+    database, mocked_request_url_data: dict, client: TestClient, loaded_items
+):
+    page_size = 10
+    bases = actions.ActionGetFilteredBases(
+        database=database,
+        page=0,
+        page_size=page_size,
+        name_tags=[],
+    )
+    assert len(bases) == page_size
+
+
+def test_get_players_from_endpoint(
+    database, mocked_request_url_data: dict, client: TestClient, loaded_items
+):
+    size = 10
+
+    result = client.get(f"/bases/?page_size={size}").json()
+    assert len(result) == size

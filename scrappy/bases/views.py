@@ -19,12 +19,14 @@ query_default_values = BaseQueryParams()
 async def get_bases(
     database: Database = Depends(DatabaseFactory.get_default_database),
     page: int = Query(default=query_default_values.page),
+    page_size: int = Query(default=query_default_values.page_size),
     name: list[str] = Query(default=query_default_values.name_tags),
 ) -> list[BaseOut]:
 
     bases = base_actions.ActionGetFilteredBases(
         database=database,
         page=page,
+        page_size=page_size,
         name_tags=name,
     )
     return bases
