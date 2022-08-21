@@ -15,7 +15,7 @@ router = APIRouter(
 query_default_values = BaseQueryParams()
 
 
-@router.get("/")
+@router.get("")
 async def get_bases(
     database: Database = Depends(DatabaseFactory.get_default_database),
     page: int = Query(default=query_default_values.page),

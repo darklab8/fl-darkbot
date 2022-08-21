@@ -81,5 +81,5 @@ def test_get_players_from_endpoint(
 ):
     size = 10
 
-    result = client.get(f"/bases/?page_size={size}").json()
+    result = client.get(f"/bases?page_size={size}").json()
     assert len(result) == size

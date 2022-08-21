@@ -15,7 +15,7 @@ router = APIRouter(
 query_default_values = PlayerQueryParams()
 
 
-@router.get("/")
+@router.get("")
 async def get_players(
     database: Database = Depends(DatabaseFactory.get_default_database),
     page: int = Query(default=query_default_values.page),
@@ -37,7 +37,7 @@ async def get_players(
 
 
 # purely test to try async
-@router.get("/async")
+@router.get("-async")
 async def get_async(
     database: Database = Depends(DatabaseFactory.get_default_database),
 ) -> list[PlayerOut]:

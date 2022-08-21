@@ -114,14 +114,14 @@ def test_filter_players(loaded_players, database):
 def test_get_players_from_endpoint(
     database, mocked_request_url_data: dict, client: TestClient, loaded_players
 ):
-    assert len(client.get("/players/?player_tag=AWES&player_tag=Aiv").json()) == 2
+    assert len(client.get("/players?player_tag=AWES&player_tag=Aiv").json()) == 2
 
 
 @pytest.mark.asyncio
 async def test_async_try(
     database, mocked_request_url_data: dict, app, loaded_players, async_client
 ):
-    response = await async_client.get("/players/async")
+    response = await async_client.get("/players-async")
     players = response.json()
     assert len(players) > 0
 
