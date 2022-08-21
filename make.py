@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.10
 import argparse
 import subprocess
 import secrets

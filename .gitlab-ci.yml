@@ -8,15 +8,16 @@ stages:
 .env_scrappy_staging: &env_scrappy_staging
   - echo "$env_scrappy_staging" > .env.scrappy
 
-unit-testing-configurator:
+unit-configurator:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
   before_script:
     - *env_scrappy_staging
   script:
     - python3 make.py configurator test
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
 
-unit-testing:
+unit-scrappy:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
   before_script:
@@ -24,11 +25,12 @@ unit-testing:
   script:
     - python3 make.py scrappy test
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
+  # TODO add syntax to output it?
+  # artifacts:
+  #   reports:
+  #     coverage_report:
+  #       coverage_format: cobertura
+  #       path: coverage.xml
 
 linting:
   image: ${IMAGE_PIPELINE_RUNNER}

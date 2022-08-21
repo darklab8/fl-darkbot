@@ -1,7 +1,11 @@
 black
-factory-boy
+
 pytest
 pytest-pythonpath
 pytest-asyncio
+pytest-cov
+
 Faker
+factory-boy
+
 httpx
