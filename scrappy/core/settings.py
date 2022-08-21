@@ -12,8 +12,11 @@ DATABASE_URL = config.get(
 )
 
 DATABASE_NAME = "default"
+DATABASE_DEBUG = bool(config.get("database_debug", ""))
+
 CELERY_BROKER = config["celery.broker"]
 CELERY_BACKEND = config["celery.backend"]
+
 
 API_PLAYER_URL = config["player.url"]
 API_BASE_URL = config["base.url"]

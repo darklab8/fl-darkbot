@@ -21,11 +21,15 @@ class ORMBase:
 
 
 class Database:
-    def __init__(self, name: str, url: str):
+    def __init__(self, name: str, url: str, debug: bool):
         self._name = name
         self._url = url
 
-        self._engine = create_engine(self.full_url, pool_pre_ping=False, echo=True)
+        self._engine = create_engine(
+            self.full_url,
+            pool_pre_ping=False,
+            echo=debug,
+        )
 
         self._async_engine = create_async_engine(
             self.async_full_url,
@@ -33,7 +37,7 @@ class Database:
             pool_size=20,
             pool_pre_ping=True,
             pool_use_lifo=True,
-            echo=True,
+            echo=debug,
         )
 
     @property
@@ -94,6 +98,7 @@ class Database:
 class SettingStub:
     DATABASE_URL: str = "example"
     DATABASE_NAME: str = "example"
+    DATABASE_DEBUG: bool = False
 
 
 class DatabaseFactoryBase(Database):
@@ -105,10 +110,12 @@ class DatabaseFactoryBase(Database):
         cls,
         url: str | None = None,
         name: str | None = None,
+        debug: bool | None = None,
     ):
         super().__init__(
             url=cls.settings.DATABASE_URL if url is None else url,
             name=cls.settings.DATABASE_NAME if name is None else name,
+            debug=cls.settings.DATABASE_DEBUG if debug is None else debug,
         )
 
     @classmethod

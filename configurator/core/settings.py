@@ -11,6 +11,7 @@ DATABASE_URL = config.get(
     "database_url", f"{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/"
 )
 DATABASE_NAME = "default"
+DATABASE_DEBUG = bool(config.get("database_debug", ""))
 
 
 LOGGER_CONSOLE_LEVEL = config.get("logger.console.level", "INFO")

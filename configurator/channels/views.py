@@ -30,7 +30,6 @@ async def register_channel(
         owner_id=owner_id,
         owner_name=owner_name,
     )
-    print(f"DEBUG!!!!!!!!!!!!!! query_params={query_params}")
     return query_params
 
 
@@ -38,8 +37,8 @@ async def register_channel(
 async def delete_channel(
     database: Database = Depends(DatabaseFactory.get_default_database),
     channel_id: int = Path(),
-    owner_id: Union[int, None] = query_default_values.owner_id,
-    owner_name: Union[str, None] = query_default_values.owner_name,
+    owner_id: Union[int, None] = Body(default=query_default_values.owner_id),
+    owner_name: Union[str, None] = Body(default=query_default_values.owner_name),
 ):
 
     query_params = schemas.ChannelQueryParams(
@@ -47,5 +46,4 @@ async def delete_channel(
         owner_id=owner_id,
         owner_name=owner_name,
     )
-    print(f"DEBUG!!!!!!!!!!!!!! query_params={query_params}")
     return query_params
