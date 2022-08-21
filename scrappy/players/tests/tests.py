@@ -1,56 +1,28 @@
-from .storage import PlayerStorage
+from ..storage import PlayerStorage
 from faker import Faker
-from . import schemas as player_schemas
+from .. import schemas as player_schemas
 
 import pytest
 import json
-import os
 import datetime
-from . import actions as player_actions
+from .. import actions as player_actions
 from celery import shared_task
-from .tasks import update_players
+from ..tasks import update_players
 from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 from scrappy.core.logger import base_logger
+from pathlib import Path
 
 logger = base_logger.getChild(__name__)
 
 fake = Faker()
 
 
-class PlayerTestFactory:
-    repo_model = PlayerStorage
-
-    def __new__(cls, database, **kwargs: dict) -> player_schemas.PlayerOut:
-        repo = cls.repo_model(database)
-        return repo._create_one(
-            player_schemas.PlayerIn(
-                name=kwargs.get("name", fake.name()),
-                region=kwargs.get("region", fake.name()),
-                system=kwargs.get("system", fake.name()),
-                time=kwargs.get("time", fake.name()),
-                timestamp=kwargs.get("timestamp", datetime.datetime.utcnow()),
-            )
-        )
-
-
-@pytest.mark.asyncio
-async def test_check_test_factory(database):
-
-    player = PlayerTestFactory(database)
-    assert player.id == 1
-    assert isinstance(player.name, str)
-    assert isinstance(player.is_online, bool)
-    logger.debug(repr(player))
-
-
 def test_check_endpoint_to_get_players(database, client):
     assert client.get("/players/").json() == []
 
 
-file_with_data_example = os.path.join(
-    os.path.dirname(__file__), "test_example", "players.json"
-)
+file_with_data_example = Path(__file__).parent / "data" / "players.json"
 
 
 @pytest.mark.integration
@@ -72,33 +44,19 @@ def mocked_request_url_data():
 def test_players_check(database, mocked_request_url_data: dict):
 
     action = player_actions.ActionGetAndParseAndSavePlayers
-    action.task_get.run = MagicMock(return_value=mocked_request_url_data)
-    action(database=database)
+    action.task_get = MagicMock(return_value=mocked_request_url_data)
+    action(database)
 
-    player = PlayerTestFactory(database)
+    items = PlayerStorage(database)._get_all()
+    assert len(items) > 0
 
-    player_storage = PlayerStorage(database)
-    players = player_storage._get_all()
-    assert len(players) > 0
-    print(players)
+    action = player_actions.ActionGetAndParseAndSavePlayers
+    action.task_get = MagicMock(return_value=mocked_request_url_data)
+    action(database)
 
-
-def test_repeated_players_override_previous_players(database):
-    fixed_player_name = "Alpha"
-    player = PlayerTestFactory(database, name=fixed_player_name)
-
-    player_storage = PlayerStorage(database)
-    players_amount = len(player_storage._get_all())
-
-    player = PlayerTestFactory(database, name=fixed_player_name)
-
-    players_amount2 = len(player_storage._get_all())
-    player_in_db = player_storage._get_all()[0]
-
-    assert players_amount > 0
-    assert players_amount == players_amount2
-    assert player.name == player_in_db.name
-    assert player.region == player_in_db.region
+    items2 = PlayerStorage(database)._get_all()
+    assert len(items2) > 0
+    assert len(items) == len(items2)
 
 
 @shared_task
@@ -111,21 +69,6 @@ def mul(x, y):
 def test_try_testing_celery():
     task_handle = mul.delay(2, 3)
     assert task_handle.get() == 6
-
-
-@pytest.mark.usefixtures("celery_session_app")
-@pytest.mark.usefixtures("celery_session_worker")
-def test_trying_players_update(database, mocked_request_url_data):
-
-    action = player_actions.ActionGetAndParseAndSavePlayers
-    action.task_get = lambda self: mocked_request_url_data
-
-    action(database)
-
-    player_storage = PlayerStorage(database)
-    players_amount = len(player_storage._get_all())
-
-    assert players_amount > 0
 
 
 @pytest.mark.usefixtures("celery_session_app")
@@ -172,9 +115,6 @@ def test_get_players_from_endpoint(
     database, mocked_request_url_data: dict, client: TestClient, loaded_players
 ):
     assert len(client.get("/players/?player_tag=AWES&player_tag=Aiv").json()) == 2
-
-
-from httpx import AsyncClient
 
 
 @pytest.mark.asyncio

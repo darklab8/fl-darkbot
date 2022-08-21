@@ -1,0 +1,971 @@
+{
+  "Aergia Research Facility": {
+    "affiliation": "Technocracy of Auxo",
+    "health": 97.3224
+  },
+  "Jims Junktown": {
+    "affiliation": "Junkers",
+    "health": 93.0599
+  },
+  "Old Trafford": {
+    "affiliation": "Deep Space Engineering",
+    "health": 95.3674,
+    "tid": 183912
+  },
+  "Medway Dock": {
+    "affiliation": "BMM",
+    "health": 68.1563
+  },
+  "Mineore Build Industries H.Q.": {
+    "affiliation": "Freelancers",
+    "health": 100
+  },
+  "Melbourne Factory": {
+    "affiliation": "Gateway Shipping",
+    "health": 7.16343
+  },
+  "Gas Miner Konpeki": {
+    "affiliation": "Freelancers",
+    "health": 99.9409
+  },
+  "Forgotten Storage Depot ": {
+    "affiliation": "Zoners",
+    "health": 93.1415
+  },
+  "Barudoru-eki": {
+    "affiliation": "Blood Dragons",
+    "health": 52.5651
+  },
+  "Treyarch Research Facility": {
+    "affiliation": "Gallic Metal Service",
+    "health": 100
+  },
+  "Epsilon1": {
+    "affiliation": "Freelancers",
+    "health": 100
+  },
+  "Experimental module Yokosuka": {
+    "affiliation": "Kusari Naval Forces Guard",
+    "health": 99.9471
+  },
+  "Stockholm Base": {
+    "affiliation": "No Affiliation",
+    "health": 73.3094
+  },
+  "Sanctuary": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 190928
+  },
+  "Sparta Base": {
+    "affiliation": "Corsairs",
+    "health": 100,
+    "tid": 160051
+  },
+  "Cronics Trading Facility\r\n": {
+    "affiliation": "RGS Shipping",
+    "health": 79.5925
+  },
+  "Freeport KazzMull Storage Depot": {
+    "affiliation": "Zoners",
+    "health": 100
+  },
+  "Outpost Ozymandias": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 161594
+  },
+  "Cleveland Station": {
+    "affiliation": "Bristol Constructions and Manufacturing",
+    "health": 90.7402,
+    "tid": 186282
+  },
+  "Porto-Vecchio Station": {
+    "affiliation": "Unione Corse",
+    "health": 100
+  },
+  "Omega Mining Storage": {
+    "affiliation": "Zoners",
+    "health": 48.811
+  },
+  "Eisenberger Bahnhof": {
+    "affiliation": "No Affiliation",
+    "health": 7.93661
+  },
+  "Omega Station": {
+    "affiliation": "Zoners",
+    "health": 47.798
+  },
+  "Terra Nova": {
+    "affiliation": "No Affiliation",
+    "health": 100
+  },
+  "La Lunar Emporium": {
+    "affiliation": "Gallic Metal Service",
+    "health": 100
+  },
+  "Chesterfield Station": {
+    "affiliation": "Deep Space Engineering",
+    "health": 92.6589,
+    "tid": 177716
+  },
+  "Lab Reactor Raid": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 174702
+  },
+  "Zamora Station": {
+    "affiliation": "Outcasts",
+    "health": 29.7507
+  },
+  "Malta Research Station": {
+    "affiliation": "Outcasts",
+    "health": 96.3766,
+    "tid": 191709
+  },
+  "Copper Storage Depot": {
+    "affiliation": "Freelancers",
+    "health": 43.4019,
+    "tid": 153868
+  },
+  "krcma": {
+    "affiliation": "Zoners",
+    "health": 89.9894
+  },
+  "Brunswick Shrine": {
+    "affiliation": "pf_02_grp IFF",
+    "health": 99.3702,
+    "tid": 121670
+  },
+  "All Worlds Enterprises": {
+    "affiliation": "Freelancers",
+    "health": 96.9809,
+    "tid": 191265
+  },
+  "Thoth Edgeworlds Institute": {
+    "affiliation": "No Affiliation",
+    "health": 4.79457e-26
+  },
+  "Space Market Center": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 186196
+  },
+  "Prison Station Nicosia": {
+    "affiliation": "Corsairs",
+    "health": 99.8649,
+    "tid": 177160
+  },
+  "Andorra Haven": {
+    "affiliation": "Freelancers",
+    "health": 44.5916,
+    "tid": 192690
+  },
+  "Missing Passenger Liner": {
+    "affiliation": "Hogosha",
+    "health": 4.7946e-26
+  },
+  "Feldbergdef2": {
+    "affiliation": "Freelancers",
+    "health": 97.2248,
+    "tid": 191823
+  },
+  "Med Force Omega Hospital": {
+    "affiliation": "Zoners",
+    "health": 99.1849
+  },
+  "Bochum Depot": {
+    "affiliation": "ALG Waste Disposal",
+    "health": 99.5452,
+    "tid": 189679
+  },
+  "Les_Pays_Bas": {
+    "affiliation": "Freelancers",
+    "health": 99.4466
+  },
+  "Oceana Shipping Platform": {
+    "affiliation": "Gateway Shipping",
+    "health": 100,
+    "tid": 102926
+  },
+  "Yuudoku Depot": {
+    "affiliation": "ALG Waste Disposal",
+    "health": 88.072,
+    "tid": 193487
+  },
+  "Shrine Of Shamash": {
+    "affiliation": "Freelancers",
+    "health": 79.6993
+  },
+  "Beaumont Spire": {
+    "affiliation": "Junkers",
+    "health": 76.1369,
+    "tid": 118039
+  },
+  "Wismar Shipping Depot": {
+    "affiliation": "Kruger Minerals",
+    "health": 93.999
+  },
+  "Omega Palace": {
+    "affiliation": "Zoners",
+    "health": 54.6175,
+    "tid": 183710
+  },
+  "Hellas Defence": {
+    "affiliation": "Zoners",
+    "health": 86.3024
+  },
+  "Andover Station": {
+    "affiliation": "Border World Exports",
+    "health": 100,
+    "tid": 182276
+  },
+  "Redline Depot": {
+    "affiliation": "No Affiliation",
+    "health": 19.9442
+  },
+  "Primary Link Node": {
+    "affiliation": "Freelancers",
+    "health": 60.1728
+  },
+  "Shirosato Station": {
+    "affiliation": "Kusari State Police",
+    "health": 100
+  },
+  "Emlenton Storage & Exports": {
+    "affiliation": "Universal Shipping",
+    "health": 100,
+    "tid": 111486
+  },
+  "Warp Travel Industries": {
+    "affiliation": "Zoners",
+    "health": 100
+  },
+  "Legacy Mining Platform": {
+    "affiliation": "Freelancers",
+    "health": 100
+  },
+  "Fabrique National de Herstal": {
+    "affiliation": "Gallic Metal Service",
+    "health": 84.1877
+  },
+  "Goldgeist": {
+    "affiliation": "BMM",
+    "health": 96.294
+  },
+  "San Juan": {
+    "affiliation": "Junkers",
+    "health": 82.3973,
+    "tid": 137909
+  },
+  "New Horizon Commercia": {
+    "affiliation": "Freelancers",
+    "health": 100
+  },
+  "Onsen Relax": {
+    "affiliation": "No Affiliation",
+    "health": 100
+  },
+  "Appleton Laboratory": {
+    "affiliation": "Independent Miners Guild",
+    "health": 100
+  },
+  "Mekong Station": {
+    "affiliation": "Gas Miners Guild",
+    "health": 89.2068,
+    "tid": 177237
+  },
+  "Tipperary Workshop": {
+    "affiliation": "Bretonia Armed Forces",
+    "health": 84.2759
+  },
+  "York Station": {
+    "affiliation": "BMM",
+    "health": 100,
+    "tid": 160443
+  },
+  "Houston International": {
+    "affiliation": "Universal Shipping",
+    "health": 100,
+    "tid": 137315
+  },
+  "Shiojiri Storage Depot": {
+    "affiliation": "Samura Industries",
+    "health": 89.9897,
+    "tid": 120825
+  },
+  "Mondbasis Alpha 2": {
+    "affiliation": "No Affiliation",
+    "health": 4.5089
+  },
+  "Alba Station": {
+    "affiliation": "Outcasts",
+    "health": 90.7581,
+    "tid": 192503
+  },
+  "Long Island Station": {
+    "affiliation": "Liberty Navy",
+    "health": 96.5387,
+    "tid": 94989
+  },
+  "Blackpool Production Facility": {
+    "affiliation": "Bounty Hunters Guild",
+    "health": 100
+  },
+  "Iskra Outpost": {
+    "affiliation": "Coalition",
+    "health": 100,
+    "tid": 175167
+  },
+  "Reincarnation Outpost": {
+    "affiliation": "Corsairs",
+    "health": 100,
+    "tid": 190590
+  },
+  "Monte Cinto Station ": {
+    "affiliation": "Unione Corse",
+    "health": 99.3697
+  },
+  "Med Force General Academy": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 181843
+  },
+  "Riviera Resort": {
+    "affiliation": "Orbital Spa and Cruise",
+    "health": 97.0516
+  },
+  "Aurora Station": {
+    "affiliation": "No Affiliation",
+    "health": 1.43142
+  },
+  "Starflier Base": {
+    "affiliation": "Freelancers",
+    "health": 99.6857,
+    "tid": 187902
+  },
+  "Lunel Sorting Facility": {
+    "affiliation": "EFL Oil and Machinery",
+    "health": 43.9342
+  },
+  "Tation": {
+    "affiliation": "Corsairs",
+    "health": 11.8876
+  },
+  "Chipironia": {
+    "affiliation": "IDF Shipping",
+    "health": 93.6738
+  },
+  "Sirius Technology Center": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 189831
+  },
+  "Dreamland Harbor": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 185144
+  },
+  "Equipment and Repairs": {
+    "affiliation": "Freelancers",
+    "health": 99.3185
+  },
+  "Isle of Skye": {
+    "affiliation": "BMM",
+    "health": 100,
+    "tid": 134738
+  },
+  "Fort Lune": {
+    "affiliation": "Gallic Navy",
+    "health": 99.3117
+  },
+  "POB test 3": {
+    "affiliation": "No Affiliation",
+    "health": 64.6351
+  },
+  "Lab Reactor Read": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 174692
+  },
+  "Sark Station": {
+    "affiliation": "Zoners",
+    "health": 32.7412,
+    "tid": 125688
+  },
+  "Abrams Research Station": {
+    "affiliation": "No Affiliation",
+    "health": 18.5597
+  },
+  "Kadesh Orbital City": {
+    "affiliation": "Zoners",
+    "health": 100
+  },
+  "Freeport KazzMull": {
+    "affiliation": "Zoners",
+    "health": 99.9739,
+    "tid": 191946
+  },
+  "The Grotto": {
+    "affiliation": "Freelancers",
+    "health": 84.4136
+  },
+  "Salisbury Town": {
+    "affiliation": "Junkers",
+    "health": 88.9675,
+    "tid": 188160
+  },
+  "The Junkyard": {
+    "affiliation": "Junkers",
+    "health": 99.2158,
+    "tid": 111409
+  },
+  "Yamato": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 172739
+  },
+  "Quarantine Annex": {
+    "affiliation": "The Order",
+    "health": 100
+  },
+  "Deterrence Sanctum": {
+    "affiliation": "Corsairs",
+    "health": 99.7938
+  },
+  "McBoyles Schrottplatz": {
+    "affiliation": "Junkers",
+    "health": 98.2361,
+    "tid": 191831
+  },
+  "Valkyrie Production Facility": {
+    "affiliation": "Zoners",
+    "health": 100
+  },
+  "Estacion orbital de Mykonos": {
+    "affiliation": "Corsairs",
+    "health": 5.6198
+  },
+  "Salt Lake Station HQ": {
+    "affiliation": "Liberty Navy",
+    "health": 94.0755
+  },
+  "Grand Junction Freeport": {
+    "affiliation": "Freelancers",
+    "health": 100
+  },
+  "Roma Invicta": {
+    "affiliation": "Corsairs",
+    "health": 15.2218
+  },
+  "FortiSec": {
+    "affiliation": "BMM",
+    "health": 100,
+    "tid": 138396
+  },
+  "Refugio de Lisboa": {
+    "affiliation": "Corsairs",
+    "health": 100,
+    "tid": 184605
+  },
+  "Malfunctioning Depot": {
+    "affiliation": "No Affiliation",
+    "health": 4.79464e-26
+  },
+  "Lagerhaus": {
+    "affiliation": "Junkers",
+    "health": 97.6973,
+    "tid": 193613
+  },
+  "Nichols Trade Center": {
+    "affiliation": "Zoners",
+    "health": 99.2587,
+    "tid": 79344
+  },
+  "Athens Station": {
+    "affiliation": "Zoners",
+    "health": 100
+  },
+  "Fort de Bregancon": {
+    "affiliation": "Gallic Navy",
+    "health": 90.6586
+  },
+  "AESIR Facility": {
+    "affiliation": "MND",
+    "health": 22.8971,
+    "tid": 159480
+  },
+  "Puerto del Sol": {
+    "affiliation": "Corsairs",
+    "health": 100
+  },
+  "1": {
+    "affiliation": "No Affiliation",
+    "health": 37.7201,
+    "tid": 181876
+  },
+  "Handelsdepot": {
+    "affiliation": "Junkers",
+    "health": 66.8926,
+    "tid": 168819
+  },
+  "Artron Station": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 179518
+  },
+  "Epsilon2": {
+    "affiliation": "Freelancers",
+    "health": 99.4567
+  },
+  "ZhonghuaGuyongJun Fortress": {
+    "affiliation": "Gallic Metal Service",
+    "health": 100
+  },
+  "Damascus Research Station": {
+    "affiliation": "The Order",
+    "health": 100,
+    "tid": 178982
+  },
+  "Nuremberg Border Station": {
+    "affiliation": "MND",
+    "health": 66.633,
+    "tid": 181409
+  },
+  "FeldBerg": {
+    "affiliation": "Freelancers",
+    "health": 97.2251,
+    "tid": 191528
+  },
+  "Outpost Eleven": {
+    "affiliation": "Zoners",
+    "health": 42.8938
+  },
+  "Fernando Poo": {
+    "affiliation": "Zoners",
+    "health": 76.9674,
+    "tid": 187993
+  },
+  "Secret Valley Workshop": {
+    "affiliation": "BMM",
+    "health": 100,
+    "tid": 159309
+  },
+  "Haven": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 192733
+  },
+  "Depot101": {
+    "affiliation": "No Affiliation",
+    "health": 100
+  },
+  "Oban Station": {
+    "affiliation": "Bretonia Armed Forces",
+    "health": 100,
+    "tid": 186680
+  },
+  "Albany Police Academy": {
+    "affiliation": "Liberty Police, Inc.",
+    "health": 60.3393
+  },
+  "Rheinland Shipping Headquarters": {
+    "affiliation": "RGS Shipping",
+    "health": 85.8728
+  },
+  "Festus McBoyle's Scrapyard": {
+    "affiliation": "Junkers",
+    "health": 96.0354
+  },
+  "Krivi_Stojko": {
+    "affiliation": "Gallic Metal Service",
+    "health": 100
+  },
+  "Xuanming Trade Centre": {
+    "affiliation": "Samura Industries",
+    "health": 100,
+    "tid": 114866
+  },
+  "Freeport 12 Extension": {
+    "affiliation": "Zoners",
+    "health": 99.6613
+  },
+  "Minedepot": {
+    "affiliation": "Freelancers",
+    "health": 89.9339,
+    "tid": 188667
+  },
+  "Veracruz Munitions": {
+    "affiliation": "Liberty Insurgency",
+    "health": 99.9969
+  },
+  "Osihi Ronin Station": {
+    "affiliation": "Blood Dragons",
+    "health": 98.1423,
+    "tid": 172153
+  },
+  "Jamestown Manufactory": {
+    "affiliation": "Freelancers",
+    "health": 67.6368
+  },
+  "Saint Leu Production Facility": {
+    "affiliation": "No Affiliation",
+    "health": 20.3804
+  },
+  "Luxury Liner Maldives": {
+    "affiliation": "Orbital Spa and Cruise",
+    "health": 100,
+    "tid": 187049
+  },
+  "Libourne Research Complex": {
+    "affiliation": "Gallic Royalists",
+    "health": 100
+  },
+  "Annapolis Station": {
+    "affiliation": "Deep Space Engineering",
+    "health": 100
+  },
+  "Martinique": {
+    "affiliation": "Gallic Brigands",
+    "health": 94.2793
+  },
+  "Miningfactory Neuss": {
+    "affiliation": "Daumann Heavy Construction",
+    "health": 100,
+    "tid": 185803
+  },
+  "Makassar Station": {
+    "affiliation": "Independent Miners Guild",
+    "health": 90.8281,
+    "tid": 185913
+  },
+  "Safe Haven Station": {
+    "affiliation": "Freelancers",
+    "health": 43.3262
+  },
+  "Feldbergdef1": {
+    "affiliation": "Freelancers",
+    "health": 97.3311,
+    "tid": 191815
+  },
+  "Mineore Research Center": {
+    "affiliation": "Freelancers",
+    "health": 99.5452
+  },
+  "Swift's Research 1": {
+    "affiliation": "Junkers",
+    "health": 76.3792
+  },
+  "Kobayashi Station": {
+    "affiliation": "Interspace Commerce",
+    "health": 47.1221,
+    "tid": 188424
+  },
+  "Freeport Omega": {
+    "affiliation": "Zoners",
+    "health": 55.3088
+  },
+  "Kinkaku-ji": {
+    "affiliation": "Golden Chrysanthemums",
+    "health": 100
+  },
+  "ConEx Exports": {
+    "affiliation": "Universal Shipping",
+    "health": 86.8594
+  },
+  "Theta Resort": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 174988
+  },
+  "Doe Industries Space Port": {
+    "affiliation": "Deep Space Engineering",
+    "health": 92.6559,
+    "tid": 90141
+  },
+  "Lichtenberg Station": {
+    "affiliation": "Rheinland Military",
+    "health": 100,
+    "tid": 193915
+  },
+  "All Worlds Gallia": {
+    "affiliation": "Interspace Commerce",
+    "health": 91.0691,
+    "tid": 192449
+  },
+  "Delta Mining Corp.": {
+    "affiliation": "Zoners",
+    "health": 100
+  },
+  "Melbourne Station": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 109323
+  },
+  "Ruhrpott Mining Facility": {
+    "affiliation": "Daumann Heavy Construction",
+    "health": 99.6531,
+    "tid": 185661
+  },
+  "Ilfracombe Base": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 134977
+  },
+  "Med Force General and Research": {
+    "affiliation": "Zoners",
+    "health": 5.00097e-26,
+    "tid": 176255
+  },
+  "Iceland Base": {
+    "affiliation": "No Affiliation",
+    "health": 74.9884
+  },
+  "BiaCris": {
+    "affiliation": "IDF Shipping",
+    "health": 100,
+    "tid": 180738
+  },
+  "Novosibirsk": {
+    "affiliation": "Coalition",
+    "health": 73.3074
+  },
+  "Legacy Shipping Platform": {
+    "affiliation": "Freelancers",
+    "health": 100
+  },
+  "Federal Supply Station": {
+    "affiliation": "MND",
+    "health": 100
+  },
+  "Freeport 12": {
+    "affiliation": "Zoners",
+    "health": 99.8925
+  },
+  "Brighton Business Concourse": {
+    "affiliation": "Samura Industries",
+    "health": 100,
+    "tid": 161345
+  },
+  "Cinder Base": {
+    "affiliation": "Bristol Constructions and Manufacturing",
+    "health": 87.2559
+  },
+  "New Hope Research Institute": {
+    "affiliation": "Zoners",
+    "health": 99.1267,
+    "tid": 176047
+  },
+  "Storage Annex": {
+    "affiliation": "The Order",
+    "health": 100
+  },
+  "Nebula Shipping Express": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 184469
+  },
+  "Lancer Paradise": {
+    "affiliation": "No Affiliation",
+    "health": 16.6698
+  },
+  "Secret Valley Lab": {
+    "affiliation": "BMM",
+    "health": 100
+  },
+  "Sanno Mining Facility": {
+    "affiliation": "Freelancers",
+    "health": 100,
+    "tid": 191378
+  },
+  "Constellation Express HQ": {
+    "affiliation": "Universal Shipping",
+    "health": 81.6585
+  },
+  "Mondbasis Alpha 1": {
+    "affiliation": "No Affiliation",
+    "health": 0.812159
+  },
+  "Ulster Station": {
+    "affiliation": "Interspace Commerce",
+    "health": 100,
+    "tid": 186916
+  },
+  "Kruger Mineralien Facility ": {
+    "affiliation": "Kruger Minerals",
+    "health": 100,
+    "tid": 109907
+  },
+  "TAU-37 Ore Supplies LTD": {
+    "affiliation": "Zoners",
+    "health": 100
+  },
+  "Mr.Trakais SpaceTech Shop": {
+    "affiliation": "Liberty Police, Inc.",
+    "health": 99.4649,
+    "tid": 175418
+  },
+  "Landsero Paradiso": {
+    "affiliation": "No Affiliation",
+    "health": 16.8612
+  },
+  "Ansbach Station": {
+    "affiliation": "MND",
+    "health": 65.0088
+  },
+  "Waskaganish Outpost": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 193424
+  },
+  "Perenco Terminal": {
+    "affiliation": "Gallic Metal Service",
+    "health": 100
+  },
+  "14BIS - 4D & A Comerce": {
+    "affiliation": "BMM",
+    "health": 100
+  },
+  "Sabah Research Section": {
+    "affiliation": "Crayter Republic",
+    "health": 100,
+    "tid": 164475
+  },
+  "Swift's Mining Co.1": {
+    "affiliation": "Daumann Heavy Construction",
+    "health": 93.5509,
+    "tid": 191298
+  },
+  "Hellas-Base": {
+    "affiliation": "Zoners",
+    "health": 87.3409
+  },
+  "Faroe Shipping Platform": {
+    "affiliation": "Interspace Commerce",
+    "health": 100
+  },
+  "Kawada Storage Facility": {
+    "affiliation": "Golden Chrysanthemums",
+    "health": 4.79205e-26
+  },
+  "Eureka Station": {
+    "affiliation": "Border World Exports",
+    "health": 100,
+    "tid": 183088
+  },
+  "Globus Holding": {
+    "affiliation": "BMM",
+    "health": 100,
+    "tid": 174336
+  },
+  "Iejima Station": {
+    "affiliation": "Gas Miners Guild",
+    "health": 99.9993,
+    "tid": 133407
+  },
+  "Ikarus Storage Facility 03": {
+    "affiliation": "Junkers",
+    "health": 44.3191,
+    "tid": 182573
+  },
+  "Falster Station": {
+    "affiliation": "Independent Miners Guild",
+    "health": 100,
+    "tid": 79980
+  },
+  "Planet Leeds Search and Rescue": {
+    "affiliation": "Artificial Intelligence",
+    "health": 95.5549
+  },
+  "Port Tragonisi": {
+    "affiliation": "Corsairs",
+    "health": 99.3396
+  },
+  "Canary Wharf Station": {
+    "affiliation": "Border World Exports",
+    "health": 100,
+    "tid": 130363
+  },
+  "Le Paradis des Chats": {
+    "affiliation": "Gallic Metal Service",
+    "health": 100,
+    "tid": 174362
+  },
+  "Nebula Overwatch": {
+    "affiliation": "Freelancers",
+    "health": 96.2479
+  },
+  "Med Force General-B": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 178400
+  },
+  "CWW-Shipyard": {
+    "affiliation": "Freelancers",
+    "health": 97.7537,
+    "tid": 191527
+  },
+  "Geneva Shipping Platform": {
+    "affiliation": "Zoners",
+    "health": 99.3911,
+    "tid": 136317
+  },
+  "Yamato Base": {
+    "affiliation": "Freelancers",
+    "health": 99.6294
+  },
+  "Fortitudine": {
+    "affiliation": "BMM",
+    "health": 100,
+    "tid": 118442
+  },
+  "Secret Valley Satellite": {
+    "affiliation": "BMM",
+    "health": 100
+  },
+  "Mirai Enterprise ": {
+    "affiliation": "Freelancers",
+    "health": 40.7246
+  },
+  "Mont Blanc Storage Facility": {
+    "affiliation": "Gallic Metal Service",
+    "health": 100
+  },
+  "Aruba Depot": {
+    "affiliation": "Bristol Constructions and Manufacturing",
+    "health": 4.49198
+  },
+  "Junker's Town": {
+    "affiliation": "Junkers",
+    "health": 100,
+    "tid": 137873
+  },
+  "Boreas Frozen Storage": {
+    "affiliation": "Technocracy of Auxo",
+    "health": 39.0932,
+    "tid": 184821
+  },
+  "Nebula Complex": {
+    "affiliation": "Freelancers",
+    "health": 97.9908
+  },
+  "Tortuga": {
+    "affiliation": "Outcasts",
+    "health": 100,
+    "tid": 182245
+  },
+  "Lab Reactor HQ": {
+    "affiliation": "Zoners",
+    "health": 100,
+    "tid": 174925
+  },
+  "Trader Hub Port 34": {
+    "affiliation": "Universal Shipping",
+    "health": 92.3682,
+    "tid": 178501
+  },
+  "Kronstadt": {
+    "affiliation": "Coalition",
+    "health": 83.4773
+  }
+}

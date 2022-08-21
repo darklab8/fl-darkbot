@@ -1,6 +1,7 @@
 from sqlalchemy import func, or_
-from sqlalchemy import select, insert, update
+from sqlalchemy import select, update
 from sqlalchemy.sql import Select, Insert
+from sqlalchemy.dialects.postgresql import insert
 import scrappy.players.schemas as schemas
 from utils.database.sql import Database
 from scrappy.players.models import Player
@@ -56,49 +57,18 @@ class PlayerStorage(AbstractStorage):
     def create(
         self,
         *players: schemas.PlayerIn,
-    ) -> list[schemas.PlayerOut]:
-
-        result = []
-        for player in players:
-            result.append(self._create_one(player))
-        return result
-
-    def _create_one(
-        self,
-        player: schemas.PlayerIn,
-    ) -> schemas.PlayerOut:
+    ) -> None:
 
         with self.db.get_core_session() as session:
-
-            get_player = select(Player).where(Player.name == player.name)
-            already_present_user = session.execute(get_player).scalar()
-
-            if already_present_user:
-                add_or_update_user_query = (
-                    update(Player)
-                    .where(Player.id == already_present_user.id)
-                    .values(**player.dict())
-                )
-            else:
-                add_or_update_user_query: Insert = insert(Player).values(  # type: ignore
-                    **player.dict()
-                )
-
-            session.execute(add_or_update_user_query)
-
-            get_refreshed_player: Select = IsOnlineQuery.create().where(
-                IsOnlineQuery.latest_timestamp == Player.timestamp
+            stmt = insert(Player).values([item.dict() for item in players])
+            stmt = stmt.on_conflict_do_update(
+                index_elements=[Player.name],
+                set_={k: v for k, v in stmt.excluded.items() if v.primary_key is False},
             )
 
-            db_row = session.execute(get_refreshed_player).first()
-            if db_row is None:
-                raise Exception("no player")
-            db_row: Row = db_row  # type: ignore
-            extracted_info = IsOnlineQuery.from_query_row_to_schema(db_row)
-
+            result = session.execute(stmt)
+            print(result)
             session.commit()
-
-        return extracted_info
 
     page_size = 20
 

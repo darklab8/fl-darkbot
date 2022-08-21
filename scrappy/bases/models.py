@@ -6,7 +6,7 @@ class Base(Model):
     __tablename__ = "bases"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String, unique=True, index=True)
     affiliation = Column(String)
     health = Column(Float)
     tid = Column(Integer)

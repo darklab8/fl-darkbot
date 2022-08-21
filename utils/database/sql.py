@@ -25,7 +25,7 @@ class Database:
         self._name = name
         self._url = url
 
-        self._engine = create_engine(self.full_url, pool_pre_ping=False)
+        self._engine = create_engine(self.full_url, pool_pre_ping=False, echo=True)
 
         self._async_engine = create_async_engine(
             self.async_full_url,
@@ -33,6 +33,7 @@ class Database:
             pool_size=20,
             pool_pre_ping=True,
             pool_use_lifo=True,
+            echo=True,
         )
 
     @property

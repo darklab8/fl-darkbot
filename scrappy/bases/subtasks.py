@@ -37,5 +37,5 @@ class SubTaskParseBases(AbstractAction):
 class SubTaskSaveBasesToStorage(SubTaskSaveItemsToStorage):
     storage = BaseStorage
 
-    def __init__(self, players: list[base_schemas.BaseIn], database: Database):
-        super().__init__(items=players, database=database)
+    def __init__(self, items: list[base_schemas.BaseIn], database: Database):
+        super().__init__(items=items, database=database)

@@ -373,6 +373,7 @@ class Makefile:
             case (service, "shell"):
                 self.run_in_compose(
                     command=f"{staging_env} {ComposeCommands.shell.format(service=self.service)}",
+                    compose_overrides=["network-override"],
                 )
             case (service, "run"):
                 self.run_in_compose(

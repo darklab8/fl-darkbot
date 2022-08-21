@@ -6,7 +6,7 @@ class Player(Model):
     __tablename__ = "players"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String, unique=True, index=True)
     region = Column(String)
     system = Column(String)
     time = Column(String)  # time online

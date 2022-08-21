@@ -9,7 +9,7 @@ class AbstractStorage(abc.ABC):
         self.db = db
 
     @abc.abstractmethod
-    def create(self, *items: Any) -> list[Any]:
+    def create(self, *items: Any) -> None:
         pass
 
     @abc.abstractmethod
