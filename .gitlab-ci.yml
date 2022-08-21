@@ -25,20 +25,28 @@ unit-scrappy:
   script:
     - python3 make.py scrappy test
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  # TODO add syntax to output it?
+  # TODO add syntax for it being grabbable?
   # artifacts:
   #   reports:
   #     coverage_report:
   #       coverage_format: cobertura
   #       path: coverage.xml
 
-linting:
+lint-scrappy:
   image: ${IMAGE_PIPELINE_RUNNER}
   stage: test
   before_script:
     - *env_scrappy_staging
   script:
     - python3 make.py scrappy lint
+
+ling-configurator:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *env_scrappy_staging
+  script:
+    - python3 make.py configurator lint
 
 migrate-scrappy:
   image: ${IMAGE_PIPELINE_RUNNER}
@@ -47,3 +55,11 @@ migrate-scrappy:
     - *env_scrappy_staging
   script:
     - python3 make.py scrappy migrate
+
+migrate-configurator:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *env_scrappy_staging
+  script:
+    - python3 make.py configurator migrate
