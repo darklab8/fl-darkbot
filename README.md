@@ -61,3 +61,14 @@ Warning: python3.10 is supposed to be installed
 
 - python3 make.py scrappy shell # Running dev env
 - python3 make.py scrappy test # Running tests
+
+# Goals to follow:
+
+- having it clean architectured as possible, with porto architecture main guidance to how it should be looking https://github.com/Mahmoudz/Porto
+- testing coverage should be no less than 80%, ideally 90%+
+- following different OOP principles, like having minimum exposed interfaces to rest of a code
+- the code should be as obvious in its couplings as possible.
+- main purpose of a current architecture to have it horizontally scalable(each part of architecture should be stateless) + easily extendable in features because everything relevant is gathered in one places, while having maximum isolation from Discord API as really bad fragile dependency
+- closest goals to reach MVP (minimum viable product), and after that having a full sweep with static typization through mypy 
+- currently project also undergoes refactorization into asyncronous code
+- reaching code readability mainly through well chosen function/class/variable names. If it is not enough, then resorting to docstrings, if it is not enough then resorting to comments
