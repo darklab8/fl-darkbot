@@ -42,7 +42,6 @@ async def test_registering_channel_with_view(
         },
     )
     data = response.json()
-    print(data)
 
     assert response.status_code == 200
 
@@ -50,3 +49,11 @@ async def test_registering_channel_with_view(
 
     assert len(channels) > 0
     assert channels[0].channel_id == test_query.channel_id
+
+    owner = await storage.ChannelStorage(db=database).get_owner_by_channel_id(
+        test_query.channel_id
+    )
+
+    assert owner.owner_id == test_query.owner_id
+    assert owner.channel_id == test_query.channel_id
+    assert owner.owner_name == test_query.owner_name

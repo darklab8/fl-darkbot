@@ -21,11 +21,11 @@ class ChannelOwner(Model):
     id = Column(Integer, primary_key=True, index=True)
     owner_id = Column(Integer, index=True)
     owner_name = Column(String)
-    channel = Column(Integer, ForeignKey("channel.id"))
+    channel_id = Column(Integer, ForeignKey("channel.id"))
     created = Column(DateTime, default=datetime.datetime.utcnow)
 
     __table_args__ = (
         UniqueConstraint(
-            "owner_id", "channel", name=ChannelOwnerConstraints.owner_channel
+            "owner_id", "channel_id", name=ChannelOwnerConstraints.owner_channel
         ),
     )
