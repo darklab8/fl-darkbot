@@ -1,13 +1,16 @@
-import pytest
-import json
-from scrappy.bases import subtasks
-from typing import Any
 import pathlib
+import json
+from typing import Any
+from unittest.mock import MagicMock
+
+import pytest
+from fastapi.testclient import TestClient
+from scrappy.bases import subtasks
+
 from .. import actions
 from .. import subtasks
-from unittest.mock import MagicMock
 from .. import storage
-from fastapi.testclient import TestClient
+
 
 file_with_data_example = pathlib.Path(__file__).parent / "data" / "bases.json"
 
