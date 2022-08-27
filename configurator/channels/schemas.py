@@ -8,8 +8,7 @@ class ChannelOut(BaseModel):
 
 class ChannelOwnerOut(BaseModel):
     id: int
-    owner_id: int
-    owner_name: str
+    name: str
     channel_id: int
     created: datetime.datetime
 

@@ -54,6 +54,6 @@ async def test_registering_channel_with_view(
         test_query.channel_id
     )
 
-    assert owner.owner_id == test_query.owner_id
+    assert owner.id == test_query.owner_id
     assert owner.channel_id == test_query.channel_id
-    assert owner.owner_name == test_query.owner_name
+    assert owner.name == test_query.owner_name

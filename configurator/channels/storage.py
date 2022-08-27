@@ -62,9 +62,9 @@ class ChannelStorage:
             return
         async with self.db.get_async_session() as session:
             stmt = insert(models.ChannelOwner).values(
-                owner_id=query.owner_id,
+                id=query.owner_id,
+                name=query.owner_name,
                 channel_id=query.channel_id,
-                owner_name=query.owner_name,
             )
             stmt = stmt.on_conflict_do_update(
                 constraint=models.ChannelOwnerConstraints.owner_channel,
