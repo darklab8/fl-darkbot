@@ -1,5 +1,5 @@
 from ..core.logger import base_logger
-from utils.porto import AbstractAction
+from configurator.commons.actions import AbstractAction
 from . import schemas
 from . import storage
 from utils.database.sql import Database
@@ -7,7 +7,7 @@ from utils.database.sql import Database
 logger = base_logger.getChild(__name__)
 
 
-class ActionRegisterChannel:
+class ActionRegisterChannel(AbstractAction):
     def __init__(self, db: Database, query: schemas.ChannelQueryParams):
         self.db = db
         self.query = query
@@ -16,7 +16,7 @@ class ActionRegisterChannel:
         await storage.ChannelStorage(self.db).register(self.query)
 
 
-class ActionDeleteChannel:
+class ActionDeleteChannel(AbstractAction):
     def __init__(self, db: Database, channel_id: int):
         self.db = db
         self.channel_id = channel_id
