@@ -4,11 +4,12 @@ from fastapi import Query, Path, Body
 from fastapi import Depends
 from ..core.databases import DatabaseFactory
 from utils.database.sql import Database
+from utils.rest_api.message import MessageOk
 from . import actions
 from . import storage
 from . import schemas
 from typing import Union
-from pydantic import BaseModel
+
 
 router = APIRouter(
     prefix="/channels",
@@ -16,10 +17,6 @@ router = APIRouter(
 )
 
 query_default_values = schemas.ChannelQueryParams(channel_id=0)
-
-
-class MessageOk(BaseModel):
-    result: str = "OK"
 
 
 @router.post("/{channel_id}", response_model=MessageOk)
