@@ -1,49 +1,29 @@
 from . import schemas
 from utils.database.sql import Database
+from utils.database.queryset import AbstractQuerySet, ModelIn, SchemasOut
 from . import models
-from sqlalchemy import delete, select
+from sqlalchemy import delete
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.sql import Select
-from sqlalchemy.engine import Row
 from sqlalchemy.ext.asyncio import AsyncResult
 
 
-class ChannelQuerySet:
-    @classmethod
-    def select(cls) -> Select:
-        stmt = select(models.Channel)
-        return stmt
+class ChanellQuerySet(AbstractQuerySet):
+    def __init__(self):
+        super().__init__(
+            model=models.Channel,
+            out=schemas.ChannelOut,
+        )
 
-    @staticmethod
-    def from_query_row_to_schema(one_row: tuple[models.Channel]) -> schemas.ChannelOut:
-        return schemas.ChannelOut(channel_id=one_row[0].id)
-
-    @classmethod
-    def from_many_rows_to_schemas(
-        cls,
-        many_row: list[Row],
-    ) -> list[schemas.ChannelOut]:
-        return [cls.from_query_row_to_schema(db_row) for db_row in many_row]
+    def from_query_row_to_schema(self, one_row: tuple[ModelIn]) -> SchemasOut:
+        return self.schema_out(channel_id=one_row[0].id)
 
 
-class ChannelOwnerQuerySet:
-    @classmethod
-    def select(cls) -> Select:
-        stmt = select(models.ChannelOwner)
-        return stmt
-
-    @staticmethod
-    def from_query_row_to_schema(
-        one_row: tuple[models.ChannelOwner],
-    ) -> schemas.ChannelOwnerOut:
-        return schemas.ChannelOwnerOut(**(one_row[0].__dict__))
-
-    @classmethod
-    def from_many_rows_to_schemas(
-        cls,
-        many_row: list[Row],
-    ) -> list[schemas.ChannelOwnerOut]:
-        return [cls.from_query_row_to_schema(db_row) for db_row in many_row]
+class ChannelOwnerQuerySet(AbstractQuerySet):
+    def __init__(self):
+        super().__init__(
+            model=models.ChannelOwner,
+            out=schemas.ChannelOwnerOut,
+        )
 
 
 class ChannelStorage:
@@ -52,18 +32,19 @@ class ChannelStorage:
 
     async def get_all(self):
         async with self.db.get_async_session() as session:
-            stmt = ChannelQuerySet.select()
-            db_rows = await session.execute(stmt)
-            return ChannelQuerySet.from_many_rows_to_schemas(db_rows)
+            queryset = ChanellQuerySet()
+            stmt = queryset.select()
+            result: AsyncResult = await session.execute(stmt)
+            db_rows = result.all()
+            return queryset.from_many_rows_to_schemas(db_rows)
 
     async def get_owner_by_channel_id(self, channel_id: int):
         async with self.db.get_async_session() as session:
-            stmt = ChannelOwnerQuerySet.select().where(
-                models.ChannelOwner.channel_id == channel_id
-            )
+            queryset = ChannelOwnerQuerySet()
+            stmt = queryset.select().where(models.ChannelOwner.channel_id == channel_id)
             result: AsyncResult = await session.execute(stmt)
             db_row = result.first()
-            return ChannelOwnerQuerySet.from_query_row_to_schema(db_row)
+            return queryset.from_query_row_to_schema(db_row)
 
     async def register(self, query: schemas.ChannelQueryParams):
         async with self.db.get_async_session() as session:
