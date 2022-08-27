@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 import configurator.channels.views as channels_views
+import configurator.bases.views as bases_views
 
 
 def app_factory():
@@ -9,6 +10,7 @@ def app_factory():
     app = FastAPI()
 
     app.include_router(channels_views.router)
+    app.include_router(bases_views.router)
 
     @app.get("/")
     def get_ping():
