@@ -14,6 +14,7 @@ FROM base AS branch-shared-env-dev
 
 RUN apt update && apt install -y \ 
     git \
+    bash-completion \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS branch-shared-env-prod
@@ -43,3 +44,6 @@ COPY pytest.ini conftest.py make.py ./
 FROM final as final-listener
 COPY --from=final /code /code
 COPY consoler /code/consoler
+COPY docker/.bash_profile /install/
+RUN cat /install/.bash_profile >> /etc/profile
+
