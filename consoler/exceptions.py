@@ -4,3 +4,7 @@ class ConsoleException(Exception):
 
 class NotRegisteredCommand(ConsoleException):
     pass
+
+
+class NotImplementedMethod(ConsoleException):
+    pass

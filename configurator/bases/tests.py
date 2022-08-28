@@ -2,7 +2,7 @@ import pytest
 from . import storage
 from . import schemas
 from . import actions
-from .views import Paths
+from .paths import Paths
 from configurator.channels import actions as channel_actions
 from configurator.channels import schemas as channel_schemas
 

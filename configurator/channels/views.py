@@ -9,10 +9,7 @@ from . import actions
 from . import storage
 from . import schemas
 from typing import Union
-
-
-class Paths:
-    base = "/channel"
+from .paths import Paths
 
 
 router = APIRouter(

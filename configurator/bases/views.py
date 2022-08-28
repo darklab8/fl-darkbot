@@ -10,11 +10,7 @@ from . import storage
 from . import schemas
 from typing import Union, List
 from pydantic import Field, BaseModel
-from ..channels.views import Paths as ChannelPaths
-
-
-class Paths:
-    base = f"{ChannelPaths.base}/base"
+from .paths import Paths
 
 
 router = APIRouter(
