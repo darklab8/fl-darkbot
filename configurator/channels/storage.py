@@ -46,7 +46,7 @@ class ChannelStorage:
             db_row = result.first()
             return queryset.from_query_row_to_schema(db_row)
 
-    async def register(self, query: schemas.ChannelQueryParams):
+    async def register(self, query: schemas.ChannelCreateQueryParams):
         async with self.db.get_async_session() as session:
 
             stmt = insert(models.Channel).values(id=query.channel_id)
@@ -57,7 +57,7 @@ class ChannelStorage:
 
         await self.record_owner(query=query)
 
-    async def record_owner(self, query: schemas.ChannelQueryParams):
+    async def record_owner(self, query: schemas.ChannelCreateQueryParams):
         if query.owner_id is None:
             return
         async with self.db.get_async_session() as session:

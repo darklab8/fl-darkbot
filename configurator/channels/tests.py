@@ -2,11 +2,12 @@ import pytest
 from . import storage
 from . import schemas
 from . import actions
+from .views import Paths
 
 
 @pytest.fixture
 def test_query():
-    return schemas.ChannelQueryParams(
+    return schemas.ChannelCreateQueryParams(
         channel_id=5,
         owner_id=6,
         owner_name="John",
@@ -15,7 +16,7 @@ def test_query():
 
 @pytest.mark.asyncio
 async def test_registering_channel_without_view(
-    database, async_client, test_query: schemas.ChannelQueryParams
+    database, async_client, test_query: schemas.ChannelCreateQueryParams
 ):
 
     await actions.ActionRegisterChannel(
@@ -31,15 +32,12 @@ async def test_registering_channel_without_view(
 
 @pytest.mark.asyncio
 async def test_registering_channel_with_view(
-    database, async_client, test_query: schemas.ChannelQueryParams
+    database, async_client, test_query: schemas.ChannelCreateQueryParams
 ):
 
     response = await async_client.post(
-        f"/channels/{test_query.channel_id}",
-        json={
-            "owner_id": test_query.owner_id,
-            "owner_name": test_query.owner_name,
-        },
+        Paths.base,
+        json=dict(test_query),
     )
     data = response.json()
 

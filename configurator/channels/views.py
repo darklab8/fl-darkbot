@@ -11,27 +11,24 @@ from . import schemas
 from typing import Union
 
 
+class Paths:
+    base = "/channel"
+
+
 router = APIRouter(
-    prefix="/channels",
+    prefix=Paths.base,
     tags=["items"],
 )
 
-query_default_values = schemas.ChannelQueryParams(channel_id=0)
+query_default_values = schemas.ChannelCreateQueryParams(channel_id=0)
 
 
-@router.post("/{channel_id}", response_model=MessageOk)
+@router.post("", response_model=MessageOk)
 async def register_channel(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    channel_id: int = Path(),
-    owner_id: Union[int, None] = Body(default=query_default_values.owner_id),
-    owner_name: str = Body(default=query_default_values.owner_name),
+    query: schemas.ChannelCreateQueryParams = Body(),
 ):
 
-    query = schemas.ChannelQueryParams(
-        channel_id=channel_id,
-        owner_id=owner_id,
-        owner_name=owner_name,
-    )
     await actions.ActionRegisterChannel(
         db=database,
         query=query,
@@ -40,13 +37,13 @@ async def register_channel(
     return MessageOk()
 
 
-@router.delete("/{channel_id}", response_model=MessageOk)
+@router.delete("", response_model=MessageOk)
 async def delete_channel(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    channel_id: int = Path(),
+    query: schemas.ChannelDeleteQueryParams = Body(),
 ):
     await actions.ActionDeleteChannel(
         db=database,
-        channel_id=channel_id,
+        channel_id=query.channel_id,
     ).run()
     return MessageOk()

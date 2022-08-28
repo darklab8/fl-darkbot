@@ -2,6 +2,7 @@ import pytest
 from . import storage
 from . import schemas
 from . import actions
+from .views import Paths
 from configurator.channels import actions as channel_actions
 from configurator.channels import schemas as channel_schemas
 
@@ -15,14 +16,14 @@ async def test_base_registry(database, async_client):
 
     await channel_actions.ActionRegisterChannel(
         db=database,
-        query=channel_schemas.ChannelQueryParams(channel_id=test_query.channel_id),
+        query=channel_schemas.ChannelCreateQueryParams(
+            channel_id=test_query.channel_id
+        ),
     ).run()
 
     response = await async_client.post(
-        f"/channels/{test_query.channel_id}/base",
-        json={
-            "base_tags": test_query.base_tags,
-        },
+        Paths.base,
+        json=dict(test_query),
     )
 
     assert response.status_code == 200

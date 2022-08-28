@@ -13,7 +13,11 @@ class ChannelOwnerOut(BaseModel):
     created: datetime.datetime
 
 
-class ChannelQueryParams(BaseModel):
+class ChannelCreateQueryParams(BaseModel):
     channel_id: int
     owner_id: int | None = None
     owner_name: str = ""
+
+
+class ChannelDeleteQueryParams(BaseModel):
+    channel_id: int

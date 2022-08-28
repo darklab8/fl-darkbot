@@ -8,7 +8,7 @@ logger = base_logger.getChild(__name__)
 
 
 class ActionRegisterChannel(AbstractAction):
-    def __init__(self, db: Database, query: schemas.ChannelQueryParams):
+    def __init__(self, db: Database, query: schemas.ChannelCreateQueryParams):
         self.db = db
         self.query = query
 

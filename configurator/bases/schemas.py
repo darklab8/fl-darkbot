@@ -7,6 +7,10 @@ class BaseRegisterRequestParams(BaseModel):
     base_tags: list[str] = []
 
 
+class BaseDeleteRequestParams(BaseModel):
+    channel_id: int
+
+
 class BaseOut(BaseModel):
     tags: list[str]
     channel_id: int

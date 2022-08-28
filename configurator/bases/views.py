@@ -10,10 +10,15 @@ from . import storage
 from . import schemas
 from typing import Union, List
 from pydantic import Field, BaseModel
+from ..channels.views import Paths as ChannelPaths
+
+
+class Paths:
+    base = f"{ChannelPaths.base}/base"
 
 
 router = APIRouter(
-    prefix="/channels",
+    prefix=Paths.base,
     tags=["items"],
 )
 
@@ -24,38 +29,32 @@ class BaseBodyInput(BaseModel):
     base_tags: list[str] = Field(default=[])
 
 
-@router.post("/{channel_id}/base", response_model=MessageOk)
+@router.post("", response_model=MessageOk)
 async def register_base(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    channel_id: int = Path(),
-    base: BaseBodyInput = Body(),
+    query: schemas.BaseRegisterRequestParams = Body(),
 ):
-
-    query = schemas.BaseRegisterRequestParams(
-        channel_id=channel_id,
-        base_tags=base.base_tags,
-    )
     await actions.ActionRegisterBase(db=database, query=query).run()
 
     return MessageOk()
 
 
-@router.delete("/{channel_id}/base", response_model=MessageOk)
+@router.delete("", response_model=MessageOk)
 async def delete_base(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    channel_id: int = Path(),
+    query: schemas.BaseDeleteRequestParams = Body(),
 ):
 
     await actions.ActionDeleteBases(
         db=database,
-        channel_id=channel_id,
+        channel_id=query.channel_id,
     ).run()
 
     return MessageOk()
 
 
 # TODO add alarm
-# @router.post("/{channel_id}/base/alarm", response_model=MessageOk)
+# @router.post("/alarm", response_model=MessageOk)
 # async def register_base_alarms(
 #     database: Database = Depends(DatabaseFactory.get_default_database),
 #     channel_id: int = Path(),
