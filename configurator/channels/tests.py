@@ -2,7 +2,6 @@ import pytest
 from . import storage
 from . import schemas
 from . import actions
-from .paths import Paths
 
 
 @pytest.fixture
@@ -36,7 +35,7 @@ async def test_registering_channel_with_view(
 ):
 
     response = await async_client.post(
-        Paths.base,
+        actions.ActionRegisterChannel.url,
         json=dict(test_query),
     )
     data = response.json()

@@ -9,21 +9,20 @@ from . import actions
 from . import storage
 from . import schemas
 from typing import Union
-from .paths import Paths
 
 
 router = APIRouter(
-    prefix=Paths.base,
+    prefix="",
     tags=["items"],
 )
 
-query_default_values = schemas.ChannelCreateQueryParams(channel_id=0)
+query_default_values = actions.ActionRegisterChannel.query_factory(channel_id=0)
 
 
-@router.post("", response_model=MessageOk)
+@router.post(actions.ActionRegisterChannel.url, response_model=MessageOk)
 async def register_channel(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    query: schemas.ChannelCreateQueryParams = Body(),
+    query: actions.ActionRegisterChannel.query_factory = Body(),
 ):
 
     await actions.ActionRegisterChannel(
@@ -34,13 +33,13 @@ async def register_channel(
     return MessageOk()
 
 
-@router.delete("", response_model=MessageOk)
+@router.delete(actions.ActionRegisterChannel.url, response_model=MessageOk)
 async def delete_channel(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    query: schemas.ChannelDeleteQueryParams = Body(),
+    query: actions.ActionDeleteChannel.query_factory = Body(),
 ):
     await actions.ActionDeleteChannel(
         db=database,
-        channel_id=query.channel_id,
+        query=query,
     ).run()
     return MessageOk()

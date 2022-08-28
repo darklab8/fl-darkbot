@@ -1,2 +1,0 @@
-class Paths:
-    base = "/channel"

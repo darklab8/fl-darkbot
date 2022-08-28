@@ -10,11 +10,10 @@ from . import storage
 from . import schemas
 from typing import Union, List
 from pydantic import Field, BaseModel
-from .paths import Paths
 
 
 router = APIRouter(
-    prefix=Paths.base,
+    prefix="",
     tags=["items"],
 )
 
@@ -25,25 +24,25 @@ class BaseBodyInput(BaseModel):
     base_tags: list[str] = Field(default=[])
 
 
-@router.post("", response_model=MessageOk)
+@router.post(actions.ActionRegisterBase.url, response_model=MessageOk)
 async def register_base(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    query: schemas.BaseRegisterRequestParams = Body(),
+    query: actions.ActionRegisterBase.query_factory = Body(),
 ):
     await actions.ActionRegisterBase(db=database, query=query).run()
 
     return MessageOk()
 
 
-@router.delete("", response_model=MessageOk)
+@router.delete(actions.ActionDeleteBases.url, response_model=MessageOk)
 async def delete_base(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    query: schemas.BaseDeleteRequestParams = Body(),
+    query: actions.ActionDeleteBases.query_factory = Body(),
 ):
 
     await actions.ActionDeleteBases(
         db=database,
-        channel_id=query.channel_id,
+        query=query,
     ).run()
 
     return MessageOk()

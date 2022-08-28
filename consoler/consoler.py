@@ -5,10 +5,8 @@ from . import exceptions
 from . import settings
 import asyncio
 from typing import Any
-from configurator.channels.paths import Paths as ConfigChannelPaths
-from configurator.channels import schemas as ConfigChannelSchemas
-from configurator.bases.paths import Paths as ConfigBasePaths
-from configurator.bases import schemas as ConfigBaselSchemas
+from configurator.channels import actions as configurator_channel_actions
+from configurator.bases import actions as configurator_base_actions
 
 
 def process_cli() -> SimpleNamespace:
@@ -47,6 +45,7 @@ def process_cli() -> SimpleNamespace:
         name="base",
         help="base commands",
     )
+    base_parser.add_argument("--channel_id", type=int, required=True)
 
     base_choices = base_parser.add_subparsers(
         dest="action",
@@ -59,7 +58,6 @@ def process_cli() -> SimpleNamespace:
         name="add",
         help="adding base for tracking",
     )
-    base_add_parser.add_argument("--channel_id", type=int, required=True)
     base_add_parser.add_argument(
         "base_tags",
         metavar="tag",
@@ -71,7 +69,6 @@ def process_cli() -> SimpleNamespace:
         name="clear",
         help="clearing settings",
     )
-    base_clear_parser.add_argument("--channel_id", type=int, required=True)
 
     args = root_parser.parse_args()
     return args
@@ -119,37 +116,42 @@ async def run_command(args: SimpleNamespace):
             if args.owner_name is not None:
                 params["owner_name"] = args.owner_name
 
+            registry_channel = configurator_channel_actions.ActionRegisterChannel
             await config_request(
-                path=ConfigChannelPaths.base,
-                method="post",
-                json=dict(ConfigChannelSchemas.ChannelCreateQueryParams(**params)),
+                path=registry_channel.url,
+                method=registry_channel.method.name,
+                json=dict(registry_channel.query_factory(**params)),
             )
         case "disconnect":
             params = {"channel_id": args.channel_id}
+
+            delete_channel = configurator_channel_actions.ActionDeleteChannel
             await config_request(
-                path=ConfigChannelPaths.base,
-                method="delete",
-                json=dict(ConfigChannelSchemas.ChannelDeleteQueryParams(**params)),
+                path=delete_channel.url,
+                method=delete_channel.method.name,
+                json=dict(delete_channel.query_factory(**params)),
             )
         case "base":
             match args.action:
                 case "add":
+                    registry_base = configurator_base_actions.ActionRegisterBase
                     await config_request(
-                        path=ConfigBasePaths.base,
-                        method="post",
+                        path=registry_base.url,
+                        method=registry_base.method.name,
                         json=dict(
-                            ConfigBaselSchemas.BaseRegisterRequestParams(
+                            registry_base.query_factory(
                                 channel_id=args.channel_id,
                                 base_tags=args.base_tags,
                             )
                         ),
                     )
                 case "clear":
+                    delete_base = configurator_base_actions.ActionDeleteBases
                     await config_request(
-                        path=ConfigBasePaths.base,
-                        method="delete",
+                        path=delete_base.url,
+                        method=delete_base.method.name,
                         json=dict(
-                            ConfigBaselSchemas.BaseDeleteRequestParams(
+                            delete_base.query_factory(
                                 channel_id=args.channel_id,
                             )
                         ),
