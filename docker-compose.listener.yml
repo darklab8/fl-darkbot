@@ -16,3 +16,4 @@ services:
         mode: "non-blocking"
     environment:
       LISTENER_DISCORD_TOKEN: "${LISTENER_DISCORD_TOKEN:-example}"
+    command: python3 -m listener

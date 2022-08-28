@@ -62,6 +62,7 @@ class ScrappyActions(AugmentedEnum):
 
 class ListenerActions(AugmentedEnum):
     shell = auto()
+    run = auto()
 
 
 class DiscorderActions(AugmentedEnum):

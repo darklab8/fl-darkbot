@@ -39,6 +39,7 @@ def process_cli() -> SimpleNamespace:
         name="check",
         help="check commands",
     )
+    check_parser.add_argument("--channel_id", type=int, required=True)
 
     # base
     base_parser = actions_choices.add_parser(

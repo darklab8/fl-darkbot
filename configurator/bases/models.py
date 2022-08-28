@@ -1,4 +1,11 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy import (
+    Column,
+    String,
+    DateTime,
+    ForeignKey,
+    UniqueConstraint,
+    BigInteger,
+)
 from sqlalchemy.orm import relationship
 from ..core.base import Model
 import datetime
@@ -10,9 +17,9 @@ class BaseConstraints:
 
 class Base(Model):
     __tablename__ = "base"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(BigInteger, primary_key=True, index=True)
     tag = Column(String)
-    channel_id = Column(Integer, ForeignKey("channel.id"))
+    channel_id = Column(BigInteger, ForeignKey("channel.id"))
     created = Column(DateTime, default=datetime.datetime.utcnow)
 
     __table_args__ = (

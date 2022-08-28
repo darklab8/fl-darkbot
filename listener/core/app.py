@@ -1,6 +1,7 @@
 import discord
 from .connector import run_command_async
 from listener.permissions import PermissionChecker
+import inspect
 
 
 class MyClient(discord.Client):
@@ -36,10 +37,17 @@ class MyClient(discord.Client):
 
         args = [arg for arg in content.split(" ") if arg != ""]
         print(f"args={args}")
+        final_args = (
+            ["python3", "-m", "consoler"]
+            + args
+            + [f"--channel_id={message.channel.id}"]
+        )
+        print(f"final_args={final_args}")
+        result = await run_command_async(*final_args)
 
-        result = await run_command_async(*(["python3", "-m" "consoler"] + args))
-
-        # print(f"answer={result}")
-
-        # await message.channel.send("pong")
-        await message.channel.send(result)
+        markdown_template = inspect.cleandoc(
+            """```
+        {text}
+        ```"""
+        )
+        await message.channel.send(markdown_template.format(text=result))

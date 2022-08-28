@@ -1,5 +1,13 @@
 from enum import unique
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    ForeignKey,
+    UniqueConstraint,
+    BigInteger,
+)
 from sqlalchemy.orm import relationship
 from ..core.base import Model
 import datetime
@@ -8,7 +16,7 @@ import datetime
 class Channel(Model):
     __tablename__ = "channel"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(BigInteger, primary_key=True, index=True)
     owners = relationship("ChannelOwner")
 
 
@@ -18,9 +26,9 @@ class ChannelOwnerConstraints:
 
 class ChannelOwner(Model):
     __tablename__ = "owner"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(BigInteger, primary_key=True, index=True)
     name = Column(String)
-    channel_id = Column(Integer, ForeignKey("channel.id"))
+    channel_id = Column(BigInteger, ForeignKey("channel.id"))
     created = Column(DateTime, default=datetime.datetime.utcnow)
 
     __table_args__ = (
