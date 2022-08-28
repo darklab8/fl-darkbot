@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 import configurator.channels.views as channels_views
 import configurator.bases.views as bases_views
+from utils.rest_api.message import MessageOk
 
 
 def app_factory():
@@ -14,7 +15,7 @@ def app_factory():
 
     @app.get("/")
     def get_ping():
-        return {"message": "pong!"}
+        return dict(MessageOk())
 
     return app
 

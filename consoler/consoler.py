@@ -1,12 +1,12 @@
 import argparse
 from types import SimpleNamespace
-import aiohttp
-from . import exceptions
-from . import settings
+
+from configurator.bases import actions
+from .core import exceptions
 import asyncio
-from typing import Any
-from configurator.channels import actions as configurator_channel_actions
-from configurator.bases import actions as configurator_base_actions
+from .bases import actions as base_actions
+from .channels import actions as channels_actions
+from .commons import actions as common_actions
 
 
 def process_cli() -> SimpleNamespace:
@@ -45,7 +45,6 @@ def process_cli() -> SimpleNamespace:
         name="base",
         help="base commands",
     )
-    base_parser.add_argument("--channel_id", type=int, required=True)
 
     base_choices = base_parser.add_subparsers(
         dest="action",
@@ -58,6 +57,7 @@ def process_cli() -> SimpleNamespace:
         name="add",
         help="adding base for tracking",
     )
+    base_add_parser.add_argument("--channel_id", type=int, required=True)
     base_add_parser.add_argument(
         "base_tags",
         metavar="tag",
@@ -69,41 +69,10 @@ def process_cli() -> SimpleNamespace:
         name="clear",
         help="clearing settings",
     )
+    base_clear_parser.add_argument("--channel_id", type=int, required=True)
 
     args = root_parser.parse_args()
     return args
-
-
-def is_succesful_request(code: int):
-    if code < 299:
-        return True
-    return False
-
-
-async def config_request(path: str, method: str, json: dict[str, Any] = {}):
-    async with aiohttp.ClientSession() as session:
-        match method:
-            case "get":
-                async with session.get(settings.CONFIGURATOR_API + path) as resp:
-                    if is_succesful_request(resp.status):
-                        print("successful request")
-                    return resp
-            case "post":
-                async with session.post(
-                    settings.CONFIGURATOR_API + path, json=json
-                ) as resp:
-                    if is_succesful_request(resp.status):
-                        print("successful request")
-                    return resp
-            case "delete":
-                async with session.delete(
-                    settings.CONFIGURATOR_API + path, json=json
-                ) as resp:
-                    if is_succesful_request(resp.status):
-                        print("successful request")
-                    return resp
-            case _:
-                raise exceptions.NotImplementedMethod()
 
 
 async def run_command(args: SimpleNamespace):
@@ -116,50 +85,34 @@ async def run_command(args: SimpleNamespace):
             if args.owner_name is not None:
                 params["owner_name"] = args.owner_name
 
-            registry_channel = configurator_channel_actions.ActionRegisterChannel
-            await config_request(
-                path=registry_channel.url,
-                method=registry_channel.method.name,
-                json=dict(registry_channel.query_factory(**params)),
-            )
+            action = channels_actions.ActionRegisterChannel
+            await action(query=action.action.query_factory(**params)).run()
         case "disconnect":
             params = {"channel_id": args.channel_id}
 
-            delete_channel = configurator_channel_actions.ActionDeleteChannel
-            await config_request(
-                path=delete_channel.url,
-                method=delete_channel.method.name,
-                json=dict(delete_channel.query_factory(**params)),
-            )
+            action = channels_actions.ActionDeleteChannel
+            await action(query=action.action.query_factory(**params)).run()
         case "base":
             match args.action:
                 case "add":
-                    registry_base = configurator_base_actions.ActionRegisterBase
-                    await config_request(
-                        path=registry_base.url,
-                        method=registry_base.method.name,
-                        json=dict(
-                            registry_base.query_factory(
-                                channel_id=args.channel_id,
-                                base_tags=args.base_tags,
-                            )
-                        ),
-                    )
+                    action = base_actions.ActionRegisterBase
+                    await action(
+                        query=action.action.query_factory(
+                            channel_id=args.channel_id,
+                            base_tags=args.base_tags,
+                        )
+                    ).run()
                 case "clear":
-                    delete_base = configurator_base_actions.ActionDeleteBases
-                    await config_request(
-                        path=delete_base.url,
-                        method=delete_base.method.name,
-                        json=dict(
-                            delete_base.query_factory(
-                                channel_id=args.channel_id,
-                            )
-                        ),
-                    )
+                    action = base_actions.ActionDeleteBases
+                    await action(
+                        query=action.action.query_factory(
+                            channel_id=args.channel_id,
+                        )
+                    ).run()
                 case _:
                     raise exceptions.NotRegisteredCommand()
         case "check":
-            await config_request(path="/", method="get")
+            print(await common_actions.ActionPingConfig().run())
         case _:
             raise exceptions.NotRegisteredCommand()
 
