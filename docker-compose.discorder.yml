@@ -10,7 +10,7 @@ services:
         SERVICE: discorder
       target: final
     ports:
-      - "8080:8080"
+      - "8030:8000"
     logging:
       driver: "json-file"
       options:
@@ -18,4 +18,5 @@ services:
         mode: "non-blocking"
     environment:
       DISCORDER_DISCORD_TOKEN: "${DISCORDER_DISCORD_TOKEN:-example}"
+    command: python3 -m discorder
     

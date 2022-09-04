@@ -25,6 +25,16 @@ unit-scrappy:
   script:
     - python3 make.py scrappy test
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+
+discorder-scrappy:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *env_scrappy_staging
+  script:
+    - python3 make.py discorder test
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+
   # TODO add syntax for it being grabbable?
   # artifacts:
   #   reports:

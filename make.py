@@ -67,6 +67,8 @@ class ListenerActions(AugmentedEnum):
 
 class DiscorderActions(AugmentedEnum):
     shell = auto()
+    run = auto()
+    test = auto()
 
 
 class ConfiguratorActions(AugmentedEnum):

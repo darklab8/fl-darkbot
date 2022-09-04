@@ -2,6 +2,10 @@ black
 pytest
 pytest-pythonpath
 pytest-asyncio
+pytest-cov
 
 # for starlette.testclient import TestClient
 requests
+
+# for test AsyncClient
+httpx
