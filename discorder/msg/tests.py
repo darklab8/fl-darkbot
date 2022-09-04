@@ -4,9 +4,11 @@ from .urls import urls
 from utils.rest_api.message import MessageOk
 import asyncio
 from httpx import AsyncClient
+from fastapi.testclient import TestClient
+from . import rpc
 
 
-class TestMessage:
+class DummyMessage:
     def __init__(self, id, content):
         self.id = id
         self.content = content
@@ -16,10 +18,10 @@ class TestMessage:
 
 
 @pytest.mark.asyncio
-async def test_create_or_replace_msg(client: AsyncClient, channel_id: int):
+async def test_create_or_replace_msg(client: TestClient, channel_id: int):
 
     id = "2ca613b64fdc2eb7"
-    await asyncio.sleep(10)
+    await asyncio.sleep(3)
     response = client.post(
         urls.base,
         json=dict(
@@ -27,7 +29,7 @@ async def test_create_or_replace_msg(client: AsyncClient, channel_id: int):
                 id=id,
                 channel_id=channel_id,
                 message=str(
-                    TestMessage(id=id, content="create or replace testing message")
+                    DummyMessage(id=id, content="create or replace testing message")
                 ),
             )
         ),
@@ -43,7 +45,7 @@ async def test_create_or_replace_msg(client: AsyncClient, channel_id: int):
                 id=id,
                 channel_id=channel_id,
                 message=str(
-                    TestMessage(id=id, content="create or replace testing message 2")
+                    DummyMessage(id=id, content="create or replace testing message 2")
                 ),
             )
         ),
@@ -62,3 +64,44 @@ async def test_create_or_replace_msg(client: AsyncClient, channel_id: int):
     )
     assert response.status_code == 200
     assert response.json() == dict(MessageOk())
+
+
+@pytest.mark.asyncio
+async def test_rpc(client: AsyncClient, channel_id: int):
+
+    id = "43ru34hri3hr34"
+    assert (
+        MessageOk()
+        == await rpc.CreateOrReplaceMessage(
+            query=rpc.CreateOrReplaceMessage.query_factory(
+                id=id,
+                channel_id=channel_id,
+                message=str(
+                    DummyMessage(id=id, content="create or replace testing message")
+                ),
+            )
+        ).run()
+    )
+
+    assert (
+        MessageOk()
+        == await rpc.CreateOrReplaceMessage(
+            query=rpc.CreateOrReplaceMessage.query_factory(
+                id=id,
+                channel_id=channel_id,
+                message=str(
+                    DummyMessage(id=id, content="create or replace testing message 2")
+                ),
+            )
+        ).run()
+    )
+
+    assert (
+        MessageOk()
+        == await rpc.DeleteMessage(
+            query=rpc.DeleteMessage.query_factory(
+                id=id,
+                channel_id=channel_id,
+            )
+        ).run()
+    )

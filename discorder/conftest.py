@@ -1,6 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
+import asyncio
+import pytest_asyncio
 
 from .app import create_app
 
@@ -20,13 +22,6 @@ def client(app):
     # with-contextmanager is used in order to await `startup` event creating discord bot
     with TestClient(app) as client:
         yield client
-
-
-# @pytest_asyncio.fixture(scope="module")
-@pytest.fixture(scope="session")
-async def async_client(app):
-    async with AsyncClient(app=app, base_url="http://test") as async_client:
-        yield async_client
 
 
 @pytest.fixture()

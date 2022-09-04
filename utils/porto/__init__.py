@@ -12,3 +12,9 @@ class AbstractAction(abc.ABC):
     @abc.abstractmethod
     def run(self) -> Any:
         pass
+
+
+class AsyncAbstractAction(abc.ABC):
+    @abc.abstractmethod
+    async def run(self, *args, **kwargs) -> Any:
+        pass

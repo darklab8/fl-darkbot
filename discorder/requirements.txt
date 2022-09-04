@@ -3,3 +3,5 @@ discord.py
 # rest api 
 fastapi
 uvicorn
+
+aiohttp

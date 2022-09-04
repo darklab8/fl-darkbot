@@ -1,7 +1,7 @@
 from utils.database.sql import Database
 from utils.rest_api.methods import RequestMethod
 from ..core.logger import base_logger
-from ..commons.actions import AbstractAction
+from utils.porto import AsyncAbstractAction
 from . import schemas
 from . import storage
 from .urls import urls
@@ -10,7 +10,7 @@ from .urls import urls
 logger = base_logger.getChild(__name__)
 
 
-class ActionRegisterChannel(AbstractAction):
+class ActionRegisterChannel(AsyncAbstractAction):
     url = urls.base
     method = RequestMethod.post
     query_factory = schemas.ChannelCreateQueryParams
@@ -23,7 +23,7 @@ class ActionRegisterChannel(AbstractAction):
         await storage.ChannelStorage(self.db).register(self.query)
 
 
-class ActionDeleteChannel(AbstractAction):
+class ActionDeleteChannel(AsyncAbstractAction):
     url = urls.base
     method = RequestMethod.delete
     query_factory = schemas.ChannelDeleteQueryParams
