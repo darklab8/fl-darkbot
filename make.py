@@ -371,7 +371,8 @@ class Makefile:
                         )
             case (service, "test"):
                 self.run_in_compose(
-                    command=ComposeCommands.base.format(
+                    command=f"{staging_env} "
+                    + ComposeCommands.base.format(
                         service=self.service,
                         cmd=ShellCommands.test.format(optional_cmd=self.unread_cmd),
                     ),

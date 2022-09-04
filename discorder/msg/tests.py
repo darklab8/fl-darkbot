@@ -66,6 +66,7 @@ async def test_create_or_replace_msg(client: TestClient, channel_id: int):
     assert response.json() == dict(MessageOk())
 
 
+@pytest.mark.integration
 @pytest.mark.asyncio
 async def test_rpc(client: AsyncClient, channel_id: int):
 

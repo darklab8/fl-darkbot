@@ -61,7 +61,7 @@ class AbstractRPCAction(abc.ABC):
     def query_factory(self) -> BaseModel:
         return self.action.query_factory
 
-    async def run(self) -> "AbstractRPCAction.response_factory" | None:
+    async def run(self):
         response = await config_request(
             api_url=self.api_url,
             path=self.url,
