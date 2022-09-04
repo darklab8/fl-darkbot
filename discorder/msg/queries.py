@@ -2,11 +2,11 @@ from pydantic import BaseModel
 
 
 class CreateOrReplaceMessqgeQueryParams(BaseModel):
-    identificator = str
+    id: str
     channel_id: int
     message: str
 
 
 class DeleteMessageQueryParams(BaseModel):
-    identificator = str
+    id: str
     channel_id: int
