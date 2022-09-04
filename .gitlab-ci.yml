@@ -6,7 +6,7 @@ stages:
   - test
 
 .env_scrappy_staging: &env_scrappy_staging
-  - echo "$env_scrappy_staging" > .env.scrappy
+  - echo "$env_scrappy_staging" > .env.staging
 
 unit-configurator:
   image: ${IMAGE_PIPELINE_RUNNER}
