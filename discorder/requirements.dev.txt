@@ -2,3 +2,6 @@ black
 pytest
 pytest-pythonpath
 pytest-asyncio
+
+# for starlette.testclient import TestClient
+requests

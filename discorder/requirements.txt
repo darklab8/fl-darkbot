@@ -1,4 +1,5 @@
 discord.py
 
 # rest api 
-aiohttp
+fastapi
+uvicorn

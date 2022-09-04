@@ -1,10 +1,23 @@
-from discord.ext.commands import Bot
+import discord
+from discord.ext import commands
+from .core import settings
+import secrets
 
 
-class Singleton:
-    @classmethod
-    def get_bot(cls):
-        if not hasattr(cls, "bot"):
-            cls.bot = Bot(command_prefix="$")
+async def create_bot():
+    intents = discord.Intents.default()
+    intents.message_content = True
+    intents.members = True
 
-        return cls.bot
+    bot = commands.Bot(
+        command_prefix=secrets.token_hex(10),
+        case_insensitive=True,
+        intents=intents,
+    )
+
+    return bot
+
+
+async def run_bot(bot: commands.Bot):
+    async with bot:
+        await bot.start(token=settings.DISCORD_TOKEN)
