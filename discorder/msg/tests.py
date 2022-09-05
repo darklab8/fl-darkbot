@@ -21,7 +21,7 @@ class DummyMessage:
 async def test_create_or_replace_msg(client: TestClient, channel_id: int):
 
     id = "2ca613b64fdc2eb7"
-    await asyncio.sleep(3)
+    await asyncio.sleep(10)
     response = client.post(
         urls.base,
         json=dict(

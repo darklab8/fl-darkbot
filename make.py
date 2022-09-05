@@ -369,6 +369,16 @@ class Makefile:
                         self.shell(
                             " ".join([base_cmd, shared, end_cmd]).format(app=app)
                         )
+            case (Services.discorder.name, "test"):
+                self.run_in_compose(
+                    command=f"{staging_env} "
+                    + ComposeCommands.base.format(
+                        service=self.service,
+                        cmd=f"{self.unread_cmd}",
+                    ),
+                    session_id=self.session_id,
+                    compose_file="discorder-integration",
+                )
             case (service, "test"):
                 self.run_in_compose(
                     command=f"{staging_env} "

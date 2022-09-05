@@ -1,4 +1,5 @@
 import abc
+from codecs import StreamReader
 import aiohttp
 from typing import Any
 import enum
@@ -12,6 +13,12 @@ def is_succesful_request(code: int):
     return False
 
 
+async def handle_answer(resp: aiohttp.ClientResponse):
+    if is_succesful_request(resp.status):
+        print("successful request")
+    return await resp.json()
+
+
 async def config_request(
     api_url: str, path: str, method: str, json: dict[str, Any] = {}
 ):
@@ -19,21 +26,15 @@ async def config_request(
         match method:
             case "get":
                 async with session.get(api_url + path) as resp:
-                    if is_succesful_request(resp.status):
-                        print("successful request")
-                    return await resp.json()
+                    return await handle_answer(resp)
             case "post":
                 async with session.post(api_url + path, json=json) as resp:
-                    if is_succesful_request(resp.status):
-                        print("successful request")
-                    return await resp.json()
+                    return await handle_answer(resp)
             case "delete":
                 async with session.delete(api_url + path, json=json) as resp:
-                    if is_succesful_request(resp.status):
-                        print("successful request")
-                    return await resp.json()
+                    return await handle_answer(resp)
             case _:
-                raise exceptions.NotImplementedMethod()
+                raise NotImplementedError("not implemeneted aiohttp method type")
 
 
 class AbstractRPCAction(abc.ABC):
