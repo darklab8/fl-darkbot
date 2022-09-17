@@ -10,7 +10,7 @@ CELERY_BACKEND = config["celery.backend"]
 LOGGER_CONSOLE_LEVEL = config.get("logger.console.level", "INFO")
 
 CONFIGURATOR_API = config.get(
-    "CONFIGURATOR_API_URL", default="http://configurator_web:8020"
+    "CONFIGURATOR_API_URL", default="http://configurator_web:8000"
 )
 
-SCRAPPY_API = config.get("CONFIGURATOR_API_URL", default="http://scrappy_web:8010")
+SCRAPPY_API = config.get("CONFIGURATOR_API_URL", default="http://scrappy_web:8000")

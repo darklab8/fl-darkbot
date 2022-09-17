@@ -62,6 +62,8 @@ services:
   scrappy_web:
     <<: *scrappy_base
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
+    expose:
+      - "8000"
     ports:
       - "8010:8000"
   scrappy_beat:

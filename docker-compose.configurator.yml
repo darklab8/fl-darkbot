@@ -55,5 +55,7 @@ services:
   configurator_web:
     <<: *configurator_base
     command: uvicorn configurator.core.main:app --host 0.0.0.0
+    expose:
+      - "8000"
     ports:
       - "8020:8000"

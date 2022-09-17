@@ -47,6 +47,7 @@ FROM final as final-listener
 
 COPY --from=final /code /code
 COPY consoler /code/consoler
+COPY configurator /code/configurator
 COPY docker/.bash_profile /install/
 RUN cat /install/.bash_profile >> /etc/profile
 

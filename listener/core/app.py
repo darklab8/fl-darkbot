@@ -50,4 +50,4 @@ class MyClient(discord.Client):
         {text}
         ```"""
         )
-        await message.channel.send(markdown_template.format(text=result))
+        await message.channel.send(markdown_template.format(text=result[-1980:]))

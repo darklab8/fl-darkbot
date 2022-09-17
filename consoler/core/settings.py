@@ -5,5 +5,5 @@ logger = Logger(console_level="DEBUG", name=__name__)
 config = ConfigParser(settings_prefix="consoler")
 
 CONFIGURATOR_API = config.get(
-    "CONFIGURATOR_API_URL", default="http://configurator_web:8020"
+    "CONFIGURATOR_API_URL", default="http://configurator_web:8000"
 )
