@@ -4,8 +4,8 @@ from types import SimpleNamespace
 from configurator.bases import actions
 from .core import exceptions
 import asyncio
-from .bases import actions as base_actions
-from .channels import actions as channels_actions
+from configurator.bases import rpc as bases_actions
+from configurator.channels import rpc as channels_actions
 from .commons import actions as common_actions
 
 

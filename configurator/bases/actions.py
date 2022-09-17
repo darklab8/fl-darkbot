@@ -1,6 +1,6 @@
 from utils.rest_api.methods import RequestMethod
 from utils.database.sql import Database
-
+from utils.rest_api.message import MessageOk
 from ..core.logger import base_logger
 from utils.porto import AsyncAbstractAction
 from . import schemas
@@ -15,6 +15,7 @@ class ActionRegisterBase(AsyncAbstractAction):
     url = urls.base
     method = RequestMethod.post
     query_factory = schemas.BaseRegisterRequestParams
+    response_factory = MessageOk
 
     def __init__(self, db: Database, query: schemas.BaseRegisterRequestParams):
         self.db = db
@@ -22,12 +23,14 @@ class ActionRegisterBase(AsyncAbstractAction):
 
     async def run(self) -> None:
         await storage.BaseStorage(self.db).register_base(self.query)
+        return MessageOk()
 
 
 class ActionDeleteBases(AsyncAbstractAction):
     url = urls.base
     method = RequestMethod.delete
     query_factory = schemas.BaseDeleteRequestParams
+    response_factory = MessageOk
 
     def __init__(self, db: Database, query: schemas.BaseDeleteRequestParams):
         self.db = db
@@ -35,3 +38,4 @@ class ActionDeleteBases(AsyncAbstractAction):
 
     async def run(self) -> None:
         await storage.BaseStorage(self.db).delete_bases(self.channel_id)
+        return MessageOk()

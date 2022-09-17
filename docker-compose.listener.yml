@@ -16,6 +16,7 @@ services:
         mode: "non-blocking"
     environment:
       LISTENER_DISCORD_TOKEN: "${LISTENER_DISCORD_TOKEN:-example}"
+      CONFIGURATOR_API_URL: "http://configurator_web:8000"
     command: sh -c "exit"
   listener_app:
     <<: *listener_base
