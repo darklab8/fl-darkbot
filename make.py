@@ -79,6 +79,13 @@ class ConfiguratorActions(AugmentedEnum):
     lint = auto()
 
 
+class ViewerActions(AugmentedEnum):
+    shell = auto()
+    run = auto()
+    test = auto()
+    lint = auto()
+
+
 class PgadminActions(AugmentedEnum):
     run = auto()
 
@@ -100,6 +107,7 @@ class Services(AugmentedEnum):
     listener = ListenerActions
     discorder = DiscorderActions
     configurator = ConfiguratorActions
+    viewer = ViewerActions
 
 
 @dataclass

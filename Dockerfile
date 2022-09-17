@@ -27,6 +27,8 @@ FROM branch-shared-env-${ENVIRONMENT} as branch-app-discorder
 
 FROM branch-shared-env-${ENVIRONMENT} as branch-app-configurator
 
+FROM branch-shared-env-${ENVIRONMENT} as branch-app-viewer
+
 FROM branch-app-${SERVICE} AS final
 ARG SERVICE
 ARG ENVIRONMENT
@@ -42,6 +44,7 @@ COPY utils /code/utils
 COPY pytest.ini conftest.py make.py ./
 
 FROM final as final-listener
+
 COPY --from=final /code /code
 COPY consoler /code/consoler
 COPY docker/.bash_profile /install/

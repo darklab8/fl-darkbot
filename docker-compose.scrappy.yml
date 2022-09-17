@@ -43,7 +43,7 @@ services:
     links:
       - scrappy_db
       - scrappy_redis
-    command: python3 make.py shell migrate scrappy
+    command: sh -c "exit"
     environment:
       SCRAPPY_DATABASE_USERNAME: "postgres"
       SCRAPPY_DATABASE_PASSWORD: "postgres"
@@ -56,11 +56,14 @@ services:
       SCRAPPY_CELERY_BROKER: "redis://scrappy_redis:6379/0"
       SCRAPPY_CELERY_BACKEND: "redis://scrappy_redis:6379/0"
       PYTEST_PLUGINS: celery.contrib.pytest
+  scrappy_migrator:
+    <<: *scrappy_base
+    command: python3 make.py shell migrate scrappy
   scrappy_web:
     <<: *scrappy_base
     command: uvicorn scrappy.core.main:app --host 0.0.0.0
     ports:
-      - "8000:8000"
+      - "8010:8000"
   scrappy_beat:
     <<: *scrappy_base
     command: celery -A scrappy.core.celery beat

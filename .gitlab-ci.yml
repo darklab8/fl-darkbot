@@ -73,3 +73,19 @@ migrate-configurator:
     - *env_scrappy_staging
   script:
     - python3 make.py configurator migrate
+
+test-viewer:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *env_scrappy_staging
+  script:
+    - python3 make.py viewer test
+
+lint-viewer:
+  image: ${IMAGE_PIPELINE_RUNNER}
+  stage: test
+  before_script:
+    - *env_scrappy_staging
+  script:
+    - python3 make.py viewer lint

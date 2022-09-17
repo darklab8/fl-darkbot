@@ -18,5 +18,7 @@ services:
         mode: "non-blocking"
     environment:
       DISCORDER_DISCORD_TOKEN: "${DISCORDER_DISCORD_TOKEN:-example}"
+    command: sh -c "exit"
+  discorder_app:
+    <<: *discorder_base
     command: python3 -m discorder
-    

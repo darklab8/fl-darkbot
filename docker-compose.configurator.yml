@@ -43,14 +43,17 @@ services:
     links:
       - configurator_db
       - configurator_redis
-    command: python3 make.py shell migrate configurator
+    command: sh -c "exit"
     environment:
       CONFIGURATOR_DATABASE_USERNAME: "postgres"
       CONFIGURATOR_DATABASE_PASSWORD: "postgres"
       CONFIGURATOR_DATABASE_HOST: "configurator_db"
       CONFIGURATOR_LOGGER_CONSOLE_LEVEL: "DEBUG"
+  configurator_migrator:
+    <<: *configurator_base
+    command: python3 make.py shell migrate configurator
   configurator_web:
     <<: *configurator_base
     command: uvicorn configurator.core.main:app --host 0.0.0.0
     ports:
-      - "8000:8000"
+      - "8020:8000"
