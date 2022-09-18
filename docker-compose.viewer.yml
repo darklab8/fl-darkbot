@@ -12,7 +12,7 @@ x-definitions:
     args:
       ENVIRONMENT: dev
       SERVICE: viewer
-    target: final
+    target: final-viewer
 
   environment: &environment
     VIEWER_CELERY_BROKER: "redis://viewer_redis:6379/0"
