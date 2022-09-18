@@ -5,6 +5,10 @@ from . import models
 from sqlalchemy import delete
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncResult
+from collections import defaultdict
+from ..core.logger import base_logger
+
+logger = base_logger.getChild(__name__)
 
 
 class BaseQuerySet(AbstractQuerySet):
@@ -30,6 +34,40 @@ class BaseStorage:
                 channel_id=channel_id,
                 tags=[row[0].tag for row in db_rows],
             )
+            return data
+
+    async def get_bases(
+        self, query: schemas.BaseGetRequestParams
+    ) -> schemas.BasesManyOut:
+        async with self.db.get_async_session() as session:
+            logger.debug("storage.get_bases: started")
+            queryset = BaseQuerySet()
+            stmt = queryset.select()
+            result: AsyncResult = await session.execute(stmt)
+            logger.debug(f"storage.get_bases.bases: executed SQL")
+            db_rows = result.all()
+
+            logger.debug("storage.get_bases.bases: got results.all")
+            rows = list([row for row in db_rows])
+
+            logger.debug(f"storage.get_bases.bases: rows={rows}")
+
+            # group tags for channels
+            base_dicts = defaultdict(
+                lambda: schemas.BaseOut(
+                    channel_id=-1,
+                    tags=[],
+                )
+            )
+            for row in rows:
+                channel_id = row[0].channel_id
+                base_dicts[channel_id].channel_id = channel_id
+                base_dicts[channel_id].tags.append(row[0].tag)
+
+            bases = [base for base in base_dicts.values()]
+
+            logger.debug(f"storage.get_bases.bases={bases}")
+            data = schemas.BasesManyOut.parse_obj(bases)
             return data
 
     async def register_base(self, query: schemas.BaseRegisterRequestParams):

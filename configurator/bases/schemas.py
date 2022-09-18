@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-import datetime
+from typing import List
 
 
 class BaseRegisterRequestParams(BaseModel):
@@ -11,6 +11,18 @@ class BaseDeleteRequestParams(BaseModel):
     channel_id: int
 
 
+class BaseGetRequestParams(BaseModel):
+    pass
+
+
 class BaseOut(BaseModel):
     tags: list[str]
     channel_id: int
+
+
+class BasesManyOut(BaseModel):
+    __root__: List[BaseOut]
+
+    def __iter__(self):
+        for item in self.__root__:
+            yield item

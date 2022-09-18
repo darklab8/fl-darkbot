@@ -96,7 +96,7 @@ async def run_command(args: SimpleNamespace):
         case "base":
             match args.action:
                 case "add":
-                    action = base_actions.ActionRegisterBase
+                    action = bases_actions.ActionRegisterBase
                     await action(
                         query=action.action.query_factory(
                             channel_id=args.channel_id,
@@ -104,7 +104,7 @@ async def run_command(args: SimpleNamespace):
                         )
                     ).run()
                 case "clear":
-                    action = base_actions.ActionDeleteBases
+                    action = bases_actions.ActionDeleteBases
                     await action(
                         query=action.action.query_factory(
                             channel_id=args.channel_id,

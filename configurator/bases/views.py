@@ -10,7 +10,11 @@ from . import storage
 from . import schemas
 from typing import Union, List
 from pydantic import Field, BaseModel
+from ..core.logger import base_logger
+import json
 
+
+logger = base_logger.getChild(__name__)
 
 router = APIRouter(
     prefix="",
@@ -46,6 +50,24 @@ async def delete_base(
     ).run()
 
     return MessageOk()
+
+
+@router.post(
+    actions.ActionGetBases.url,
+    response_model=List[schemas.BaseOut],
+)
+async def get_bases(
+    database: Database = Depends(DatabaseFactory.get_default_database),
+    # query: actions.ActionGetBases.query_factory = Body(),
+):
+    query = actions.ActionGetBases.query_factory()
+    logger.debug(f"get_bases: starting view")
+    logger.debug(f"get_bases={query}")
+    logger.debug(f"get_bases: starting action")
+    bases = await actions.ActionGetBases(db=database, query=query).run()
+    logger.debug(f"get_bases: finished action")
+    logger.debug(f"get_bases: finishing view")
+    return list(bases)
 
 
 # TODO add alarm

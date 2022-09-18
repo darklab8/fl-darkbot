@@ -6,3 +6,5 @@ SQLAlchemy-Utils
 alembic
 psycopg2-binary
 asyncpg
+
+aiohttp

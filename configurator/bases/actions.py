@@ -11,6 +11,23 @@ from .urls import urls
 logger = base_logger.getChild(__name__)
 
 
+class ActionGetBases(AsyncAbstractAction):
+    url = urls.base_get
+    method = RequestMethod.post
+    query_factory = schemas.BaseGetRequestParams
+    response_factory = schemas.BasesManyOut
+
+    def __init__(self, db: Database, query: schemas.BaseGetRequestParams):
+        self.db = db
+        self.query = query
+
+    async def run(self) -> None:
+        logger.debug(f"actions.ActionGetBases.query={self.query}")
+        bases = await storage.BaseStorage(self.db).get_bases(self.query)
+        logger.debug(f"actions.ActionGetBases.bases={bases}")
+        return bases
+
+
 class ActionRegisterBase(AsyncAbstractAction):
     url = urls.base
     method = RequestMethod.post

@@ -19,6 +19,7 @@ x-definitions:
     VIEWER_CELERY_BACKEND: "redis://viewer_redis:6379/0"
     PYTEST_PLUGINS: celery.contrib.pytest
     SCRAPPY_API_URL: "http://scrappy_web:8000"
+    CONFIGURATOR_API_URL: "http://configurator_web:8000"
 
   app: &app
     build: 
