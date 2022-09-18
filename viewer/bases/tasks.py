@@ -3,7 +3,9 @@ import asyncio
 
 # from .actions import ActionGetAndParseAndSaveBases
 from scrappy.bases import rpc as rpc_bases_data
+from scrappy.bases import schemas as rpc_bases_data_schemas
 from configurator.bases import rpc as rpc_bases_settings
+from configurator.bases import schemas as rpc_bases_settings_schemas
 from ..core import settings
 from ..core.logger import base_logger
 
@@ -12,18 +14,15 @@ logger = base_logger.getChild(__name__)
 
 @shared_task
 def update_all_bases() -> bool:
-    result = asyncio.run(
-        rpc_bases_settings.ActionGetBases(
-            query=rpc_bases_settings.ActionGetBases.query_factory()
-        ).run()
-    )
-    logger.debug(f"update_all_bases.result={result}")
+    pass
+
+    # for base in base_settings:
+    #     render_base.delay(
+    #         channel_id=base.channel_id,
+    #         tags=base.tags,
+    #     )
 
 
-# def render_to_channel(channel_id, tags: list[str]):
-# invent some unique ID of a msg.
-#
-
-# ActionGetAndParseAndSaveBases(database=DatabaseFactory(name=database_name))
-# logger.info(f"task={'update_bases'.upper()} is done")
-# return True
+# @shared_task
+# def render_base(channel_id: int, tags: list[str]) -> bool:
+#     logger.debug(f"render_base.channel_id={channel_id}, tags={tags}")

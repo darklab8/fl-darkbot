@@ -6,5 +6,7 @@ aiohttp
 
 pydantic
 
+Jinja2
+
 # added for import problems only. Resolve them.
 sqlalchemy
