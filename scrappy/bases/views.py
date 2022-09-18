@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from fastapi import Query
+from fastapi import Query, Body
 
 from fastapi import Depends
 from scrappy.core.databases import DatabaseFactory
@@ -12,21 +12,14 @@ router = APIRouter(
     tags=["items"],
 )
 
-query_default_values = BaseQueryParams()
-
-
-@router.get("")
+@router.post("")
 async def get_bases(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    page: int = Query(default=query_default_values.page),
-    page_size: int = Query(default=query_default_values.page_size),
-    name: list[str] = Query(default=query_default_values.name_tags),
+    query: BaseQueryParams = Body(),
 ) -> list[BaseOut]:
 
     bases = base_actions.ActionGetFilteredBases(
         database=database,
-        page=page,
-        page_size=page_size,
-        name_tags=name,
+        query=query,
     )
     return bases

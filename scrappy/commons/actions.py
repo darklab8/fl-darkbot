@@ -38,16 +38,12 @@ class ActionGetAndParseAndSaveItems(AbstractAction):
 
 class ActionGetFilteredItems(AbstractAction):
     @abc.abstractproperty
-    def queryparams(self) -> Type[BaseModel]:
-        pass
-
-    @abc.abstractproperty
     def storage(self) -> Type[AbstractStorage]:
         pass
 
-    def __init__(self, database: Database, **kwargs: dict[str, Any]):
+    def __init__(self, database: Database, query):
         self._database = database
-        self.query = self.queryparams(**kwargs)
+        self.query = query
 
     def run(self) -> list[Any]:
         storage = self.storage(self._database)

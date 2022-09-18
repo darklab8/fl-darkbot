@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from fastapi import Query
+from fastapi import Query, Body
 from fastapi import Depends, Response
 from scrappy.core.databases import DatabaseFactory
 from utils.database.sql import Database
@@ -12,26 +12,15 @@ router = APIRouter(
     tags=["items"],
 )
 
-query_default_values = PlayerQueryParams()
-
-
 @router.get("")
 async def get_players(
     database: Database = Depends(DatabaseFactory.get_default_database),
-    page: int = Query(default=query_default_values.page),
-    player_tag: list[str] = Query(default=query_default_values.player_whitelist_tags),
-    region_tag: list[str] = Query(default=query_default_values.region_whitelist_tags),
-    system_tag: list[str] = Query(default=query_default_values.system_whitelist_tags),
-    is_online: bool = Query(default=query_default_values.is_online),
+    query: PlayerQueryParams = Body(),
 ) -> list[PlayerOut]:
 
     players = player_actions.ActionGetFilteredPlayers(  # type: ignore
         database=database,
-        page=page,
-        player_whitelist_tags=player_tag,
-        region_whitelist_tags=region_tag,
-        system_whitelist_tags=system_tag,
-        is_online=is_online,
+        query=query,
     )
     return players
 

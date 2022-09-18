@@ -11,3 +11,6 @@ asyncpg
 # celery
 celery[redis]
 flower
+
+# for rpc
+aiohttp

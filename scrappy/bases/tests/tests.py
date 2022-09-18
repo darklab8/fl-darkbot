@@ -10,6 +10,7 @@ from scrappy.bases import subtasks
 from .. import actions
 from .. import subtasks
 from .. import storage
+from .. import rpc
 
 
 file_with_data_example = pathlib.Path(__file__).parent / "data" / "bases.json"
@@ -72,17 +73,40 @@ def test_get_bases_from_action(
     page_size = 10
     bases = actions.ActionGetFilteredBases(
         database=database,
-        page=0,
-        page_size=page_size,
-        name_tags=[],
+        query=actions.ActionGetFilteredBases.query_factory(
+            page=0,
+            page_size=page_size,
+            name_tags=[],
+        ),
     )
     assert len(bases) == page_size
 
 
-def test_get_players_from_endpoint(
+def test_get_bases_from_endpoint(
     database, mocked_request_url_data: dict, client: TestClient, loaded_items
 ):
     size = 10
 
-    result = client.get(f"/bases?page_size={size}").json()
+    result = client.post(
+        f"/bases",
+        json={
+            "page_size": size,
+        },
+    ).json()
     assert len(result) == size
+
+
+# TODO fix test. not working at all for some reason. Hoping it will work in microserivce
+@pytest.mark.integration
+@pytest.mark.asyncio
+async def test_get_bases_from_rpc(
+    database, mocked_request_url_data: dict, async_client, loaded_items
+):
+    size = 10
+    result = await rpc.ActionGetFilteredBases(
+        query=rpc.ActionGetFilteredBases.query_factory(
+            page_size=size,
+        )
+    ).run()
+
+    assert len(list(result)) == size

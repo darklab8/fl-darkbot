@@ -1,3 +1,7 @@
 # celery
 celery[redis]
 flower
+
+aiohttp
+
+pydantic

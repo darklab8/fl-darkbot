@@ -21,5 +21,6 @@ class ActionGetAndParseAndSavePlayers(ActionGetAndParseAndSaveItems):
 
 
 class ActionGetFilteredPlayers(ActionGetFilteredItems):
-    queryparams = PlayerQueryParams
+    query_factory = PlayerQueryParams
+    
     storage = PlayerStorage

@@ -1,5 +1,5 @@
 from .storage import BaseStorage
-from pydantic import BaseModel
+from . import schemas
 from scrappy.commons.actions import (
     ActionGetAndParseAndSaveItems,
     ActionGetFilteredItems,
@@ -22,5 +22,5 @@ class ActionGetAndParseAndSaveBases(ActionGetAndParseAndSaveItems):
 
 
 class ActionGetFilteredBases(ActionGetFilteredItems):
-    queryparams = BaseQueryParams
+    query_factory = BaseQueryParams
     storage = BaseStorage

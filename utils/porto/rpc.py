@@ -69,6 +69,8 @@ class AbstractRPCAction(abc.ABC):
             method=self.method.name,
             json=dict(self.query),
         )
+        if isinstance(response, list):
+            return self.response_factory.parse_obj(response)
 
         return self.response_factory(**response)
 
