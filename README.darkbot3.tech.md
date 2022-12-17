@@ -57,3 +57,10 @@ https://github.com/Shopify/sarama mature Kafka, yay!
 
 https://github.com/pocketbase/pocketbase https://youtube.com/shorts/iYPIWFHXFg4?feature=share CMS xD
 https://youtube.com/shorts/ePSQXjIMDho?feature=share
+
+### all
+https://github.com/avelino/awesome-go
+
+## lambda
+https://spacelift.io/blog/terraform-aws-lambda // lambda terraform
+https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html lambda config layers
