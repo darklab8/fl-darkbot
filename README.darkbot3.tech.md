@@ -11,13 +11,14 @@ https://github.com/spf13/cobra TOO NICE NOT TO HAVE Cobra or Viper
 https://github.com/Necroforger/dgrouter OPTIONAL evaluate (i think better to reject) (Discord router)
 https://github.com/qor/admin BEAUTIFUL!!! Evaluate for usage in darktool too.
 
-https://github.com/levigross/grequests OPTIONAL
 https://github.com/gojek/heimdall OPTIONAL
 
 https://github.com/uber-go/zap logging?
 logrus is fine though
 
 # Not chosen tech
+
+https://github.com/levigross/grequests ~~OPTIONAL // default lib works fine too. Not necessary to have grequests.~~
 
 ## sql query builder
 
