@@ -1,4 +1,4 @@
 /.env*
-/.settings*
+/.settings.yml
 /main
 /chromedriver

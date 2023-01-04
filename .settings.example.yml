@@ -1,0 +1,18 @@
+scrappy:
+  player:
+    url: example
+  base:
+    url: example
+  forum:
+    username: example
+    password: example
+
+listener:
+  discord:
+    bot:
+      token: example
+
+discorder:
+  discord:
+    bot:
+      token: example

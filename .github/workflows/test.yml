@@ -28,5 +28,7 @@ jobs:
         run: |
           echo 'ci version' > settings/version.txt
 
+          cp .settings.example.yml .settings.yml
+
       - name: Test
         run: task test
