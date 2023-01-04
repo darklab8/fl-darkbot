@@ -1,11 +1,8 @@
 package scrappy
 
 import (
-	"darkbot/settings"
 	"darkbot/utils"
 	"encoding/json"
-	"io/ioutil"
-	"net/http"
 	"time"
 )
 
@@ -55,16 +52,14 @@ func (b BasesStampedRecord) NewFromAPI(body []byte) BasesStampedRecord {
 
 type BaseRecords struct {
 	records []*BasesStampedRecord
+	api     APIinterface
 }
 
 var BaseStorage BaseRecords
 
 func (b *BaseRecords) addFromAPI() {
-	resp, err := http.Get(settings.Config.Scrappy.Base.URL)
-	utils.CheckWarn(err, "unable to get scrappy")
-	body, err := ioutil.ReadAll(resp.Body)
-	utils.CheckWarn(err, "unable to read base body")
-	record := BasesStampedRecord{}.NewFromAPI(body)
+	data := b.api.New().GetData()
+	record := BasesStampedRecord{}.NewFromAPI(data)
 	b.add(record)
 }
 

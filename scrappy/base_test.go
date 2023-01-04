@@ -11,7 +11,7 @@ import (
 func TestGetBases(t *testing.T) {
 
 	var storage BaseRecords
-
+	storage.api = APIBasespy{}
 	storage.addFromAPI()
 
 	bases, err := storage.getLatestRecord()
