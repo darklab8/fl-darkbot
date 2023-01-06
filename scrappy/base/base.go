@@ -1,16 +1,11 @@
-package scrappy
+package base
 
 import (
+	"darkbot/scrappy/api"
 	"darkbot/utils"
 	"encoding/json"
 	"time"
 )
-
-type baseSerializer struct {
-	Affiliation string  `json:"affiliation"`
-	Health      float64 `json:"health"`
-	Tid         int     `json:"tid"`
-}
 
 type Base struct {
 	Affiliation string
@@ -32,6 +27,27 @@ func (b BasesStampedRecord) New() BasesStampedRecord {
 	return b
 }
 
+type BaseRecords struct {
+	records []*BasesStampedRecord
+	api     api.APIinterface
+}
+
+var BaseStorage BaseRecords
+
+func (b *BaseRecords) add(record BasesStampedRecord) {
+	b.records = append(b.records, &record)
+}
+
+func (b *BaseRecords) getLatestRecord() (*BasesStampedRecord, error) {
+	if len(b.records) == 0 {
+		return nil, utils.ErrorNotFound{}
+	}
+
+	return b.records[len(b.records)-1], nil
+}
+
+// API addition
+
 func (b BasesStampedRecord) NewFromAPI(body []byte) BasesStampedRecord {
 	b = b.New()
 
@@ -50,27 +66,8 @@ func (b BasesStampedRecord) NewFromAPI(body []byte) BasesStampedRecord {
 	return b
 }
 
-type BaseRecords struct {
-	records []*BasesStampedRecord
-	api     APIinterface
-}
-
-var BaseStorage BaseRecords
-
 func (b *BaseRecords) addFromAPI() {
 	data := b.api.New().GetData()
 	record := BasesStampedRecord{}.NewFromAPI(data)
 	b.add(record)
-}
-
-func (b *BaseRecords) add(record BasesStampedRecord) {
-	b.records = append(b.records, &record)
-}
-
-func (b *BaseRecords) getLatestRecord() (*BasesStampedRecord, error) {
-	if len(b.records) == 0 {
-		return nil, utils.ErrorNotFound{}
-	}
-
-	return b.records[len(b.records)-1], nil
 }

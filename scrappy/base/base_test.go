@@ -1,4 +1,4 @@
-package scrappy
+package base
 
 import (
 	"darkbot/utils"

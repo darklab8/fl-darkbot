@@ -1,7 +1,10 @@
-package scrappy
+/*
+Reusable API code to request []byte code of smth. Reusable for player and base.
+*/
+
+package api
 
 import (
-	"darkbot/settings"
 	"darkbot/utils"
 	"io/ioutil"
 	"net/http"
@@ -24,20 +27,6 @@ func (a API) GetData() []byte {
 	return body
 }
 
-type BasesAPI struct {
-	API
-}
-
-func (a BasesAPI) New() APIinterface {
-	a.url = settings.Config.Scrappy.Base.URL
-	return a
-}
-
-type PlayerAPI struct {
-	API
-}
-
-func (a PlayerAPI) New() APIinterface {
-	a.url = settings.Config.Scrappy.Player.URL
-	return a
+func (a API) Init(url string) {
+	a.url = url
 }
