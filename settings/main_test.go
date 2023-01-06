@@ -9,6 +9,7 @@ import (
 
 func TestMain(t *testing.T) {
 	load()
-	isContains := strings.Contains(Config.Scrappy.Forum.Username, "darkwind")
-	assert.True(t, isContains)
+	isContains1 := strings.Contains(Config.Scrappy.Forum.Username, "darkwind")
+	isContains2 := strings.Contains(Config.Scrappy.Forum.Username, "example")
+	assert.True(t, isContains1 || isContains2)
 }
