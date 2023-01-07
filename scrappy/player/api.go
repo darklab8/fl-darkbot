@@ -1,15 +1,15 @@
 package player
 
 import (
-	"darkbot/scrappy/apiRawData"
+	"darkbot/scrappy/shared/api"
 	"darkbot/settings"
 )
 
 type PlayerAPI struct {
-	apiRawData.APIrequest
+	api.APIrequest
 }
 
-func (a PlayerAPI) New() apiRawData.APIinterface {
+func (a PlayerAPI) New() api.APIinterface {
 	a.Init(settings.Config.Scrappy.Player.URL)
 	return a
 }

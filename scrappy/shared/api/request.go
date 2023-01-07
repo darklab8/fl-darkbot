@@ -1,4 +1,4 @@
-package apiRawData
+package api
 
 import (
 	"darkbot/utils"

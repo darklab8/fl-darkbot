@@ -1,6 +1,7 @@
 package base
 
 import (
+	"darkbot/scrappy/shared/api"
 	"darkbot/utils"
 	"fmt"
 	"testing"
@@ -8,9 +9,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type BaseStorageMocked struct {
+	BaseStorage
+}
+
+func (b BaseStorageMocked) API() api.APIinterface {
+	return APIBasespy{}
+}
+
 func TestGetBases(t *testing.T) {
 
-	var storage BaseStorage
+	// var storage storage.IStorage
+	// storage = &BaseStorageMocked{}
+	storage := BaseStorage{}
 	storage.api = APIBasespy{}
 	storage.Update()
 

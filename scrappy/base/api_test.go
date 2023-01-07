@@ -1,7 +1,7 @@
 package base
 
 import (
-	"darkbot/scrappy/apiRawData"
+	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
 	"darkbot/utils"
 	"io/ioutil"
@@ -30,7 +30,7 @@ type APIBasespy struct {
 	APIspy
 }
 
-func (a APIBasespy) New() apiRawData.APIinterface {
+func (a APIBasespy) New() api.APIinterface {
 	return a
 }
 

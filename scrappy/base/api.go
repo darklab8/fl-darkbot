@@ -1,15 +1,15 @@
 package base
 
 import (
-	"darkbot/scrappy/apiRawData"
+	"darkbot/scrappy/shared/api"
 	"darkbot/settings"
 )
 
 type basesAPI struct {
-	apiRawData.APIrequest
+	api.APIrequest
 }
 
-func (a basesAPI) New() apiRawData.APIinterface {
+func (a basesAPI) New() api.APIinterface {
 	a.Init(settings.Config.Scrappy.Base.URL)
 	return a
 }

@@ -1,10 +1,10 @@
 package base
 
-import "darkbot/scrappy/apiRawData"
+import "darkbot/scrappy/shared/api"
 
 type BaseStorage struct {
 	baseRecords
-	api    apiRawData.APIinterface
+	api    api.APIinterface
 	parser baseParser
 }
 

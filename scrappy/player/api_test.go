@@ -1,7 +1,7 @@
 package player
 
 import (
-	"darkbot/scrappy/apiRawData"
+	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
 	"darkbot/utils"
 	"io/ioutil"
@@ -26,7 +26,7 @@ func TestRegeneratePlayerData(t *testing.T) {
 type APIPlayerSpy struct {
 }
 
-func (a APIPlayerSpy) New() apiRawData.APIinterface {
+func (a APIPlayerSpy) New() api.APIinterface {
 	return a
 }
 
