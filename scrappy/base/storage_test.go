@@ -8,9 +8,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func FixtureBaseStorageMockified() BaseStorage {
+	storage := BaseStorage{}.New()
+	storage.api = APIBasespy{}
+	return storage
+}
+
 func TestGetBases(t *testing.T) {
 	storage := FixtureBaseStorageMockified()
-
 	storage.Update()
 
 	bases, err := storage.GetLatestRecord()
@@ -18,12 +23,6 @@ func TestGetBases(t *testing.T) {
 
 	assert.True(t, len(bases.List) > 0)
 	fmt.Println(bases.List)
-}
-
-func FixtureBaseStorageMockified() BaseStorage {
-	storage := BaseStorage{}.New()
-	storage.api = APIBasespy{}
-	return storage
 }
 
 func TestAddManyRecords(t *testing.T) {
