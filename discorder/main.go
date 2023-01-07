@@ -57,7 +57,7 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	// If the message is "ping" reply with "Pong!"
-	rendered := consoler.Execute(m.Content)
+	rendered := consoler.Consoler{}.New(m.Content).Execute().GetResult()
 
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)

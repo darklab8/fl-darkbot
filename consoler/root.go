@@ -4,43 +4,64 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package consoler
 
 import (
-	"context"
 	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "consoler",
-	Short: "A brief description of your application",
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("consoler running with args=", args)
-	},
+type Consoler struct {
+	cmd    string
+	result string
 }
 
-func doSomething(ctx context.Context) {
-	fmt.Println("Doing something!")
+func (c Consoler) New(cmd string) *Consoler {
+	c.cmd = cmd
+	return &c
+}
+
+func (c *Consoler) CreateRoot() *cobra.Command {
+	createdCmd := &cobra.Command{
+		Use:   "consoler",
+		Short: "A brief description of your application",
+		// Uncomment the following line if your bare application
+		// has an action associated with it:
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("consoler running with args=", args)
+		},
+	}
+	createdCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	return createdCmd
+}
+
+func (c *Consoler) CreatePing(rootCmd *cobra.Command) {
+	pingCMD := &cobra.Command{
+		Use:   "ping",
+		Short: "Check stuff is working",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("ping called with args=", args)
+			c.result = "Pong! (from consoler)"
+		},
+	}
+	rootCmd.AddCommand(pingCMD)
+}
+
+func (c *Consoler) Create() *cobra.Command {
+	rootCmd := c.CreateRoot()
+	c.CreatePing(rootCmd)
+
+	return rootCmd
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute(cmd string) string {
-	rootCmd.Run(&cobra.Command{}, strings.Split(cmd, " "))
-	return "Pong!"
+func (c *Consoler) Execute() *Consoler {
+	rootCmd := c.Create()
+	rootCmd.SetArgs(strings.Split(c.cmd, " "))
+	rootCmd.Execute()
+	return c
 }
 
-func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.darkbot.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+func (c *Consoler) GetResult() string {
+	return c.result
 }
