@@ -18,6 +18,6 @@ func (a APIrequest) GetData() []byte {
 	return body
 }
 
-func (a APIrequest) Init(url string) {
+func (a *APIrequest) Init(url string) {
 	a.url = url
 }

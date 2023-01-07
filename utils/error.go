@@ -26,10 +26,14 @@ func CheckWarn(err error, msgs ...string) {
 	log.Print(err, "WARN ", msgs)
 }
 
-func LogInfo(err error, msgs ...string) {
+func ELogInfo(err error, msgs ...string) {
 	if err == nil {
 		return
 	}
 
 	log.Print(err, "INFO ", msgs)
+}
+
+func LogInfo(msgs ...string) {
+	log.Print("INFO ", msgs)
 }

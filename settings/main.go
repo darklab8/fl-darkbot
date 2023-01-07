@@ -40,16 +40,22 @@ type ConfigScheme struct {
 var Config ConfigScheme
 
 func load() {
+	utils.LogInfo("identifying folder of settings")
 	workdir := filepath.Dir(utils.GetCurrrentFolder())
 	AutogitSettingsPath := filepath.Join(workdir, ".settings.yml")
+	utils.LogInfo("settings folder is ", AutogitSettingsPath)
 
 	file, err := ioutil.ReadFile(AutogitSettingsPath)
+	utils.LogInfo("Reading file settings")
 	utils.CheckFatal(err, "Could not read the file due to error, settings_path=%s\n", AutogitSettingsPath)
 
 	err = yaml.Unmarshal(file, &Config)
 	utils.CheckFatal(err, "unable to unmarshal settings")
+
+	utils.LogInfo("settings were downloaded. Scrappy base url=", Config.Scrappy.Base.URL)
 }
 
 func init() {
+	utils.LogInfo("attempt to load settings")
 	load()
 }

@@ -4,6 +4,7 @@ import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/shared/parser"
 	"darkbot/scrappy/shared/records"
+	"darkbot/utils"
 )
 
 type Base struct {
@@ -24,6 +25,7 @@ func (b *BaseStorage) Update() {
 	data := b.api.New().GetData()
 	record := b.parser.Parse(data)
 	b.Add(record)
+	utils.LogInfo("updated base storage")
 }
 
 func (b BaseStorage) New() BaseStorage {
@@ -31,5 +33,3 @@ func (b BaseStorage) New() BaseStorage {
 	b.api = basesAPI{}
 	return b
 }
-
-var Storage BaseStorage
