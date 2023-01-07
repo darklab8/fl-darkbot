@@ -5,42 +5,62 @@ package cmd
 
 import (
 	"darkbot/scrappy"
+	"darkbot/settings"
+	"darkbot/utils"
 	"fmt"
-	"sync"
 
+	"github.com/bwmarrin/discordgo"
 	"github.com/spf13/cobra"
 )
 
-// runCmd represents the run command
+// runCmd represents the check command
 var runCmd = &cobra.Command{
-	Use:   "run",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use: "run",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("run called")
+
 		go scrappy.Run()
-		fmt.Println("started scrappy scrapping xD")
-		mu := sync.Mutex{}
-		mu.Lock()
-		mu.Lock()
+
+		dg, err := discordgo.New("Bot " + settings.Config.Discorder.Discord.Bot.Token)
+		utils.CheckPanic(err, "failed to init discord")
+
+		// Register the messageCreate func as a callback for MessageCreate events.
+		dg.AddHandler(messageCreate)
+
+		// In this example, we only care about receiving message events.
+		dg.Identify.Intents = discordgo.IntentsGuildMessages
+
+		// Open a websocket connection to Discord and begin listening.
+		err = dg.Open()
+		utils.CheckPanic(err, "error opening connection,")
+		defer dg.Close()
+
+		fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+		utils.SleepAwaitCtrlC()
+		fmt.Println("gracefully closed discord conn")
 	},
 }
 
 func init() {
-	scrappyCmd.AddCommand(runCmd)
+	rootCmd.AddCommand(runCmd)
+}
 
-	// Here you will define your flags and configuration settings.
+// This function will be called (due to AddHandler above) every time a new
+// message is created on any channel that the authenticated bot has access to.
+func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// runCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// Ignore all messages created by the bot itself
+	// This isn't required in this specific example but it's a good practice.
+	if m.Author.ID == s.State.User.ID {
+		return
+	}
+	// If the message is "ping" reply with "Pong!"
+	if m.Content == "ping" {
+		s.ChannelMessageSend(m.ChannelID, "Pong!")
+	}
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// runCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// If the message is "pong" reply with "Ping!"
+	if m.Content == "pong" {
+		s.ChannelMessageSend(m.ChannelID, "Ping!")
+	}
 }
