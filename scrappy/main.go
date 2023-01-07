@@ -26,15 +26,15 @@ func (s *ScrappyStorage) Update() {
 var storage *ScrappyStorage
 
 func init() {
+	utils.LogInfo("initialized scrappy")
 	storage = (&ScrappyStorage{}).New()
 }
 
 func Run() {
-	utils.LogInfo("initialized scrappy")
-
+	utils.LogInfo("starting scrappy infinity update loop")
 	for {
 		storage.Update()
 		time.Sleep(10 * time.Second)
 	}
-	utils.LogInfo("gracefully shutdown scrappy")
+	utils.LogInfo("gracefully shutdown scrappy infinity loop")
 }
