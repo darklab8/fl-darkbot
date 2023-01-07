@@ -1,7 +1,6 @@
 package base
 
 import (
-	"darkbot/scrappy/shared/api"
 	"darkbot/utils"
 	"fmt"
 	"testing"
@@ -9,33 +8,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type BaseStorageMocked struct {
-	BaseStorage
-}
-
-func (b BaseStorageMocked) API() api.APIinterface {
-	return APIBasespy{}
-}
-
 func TestGetBases(t *testing.T) {
+	storage := FixtureBaseStorageMockified()
 
-	// var storage storage.IStorage
-	// storage = &BaseStorageMocked{}
-	storage := BaseStorage{}
-	storage.api = APIBasespy{}
 	storage.Update()
 
 	bases, err := storage.GetLatestRecord()
 	utils.CheckPanic(err, "not found latest base record")
 
-	assert.True(t, len(bases.list) > 0)
-	fmt.Println(bases.list)
+	assert.True(t, len(bases.List) > 0)
+	fmt.Println(bases.List)
+}
+
+func FixtureBaseStorageMockified() BaseStorage {
+	storage := BaseStorage{}.New()
+	storage.api = APIBasespy{}
+	return storage
 }
 
 func TestAddManyRecords(t *testing.T) {
 
-	var storage BaseStorage
-	storage.api = APIBasespy{}
+	storage := FixtureBaseStorageMockified()
 	storage.Update()
 	storage.Update()
 

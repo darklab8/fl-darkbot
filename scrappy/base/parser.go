@@ -1,6 +1,7 @@
 package base
 
 import (
+	"darkbot/scrappy/shared/records"
 	"darkbot/utils"
 	"encoding/json"
 )
@@ -14,8 +15,8 @@ type baseSerializer struct {
 type baseParser struct {
 }
 
-func (b baseParser) Parse(body []byte) basesStampedRecord {
-	record := basesStampedRecord{}.new()
+func (b baseParser) Parse(body []byte) records.StampedObjects[Base] {
+	record := records.StampedObjects[Base]{}.New()
 
 	var bases map[string]baseSerializer
 	if err := json.Unmarshal(body, &bases); err != nil {
@@ -23,12 +24,15 @@ func (b baseParser) Parse(body []byte) basesStampedRecord {
 	}
 
 	for name, serializer := range bases {
-		record.addBase(Base{
-			name:        name,
-			Affiliation: serializer.Affiliation,
-			Health:      serializer.Health,
-			Tid:         serializer.Tid,
-		})
+		record.Add(
+			name,
+			Base{
+				name:        name,
+				Affiliation: serializer.Affiliation,
+				Health:      serializer.Health,
+				Tid:         serializer.Tid,
+			},
+		)
 	}
 	return record
 }
