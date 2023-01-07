@@ -1,7 +1,7 @@
 package base
 
 import (
-	"darkbot/scrappy/api"
+	"darkbot/scrappy/apiRawData"
 	"darkbot/scrappy/tests"
 	"darkbot/utils"
 	"io/ioutil"
@@ -12,7 +12,7 @@ import (
 
 func TestRegenerateBaseData(t *testing.T) {
 	utils.RegenerativeTest(func() error {
-		data := BasesAPI{}.New().GetData()
+		data := basesAPI{}.New().GetData()
 		path_testdata := tests.FixtureCreateTestDataFolder()
 		path_testfile := path.Join(path_testdata, "basedata.json")
 		err := ioutil.WriteFile(path_testfile, data, os.ModePerm)
@@ -30,7 +30,7 @@ type APIBasespy struct {
 	APIspy
 }
 
-func (a APIBasespy) New() api.APIinterface {
+func (a APIBasespy) New() apiRawData.APIinterface {
 	return a
 }
 

@@ -1,8 +1,4 @@
-/*
-Reusable API code to request []byte code of smth. Reusable for player and base.
-*/
-
-package api
+package apiRawData
 
 import (
 	"darkbot/utils"
@@ -10,16 +6,11 @@ import (
 	"net/http"
 )
 
-type APIinterface interface {
-	GetData() []byte
-	New() APIinterface
-}
-
-type API struct {
+type APIrequest struct {
 	url string
 }
 
-func (a API) GetData() []byte {
+func (a APIrequest) GetData() []byte {
 	resp, err := http.Get(a.url)
 	utils.CheckWarn(err, "unable to get url")
 	body, err := ioutil.ReadAll(resp.Body)
@@ -27,6 +18,6 @@ func (a API) GetData() []byte {
 	return body
 }
 
-func (a API) Init(url string) {
+func (a APIrequest) Init(url string) {
 	a.url = url
 }
