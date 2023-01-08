@@ -24,11 +24,10 @@ jobs:
         with:
           go-version: 1.19
 
-      - name: Setu pdeps
+      - name: Setup deps
         run: |
           echo 'ci version' > settings/version.txt
-
-          cp .settings.example.yml .settings.yml
+          cp .env.example .env
 
       - name: Test
         run: task test
