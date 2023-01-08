@@ -15,6 +15,8 @@ type ConfigScheme struct {
 	ScrappyForumPassword string `mapstructure:"SCRAPPY_FORUM_PASSWORD"`
 
 	DiscorderBotToken string `mapstructure:"DISCORDER_BOT_TOKEN"`
+
+	ConfiguratorDbname string `mapstructure:"CONFIGURATOR_DBNAME"`
 }
 
 var Config ConfigScheme

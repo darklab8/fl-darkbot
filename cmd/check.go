@@ -4,7 +4,6 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"darkbot/consoler"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -16,7 +15,12 @@ var checkCmd = &cobra.Command{
 	Short: "Experimental command",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("check called")
-		fmt.Println("result=", consoler.Consoler{}.New("").Execute().String())
+		// fmt.Println("result=", consoler.Consoler{}.New("").Execute().String())
+
+		// db := configurator.GetConnection()
+		// channel1 := configurator.Channel{gorm.Model{ID: 123}, ChannelID: "123"}
+		// db.FirstOrCreate(&channel1)
+		// fmt.Println(channel1)
 	},
 }
 

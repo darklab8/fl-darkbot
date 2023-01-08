@@ -46,4 +46,5 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)
 	}
+	fmt.Println("ChannelID=", m.ChannelID)
 }
