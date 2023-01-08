@@ -16,7 +16,7 @@ var checkCmd = &cobra.Command{
 	Short: "Experimental command",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("check called")
-		fmt.Println("result=", consoler.Consoler{}.New("ping --help").Execute().GetResult())
+		fmt.Println("result=", consoler.Consoler{}.New("").Execute().String())
 	},
 }
 

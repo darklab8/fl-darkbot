@@ -7,12 +7,12 @@ import (
 )
 
 func TestGettingOutput(t *testing.T) {
-	assert.Contains(t, Consoler{}.New("ping").Execute().GetResult(), "Pong!")
+	assert.Contains(t, Consoler{}.New("ping").Execute().String(), "Pong!")
 }
 
 func TestGrabStdout(t *testing.T) {
 	c := Consoler{}.New("ping --help")
-	result := c.Execute().GetResult()
+	result := c.Execute().String()
 
 	assert.Contains(t, result, "\nFlags:\n  -h, --help   ")
 }
