@@ -2,7 +2,7 @@
 Interacting with Discord API
 */
 
-package discorder
+package listener
 
 import (
 	"darkbot/consoler"
@@ -18,7 +18,6 @@ func Run() {
 	utils.CheckPanic(err, "failed to init discord")
 
 	// Register the messageCreate func as a callback for MessageCreate events.
-	dg.AddHandler(pingHandler)
 	dg.AddHandler(consolerHandler)
 
 	// In this example, we only care about receiving message events.
@@ -32,21 +31,6 @@ func Run() {
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	utils.SleepAwaitCtrlC()
 	fmt.Println("gracefully closed discord conn")
-}
-
-// This function will be called (due to AddHandler above) every time a new
-// message is created on any channel that the authenticated bot has access to.
-func pingHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-
-	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-	// If the message is "ping" reply with "Pong!"
-	if m.Content == "ping" {
-		s.ChannelMessageSend(m.ChannelID, "Pong!")
-	}
 }
 
 func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {

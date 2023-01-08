@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"darkbot/discorder"
+	"darkbot/listener"
 	"darkbot/scrappy"
 	"darkbot/utils"
 	"fmt"
@@ -19,7 +19,7 @@ var runCmd = &cobra.Command{
 		fmt.Println("run called")
 
 		go scrappy.Run()
-		go discorder.Run()
+		go listener.Run()
 		utils.SleepAwaitCtrlC()
 	},
 }
