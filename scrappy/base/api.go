@@ -10,6 +10,6 @@ type basesAPI struct {
 }
 
 func (a basesAPI) New() api.APIinterface {
-	a.Init(settings.Config.Scrappy.Base.URL)
+	a.Init(settings.Config.ScrappyBaseUrl)
 	return a
 }

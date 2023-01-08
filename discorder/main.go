@@ -14,7 +14,7 @@ import (
 )
 
 func Run() {
-	dg, err := discordgo.New("Bot " + settings.Config.Discorder.Discord.Bot.Token)
+	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
 	utils.CheckPanic(err, "failed to init discord")
 
 	// Register the messageCreate func as a callback for MessageCreate events.

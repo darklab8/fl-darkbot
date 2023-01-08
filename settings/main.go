@@ -2,39 +2,19 @@ package settings
 
 import (
 	"darkbot/utils"
-	"io/ioutil"
 	"path/filepath"
 
-	"gopkg.in/yaml.v3"
+	"github.com/spf13/viper"
 )
 
 type ConfigScheme struct {
-	Scrappy struct {
-		Player struct {
-			URL string `yaml:"url"`
-		} `yaml:"player"`
-		Base struct {
-			URL string `yaml:"url"`
-		} `yaml:"base"`
-		Forum struct {
-			Username string `yaml:"username"`
-			Password string `yaml:"password"`
-		} `yaml:"forum"`
-	} `yaml:"scrappy"`
-	Listener struct {
-		Discord struct {
-			Bot struct {
-				Token string `yaml:"token"`
-			} `yaml:"bot"`
-		} `yaml:"discord"`
-	} `yaml:"listener"`
-	Discorder struct {
-		Discord struct {
-			Bot struct {
-				Token string `yaml:"token"`
-			} `yaml:"bot"`
-		} `yaml:"discord"`
-	} `yaml:"discorder"`
+	ScrappyBaseUrl   string `mapstructure:"SCRAPPY_BASE_URL"`
+	ScrappyPlayerUrl string `mapstructure:"SCRAPPY_PLAYER_URL"`
+
+	ScrappyForumUsername string `mapstructure:"SCRAPPY_FORUM_USERNAME"`
+	ScrappyForumPassword string `mapstructure:"SCRAPPY_FORUM_PASSWORD"`
+
+	DiscorderBotToken string `mapstructure:"DISCORDER_BOT_TOKEN"`
 }
 
 var Config ConfigScheme
@@ -42,17 +22,15 @@ var Config ConfigScheme
 func load() {
 	utils.LogInfo("identifying folder of settings")
 	workdir := filepath.Dir(utils.GetCurrrentFolder())
-	AutogitSettingsPath := filepath.Join(workdir, ".settings.yml")
-	utils.LogInfo("settings folder is ", AutogitSettingsPath)
+	viper.AddConfigPath(workdir)
+	viper.SetConfigName(".env")
+	viper.SetConfigType("env")
+	viper.AutomaticEnv()
+	viper.ReadInConfig()
 
-	file, err := ioutil.ReadFile(AutogitSettingsPath)
-	utils.LogInfo("Reading file settings")
-	utils.CheckFatal(err, "Could not read the file due to error, settings_path=%s\n", AutogitSettingsPath)
+	viper.Unmarshal(&Config)
 
-	err = yaml.Unmarshal(file, &Config)
-	utils.CheckFatal(err, "unable to unmarshal settings")
-
-	utils.LogInfo("settings were downloaded. Scrappy base url=", Config.Scrappy.Base.URL)
+	utils.LogInfo("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
 }
 
 func init() {

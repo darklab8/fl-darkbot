@@ -10,6 +10,6 @@ type PlayerAPI struct {
 }
 
 func (a PlayerAPI) New() api.APIinterface {
-	a.Init(settings.Config.Scrappy.Player.URL)
+	a.Init(settings.Config.ScrappyPlayerUrl)
 	return a
 }
