@@ -11,12 +11,15 @@ import (
 )
 
 type Consoler struct {
-	cmd    string
-	result string
+	cmd        string
+	buffStdout Writer
+	buffStderr Writer
 }
 
 func (c Consoler) New(cmd string) *Consoler {
 	c.cmd = cmd
+	c.buffStdout = Writer{}.New()
+	c.buffStderr = Writer{}.New()
 	return &c
 }
 
@@ -24,8 +27,6 @@ func (c *Consoler) CreateRoot() *cobra.Command {
 	createdCmd := &cobra.Command{
 		Use:   "consoler",
 		Short: "A brief description of your application",
-		// Uncomment the following line if your bare application
-		// has an action associated with it:
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("consoler running with args=", args)
 		},
@@ -40,7 +41,7 @@ func (c *Consoler) CreatePing(rootCmd *cobra.Command) {
 		Short: "Check stuff is working",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("ping called with args=", args)
-			c.result = "Pong! (from consoler)"
+			cmd.OutOrStdout().Write([]byte("Pong! from consoler"))
 		},
 	}
 	rootCmd.AddCommand(pingCMD)
@@ -53,15 +54,17 @@ func (c *Consoler) Create() *cobra.Command {
 	return rootCmd
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func (c *Consoler) Execute() *Consoler {
 	rootCmd := c.Create()
 	rootCmd.SetArgs(strings.Split(c.cmd, " "))
+
+	rootCmd.SetOut(c.buffStdout)
+	rootCmd.SetErr(c.buffStderr)
+
 	rootCmd.Execute()
 	return c
 }
 
 func (c *Consoler) GetResult() string {
-	return c.result
+	return c.buffStdout.String() + c.buffStderr.String()
 }
