@@ -6,3 +6,28 @@ TODO implement interface
 */
 
 package discorder
+
+import (
+	"darkbot/settings"
+	"darkbot/utils"
+
+	"github.com/bwmarrin/discordgo"
+)
+
+type Discorder struct {
+	dg *discordgo.Session
+}
+
+func NewClient() Discorder {
+	d := Discorder{}
+	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
+	utils.CheckPanic(err, "failed to init discord")
+	dg.Identify.Intents = discordgo.IntentsGuildMessages
+
+	d.dg = dg
+	return d
+}
+
+func (d Discorder) SengMessage(channelId string, message string) {
+	d.dg.ChannelMessageSend(channelId, message)
+}

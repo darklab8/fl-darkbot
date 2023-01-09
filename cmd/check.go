@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"darkbot/discorder"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -21,6 +22,9 @@ var checkCmd = &cobra.Command{
 		// channel1 := configurator.Channel{gorm.Model{ID: 123}, ChannelID: "123"}
 		// db.FirstOrCreate(&channel1)
 		// fmt.Println(channel1)
+
+		dg := discorder.NewClient()
+		dg.SengMessage("838802002582175756", "123message")
 	},
 }
 
