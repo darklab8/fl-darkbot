@@ -24,7 +24,8 @@ var checkCmd = &cobra.Command{
 		// fmt.Println(channel1)
 
 		dg := discorder.NewClient()
-		dg.SengMessage("838802002582175756", "123message")
+		// dg.SengMessage("838802002582175756", "123message")
+		dg.GetLatestMessages("838802002582175756")
 	},
 }
 

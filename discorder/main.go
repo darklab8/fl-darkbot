@@ -28,6 +28,30 @@ func NewClient() Discorder {
 	return d
 }
 
-func (d Discorder) SengMessage(channelId string, message string) {
-	d.dg.ChannelMessageSend(channelId, message)
+func (d Discorder) SengMessage(channelID string, content string) {
+	d.dg.ChannelMessageSend(channelID, content)
+}
+
+func (d Discorder) EditMessage(channelID string, messageID string, content string) {
+	d.dg.ChannelMessageEdit(channelID, messageID, content)
+}
+
+func (d Discorder) DeleteMessage(channelID string, messageID string) {
+	d.dg.ChannelMessageDelete(channelID, messageID)
+}
+
+func (d Discorder) GetLatestMessages(channelID string) []*discordgo.Message {
+	messagesLimitToGrab := 100 // max 100
+	messages, err := d.dg.ChannelMessages(channelID, messagesLimitToGrab, "", "", "")
+	if err != nil {
+		utils.CheckWarn(err, "Unable to get messages from channelId=", channelID)
+		return []*discordgo.Message{}
+	}
+
+	// Checking messages content
+	// for _, msg := range messages {
+	// 	fmt.Println(msg.Content)
+	// }
+
+	return messages
 }
