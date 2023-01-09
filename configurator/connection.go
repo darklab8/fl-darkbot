@@ -5,6 +5,7 @@ User settings. Probably in Sqlite3? :thinking:
 package configurator
 
 import (
+	"darkbot/configurator/models"
 	"darkbot/settings"
 	"darkbot/utils"
 	"path/filepath"
@@ -20,7 +21,20 @@ func GetConnection() *gorm.DB {
 	utils.CheckPanic(err, "failed to connect database")
 
 	// Auto Migrate the schema
-	db.AutoMigrate(&Channel{})
+	db.AutoMigrate(
+		&models.Channel{},
+		&models.TagBase{},
+		&models.TagPlayerFriend{},
+		&models.TagPlayerEnemy{},
+		&models.TagSystem{},
+		&models.TagRegion{},
+		&models.TagForumPostTrack{},
+		&models.TagForumPostIgnore{},
+		&models.AlertPlayerUnrecognized{},
+		&models.AlertPlayerEnemy{},
+		&models.AlertPlayerFriend{},
+		&models.AlertBase{},
+	)
 
 	return db
 }

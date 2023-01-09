@@ -1,4 +1,4 @@
-package configurator
+package models
 
 import "gorm.io/gorm"
 
@@ -39,7 +39,7 @@ type TagForumPostIgnore struct {
 
 // =========== Alerts ===============
 
-type AlertPlayerUknown struct {
+type AlertPlayerUnrecognized struct {
 	AlertTemplate
 }
 
