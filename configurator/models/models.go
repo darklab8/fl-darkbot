@@ -1,10 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Channel struct {
-	gorm.Model
-	Ref string `gorm:"index"` // Discord channel reference
+	ChannelID string `gorm:"primarykey"` // Discord channel reference
 }
 
 // ================== Tag Tracking ====================

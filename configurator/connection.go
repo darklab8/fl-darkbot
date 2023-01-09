@@ -8,16 +8,21 @@ import (
 	"darkbot/configurator/models"
 	"darkbot/settings"
 	"darkbot/utils"
-	"path/filepath"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-func GetConnection() *gorm.DB {
-	workdir := filepath.Dir(utils.GetCurrrentFolder())
-	dbpath := filepath.Join(workdir, "data", settings.Config.ConfiguratorDbname+".sqlite3")
-	db, err := gorm.Open(sqlite.Open(dbpath), &gorm.Config{})
+type Configurator struct {
+	db *gorm.DB
+}
+
+func (cg Configurator) GetClient() *gorm.DB {
+	return cg.db
+}
+
+func NewConfigurator() Configurator {
+	db, err := gorm.Open(sqlite.Open(settings.Dbpath), &gorm.Config{})
 	utils.CheckPanic(err, "failed to connect database")
 
 	// Auto Migrate the schema
@@ -36,5 +41,5 @@ func GetConnection() *gorm.DB {
 		&models.AlertBase{},
 	)
 
-	return db
+	return Configurator{db: db}
 }

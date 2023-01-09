@@ -16,7 +16,7 @@ var migrateCmd = &cobra.Command{
 	Short: "Migrate db",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("migrate called")
-		configurator.GetConnection()
+		configurator.NewConfigurator()
 	},
 }
 

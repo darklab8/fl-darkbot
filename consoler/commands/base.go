@@ -14,7 +14,6 @@ func CreateTagAdd(rootCmd *cobra.Command) {
 	command := &cobra.Command{
 		Use:   "add",
 		Short: "Add tags",
-		// When commented out, HELP info is rendered
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("consoler running with args=", args)
 		},
@@ -26,7 +25,6 @@ func CreateTagRemove(rootCmd *cobra.Command) {
 	command := &cobra.Command{
 		Use:   "remove",
 		Short: "Remove tags",
-		// When commented out, HELP info is rendered
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("consoler running with args=", args)
 		},
@@ -38,9 +36,17 @@ func CreateTagClear(rootCmd *cobra.Command) {
 	command := &cobra.Command{
 		Use:   "clear",
 		Short: "Clear tags",
-		// When commented out, HELP info is rendered
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("consoler running with args=", args)
+		},
+	}
+	rootCmd.AddCommand(command)
+}
+
+func CreateTagList(rootCmd *cobra.Command) {
+	command := &cobra.Command{
+		Use:   "list",
+		Short: "List tags",
+		Run: func(cmd *cobra.Command, args []string) {
 		},
 	}
 	rootCmd.AddCommand(command)

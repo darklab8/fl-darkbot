@@ -21,6 +21,8 @@ type ConfigScheme struct {
 
 var Config ConfigScheme
 
+var Dbpath string
+
 func load() {
 	utils.LogInfo("identifying folder of settings")
 	workdir := filepath.Dir(utils.GetCurrrentFolder())
@@ -33,6 +35,8 @@ func load() {
 	viper.Unmarshal(&Config)
 
 	utils.LogInfo("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
+
+	Dbpath = filepath.Join(workdir, "data", Config.ConfiguratorDbname+".sqlite3")
 }
 
 func init() {

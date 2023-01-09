@@ -3,8 +3,8 @@ package models
 import "gorm.io/gorm"
 
 type FKChannel struct {
-	ChannelID uint
-	Channel   Channel `gorm:"foreignKey:ChannelID"`
+	ChannelID string
+	Channel   Channel `gorm:"references:ChannelID"`
 }
 
 type TagTemplate struct {
