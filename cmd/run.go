@@ -7,6 +7,7 @@ import (
 	"darkbot/listener"
 	"darkbot/scrappy"
 	"darkbot/utils"
+	"darkbot/viewer"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -20,6 +21,7 @@ var runCmd = &cobra.Command{
 
 		go scrappy.Run()
 		go listener.Run()
+		go viewer.Run()
 		utils.SleepAwaitCtrlC()
 	},
 }

@@ -2,6 +2,7 @@ package configurator
 
 import (
 	"darkbot/configurator/models"
+	"darkbot/utils"
 	"fmt"
 )
 
@@ -43,11 +44,7 @@ func (c ConfiguratorBase) TagsList(channelID string) []string {
 	objs := []models.TagBase{}
 	c.db.Where("channel_id = ?", channelID).Find(&objs)
 
-	results := []string{}
-	for _, obj := range objs {
-		results = append(results, obj.Tag)
-	}
-	return results
+	return utils.Comprehension(objs, func(x models.TagBase) string { return x.Tag })
 }
 
 func (c ConfiguratorBase) TagsClear(channelID string) {
