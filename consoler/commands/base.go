@@ -37,11 +37,11 @@ func (t TagCommands) CreateTagAdd() {
 		Short: "Add tags",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("consoler running with args=", args)
+			fmt.Println("CreateTagAdd.consoler running with args=", args)
 			t.cfgTags.TagsAdd(t.channelInfo.ChannelID, args...)
 			fmt.Println(len(args))
 
-			helper.Printer{Cmd: cmd}.Print("OK tags are added")
+			helper.Printer{Cmd: cmd}.Println("OK tags are added")
 		},
 	}
 	t.rootBase.AddCommand(command)
@@ -53,10 +53,10 @@ func (t TagCommands) CreateTagRemove() {
 		Short: "Remove tags",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("consoler running with args=", args)
+			fmt.Println("CreateTagRemove.consoler running with args=", args)
 			t.cfgTags.TagsRemove(t.channelInfo.ChannelID, args...)
 
-			helper.Printer{Cmd: cmd}.Print("OK tags are removed")
+			helper.Printer{Cmd: cmd}.Println("OK tags are removed")
 		},
 	}
 	t.rootBase.AddCommand(command)
@@ -67,9 +67,10 @@ func (t TagCommands) CreateTagClear() {
 		Use:   "clear",
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("CreateTagClear.consoler running with args=", args)
 			t.cfgTags.TagsClear(t.channelInfo.ChannelID)
 
-			helper.Printer{Cmd: cmd}.Print("OK tags are cleared")
+			helper.Printer{Cmd: cmd}.Println("OK tags are cleared")
 		},
 	}
 	t.rootBase.AddCommand(command)
@@ -80,8 +81,9 @@ func (t TagCommands) CreateTagList() {
 		Use:   "list",
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("CreateTagList.consoler running with args=", args)
 			tags := t.cfgTags.TagsList(t.channelInfo.ChannelID)
-
+			fmt.Println("tags=", tags)
 			var sb strings.Builder
 			for number, tag := range tags {
 				sb.WriteString(tag)
@@ -91,8 +93,8 @@ func (t TagCommands) CreateTagList() {
 				}
 			}
 			printer := helper.Printer{Cmd: cmd}
-			printer.Print("OK tags are listed")
-			printer.Print(sb.String())
+			printer.Println("OK tags are listed")
+			printer.Println(sb.String())
 		},
 	}
 	t.rootBase.AddCommand(command)
