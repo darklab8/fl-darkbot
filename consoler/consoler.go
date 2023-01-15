@@ -5,6 +5,7 @@ package consoler
 
 import (
 	"darkbot/consoler/commands"
+	"darkbot/consoler/helper"
 	"strings"
 )
 
@@ -21,8 +22,8 @@ func (c Consoler) New(cmd string) *Consoler {
 	return &c
 }
 
-func (c *Consoler) Execute(channelID string) *Consoler {
-	rootCmd := commands.Create(channelID)
+func (c *Consoler) Execute(channelInfo helper.ChannelInfo) *Consoler {
+	rootCmd := commands.Create(channelInfo)
 	rootCmd.SetArgs(strings.Split(c.cmd, " "))
 
 	rootCmd.SetOut(c.buffStdout)

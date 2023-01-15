@@ -2,15 +2,16 @@ package commands
 
 import (
 	"darkbot/configurator"
+	"darkbot/consoler/helper"
 	"fmt"
 
 	"github.com/spf13/cobra"
 )
 
-func Create(channelID string) *cobra.Command {
+func Create(channelInfo helper.ChannelInfo) *cobra.Command {
 	rootCmd := CreateRoot()
 	CreatePing(rootCmd)
-	TagCommands{}.Init(rootCmd, configurator.Base{Configurator: configurator.NewConfigurator()}, channelID)
+	TagCommands{}.Init(rootCmd, configurator.Base{Configurator: configurator.NewConfigurator()}, channelInfo)
 
 	return rootCmd
 }

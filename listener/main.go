@@ -6,6 +6,7 @@ package listener
 
 import (
 	"darkbot/consoler"
+	"darkbot/consoler/helper"
 	"darkbot/settings"
 	"darkbot/utils"
 	"fmt"
@@ -41,7 +42,7 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	// If the message is "ping" reply with "Pong!"
-	rendered := consoler.Consoler{}.New(m.Content).Execute(m.ChannelID).String()
+	rendered := consoler.Consoler{}.New(m.Content).Execute(helper.ChannelInfo{ChannelID: m.ChannelID}).String()
 
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)

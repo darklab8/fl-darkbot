@@ -10,12 +10,12 @@ import (
 )
 
 type TagCommands struct {
-	rootBase  *cobra.Command
-	cfgTags   configurator.ConfiguratorTags
-	channelID string
+	rootBase    *cobra.Command
+	cfgTags     configurator.ConfiguratorTags
+	channelInfo helper.ChannelInfo
 }
 
-func (t TagCommands) Init(rootCmd *cobra.Command, cfgTags configurator.ConfiguratorTags, channelID string) {
+func (t TagCommands) Init(rootCmd *cobra.Command, cfgTags configurator.ConfiguratorTags, channelInfo helper.ChannelInfo) {
 	rootBase := &cobra.Command{
 		Use:   "base",
 		Short: "Base Commands",
@@ -24,7 +24,7 @@ func (t TagCommands) Init(rootCmd *cobra.Command, cfgTags configurator.Configura
 
 	t.rootBase = rootBase
 	t.cfgTags = cfgTags
-	t.channelID = channelID
+	t.channelInfo = channelInfo
 	t.CreateTagAdd()
 	t.CreateTagRemove()
 	t.CreateTagClear()
@@ -38,7 +38,7 @@ func (t TagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("consoler running with args=", args)
-			t.cfgTags.TagsAdd(t.channelID, args...)
+			t.cfgTags.TagsAdd(t.channelInfo.ChannelID, args...)
 			fmt.Println(len(args))
 
 			helper.Printer{Cmd: cmd}.Print("OK tags are added")
@@ -54,7 +54,7 @@ func (t TagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("consoler running with args=", args)
-			t.cfgTags.TagsRemove(t.channelID, args...)
+			t.cfgTags.TagsRemove(t.channelInfo.ChannelID, args...)
 
 			helper.Printer{Cmd: cmd}.Print("OK tags are removed")
 		},
@@ -67,7 +67,7 @@ func (t TagCommands) CreateTagClear() {
 		Use:   "clear",
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
-			t.cfgTags.TagsClear(t.channelID)
+			t.cfgTags.TagsClear(t.channelInfo.ChannelID)
 
 			helper.Printer{Cmd: cmd}.Print("OK tags are cleared")
 		},
@@ -80,7 +80,7 @@ func (t TagCommands) CreateTagList() {
 		Use:   "list",
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
-			tags := t.cfgTags.TagsList(t.channelID)
+			tags := t.cfgTags.TagsList(t.channelInfo.ChannelID)
 
 			var sb strings.Builder
 			for number, tag := range tags {
