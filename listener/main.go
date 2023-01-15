@@ -10,6 +10,7 @@ import (
 	"darkbot/settings"
 	"darkbot/utils"
 	"fmt"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -42,6 +43,12 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	// If the message is "ping" reply with "Pong!"
+
+	// only commands starting from prefix are allowed
+	if !strings.HasPrefix(m.Content, settings.Config.ConsolerPrefix) {
+		return
+	}
+
 	rendered := consoler.Consoler{}.New(m.Content).Execute(helper.ChannelInfo{ChannelID: m.ChannelID}).String()
 
 	if rendered != "" {

@@ -17,6 +17,8 @@ type ConfigScheme struct {
 	DiscorderBotToken string `mapstructure:"DISCORDER_BOT_TOKEN"`
 
 	ConfiguratorDbname string `mapstructure:"CONFIGURATOR_DBNAME"`
+
+	ConsolerPrefix string `mapstructure:"CONSOLER_PREFIX"`
 }
 
 var Config ConfigScheme
@@ -37,6 +39,10 @@ func load() {
 	utils.LogInfo("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
 
 	Dbpath = filepath.Join(workdir, "data", Config.ConfiguratorDbname+".sqlite3")
+
+	if Config.ConsolerPrefix == "" {
+		Config.ConsolerPrefix = "."
+	}
 }
 
 func init() {

@@ -3,6 +3,7 @@ package commands
 import (
 	"darkbot/configurator"
 	"darkbot/consoler/helper"
+	"darkbot/settings"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -11,7 +12,7 @@ import (
 func Create(channelInfo helper.ChannelInfo) *cobra.Command {
 	rootCmd := CreateRoot()
 	rootCmdPrefix := &cobra.Command{
-		Use:   ".",
+		Use:   settings.Config.ConsolerPrefix,
 		Short: "Welcome to darkbot!",
 	}
 	rootCmd.AddCommand(rootCmdPrefix)
