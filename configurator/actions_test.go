@@ -12,14 +12,14 @@ func TestTags(t *testing.T) {
 	os.Remove(settings.Dbpath)
 	channelID := "123"
 
-	cg := NewConfigurator()
-	cg.ActionBaseTagsAdd(channelID, []string{"4"}...)
-	cg.ActionBaseTagsAdd(channelID, []string{"5", "6"}...)
+	cg := Base{Configurator: NewConfigurator()}
+	cg.TagsAdd(channelID, []string{"4"}...)
+	cg.TagsAdd(channelID, []string{"5", "6"}...)
 
-	baseTags := cg.ActionBaseTagsList(channelID)
+	baseTags := cg.TagsList(channelID)
 	assert.Len(t, baseTags, 3)
 
-	cg.ActionBaseTagsClear(channelID)
-	baseTags = cg.ActionBaseTagsList(channelID)
+	cg.TagsClear(channelID)
+	baseTags = cg.TagsList(channelID)
 	assert.Len(t, baseTags, 0)
 }

@@ -21,8 +21,8 @@ func (c Consoler) New(cmd string) *Consoler {
 	return &c
 }
 
-func (c *Consoler) Execute() *Consoler {
-	rootCmd := commands.Create()
+func (c *Consoler) Execute(channelID string) *Consoler {
+	rootCmd := commands.Create(channelID)
 	rootCmd.SetArgs(strings.Split(c.cmd, " "))
 
 	rootCmd.SetOut(c.buffStdout)

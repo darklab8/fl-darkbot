@@ -5,8 +5,17 @@ import (
 	"fmt"
 )
 
-func (c Configurator) ActionBaseTagsAdd(channelID string, tags ...string) {
+type ConfiguratorTags interface {
+	TagsAdd(channelID string, tags ...string)
+	TagsList(channelID string) []string
+	TagsClear(channelID string)
+}
 
+type Base struct {
+	Configurator
+}
+
+func (c Base) TagsAdd(channelID string, tags ...string) {
 	c.db.FirstOrCreate(&models.Channel{ChannelID: channelID}, models.Channel{ChannelID: channelID})
 
 	objs := []models.TagBase{}
@@ -23,14 +32,18 @@ func (c Configurator) ActionBaseTagsAdd(channelID string, tags ...string) {
 	c.db.Create(objs)
 }
 
-func (c Configurator) ActionBaseTagsList(channelID string) []models.TagBase {
-
+func (c Base) TagsList(channelID string) []string {
 	objs := []models.TagBase{}
 	c.db.Where("channel_id = ?", channelID).Find(&objs)
-	return objs
+
+	results := []string{}
+	for _, obj := range objs {
+		results = append(results, obj.Tag)
+	}
+	return results
 }
 
-func (c Configurator) ActionBaseTagsClear(channelID string) {
+func (c Base) TagsClear(channelID string) {
 	var tags []models.TagBase
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
 	fmt.Println("Clear.Find.rowsAffected=", result.RowsAffected)
