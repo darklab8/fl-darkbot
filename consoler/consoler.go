@@ -6,6 +6,7 @@ package consoler
 import (
 	"darkbot/consoler/commands"
 	"darkbot/consoler/helper"
+	"darkbot/settings"
 	"strings"
 )
 
@@ -23,6 +24,11 @@ func (c Consoler) New(cmd string) *Consoler {
 }
 
 func (c *Consoler) Execute(channelInfo helper.ChannelInfo) *Consoler {
+	// only commands starting from prefix are allowed
+	if !strings.HasPrefix(c.cmd, settings.Config.ConsolerPrefix) {
+		return c
+	}
+
 	rootCmd := commands.Create(channelInfo)
 	rootCmd.SetArgs(strings.Split(c.cmd, " "))
 
