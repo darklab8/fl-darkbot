@@ -7,6 +7,7 @@ import (
 
 type ConfiguratorTags interface {
 	TagsAdd(channelID string, tags ...string)
+	TagsRemove(channelID string, tags ...string)
 	TagsList(channelID string) []string
 	TagsClear(channelID string)
 }
@@ -30,6 +31,12 @@ func (c Base) TagsAdd(channelID string, tags ...string) {
 	}
 
 	c.db.Create(objs)
+}
+
+func (c Base) TagsRemove(channelID string, tags ...string) {
+	for _, tag := range tags {
+		c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&models.TagBase{})
+	}
 }
 
 func (c Base) TagsList(channelID string) []string {

@@ -2,6 +2,7 @@ package commands
 
 import (
 	"darkbot/configurator"
+	"darkbot/consoler/helper"
 	"fmt"
 	"strings"
 
@@ -40,7 +41,7 @@ func (t TagCommands) CreateTagAdd() {
 			t.cfgTags.TagsAdd(t.channelID, args...)
 			fmt.Println(len(args))
 
-			cmd.OutOrStdout().Write([]byte("OK tags are added"))
+			helper.Printer{Cmd: cmd}.Print("OK tags are added")
 		},
 	}
 	t.rootBase.AddCommand(command)
@@ -53,6 +54,9 @@ func (t TagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("consoler running with args=", args)
+			t.cfgTags.TagsRemove(t.channelID, args...)
+
+			helper.Printer{Cmd: cmd}.Print("OK tags are removed")
 		},
 	}
 	t.rootBase.AddCommand(command)
@@ -64,6 +68,8 @@ func (t TagCommands) CreateTagClear() {
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			t.cfgTags.TagsClear(t.channelID)
+
+			helper.Printer{Cmd: cmd}.Print("OK tags are cleared")
 		},
 	}
 	t.rootBase.AddCommand(command)
@@ -84,7 +90,9 @@ func (t TagCommands) CreateTagList() {
 					sb.WriteString(", ")
 				}
 			}
-			cmd.OutOrStdout().Write([]byte(sb.String()))
+			printer := helper.Printer{Cmd: cmd}
+			printer.Print("OK tags are listed")
+			printer.Print(sb.String())
 		},
 	}
 	t.rootBase.AddCommand(command)
