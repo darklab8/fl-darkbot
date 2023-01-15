@@ -5,18 +5,18 @@ import (
 	"fmt"
 )
 
-type ConfiguratorTags interface {
+type IConfiguratorTags interface {
 	TagsAdd(channelID string, tags ...string)
 	TagsRemove(channelID string, tags ...string)
 	TagsList(channelID string) []string
 	TagsClear(channelID string)
 }
 
-type Base struct {
+type ConfiguratorBase struct {
 	Configurator
 }
 
-func (c Base) TagsAdd(channelID string, tags ...string) {
+func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) {
 	c.db.FirstOrCreate(&models.Channel{ChannelID: channelID}, models.Channel{ChannelID: channelID})
 
 	objs := []models.TagBase{}
@@ -33,13 +33,13 @@ func (c Base) TagsAdd(channelID string, tags ...string) {
 	c.db.Create(objs)
 }
 
-func (c Base) TagsRemove(channelID string, tags ...string) {
+func (c ConfiguratorBase) TagsRemove(channelID string, tags ...string) {
 	for _, tag := range tags {
 		c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&models.TagBase{})
 	}
 }
 
-func (c Base) TagsList(channelID string) []string {
+func (c ConfiguratorBase) TagsList(channelID string) []string {
 	objs := []models.TagBase{}
 	c.db.Where("channel_id = ?", channelID).Find(&objs)
 
@@ -50,7 +50,7 @@ func (c Base) TagsList(channelID string) []string {
 	return results
 }
 
-func (c Base) TagsClear(channelID string) {
+func (c ConfiguratorBase) TagsClear(channelID string) {
 	var tags []models.TagBase
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
 	fmt.Println("Clear.Find.rowsAffected=", result.RowsAffected)

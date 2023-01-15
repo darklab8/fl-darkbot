@@ -12,7 +12,7 @@ func TestTags(t *testing.T) {
 	os.Remove(settings.Dbpath)
 	channelID := "123"
 
-	cg := Base{Configurator: NewConfigurator()}
+	cg := ConfiguratorBase{Configurator: NewConfigurator()}
 	cg.TagsAdd(channelID, []string{"4"}...)
 	cg.TagsAdd(channelID, []string{"5", "6"}...)
 

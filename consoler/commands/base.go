@@ -11,11 +11,11 @@ import (
 
 type TagCommands struct {
 	rootBase    *cobra.Command
-	cfgTags     configurator.ConfiguratorTags
+	cfgTags     configurator.IConfiguratorTags
 	channelInfo helper.ChannelInfo
 }
 
-func (t TagCommands) Init(rootCmd *cobra.Command, cfgTags configurator.ConfiguratorTags, channelInfo helper.ChannelInfo) {
+func (t TagCommands) Init(rootCmd *cobra.Command, cfgTags configurator.IConfiguratorTags, channelInfo helper.ChannelInfo) {
 	rootBase := &cobra.Command{
 		Use:   "base",
 		Short: "Base Commands",
