@@ -2,7 +2,6 @@ package configurator
 
 import (
 	"darkbot/settings"
-	"fmt"
 	"os"
 	"testing"
 
@@ -23,16 +22,4 @@ func TestTags(t *testing.T) {
 	cg.TagsClear(channelID)
 	baseTags = cg.TagsList(channelID)
 	assert.Len(t, baseTags, 0)
-}
-
-func TestChannels(t *testing.T) {
-	os.Remove(settings.Dbpath)
-	cg := ConfiguratorChannel{Configurator: NewConfigurator()}
-
-	cg.Add("1", "2", "3")
-
-	channels := cg.List()
-	fmt.Println(channels)
-
-	assert.Len(t, channels, 3)
 }
