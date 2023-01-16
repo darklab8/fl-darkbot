@@ -44,7 +44,8 @@ func (c ConfiguratorBase) TagsList(channelID string) []string {
 	objs := []models.TagBase{}
 	c.db.Where("channel_id = ?", channelID).Find(&objs)
 
-	return utils.Comprehension(objs, func(x models.TagBase) string { return x.Tag })
+	return utils.CompL(objs,
+		func(x models.TagBase) string { return x.Tag })
 }
 
 func (c ConfiguratorBase) TagsClear(channelID string) {
