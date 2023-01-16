@@ -13,6 +13,7 @@ type ChannelView struct {
 	channelID string
 }
 
+// Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
 func (v *ChannelView) Discover() {
 	utils.LogInfo("viewer.Init.channelID=", v.channelID)

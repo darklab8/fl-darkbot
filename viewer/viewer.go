@@ -34,7 +34,6 @@ func (v Viewer) Update() {
 	channelIDs := v.channels.List()
 
 	// For each channel
-	// Query all Discord messages
 	for _, channelID := range channelIDs {
 		view := ChannelView{discorder: discorder.NewClient(), channelID: channelID}
 		view.Discover()
