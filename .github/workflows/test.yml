@@ -29,5 +29,5 @@ jobs:
 
       - name: Test
         run: task test
-        with:
+        env:
           CI: "true"
