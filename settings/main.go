@@ -2,6 +2,7 @@ package settings
 
 import (
 	"darkbot/utils"
+	"os"
 	"path/filepath"
 
 	"github.com/caarlos0/env/v6"
@@ -13,7 +14,7 @@ type ConfigScheme struct {
 	ScrappyBaseUrl   string `env:"SCRAPPY_BASE_URL"`
 	ScrappyPlayerUrl string `env:"SCRAPPY_PLAYER_URL"`
 
-	ScrappyForumUsername string `env:"SCRAPPY_FORUM_USERNAME"`
+	ScrappyForumUsername string `env:"SCRAPPY_FORUM_USERNAME"  envDefault:"example"`
 	ScrappyForumPassword string `env:"SCRAPPY_FORUM_PASSWORD"`
 
 	DiscorderBotToken string `env:"DISCORDER_BOT_TOKEN"`
@@ -36,8 +37,13 @@ func load() {
 		utils.LogInfo("loadded settings from .env")
 	}
 
-	opts := env.Options{RequiredIfNoDef: true}
-	err = env.Parse(&Config, opts)
+	if os.Getenv("CI") == "true" {
+		err = env.Parse(&Config)
+	} else {
+		opts := env.Options{RequiredIfNoDef: true}
+		err = env.Parse(&Config, opts)
+	}
+
 	utils.CheckPanic(err, "settings have unset variable")
 
 	utils.LogInfo("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
