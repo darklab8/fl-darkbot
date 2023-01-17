@@ -2,7 +2,9 @@ package viewer
 
 import (
 	"darkbot/utils"
+	"fmt"
 	"strings"
+	"time"
 )
 
 type ChannelView struct {
@@ -37,9 +39,22 @@ func (v *ChannelView) Render() {
 // Edit if message ID is present.
 // Send if not present.
 func (v ChannelView) Send() {
+	if v.BaseView.Content == "" {
+		return
+	}
+
+	var err error
 	if v.BaseView.MessageID == "" {
-		v.discorder.SengMessage(v.channelID, v.BaseView.Content)
+		err = v.discorder.SengMessage(v.channelID, v.BaseView.Content)
+
+		if err != nil {
+			err = v.discorder.SengMessage(v.channelID, fmt.Sprintf("%s, %s, %s", BaseViewHeader, time.Now(), err))
+		}
 	} else {
-		v.discorder.EditMessage(v.channelID, v.BaseView.MessageID, v.BaseView.Content)
+		err = v.discorder.EditMessage(v.channelID, v.BaseView.MessageID, v.BaseView.Content)
+
+		if err != nil {
+			err = v.discorder.EditMessage(v.channelID, v.BaseView.MessageID, fmt.Sprintf("%s, %s, %s", BaseViewHeader, time.Now(), err))
+		}
 	}
 }

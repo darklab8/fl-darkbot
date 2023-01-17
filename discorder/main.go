@@ -28,12 +28,16 @@ func NewClient() Discorder {
 	return d
 }
 
-func (d Discorder) SengMessage(channelID string, content string) {
-	d.dg.ChannelMessageSend(channelID, content)
+func (d Discorder) SengMessage(channelID string, content string) error {
+	_, err := d.dg.ChannelMessageSend(channelID, content)
+	utils.CheckWarn(err)
+	return err
 }
 
-func (d Discorder) EditMessage(channelID string, messageID string, content string) {
-	d.dg.ChannelMessageEdit(channelID, messageID, content)
+func (d Discorder) EditMessage(channelID string, messageID string, content string) error {
+	_, err := d.dg.ChannelMessageEdit(channelID, messageID, content)
+	utils.CheckWarn(err)
+	return err
 }
 
 func (d Discorder) DeleteMessage(channelID string, messageID string) {
