@@ -11,7 +11,7 @@ type Base struct {
 	Affiliation string
 	Health      float64
 	Tid         int
-	name        string
+	Name        string
 }
 
 type BaseStorage struct {
@@ -28,7 +28,7 @@ func (b *BaseStorage) Update() {
 	utils.LogInfo("updated base storage")
 }
 
-func (b BaseStorage) New() BaseStorage {
+func (b *BaseStorage) New() *BaseStorage {
 	b.parser = baseParser{}
 	b.api = basesAPI{}
 	return b

@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func FixtureBaseStorageMockified() PlayerStorage {
-	storage := PlayerStorage{}.New()
+func FixtureBaseStorageMockified() *PlayerStorage {
+	storage := (&PlayerStorage{}).New()
 	storage.api = APIPlayerSpy{}
 	return storage
 }

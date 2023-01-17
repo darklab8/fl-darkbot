@@ -28,7 +28,7 @@ func (b *PlayerStorage) Update() {
 	utils.LogInfo("updated player storage")
 }
 
-func (b PlayerStorage) New() PlayerStorage {
+func (b *PlayerStorage) New() *PlayerStorage {
 	b.parser = playerParser{}
 	b.api = PlayerAPI{}
 	return b

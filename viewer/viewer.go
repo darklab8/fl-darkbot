@@ -3,6 +3,7 @@ package viewer
 import (
 	"darkbot/configurator"
 	"darkbot/discorder"
+	"darkbot/scrappy"
 	"darkbot/utils"
 	"time"
 )
@@ -35,11 +36,28 @@ func (v Viewer) Update() {
 
 	// For each channel
 	for _, channelID := range channelIDs {
-		view := ChannelView{discorder: discorder.NewClient(), channelID: channelID}
+		view := NewChannelView(channelID)
 		view.Discover()
 		view.Render()
 		view.Send()
 		time.Sleep(time.Duration(v.delays.betweenChannels) * time.Second)
 	}
 	time.Sleep(time.Duration(v.delays.betweenLoops) * time.Second)
+}
+
+type ViewConfig struct {
+	discorder discorder.Discorder
+	channelID string
+	scrappy   *scrappy.ScrappyStorage
+	bases     configurator.ConfiguratorBase
+}
+
+func NewViewerConfig(channelID string) ViewConfig {
+	view := ViewConfig{
+		discorder: discorder.NewClient(),
+		channelID: channelID,
+		scrappy:   scrappy.Storage,
+		bases:     configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()},
+	}
+	return view
 }

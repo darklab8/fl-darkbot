@@ -1,16 +1,20 @@
 package viewer
 
 import (
-	"darkbot/discorder"
 	"darkbot/utils"
-	"fmt"
 	"strings"
 )
 
 type ChannelView struct {
-	discorder discorder.Discorder
-	BaseView  BaseView
-	channelID string
+	ViewConfig
+	BaseView BaseView
+}
+
+func NewChannelView(channelID string) ChannelView {
+	view := ChannelView{}
+	view.ViewConfig = NewViewerConfig(channelID)
+	view.BaseView.ViewConfig = view.ViewConfig
+	return view
 }
 
 // Query all Discord messages
@@ -27,7 +31,7 @@ func (v *ChannelView) Discover() {
 
 // Render new messages (ensure preserved Message ID)
 func (v *ChannelView) Render() {
-	v.BaseView.Content = fmt.Sprintf("%s\n```Content :)```", BaseViewHeader)
+	v.BaseView.Render()
 }
 
 // Edit if message ID is present.

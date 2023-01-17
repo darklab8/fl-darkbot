@@ -27,7 +27,7 @@ func (b baseParser) Parse(body []byte) records.StampedObjects[Base] {
 		record.Add(
 			name,
 			Base{
-				name:        name,
+				Name:        name,
 				Affiliation: serializer.Affiliation,
 				Health:      serializer.Health,
 				Tid:         serializer.Tid,

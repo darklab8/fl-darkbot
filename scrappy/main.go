@@ -8,32 +8,32 @@ import (
 )
 
 type ScrappyStorage struct {
-	baseStorage   base.BaseStorage
-	playerStorage player.PlayerStorage
+	BaseStorage   *base.BaseStorage
+	PlayerStorage *player.PlayerStorage
 }
 
 func (s *ScrappyStorage) New() *ScrappyStorage {
-	s.baseStorage = base.BaseStorage{}.New()
-	s.playerStorage = player.PlayerStorage{}.New()
+	s.BaseStorage = (&base.BaseStorage{}).New()
+	s.PlayerStorage = (&player.PlayerStorage{}).New()
 	return s
 }
 
 func (s *ScrappyStorage) Update() {
-	s.baseStorage.Update()
-	s.playerStorage.Update()
+	s.BaseStorage.Update()
+	s.PlayerStorage.Update()
 }
 
-var storage *ScrappyStorage
+var Storage *ScrappyStorage
 
 func init() {
 	utils.LogInfo("initialized scrappy")
-	storage = (&ScrappyStorage{}).New()
+	Storage = (&ScrappyStorage{}).New()
 }
 
 func Run() {
 	utils.LogInfo("starting scrappy infinity update loop")
 	for {
-		storage.Update()
+		Storage.Update()
 		time.Sleep(10 * time.Second)
 	}
 	utils.LogInfo("gracefully shutdown scrappy infinity loop")

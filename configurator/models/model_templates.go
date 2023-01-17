@@ -10,7 +10,7 @@ type FKChannel struct {
 type TagTemplate struct {
 	gorm.Model
 	FKChannel
-	Tag string
+	Tag string `gorm:"unique"`
 }
 
 type AlertTemplate struct {
