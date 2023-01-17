@@ -24,10 +24,8 @@ func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) {
 
 	for _, tag := range tags {
 		objs = append(objs, models.TagBase{
-			TagTemplate: models.TagTemplate{
-				Tag:       tag,
-				FKChannel: models.FKChannel{ChannelID: channelID},
-			},
+			Tag:       tag,
+			ChannelID: channelID,
 		})
 	}
 
