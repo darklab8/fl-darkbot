@@ -1,6 +1,6 @@
 {{.Header}} (last updated: {{.LastUpdated}})
 **Bases:** `Health` - `Name` - `Affiliation`
-```arm
+```{{ if .Bases }}arm{{ end }}
 {{range $val := .Bases -}}
 health: {{$val.Health | printf "\"%.1f\""}}, #name: {{$val.Name | printf "%q"}}, #affiliation: {{$val.Affiliation | printf "%q"}}
 {{ end -}}
