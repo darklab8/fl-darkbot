@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 type ChannelView struct {
 	ViewConfig
 	BaseView BaseView
+	Msgs     []*discordgo.Message
 }
 
 func NewChannelView(channelID string) ChannelView {
@@ -29,6 +32,8 @@ func (v *ChannelView) Discover() {
 			v.BaseView.MessageID = msg.ID
 		}
 	}
+
+	v.Msgs = msgs
 }
 
 // Render new messages (ensure preserved Message ID)
@@ -56,5 +61,27 @@ func (v ChannelView) Send() {
 		if err != nil {
 			err = v.discorder.EditMessage(v.channelID, v.BaseView.MessageID, fmt.Sprintf("%s, %s, %s", BaseViewHeader, time.Now(), err))
 		}
+	}
+}
+
+func (v ChannelView) DeleteOld() {
+	deleteLimit := 10
+	for _, msg := range v.Msgs {
+		if msg.ID == v.BaseView.MessageID {
+			continue
+		}
+
+		if deleteLimit <= 0 {
+			break
+		}
+
+		timeDiff := time.Now().Sub(msg.Timestamp)
+		if timeDiff.Seconds() < 40 {
+			continue
+		}
+
+		v.discorder.DeleteMessage(v.channelID, msg.ID)
+		utils.LogInfo("deleted message with id", msg.ID)
+		deleteLimit--
 	}
 }

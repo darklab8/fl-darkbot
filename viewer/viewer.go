@@ -40,6 +40,7 @@ func (v Viewer) Update() {
 		view.Discover()
 		view.Render()
 		view.Send()
+		view.DeleteOld()
 		time.Sleep(time.Duration(v.delays.betweenChannels) * time.Second)
 	}
 	time.Sleep(time.Duration(v.delays.betweenLoops) * time.Second)

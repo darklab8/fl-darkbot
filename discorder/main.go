@@ -41,7 +41,8 @@ func (d Discorder) EditMessage(channelID string, messageID string, content strin
 }
 
 func (d Discorder) DeleteMessage(channelID string, messageID string) {
-	d.dg.ChannelMessageDelete(channelID, messageID)
+	err := d.dg.ChannelMessageDelete(channelID, messageID)
+	utils.CheckWarn(err)
 }
 
 func (d Discorder) GetLatestMessages(channelID string) []*discordgo.Message {
