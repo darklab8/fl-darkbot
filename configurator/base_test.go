@@ -23,3 +23,17 @@ func TestTags(t *testing.T) {
 	baseTags = cg.TagsList(channelID)
 	assert.Len(t, baseTags, 0)
 }
+
+func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
+	os.Remove(settings.Dbpath)
+	cg := ConfiguratorBase{Configurator: NewConfigurator()}
+	cg.TagsAdd("c1", []string{"t1"}...)
+	cg.TagsAdd("c2", []string{"t1"}...)
+
+	assert.Len(t, cg.TagsList("c1"), 1)
+	assert.Len(t, cg.TagsList("c2"), 1)
+
+	cg.TagsAdd("c2", []string{"t1"}...)
+
+	assert.Len(t, cg.TagsList("c2"), 1)
+}
