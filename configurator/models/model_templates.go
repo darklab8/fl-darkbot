@@ -2,13 +2,18 @@ package models
 
 import "gorm.io/gorm"
 
+type ChannelShared struct {
+	ChannelID string
+	Channel   Channel `gorm:"references:ChannelID"`
+}
+
 type TagTemplate struct {
 	gorm.Model
-	Channel Channel `gorm:"references:ChannelID"`
+	ChannelShared
+	Tag string
 }
 
 type AlertTemplate struct {
 	gorm.Model
-	ChannelID string
-	Channel   Channel `gorm:"references:ChannelID"`
+	ChannelShared
 }

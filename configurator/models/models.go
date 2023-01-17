@@ -8,51 +8,30 @@ type Channel struct {
 
 type TagBase struct {
 	TagTemplate
-
-	ChannelID string `gorm:"uniqueIndex:idx_1_tag_per_channel"`
-	Tag       string `gorm:"uniqueIndex:idx_1_tag_per_channel"`
 }
 
 type TagPlayerFriend struct {
 	TagTemplate
-
-	ChannelID string `gorm:"uniqueIndex:idx_2_tag_per_channel"`
-	Tag       string `gorm:"uniqueIndex:idx_2_tag_per_channel"`
 }
 
 type TagPlayerEnemy struct {
 	TagTemplate
-
-	ChannelID string `gorm:"uniqueIndex:idx_3_tag_per_channel"`
-	Tag       string `gorm:"uniqueIndex:idx_3_tag_per_channel"`
 }
 
 type TagSystem struct {
 	TagTemplate
-
-	ChannelID string `gorm:"uniqueIndex:idx_4_tag_per_channel"`
-	Tag       string `gorm:"uniqueIndex:idx_4_tag_per_channel"`
 }
 
 type TagRegion struct {
 	TagTemplate
-
-	ChannelID string `gorm:"uniqueIndex:idx_5_tag_per_channel"`
-	Tag       string `gorm:"uniqueIndex:idx_5_tag_per_channel"`
 }
 
 type TagForumPostTrack struct {
 	TagTemplate
-
-	ChannelID string `gorm:"uniqueIndex:idx_6_tag_per_channel"`
-	Tag       string `gorm:"uniqueIndex:idx_6_tag_per_channel"`
 }
 
 type TagForumPostIgnore struct {
 	TagTemplate
-
-	ChannelID string `gorm:"uniqueIndex:idx_7_tag_per_channel"`
-	Tag       string `gorm:"uniqueIndex:idx_7_tag_per_channel"`
 }
 
 // =========== Alerts ===============

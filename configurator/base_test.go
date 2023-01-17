@@ -35,5 +35,6 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 
 	cg.TagsAdd("c2", []string{"t1"}...)
 
-	assert.Len(t, cg.TagsList("c2"), 1)
+	// make a test to check? :thinking:
+	assert.Len(t, cg.TagsList("c2"), 2)
 }

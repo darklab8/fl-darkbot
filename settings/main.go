@@ -2,7 +2,6 @@ package settings
 
 import (
 	"darkbot/utils"
-	"os"
 	"path/filepath"
 
 	"github.com/caarlos0/env/v6"
@@ -37,12 +36,8 @@ func load() {
 		utils.LogInfo("loadded settings from .env")
 	}
 
-	if os.Getenv("CI") == "true" {
-		err = env.Parse(&Config)
-	} else {
-		opts := env.Options{RequiredIfNoDef: true}
-		err = env.Parse(&Config, opts)
-	}
+	opts := env.Options{RequiredIfNoDef: true}
+	err = env.Parse(&Config, opts)
 
 	utils.CheckPanic(err, "settings have unset variable")
 
