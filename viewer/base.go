@@ -4,6 +4,7 @@ import (
 	"darkbot/scrappy/base"
 	"darkbot/utils"
 	_ "embed"
+	"sort"
 	"strings"
 	"text/template"
 	"time"
@@ -53,6 +54,10 @@ func (b *BaseView) Render() {
 	if err != nil {
 		return
 	}
+	sort.Slice(record.List, func(i, j int) bool {
+		return record.List[i].Name < record.List[j].Name
+	})
+
 	tags := b.bases.TagsList(b.channelID)
 
 	for _, base := range record.List {
