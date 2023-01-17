@@ -34,18 +34,21 @@ func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) {
 		})
 	}
 
-	c.db.Create(objs)
+	result := c.db.Create(objs)
+	utils.CheckWarn(result.Error, "unsuccesful result of c.db.Create")
 }
 
 func (c ConfiguratorBase) TagsRemove(channelID string, tags ...string) {
 	for _, tag := range tags {
-		c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&models.TagBase{})
+		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&models.TagBase{})
+		utils.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
 	}
 }
 
 func (c ConfiguratorBase) TagsList(channelID string) []string {
 	objs := []models.TagBase{}
-	c.db.Where("channel_id = ?", channelID).Find(&objs)
+	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
+	utils.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 
 	return utils.CompL(objs,
 		func(x models.TagBase) string { return x.Tag })
