@@ -30,3 +30,18 @@ func TestBaseViewer(t *testing.T) {
 	base.Render()
 	fmt.Println(base.Content)
 }
+
+// func TestIntegrationTesting(t *testing.T) {
+// 	os.Remove(settings.Dbpath)
+// 	channelID := "838802002582175756"
+
+// 	cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()}
+// 	cg.TagsAdd(channelID, []string{"Station"}...)
+
+// 	scrappy.Storage.Update()
+
+// 	base := BaseView{}
+// 	base.ViewConfig = NewViewerConfig(channelID)
+// 	base.Render()
+// 	fmt.Println(base.Content)
+// }
