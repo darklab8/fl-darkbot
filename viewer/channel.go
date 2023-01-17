@@ -41,6 +41,38 @@ func (v *ChannelView) Render() {
 	v.BaseView.Render()
 }
 
+type MsgAction int
+
+const (
+	ActSend MsgAction = iota
+	ActEdit
+)
+
+func CheckTooLongMsgErr(err error, api ViewConfig, header string, action MsgAction, MessageID string) {
+	if err == nil {
+		return
+	}
+
+	if !strings.Contains(err.Error(), "BASE_TYPE_MAX_LENGTH") &&
+		!strings.Contains(err.Error(), "or fewer in length") {
+		return
+	}
+
+	msg := fmt.Sprintf("%s, %s, %s", BaseViewHeader, time.Now(), err)
+
+	switch action {
+	case ActSend:
+		api.discorder.SengMessage(api.channelID, msg)
+	case ActEdit:
+		api.discorder.EditMessage(api.channelID, MessageID, msg)
+	}
+
+}
+
+func ChannelCheckWarn(err error, channelID string, msg string) {
+	utils.CheckWarn(err, "channelID=", channelID, msg)
+}
+
 // Edit if message ID is present.
 // Send if not present.
 func (v ChannelView) Send() {
@@ -51,16 +83,13 @@ func (v ChannelView) Send() {
 	var err error
 	if v.BaseView.MessageID == "" {
 		err = v.discorder.SengMessage(v.channelID, v.BaseView.Content)
+		ChannelCheckWarn(err, v.channelID, "unable to send msg")
+		CheckTooLongMsgErr(err, v.ViewConfig, BaseViewHeader, ActSend, "")
 
-		if err != nil {
-			err = v.discorder.SengMessage(v.channelID, fmt.Sprintf("%s, %s, %s", BaseViewHeader, time.Now(), err))
-		}
 	} else {
 		err = v.discorder.EditMessage(v.channelID, v.BaseView.MessageID, v.BaseView.Content)
-
-		if err != nil {
-			err = v.discorder.EditMessage(v.channelID, v.BaseView.MessageID, fmt.Sprintf("%s, %s, %s", BaseViewHeader, time.Now(), err))
-		}
+		ChannelCheckWarn(err, v.channelID, "unable to edit msg")
+		CheckTooLongMsgErr(err, v.ViewConfig, BaseViewHeader, ActEdit, v.BaseView.MessageID)
 	}
 }
 
