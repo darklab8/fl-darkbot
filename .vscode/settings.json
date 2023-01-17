@@ -1,9 +1,6 @@
 {
-    "python.formatting.provider": "black",
-    "python.linting.enabled": true,
-    "python.testing.pytestEnabled": true,
-    "editor.formatOnSave": true
-    // "terminal.integrated.env.linux": {
-    //     "DARK_TEST_REGENERATE": "true"
-    // }
+    "editor.formatOnSave": true,
+    "terminal.integrated.env.linux": {
+        // "DARK_TEST_REGENERATE": "false",
+    }
 }

@@ -1,0 +1,7 @@
+chromedriver
+.terraform
+OLD_CODE
+OLD_CODE2
+.env
+.env.example
+main
