@@ -1,4 +1,4 @@
-package viewer
+package templ
 
 import (
 	"darkbot/configurator"
@@ -6,6 +6,7 @@ import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/shared/records"
 	"darkbot/settings"
+	"darkbot/viewer/apis"
 	"fmt"
 	"os"
 	"testing"
@@ -25,8 +26,8 @@ func TestBaseViewer(t *testing.T) {
 	record.Add("Station2", base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
 	bases.Add(record)
 
-	base := BaseView{}
-	base.ViewConfig = NewViewerConfig(channelID)
+	base := TemplateBase{}
+	base.API = apis.NewAPI(channelID)
 	base.Render()
 	fmt.Println(base.Content)
 }
@@ -41,7 +42,7 @@ func TestBaseViewer(t *testing.T) {
 // 	scrappy.Storage.Update()
 
 // 	base := BaseView{}
-// 	base.ViewConfig = NewViewerConfig(channelID)
+// 	base.ViewConfig = apis.NewAPI(channelID)
 // 	base.Render()
 // 	fmt.Println(base.Content)
 // }

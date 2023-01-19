@@ -2,6 +2,8 @@ package viewer
 
 import (
 	"darkbot/utils"
+	"darkbot/viewer/apis"
+	"darkbot/viewer/templ"
 	"strings"
 	"time"
 
@@ -9,24 +11,23 @@ import (
 )
 
 type ChannelView struct {
-	ViewConfig
-	BaseView BaseView
+	*apis.API
+	BaseView *templ.TemplateBase
 	Msgs     []*discordgo.Message
 }
 
 func NewChannelView(channelID string) ChannelView {
 	view := ChannelView{}
-	view.ViewConfig = NewViewerConfig(channelID)
-	view.BaseView.ViewConfig = view.ViewConfig
-	view.BaseView.Header = BaseViewHeader
+	view.API = apis.NewAPI(channelID)
+	view.BaseView = templ.NewTemplateBase(channelID)
 	return view
 }
 
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
 func (v *ChannelView) Discover() {
-	utils.LogInfo("viewer.Init.channelID=", v.channelID)
-	msgs := v.discorder.GetLatestMessages(v.channelID)
+	utils.LogInfo("viewer.Init.channelID=", v.ChannelID)
+	msgs := v.Discorder.GetLatestMessages(v.ChannelID)
 	for _, msg := range msgs {
 		if strings.Contains(msg.Content, v.BaseView.Header) {
 			v.BaseView.MessageID = msg.ID
@@ -40,13 +41,6 @@ func (v *ChannelView) Discover() {
 func (v *ChannelView) Render() {
 	v.BaseView.Render()
 }
-
-type MsgAction int
-
-const (
-	ActSend MsgAction = iota
-	ActEdit
-)
 
 // Edit if message ID is present.
 // Send if not present.
@@ -70,7 +64,7 @@ func (v ChannelView) DeleteOld() {
 			continue
 		}
 
-		v.discorder.DeleteMessage(v.channelID, msg.ID)
+		v.Discorder.DeleteMessage(v.ChannelID, msg.ID)
 		utils.LogInfo("deleted message with id", msg.ID)
 		deleteLimit--
 	}
