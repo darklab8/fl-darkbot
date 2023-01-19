@@ -34,11 +34,57 @@ func Run() {
 	fmt.Println("gracefully closed discord conn")
 }
 
-func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
+	botID := s.State.User.ID
+	messageAuthorID := m.Author.ID
+	botCreatorID := "370435997974134785"
 
 	// Ignore all messages created by the bot itself
 	// This isn't required in this specific example but it's a good practice.
-	if m.Author.ID == s.State.User.ID {
+	if messageAuthorID == botID {
+		return false
+	}
+
+	// Bots should not command it
+	if m.Author.Bot {
+		return false
+	}
+
+	guild, guildErr := s.Guild(m.GuildID)
+
+	// If not guild, then exit
+	if guildErr != nil {
+		return false
+	}
+	if m.Member == nil {
+		return false
+	}
+
+	var isBotController bool
+	for _, roleID := range m.Member.Roles {
+		role, err := s.State.Role(m.GuildID, roleID)
+		if err != nil {
+			continue
+		}
+
+		if role.Name == "bot_controller" {
+			isBotController = true
+		}
+	}
+
+	// if message not from guild owner, bot creator or person with role bot_controller, then ignore
+	if guild.OwnerID != messageAuthorID &&
+		botCreatorID != messageAuthorID &&
+		!isBotController {
+		return false
+	}
+
+	return true
+}
+
+func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+
+	if !allowedMessage(s, m) {
 		return
 	}
 
