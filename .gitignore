@@ -4,3 +4,4 @@
 /chromedriver
 /data/*
 !/data/.gitkeep
+settings.json
