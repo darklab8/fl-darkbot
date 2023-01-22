@@ -18,7 +18,12 @@ func Create(channelInfo helper.ChannelInfo) *cobra.Command {
 	rootCmd.AddCommand(rootCmdPrefix)
 
 	CreatePing(rootCmdPrefix)
-	TagCommands{}.Init(rootCmdPrefix, configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()}, channelInfo)
+
+	TagCommands{}.Init(
+		rootCmdPrefix,
+		configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()},
+		channelInfo,
+	)
 
 	return rootCmd
 }

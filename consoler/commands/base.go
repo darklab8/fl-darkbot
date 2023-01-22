@@ -9,13 +9,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type TagCommands struct {
+type CommandShared struct {
 	rootBase    *cobra.Command
 	cfgTags     configurator.IConfiguratorTags
 	channelInfo helper.ChannelInfo
 }
 
-func (t TagCommands) Init(rootCmd *cobra.Command, cfgTags configurator.IConfiguratorTags, channelInfo helper.ChannelInfo) {
+type TagCommands struct {
+	CommandShared
+}
+
+func (t TagCommands) Init(
+	rootCmd *cobra.Command,
+	cfgTags configurator.IConfiguratorTags,
+	channelInfo helper.ChannelInfo,
+) {
 	rootBase := &cobra.Command{
 		Use:   "base",
 		Short: "Base Commands",

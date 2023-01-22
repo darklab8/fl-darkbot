@@ -26,3 +26,11 @@ tasks:
   docker:push:
     cmds:
       - docker push darkwind8/darkbot:v0.1.0-a.2
+
+  mkdocs:init:
+    cmds:
+      - poetry install
+
+  mkdocs:dev:
+    cmds:
+      - poetry run -- mkdocs serve

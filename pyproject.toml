@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "darklab-article-autogit"
+version = "0.1.0"
+description = "Article about conventional commits and semantic versioning tool"
+authors = ["Your Name <you@example.com>"]
+license = "GPL3"
+readme = "README.md"
+packages = [{include = "darklab_article_autogit"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mkdocs = "^1.4.2"
+pymdown-extensions = "^9.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
