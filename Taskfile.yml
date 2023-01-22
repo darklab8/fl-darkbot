@@ -18,3 +18,11 @@ tasks:
   doc-web:
     cmds:
       - godoc -http=:6060
+
+  docker:build:
+    cmds:
+      - docker build --tag darkwind8/darkbot:v0.1.0-a.2 .
+
+  docker:push:
+    cmds:
+      - docker push darkwind8/darkbot:v0.1.0-a.2

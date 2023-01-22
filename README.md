@@ -9,6 +9,8 @@
 
 Darkbot 2.0
 
+**[Invite Link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bothttps:/)**
+
 # Description
 
 This project is a discord bot for open source game community [Freelancer Discovery](https://discoverygc.com/)
@@ -69,6 +71,6 @@ Warning: python3.10 is supposed to be installed
 - following different OOP principles, like having minimum exposed interfaces to rest of a code
 - the code should be as obvious in its couplings as possible.
 - main purpose of a current architecture to have it horizontally scalable(each part of architecture should be stateless) + easily extendable in features because everything relevant is gathered in one places, while having maximum isolation from Discord API as really bad fragile dependency
-- closest goals to reach MVP (minimum viable product), and after that having a full sweep with static typization through mypy 
+- closest goals to reach MVP (minimum viable product), and after that having a full sweep with static typization through mypy
 - currently project also undergoes refactorization into asyncronous code
 - reaching code readability mainly through well chosen function/class/variable names. If it is not enough, then resorting to docstrings, if it is not enough then resorting to comments

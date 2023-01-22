@@ -1,0 +1,10 @@
+version: "3"
+
+tasks:
+  deploy:prod:
+    cmds:
+      - ansible-playbook -i hosts.prod.yml deploy.yml
+
+  install:
+    cmds:
+      - ansible-galaxy collection install community.general

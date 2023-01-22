@@ -13,9 +13,6 @@ type ConfigScheme struct {
 	ScrappyBaseUrl   string `env:"SCRAPPY_BASE_URL"`
 	ScrappyPlayerUrl string `env:"SCRAPPY_PLAYER_URL"`
 
-	ScrappyForumUsername string `env:"SCRAPPY_FORUM_USERNAME"  envDefault:"example"`
-	ScrappyForumPassword string `env:"SCRAPPY_FORUM_PASSWORD"`
-
 	DiscorderBotToken string `env:"DISCORDER_BOT_TOKEN"`
 
 	ConfiguratorDbname string `env:"CONFIGURATOR_DBNAME"`

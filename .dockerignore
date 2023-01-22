@@ -5,3 +5,10 @@ OLD_CODE2
 .env
 .env.example
 main
+.terraform
+venv
+infra/kubernetes/staging/.terraform/
+infra/kubernetes/production/.terraform/
+infra/tf/production/.terraform/
+infra/tf/repo/.terraform/
+infra/tf/staging/.terraform/

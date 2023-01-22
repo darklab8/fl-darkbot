@@ -2,6 +2,7 @@ FROM golang:1.19.3-bullseye as build
 
 RUN apt update
 RUN apt install -y build-essential
+RUN apt-get install ca-certificates -y
 RUN gcc --version
 
 WORKDIR /code
@@ -24,5 +25,7 @@ RUN go build -v -o main main.go
 
 FROM debian:11.6-slim as runner
 WORKDIR /code
+RUN mkdir data
 COPY --from=build /code/main main
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 CMD ./main run

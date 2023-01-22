@@ -4,19 +4,27 @@ terraform {
       source  = "hetznercloud/hcloud"
       version = "~> 1.35.2"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 2.7.0"
+    }
   }
 }
 
-variable "staging_hcloud_token" {
+variable "production_hcloud_token" {
   type      = string
   sensitive = true
 }
 
 provider "hcloud" {
-  token = var.staging_hcloud_token
+  token = var.production_hcloud_token
 }
 
 module "stack" {
   source      = "../modules/darkbot"
   environment = "production"
+}
+
+output "cluster_ip" {
+  value = module.stack.cluster_ip
 }

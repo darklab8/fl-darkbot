@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: darkbot-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: darkbot-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: darkbot-app
+    spec:
+      containers:
+        - name: darkbot-ctr
+          image: darkwind8/darkbot:v0.1.0-a.2
+          env:
+            - name: SCRAPPY_PLAYER_URL
+              value: "{{ .Values.SCRAPPY_PLAYER_URL }}"
+            - name: SCRAPPY_BASE_URL
+              value: "{{ .Values.SCRAPPY_BASE_URL }}"
+            - name: DISCORDER_BOT_TOKEN
+              value: "{{ .Values.DISCORDER_BOT_TOKEN }}"
+            - name: CONFIGURATOR_DBNAME
+              value: "{{ .Values.PRODUCTION_CONFIGURATOR_DBNAME }}"
+          volumeMounts:
+            - mountPath: "/var/lib/darklab/{{ .Values.ENVIRONMENT }}/darkbot"
+              name: darkbot-{{ .Values.ENVIRONMENT }}-volume
+      volumes:
+        - name: darkbot-{{ .Values.ENVIRONMENT }}-volume
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  type: my-volume
+              spec:
+                accessModes: ["ReadWriteOnce"]
+                resources:
+                  requests:
+                    storage: 10Gi
