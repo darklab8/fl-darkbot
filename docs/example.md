@@ -1,4 +1,4 @@
-# Autogit
+# Mkdocs Examples
 
 ## Requirements
 
@@ -34,6 +34,7 @@ flowchart TD
   WhenAppliedRules --> IfChangelog[if it was changelog validation\nthen report no errors and exit code 0\nfor pipeline checks]
   </div>
  <script src="mermaid.min.js"></script>
+ <script src="/mermaid.min.js"></script>
  <script>mermaid.initialize({startOnLoad:true});
 </script>
 </body>
