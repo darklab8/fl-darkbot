@@ -64,6 +64,11 @@ func (v ChannelView) DeleteOld() {
 			continue
 		}
 
+		if strings.Contains(msg.Content, templ.MsgViewHeader) ||
+			strings.Contains(msg.Content, templ.BaseViewHeader) {
+			continue
+		}
+
 		v.Discorder.DeleteMessage(v.ChannelID, msg.ID)
 		utils.LogInfo("deleted message with id", msg.ID)
 		deleteLimit--
