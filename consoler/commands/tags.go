@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"darkbot/configurator"
 	"darkbot/consoler/commands/cmdgroup"
 	"darkbot/consoler/helper"
 	"fmt"
@@ -10,7 +11,8 @@ import (
 )
 
 type TagCommands struct {
-	cmdgroup.CmdGroup
+	*cmdgroup.CmdGroup
+	cfgTags configurator.IConfiguratorTags
 }
 
 func (t *TagCommands) Bootstrap() *TagCommands {
@@ -28,7 +30,7 @@ func (t *TagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagAdd.consoler running with args=", args)
-			t.CfgTags.TagsAdd(t.ChannelInfo.ChannelID, args...)
+			t.cfgTags.TagsAdd(t.ChannelInfo.ChannelID, args...)
 			fmt.Println(len(args))
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are added")
@@ -44,7 +46,7 @@ func (t *TagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagRemove.consoler running with args=", args)
-			t.CfgTags.TagsRemove(t.ChannelInfo.ChannelID, args...)
+			t.cfgTags.TagsRemove(t.ChannelInfo.ChannelID, args...)
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are removed")
 		},
@@ -58,7 +60,7 @@ func (t *TagCommands) CreateTagClear() {
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagClear.consoler running with args=", args)
-			t.CfgTags.TagsClear(t.ChannelInfo.ChannelID)
+			t.cfgTags.TagsClear(t.ChannelInfo.ChannelID)
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are cleared")
 		},
@@ -72,7 +74,7 @@ func (t *TagCommands) CreateTagList() {
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagList.consoler running with args=", args)
-			tags := t.CfgTags.TagsList(t.ChannelInfo.ChannelID)
+			tags := t.cfgTags.TagsList(t.ChannelInfo.ChannelID)
 			fmt.Println("tags=", tags)
 			var sb strings.Builder
 			for number, tag := range tags {

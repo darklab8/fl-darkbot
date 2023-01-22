@@ -8,10 +8,30 @@ import (
 )
 
 type CmdGroup struct {
-	ParentCmd   *cobra.Command
-	CurrentCmd  *cobra.Command
-	CfgTags     configurator.IConfiguratorTags
-	ChannelInfo helper.ChannelInfo
+	ParentCmd    *cobra.Command
+	CurrentCmd   *cobra.Command
+	Configurator configurator.Configurator
+	ChannelInfo  helper.ChannelInfo
+}
+
+func (c *CmdGroup) GetChild(
+	parentCmd *cobra.Command,
+	props CmdGroupProps,
+) *CmdGroup {
+	c.ParentCmd = parentCmd
+	c.setProps(props)
+	return c
+}
+
+func (c *CmdGroup) setProps(
+	props CmdGroupProps,
+) {
+
+	c.CurrentCmd = &cobra.Command{
+		Use:   props.Command,
+		Short: props.ShortDesc,
+	}
+	c.ParentCmd.AddCommand(c.CurrentCmd)
 }
 
 type CmdGroupProps struct {
@@ -25,15 +45,11 @@ func New(
 	props CmdGroupProps,
 ) CmdGroup {
 	result := CmdGroup{
-		ParentCmd:   rootCmdPrefix,
-		CfgTags:     configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()},
-		ChannelInfo: channelInfo,
+		ParentCmd:    rootCmdPrefix,
+		Configurator: configurator.NewConfigurator(),
+		ChannelInfo:  channelInfo,
 	}
-	result.CurrentCmd = &cobra.Command{
-		Use:   props.Command,
-		Short: props.ShortDesc,
-	}
-	result.ParentCmd.AddCommand(result.CurrentCmd)
+	result.setProps(props)
 
 	return result
 }

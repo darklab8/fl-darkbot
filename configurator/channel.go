@@ -16,6 +16,13 @@ func (c ConfiguratorChannel) Add(names ...string) {
 	c.db.Create(objs)
 }
 
+func (c ConfiguratorChannel) Remove(names ...string) {
+	objs := utils.CompL(names,
+		func(channelID string) models.Channel { return models.Channel{ChannelID: channelID} })
+
+	c.db.Create(objs)
+}
+
 func (c ConfiguratorChannel) List() []string {
 	objs := []models.Channel{}
 	c.db.Find(&objs)

@@ -18,7 +18,7 @@ type ConfiguratorBase struct {
 }
 
 func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) {
-	c.db.FirstOrCreate(&models.Channel{ChannelID: channelID}, models.Channel{ChannelID: channelID})
+	// c.db.FirstOrCreate(&models.Channel{ChannelID: channelID}, models.Channel{ChannelID: channelID})
 
 	objs := []models.TagBase{}
 

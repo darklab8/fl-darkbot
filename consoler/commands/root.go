@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"darkbot/configurator"
 	"darkbot/consoler/commands/cmdgroup"
 	"darkbot/consoler/helper"
 	"darkbot/settings"
@@ -30,31 +31,31 @@ func createEntrance() *cobra.Command {
 func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
 	consolerCmd := createEntrance()
 
-	root := (&rootCommands{
-		CmdGroup: cmdgroup.New(
-			consolerCmd,
-			channelInfo,
-			cmdgroup.CmdGroupProps{
-				Command:   settings.Config.ConsolerPrefix,
-				ShortDesc: "Welcome to darkbot!",
-			},
-		)}).Bootstrap()
+	rootGroup := cmdgroup.New(
+		consolerCmd,
+		channelInfo,
+		cmdgroup.CmdGroupProps{
+			Command:   settings.Config.ConsolerPrefix,
+			ShortDesc: "Welcome to darkbot!",
+		},
+	)
+	root := (&rootCommands{CmdGroup: &rootGroup}).Bootstrap()
 
 	(&TagCommands{
-		CmdGroup: cmdgroup.New(
-			root.CurrentCmd,
-			channelInfo,
-			cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"},
-		)}).Bootstrap()
+		cfgTags:  configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()},
+		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"}),
+	}).Bootstrap()
 
 	return consolerCmd
 }
 
 type rootCommands struct {
-	cmdgroup.CmdGroup
+	*cmdgroup.CmdGroup
+	channels configurator.ConfiguratorChannel
 }
 
 func (r *rootCommands) Bootstrap() *rootCommands {
+	r.channels = configurator.ConfiguratorChannel{Configurator: r.Configurator}
 	r.CreatePing()
 	return r
 }
@@ -66,6 +67,31 @@ func (r *rootCommands) CreatePing() {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("ping called with args=", args)
 			cmd.OutOrStdout().Write([]byte("Pong! from consoler"))
+		},
+	}
+	r.CurrentCmd.AddCommand(command)
+}
+
+func (r *rootCommands) CreateConnect() {
+
+	command := &cobra.Command{
+		Use:   "connect",
+		Short: "Connect bot to channel",
+		Run: func(cmd *cobra.Command, args []string) {
+			r.channels.Add(r.ChannelInfo.ChannelID)
+			cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
+		},
+	}
+	r.CurrentCmd.AddCommand(command)
+}
+
+func (r *rootCommands) CreateDisconnect() {
+	command := &cobra.Command{
+		Use:   "ping",
+		Short: "Disconnect bot from channel",
+		Run: func(cmd *cobra.Command, args []string) {
+			r.channels.Remove(r.ChannelInfo.ChannelID)
+			cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
 		},
 	}
 	r.CurrentCmd.AddCommand(command)
