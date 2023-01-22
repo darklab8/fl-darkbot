@@ -57,6 +57,8 @@ type rootCommands struct {
 func (r *rootCommands) Bootstrap() *rootCommands {
 	r.channels = configurator.ConfiguratorChannel{Configurator: r.Configurator}
 	r.CreatePing()
+	r.CreateConnect()
+	r.CreateDisconnect()
 	return r
 }
 
@@ -78,8 +80,12 @@ func (r *rootCommands) CreateConnect() {
 		Use:   "connect",
 		Short: "Connect bot to channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			r.channels.Add(r.ChannelInfo.ChannelID)
-			cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
+			err := r.channels.Add(r.ChannelInfo.ChannelID)
+			if err == nil {
+				cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
+			} else {
+				cmd.OutOrStdout().Write([]byte("ERR channel is not connected, msg=" + err.Error()))
+			}
 		},
 	}
 	r.CurrentCmd.AddCommand(command)
@@ -87,11 +93,15 @@ func (r *rootCommands) CreateConnect() {
 
 func (r *rootCommands) CreateDisconnect() {
 	command := &cobra.Command{
-		Use:   "ping",
+		Use:   "disconnect",
 		Short: "Disconnect bot from channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			r.channels.Remove(r.ChannelInfo.ChannelID)
-			cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
+			err := r.channels.Remove(r.ChannelInfo.ChannelID)
+			if err == nil {
+				cmd.OutOrStdout().Write([]byte("OK Channel is disconnected"))
+			} else {
+				cmd.OutOrStdout().Write([]byte("ERR channel is disconnected, msg=" + err.Error()))
+			}
 		},
 	}
 	r.CurrentCmd.AddCommand(command)

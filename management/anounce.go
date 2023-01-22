@@ -25,7 +25,7 @@ var amounceCmd = &cobra.Command{
 		// time.Sleep(5 * time.Second)
 
 		channels := configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator()}
-		channelIDs := channels.List()
+		channelIDs, _ := channels.List()
 
 		for _, channeID := range channelIDs {
 			dg.SengMessage(channeID, templ.MsgViewHeader+": "+strings.Join(args, " "))

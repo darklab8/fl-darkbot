@@ -3,6 +3,7 @@ package viewer
 import (
 	"darkbot/configurator"
 	"darkbot/utils"
+	"fmt"
 	"time"
 )
 
@@ -30,7 +31,8 @@ func (v Viewer) Update() {
 	utils.LogInfo("Viewer.Update")
 
 	// Query all channels
-	channelIDs := v.channels.List()
+	channelIDs, _ := v.channels.List()
+	utils.LogInfo("Viewer.Update.channelIDs=", fmt.Sprintf("%v", channelIDs))
 
 	// For each channel
 	for _, channelID := range channelIDs {

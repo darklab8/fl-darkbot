@@ -9,24 +9,34 @@ type ConfiguratorChannel struct {
 	Configurator
 }
 
-func (c ConfiguratorChannel) Add(names ...string) {
-	objs := utils.CompL(names,
-		func(channelID string) models.Channel { return models.Channel{ChannelID: channelID} })
+func (c ConfiguratorChannel) Add(channelID string) error {
 
-	c.db.Create(objs)
+	result := c.db.Table("channels").Where("channel_id = ?", channelID).Update("deleted_at", nil)
+	if result.RowsAffected > 0 {
+		return result.Error
+	}
+
+	if result.Error != nil {
+		utils.LogInfo("channels.Add.Error1=", result.Error.Error())
+	}
+
+	channel := models.Channel{ChannelID: channelID}
+	result = c.db.FirstOrCreate(&channel)
+	if result.Error != nil {
+		utils.LogInfo("channels.Add.Error2=", result.Error.Error())
+	}
+	return result.Error
 }
 
-func (c ConfiguratorChannel) Remove(names ...string) {
-	objs := utils.CompL(names,
-		func(channelID string) models.Channel { return models.Channel{ChannelID: channelID} })
-
-	c.db.Create(objs)
+func (c ConfiguratorChannel) Remove(channelID string) error {
+	return c.db.Where("channel_id = ?", channelID).Delete(&models.Channel{}).Error
 }
 
-func (c ConfiguratorChannel) List() []string {
+func (c ConfiguratorChannel) List() ([]string, error) {
+	var err error
 	objs := []models.Channel{}
-	c.db.Find(&objs)
+	err = c.db.Find(&objs).Error
 
 	return utils.CompL(objs,
-		func(x models.Channel) string { return x.ChannelID })
+		func(x models.Channel) string { return x.ChannelID }), err
 }

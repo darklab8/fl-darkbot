@@ -1,6 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type Channel struct {
+	gorm.DeletedAt
 	ChannelID string `gorm:"primarykey"` // Discord channel reference
 }
 

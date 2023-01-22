@@ -13,10 +13,23 @@ func TestChannels(t *testing.T) {
 	os.Remove(settings.Dbpath)
 	cg := ConfiguratorChannel{Configurator: NewConfigurator().Migrate()}
 
-	cg.Add("1", "2", "3")
+	cg.Add("1")
+	cg.Add("2")
+	cg.Add("3")
 
-	channels := cg.List()
+	channels, _ := cg.List()
 	fmt.Println(channels)
+	assert.Len(t, channels, 3)
 
+	cg.Remove("3")
+
+	channels, _ = cg.List()
+	fmt.Println(channels)
+	assert.Len(t, channels, 2)
+
+	cg.Add("3")
+
+	channels, _ = cg.List()
+	fmt.Println(channels)
 	assert.Len(t, channels, 3)
 }
