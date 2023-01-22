@@ -1,4 +1,4 @@
-package commands
+package cmdgroup
 
 import (
 	"darkbot/configurator"
@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type CommandGroup struct {
+type CmdGroup struct {
 	ParentCmd   *cobra.Command
 	CurrentCmd  *cobra.Command
 	CfgTags     configurator.IConfiguratorTags
@@ -19,12 +19,12 @@ type CmdGroupProps struct {
 	ShortDesc string
 }
 
-func newCommandGroupShared(
+func New(
 	rootCmdPrefix *cobra.Command,
 	channelInfo helper.ChannelInfo,
 	props CmdGroupProps,
-) CommandGroup {
-	result := CommandGroup{
+) CmdGroup {
+	result := CmdGroup{
 		ParentCmd:   rootCmdPrefix,
 		CfgTags:     configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()},
 		ChannelInfo: channelInfo,

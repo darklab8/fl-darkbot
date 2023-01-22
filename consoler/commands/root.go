@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"darkbot/consoler/commands/cmdgroup"
 	"darkbot/consoler/helper"
 	"darkbot/settings"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // Entrance into CLI
-func CreateEntrance() *cobra.Command {
+func createEntrance() *cobra.Command {
 	command := &cobra.Command{
 		Use:   "consoler",
 		Short: "A brief description of your application",
@@ -27,38 +28,38 @@ func CreateEntrance() *cobra.Command {
 }
 
 func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
-	consolerCmd := CreateEntrance()
+	consolerCmd := createEntrance()
 
-	root := (&RootCommands{
-		CommandGroup: newCommandGroupShared(
+	root := (&rootCommands{
+		CmdGroup: cmdgroup.New(
 			consolerCmd,
 			channelInfo,
-			CmdGroupProps{
+			cmdgroup.CmdGroupProps{
 				Command:   settings.Config.ConsolerPrefix,
 				ShortDesc: "Welcome to darkbot!",
 			},
 		)}).Bootstrap()
 
 	(&TagCommands{
-		CommandGroup: newCommandGroupShared(
+		CmdGroup: cmdgroup.New(
 			root.CurrentCmd,
 			channelInfo,
-			CmdGroupProps{Command: "base", ShortDesc: "Base commands"},
+			cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"},
 		)}).Bootstrap()
 
 	return consolerCmd
 }
 
-type RootCommands struct {
-	CommandGroup
+type rootCommands struct {
+	cmdgroup.CmdGroup
 }
 
-func (r *RootCommands) Bootstrap() *RootCommands {
+func (r *rootCommands) Bootstrap() *rootCommands {
 	r.CreatePing()
 	return r
 }
 
-func (r *RootCommands) CreatePing() {
+func (r *rootCommands) CreatePing() {
 	command := &cobra.Command{
 		Use:   "ping",
 		Short: "Check stuff is working",

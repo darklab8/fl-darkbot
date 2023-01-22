@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"darkbot/consoler/commands/cmdgroup"
 	"darkbot/consoler/helper"
 	"fmt"
 	"strings"
@@ -9,7 +10,7 @@ import (
 )
 
 type TagCommands struct {
-	CommandGroup
+	cmdgroup.CmdGroup
 }
 
 func (t *TagCommands) Bootstrap() *TagCommands {
