@@ -1,5 +1,5 @@
 package templ
 
 const (
-	MsgViewHeader = "#darkbot-msg"
+	MsgViewHeader = "#darkbot-announcement"
 )
