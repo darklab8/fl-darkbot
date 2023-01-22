@@ -29,7 +29,7 @@ func (c *Consoler) Execute(channelInfo helper.ChannelInfo) *Consoler {
 		return c
 	}
 
-	rootCmd := commands.Create(channelInfo)
+	rootCmd := commands.CreateConsoler(channelInfo)
 	rootCmd.SetArgs(strings.Split(c.cmd, " "))
 
 	rootCmd.SetOut(c.buffStdout)

@@ -8,27 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func Create(channelInfo helper.ChannelInfo) *cobra.Command {
-	rootCmd := CreateRoot()
-	rootCmdPrefix := &cobra.Command{
-		Use:   settings.Config.ConsolerPrefix,
-		Short: "Welcome to darkbot!",
-	}
-	rootCmd.AddCommand(rootCmdPrefix)
-
-	CreatePing(rootCmdPrefix)
-
-	TagCommands{
-		CommandGroup: newCommandGroupShared(
-			rootCmdPrefix,
-			channelInfo,
-			CmdGroupProps{Command: "base", ShortDesc: "Base commands"},
-		)}.Bootstrap()
-
-	return rootCmd
-}
-
-func CreateRoot() *cobra.Command {
+// Entrance into CLI
+func CreateEntrance() *cobra.Command {
 	command := &cobra.Command{
 		Use:   "consoler",
 		Short: "A brief description of your application",
@@ -45,7 +26,39 @@ func CreateRoot() *cobra.Command {
 	return command
 }
 
-func CreatePing(parentCommand *cobra.Command) {
+func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
+	consolerCmd := CreateEntrance()
+
+	root := (&RootCommands{
+		CommandGroup: newCommandGroupShared(
+			consolerCmd,
+			channelInfo,
+			CmdGroupProps{
+				Command:   settings.Config.ConsolerPrefix,
+				ShortDesc: "Welcome to darkbot!",
+			},
+		)}).Bootstrap()
+
+	(&TagCommands{
+		CommandGroup: newCommandGroupShared(
+			root.CurrentCmd,
+			channelInfo,
+			CmdGroupProps{Command: "base", ShortDesc: "Base commands"},
+		)}).Bootstrap()
+
+	return consolerCmd
+}
+
+type RootCommands struct {
+	CommandGroup
+}
+
+func (r *RootCommands) Bootstrap() *RootCommands {
+	r.CreatePing()
+	return r
+}
+
+func (r *RootCommands) CreatePing() {
 	command := &cobra.Command{
 		Use:   "ping",
 		Short: "Check stuff is working",
@@ -54,5 +67,5 @@ func CreatePing(parentCommand *cobra.Command) {
 			cmd.OutOrStdout().Write([]byte("Pong! from consoler"))
 		},
 	}
-	parentCommand.AddCommand(command)
+	r.CurrentCmd.AddCommand(command)
 }

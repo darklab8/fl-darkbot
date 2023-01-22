@@ -12,14 +12,15 @@ type TagCommands struct {
 	CommandGroup
 }
 
-func (t TagCommands) Bootstrap() {
+func (t *TagCommands) Bootstrap() *TagCommands {
 	t.CreateTagAdd()
 	t.CreateTagRemove()
 	t.CreateTagClear()
 	t.CreateTagList()
+	return t
 }
 
-func (t TagCommands) CreateTagAdd() {
+func (t *TagCommands) CreateTagAdd() {
 	command := &cobra.Command{
 		Use:   "add",
 		Short: "Add tags",
@@ -35,7 +36,7 @@ func (t TagCommands) CreateTagAdd() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t TagCommands) CreateTagRemove() {
+func (t *TagCommands) CreateTagRemove() {
 	command := &cobra.Command{
 		Use:   "remove",
 		Short: "Remove tags",
@@ -50,7 +51,7 @@ func (t TagCommands) CreateTagRemove() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t TagCommands) CreateTagClear() {
+func (t *TagCommands) CreateTagClear() {
 	command := &cobra.Command{
 		Use:   "clear",
 		Short: "Clear tags",
@@ -64,7 +65,7 @@ func (t TagCommands) CreateTagClear() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t TagCommands) CreateTagList() {
+func (t *TagCommands) CreateTagList() {
 	command := &cobra.Command{
 		Use:   "list",
 		Short: "List tags",
