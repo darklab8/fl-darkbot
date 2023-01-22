@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"darkbot/configurator"
 	"darkbot/consoler/helper"
 	"fmt"
 	"strings"
@@ -9,30 +8,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type CommandShared struct {
-	rootBase    *cobra.Command
-	cfgTags     configurator.IConfiguratorTags
-	channelInfo helper.ChannelInfo
-}
-
 type TagCommands struct {
-	CommandShared
+	CommandGroup
 }
 
-func (t TagCommands) Init(
-	rootCmd *cobra.Command,
-	cfgTags configurator.IConfiguratorTags,
-	channelInfo helper.ChannelInfo,
-) {
-	rootBase := &cobra.Command{
-		Use:   "base",
-		Short: "Base Commands",
-	}
-	rootCmd.AddCommand(rootBase)
-
-	t.rootBase = rootBase
-	t.cfgTags = cfgTags
-	t.channelInfo = channelInfo
+func (t TagCommands) Bootstrap() {
 	t.CreateTagAdd()
 	t.CreateTagRemove()
 	t.CreateTagClear()
@@ -46,13 +26,13 @@ func (t TagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagAdd.consoler running with args=", args)
-			t.cfgTags.TagsAdd(t.channelInfo.ChannelID, args...)
+			t.CfgTags.TagsAdd(t.ChannelInfo.ChannelID, args...)
 			fmt.Println(len(args))
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are added")
 		},
 	}
-	t.rootBase.AddCommand(command)
+	t.CurrentCmd.AddCommand(command)
 }
 
 func (t TagCommands) CreateTagRemove() {
@@ -62,12 +42,12 @@ func (t TagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagRemove.consoler running with args=", args)
-			t.cfgTags.TagsRemove(t.channelInfo.ChannelID, args...)
+			t.CfgTags.TagsRemove(t.ChannelInfo.ChannelID, args...)
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are removed")
 		},
 	}
-	t.rootBase.AddCommand(command)
+	t.CurrentCmd.AddCommand(command)
 }
 
 func (t TagCommands) CreateTagClear() {
@@ -76,12 +56,12 @@ func (t TagCommands) CreateTagClear() {
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagClear.consoler running with args=", args)
-			t.cfgTags.TagsClear(t.channelInfo.ChannelID)
+			t.CfgTags.TagsClear(t.ChannelInfo.ChannelID)
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are cleared")
 		},
 	}
-	t.rootBase.AddCommand(command)
+	t.CurrentCmd.AddCommand(command)
 }
 
 func (t TagCommands) CreateTagList() {
@@ -90,7 +70,7 @@ func (t TagCommands) CreateTagList() {
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagList.consoler running with args=", args)
-			tags := t.cfgTags.TagsList(t.channelInfo.ChannelID)
+			tags := t.CfgTags.TagsList(t.ChannelInfo.ChannelID)
 			fmt.Println("tags=", tags)
 			var sb strings.Builder
 			for number, tag := range tags {
@@ -105,5 +85,5 @@ func (t TagCommands) CreateTagList() {
 			printer.Println(sb.String())
 		},
 	}
-	t.rootBase.AddCommand(command)
+	t.CurrentCmd.AddCommand(command)
 }

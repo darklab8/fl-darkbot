@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"darkbot/configurator"
 	"darkbot/consoler/helper"
 	"darkbot/settings"
 	"fmt"
@@ -19,11 +18,12 @@ func Create(channelInfo helper.ChannelInfo) *cobra.Command {
 
 	CreatePing(rootCmdPrefix)
 
-	TagCommands{}.Init(
-		rootCmdPrefix,
-		configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()},
-		channelInfo,
-	)
+	TagCommands{
+		CommandGroup: newCommandGroupShared(
+			rootCmdPrefix,
+			channelInfo,
+			CmdGroupProps{Command: "base", ShortDesc: "Base commands"},
+		)}.Bootstrap()
 
 	return rootCmd
 }

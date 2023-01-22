@@ -23,7 +23,7 @@ func (cg Configurator) GetClient() *gorm.DB {
 
 func NewConfigurator() Configurator {
 	db, err := gorm.Open(sqlite.Open(settings.Dbpath+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{})
-	utils.CheckPanic(err, "failed to connect database")
+	utils.CheckPanic(err, "failed to connect database at dbpath=", settings.Dbpath)
 
 	// Auto Migrate the schema
 	db.AutoMigrate(
