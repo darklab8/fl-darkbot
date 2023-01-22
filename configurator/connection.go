@@ -25,8 +25,12 @@ func NewConfigurator() Configurator {
 	db, err := gorm.Open(sqlite.Open(settings.Dbpath+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{})
 	utils.CheckPanic(err, "failed to connect database at dbpath=", settings.Dbpath)
 
+	return Configurator{db: db}
+}
+
+func (cg Configurator) Migrate() Configurator {
 	// Auto Migrate the schema
-	db.AutoMigrate(
+	cg.db.AutoMigrate(
 		&models.Channel{},
 		&models.TagBase{},
 		&models.TagPlayerFriend{},
@@ -40,6 +44,5 @@ func NewConfigurator() Configurator {
 		&models.AlertPlayerFriend{},
 		&models.AlertBase{},
 	)
-
-	return Configurator{db: db}
+	return cg
 }

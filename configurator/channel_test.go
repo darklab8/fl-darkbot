@@ -11,7 +11,7 @@ import (
 
 func TestChannels(t *testing.T) {
 	os.Remove(settings.Dbpath)
-	cg := ConfiguratorChannel{Configurator: NewConfigurator()}
+	cg := ConfiguratorChannel{Configurator: NewConfigurator().Migrate()}
 
 	cg.Add("1", "2", "3")
 

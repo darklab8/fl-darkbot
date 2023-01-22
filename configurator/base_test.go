@@ -12,7 +12,7 @@ func TestTags(t *testing.T) {
 	os.Remove(settings.Dbpath)
 	channelID := "123"
 
-	cg := ConfiguratorBase{Configurator: NewConfigurator()}
+	cg := ConfiguratorBase{Configurator: NewConfigurator().Migrate()}
 	cg.TagsAdd(channelID, []string{"4"}...)
 	cg.TagsAdd(channelID, []string{"5", "6"}...)
 
@@ -26,7 +26,7 @@ func TestTags(t *testing.T) {
 
 func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 	os.Remove(settings.Dbpath)
-	cg := ConfiguratorBase{Configurator: NewConfigurator()}
+	cg := ConfiguratorBase{Configurator: NewConfigurator().Migrate()}
 	cg.TagsAdd("c1", []string{"t1"}...)
 	cg.TagsAdd("c2", []string{"t1"}...)
 

@@ -21,7 +21,7 @@ var runCmd = &cobra.Command{
 		fmt.Println("run called")
 
 		// migrate db
-		_ = configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator()}
+		configurator.NewConfigurator().Migrate()
 
 		go scrappy.Run()
 		go listener.Run()
