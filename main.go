@@ -1,11 +1,10 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package main
 
-import "darkbot/cmd"
+import "darkbot/management"
 
 func main() {
-	cmd.Execute()
+	management.Execute()
 }

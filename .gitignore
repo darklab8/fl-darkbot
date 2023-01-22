@@ -6,4 +6,5 @@
 !/data/.gitkeep
 settings.json
 .terraform/
+*.svg.bkp
 config
