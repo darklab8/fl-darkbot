@@ -1,5 +1,5 @@
-site_name: Autogit article
-site_description: about conventional commits and semantic versioning
+site_name: Darkbot
+site_description: discord bot for Freelancer Discovery
 docs_dir: docs
 theme:
     name: readthedocs

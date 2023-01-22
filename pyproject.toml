@@ -1,11 +1,10 @@
 [tool.poetry]
-name = "darklab-article-autogit"
+name = "darklab-darkbot"
 version = "0.1.0"
-description = "Article about conventional commits and semantic versioning tool"
-authors = ["Your Name <you@example.com>"]
+description = "Documentation to discord bot Darkbot"
+authors = ["Your Name <dark.dreamflyer@gmail.com>"]
 license = "GPL3"
 readme = "README.md"
-packages = [{include = "darklab_article_autogit"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
