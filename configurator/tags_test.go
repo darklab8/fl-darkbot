@@ -11,6 +11,7 @@ import (
 func TestTags(t *testing.T) {
 	os.Remove(settings.Dbpath)
 	channelID := "123"
+	ConfiguratorChannel{Configurator: NewConfigurator().Migrate()}.Add(channelID)
 	ConfiguratorChannel{Configurator: NewConfigurator()}.Add(channelID)
 
 	cg := ConfiguratorBase{Configurator: NewConfigurator().Migrate()}
@@ -35,13 +36,13 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 	cg.TagsAdd("c2", []string{"t1"}...)
 
 	tags, _ := cg.TagsList("c1")
-	assert.Len(t, len(tags), 1)
+	assert.Len(t, tags, 1)
 	tags, _ = cg.TagsList("c2")
-	assert.Len(t, len(tags), 1)
+	assert.Len(t, tags, 1)
 
 	cg.TagsAdd("c2", []string{"t1"}...)
 
 	// make a test to check? :thinking:
 	tags, _ = cg.TagsList("c2")
-	assert.Len(t, len(tags), 2)
+	assert.Len(t, tags, 2)
 }
