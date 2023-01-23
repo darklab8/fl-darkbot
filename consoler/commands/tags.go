@@ -30,7 +30,11 @@ func (t *TagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagAdd.consoler running with args=", args)
-			t.cfgTags.TagsAdd(t.ChannelInfo.ChannelID, args...)
+			err := t.cfgTags.TagsAdd(t.ChannelInfo.ChannelID, args...).GetError()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				return
+			}
 			fmt.Println(len(args))
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are added")
@@ -46,7 +50,11 @@ func (t *TagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagRemove.consoler running with args=", args)
-			t.cfgTags.TagsRemove(t.ChannelInfo.ChannelID, args...)
+			err := t.cfgTags.TagsRemove(t.ChannelInfo.ChannelID, args...).GetError()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				return
+			}
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are removed")
 		},
@@ -60,7 +68,11 @@ func (t *TagCommands) CreateTagClear() {
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagClear.consoler running with args=", args)
-			t.cfgTags.TagsClear(t.ChannelInfo.ChannelID)
+			err := t.cfgTags.TagsClear(t.ChannelInfo.ChannelID).GetErrorWithAllowedZeroRows()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				return
+			}
 
 			helper.Printer{Cmd: cmd}.Println("OK tags are cleared")
 		},
@@ -74,7 +86,13 @@ func (t *TagCommands) CreateTagList() {
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagList.consoler running with args=", args)
-			tags := t.cfgTags.TagsList(t.ChannelInfo.ChannelID)
+			tags, cfgErr := t.cfgTags.TagsList(t.ChannelInfo.ChannelID)
+			err := cfgErr.GetErrorWithAllowedZeroRows()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				return
+			}
+
 			fmt.Println("tags=", tags)
 			var sb strings.Builder
 			for number, tag := range tags {

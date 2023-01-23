@@ -9,11 +9,11 @@ type ConfiguratorChannel struct {
 	Configurator
 }
 
-func (c ConfiguratorChannel) Add(channelID string) error {
+func (c ConfiguratorChannel) Add(channelID string) *ConfiguratorError {
 
-	result := c.db.Table("channels").Where("channel_id = ?", channelID).Update("deleted_at", nil)
+	result := c.db.Table("channels").Where("channel_id = ? AND deleted_at IS NOT NULL", channelID).Update("deleted_at", nil)
 	if result.RowsAffected > 0 {
-		return result.Error
+		return (&ConfiguratorError{}).AppendAll(result)
 	}
 
 	if result.Error != nil {
@@ -21,22 +21,22 @@ func (c ConfiguratorChannel) Add(channelID string) error {
 	}
 
 	channel := models.Channel{ChannelID: channelID}
-	result = c.db.FirstOrCreate(&channel)
+	result = c.db.Create(&channel)
 	if result.Error != nil {
 		utils.LogInfo("channels.Add.Error2=", result.Error.Error())
 	}
-	return result.Error
+	return (&ConfiguratorError{}).AppendAll(result)
 }
 
-func (c ConfiguratorChannel) Remove(channelID string) error {
-	return c.db.Where("channel_id = ?", channelID).Delete(&models.Channel{}).Error
+func (c ConfiguratorChannel) Remove(channelID string) *ConfiguratorError {
+	result := c.db.Where("channel_id = ?", channelID).Delete(&models.Channel{})
+	return (&ConfiguratorError{}).AppendAll(result)
 }
 
-func (c ConfiguratorChannel) List() ([]string, error) {
-	var err error
+func (c ConfiguratorChannel) List() ([]string, *ConfiguratorError) {
 	objs := []models.Channel{}
-	err = c.db.Find(&objs).Error
+	result := c.db.Find(&objs)
 
 	return utils.CompL(objs,
-		func(x models.Channel) string { return x.ChannelID }), err
+		func(x models.Channel) string { return x.ChannelID }), (&ConfiguratorError{}).AppendAll(result)
 }

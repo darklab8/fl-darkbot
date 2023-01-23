@@ -15,9 +15,10 @@ import (
 func TestBaseViewer(t *testing.T) {
 	os.Remove(settings.Dbpath)
 	channelID := "123"
+	configurator.NewConfigurator().Migrate()
 	configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator()}.Add(channelID)
 
-	cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator().Migrate()}
+	cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()}
 	cg.TagsAdd(channelID, []string{"Station"}...)
 
 	bases := base.BaseStorage{}

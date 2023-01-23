@@ -66,7 +66,7 @@ func (b *TemplateBase) Render() {
 		return record.List[i].Name < record.List[j].Name
 	})
 
-	tags := b.Bases.TagsList(b.ChannelID)
+	tags, _ := b.Bases.TagsList(b.ChannelID)
 
 	for _, base := range record.List {
 

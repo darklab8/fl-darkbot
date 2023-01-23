@@ -17,11 +17,11 @@ func TestTags(t *testing.T) {
 	cg.TagsAdd(channelID, []string{"4"}...)
 	cg.TagsAdd(channelID, []string{"5", "6"}...)
 
-	baseTags := cg.TagsList(channelID)
+	baseTags, _ := cg.TagsList(channelID)
 	assert.Len(t, baseTags, 3)
 
 	cg.TagsClear(channelID)
-	baseTags = cg.TagsList(channelID)
+	baseTags, _ = cg.TagsList(channelID)
 	assert.Len(t, baseTags, 0)
 }
 
@@ -34,11 +34,14 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 	cg.TagsAdd("c1", []string{"t1"}...)
 	cg.TagsAdd("c2", []string{"t1"}...)
 
-	assert.Len(t, cg.TagsList("c1"), 1)
-	assert.Len(t, cg.TagsList("c2"), 1)
+	tags, _ := cg.TagsList("c1")
+	assert.Len(t, len(tags), 1)
+	tags, _ = cg.TagsList("c2")
+	assert.Len(t, len(tags), 1)
 
 	cg.TagsAdd("c2", []string{"t1"}...)
 
 	// make a test to check? :thinking:
-	assert.Len(t, cg.TagsList("c2"), 2)
+	tags, _ = cg.TagsList("c2")
+	assert.Len(t, len(tags), 2)
 }

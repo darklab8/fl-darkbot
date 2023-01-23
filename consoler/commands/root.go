@@ -80,12 +80,12 @@ func (r *rootCommands) CreateConnect() {
 		Use:   "connect",
 		Short: "Connect bot to channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := r.channels.Add(r.ChannelInfo.ChannelID)
-			if err == nil {
-				cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
-			} else {
-				cmd.OutOrStdout().Write([]byte("ERR channel is not connected, msg=" + err.Error()))
+			err := r.channels.Add(r.ChannelInfo.ChannelID).GetError()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR channel may be already connected, msg=" + err.Error()))
+				return
 			}
+			cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
 		},
 	}
 	r.CurrentCmd.AddCommand(command)
@@ -96,12 +96,12 @@ func (r *rootCommands) CreateDisconnect() {
 		Use:   "disconnect",
 		Short: "Disconnect bot from channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := r.channels.Remove(r.ChannelInfo.ChannelID)
-			if err == nil {
-				cmd.OutOrStdout().Write([]byte("OK Channel is disconnected"))
-			} else {
-				cmd.OutOrStdout().Write([]byte("ERR channel is disconnected, msg=" + err.Error()))
+			err := r.channels.Remove(r.ChannelInfo.ChannelID).GetError()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR channel may be already disconnected, msg=" + err.Error()))
+				return
 			}
+			cmd.OutOrStdout().Write([]byte("OK Channel is disconnected"))
 		},
 	}
 	r.CurrentCmd.AddCommand(command)
