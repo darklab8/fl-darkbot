@@ -2,6 +2,7 @@ package configurator
 
 import (
 	"darkbot/settings"
+	"fmt"
 	"os"
 	"testing"
 
@@ -28,7 +29,10 @@ func TestTags(t *testing.T) {
 
 func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 	os.Remove(settings.Dbpath)
-	cg := ConfiguratorBase{Configurator: NewConfigurator().Migrate()}
+	os.Remove(settings.Dbpath + "-shm")
+	os.Remove(settings.Dbpath + "-wal")
+	configur := NewConfigurator().Migrate()
+	cg := ConfiguratorBase{Configurator: configur}
 
 	ConfiguratorChannel{Configurator: NewConfigurator()}.Add("c1")
 	ConfiguratorChannel{Configurator: NewConfigurator()}.Add("c2")
@@ -40,9 +44,27 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 	tags, _ = cg.TagsList("c2")
 	assert.Len(t, tags, 1)
 
-	cg.TagsAdd("c2", []string{"t1"}...)
+	err := cg.TagsAdd("c2", []string{"t1"}...)
+	assert.Contains(t, err.GetError().Error(), "database already has those items")
+	fmt.Println("err=", err.GetError().Error())
 
 	// make a test to check? :thinking:
 	tags, _ = cg.TagsList("c2")
+	assert.Len(t, tags, 1)
+}
+
+func TestDoNotInputRepeatedTags(t *testing.T) {
+	os.Remove(settings.Dbpath)
+	os.Remove(settings.Dbpath + "-shm")
+	os.Remove(settings.Dbpath + "-wal")
+
+	configur := NewConfigurator().Migrate()
+	cg := ConfiguratorBase{Configurator: configur}
+
+	ConfiguratorChannel{Configurator: configur}.Add("c1")
+	cg.TagsAdd("c1", []string{"t1", "t2"}...)
+	cg.TagsAdd("c1", []string{"t1"}...)
+
+	tags, _ := cg.TagsList("c1")
 	assert.Len(t, tags, 2)
 }

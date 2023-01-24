@@ -24,9 +24,14 @@ type ConfiguratorError struct {
 	errors      []error
 }
 
-func (s *ConfiguratorError) AppendAll(res *gorm.DB) *ConfiguratorError {
+func (s *ConfiguratorError) AppendSQLError(res *gorm.DB) *ConfiguratorError {
 	s.rowAffected = append(s.rowAffected, int(res.RowsAffected))
 	s.errors = append(s.errors, res.Error)
+	return s
+}
+
+func (s *ConfiguratorError) AppenError(err error) *ConfiguratorError {
+	s.errors = append(s.errors, err)
 	return s
 }
 
@@ -63,6 +68,14 @@ func (s *ConfiguratorError) GetErrorWithAllowedZeroRows() error {
 	return nil
 }
 
+type StorageErrorExists struct {
+	items []string
+}
+
+func (s StorageErrorExists) Error() string {
+	return fmt.Sprintf("database already has those items=%v", s.items)
+}
+
 func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) *ConfiguratorError {
 	objs := []models.TagBase{}
 	errors := &ConfiguratorError{}
@@ -78,9 +91,17 @@ func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) *Configurato
 		})
 	}
 
+	foundObjs := []models.TagBase{}
+	c.db.Find(&foundObjs, objs)
+	if len(foundObjs) > 0 {
+		fmt.Println("TagsAdd.len(foundObjs)=", len(foundObjs))
+		errors.AppenError(StorageErrorExists{items: utils.CompL(foundObjs, func(x models.TagBase) string { return x.Tag })})
+		return errors
+	}
+
 	res := c.db.Create(objs)
 	utils.CheckWarn(res.Error, "unsuccesful result of c.db.Create")
-	errors.AppendAll(res)
+	errors.AppendSQLError(res)
 	return errors
 }
 
@@ -89,7 +110,7 @@ func (c ConfiguratorBase) TagsRemove(channelID string, tags ...string) *Configur
 	for _, tag := range tags {
 		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&models.TagBase{})
 		utils.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
-		errors.AppendAll(result)
+		errors.AppendSQLError(result)
 	}
 	return errors
 }
@@ -100,7 +121,7 @@ func (c ConfiguratorBase) TagsList(channelID string) ([]string, *ConfiguratorErr
 	utils.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 
 	return utils.CompL(objs,
-		func(x models.TagBase) string { return x.Tag }), (&ConfiguratorError{}).AppendAll(result)
+		func(x models.TagBase) string { return x.Tag }), (&ConfiguratorError{}).AppendSQLError(result)
 }
 
 func (c ConfiguratorBase) TagsClear(channelID string) *ConfiguratorError {
@@ -111,5 +132,5 @@ func (c ConfiguratorBase) TagsClear(channelID string) *ConfiguratorError {
 	result = c.db.Unscoped().Delete(&tags)
 	fmt.Println("Clear.Delete.rowsAffected=", result.RowsAffected)
 	fmt.Println("Clear.Delete.err=", result.Error)
-	return (&ConfiguratorError{}).AppendAll(result)
+	return (&ConfiguratorError{}).AppendSQLError(result)
 }
