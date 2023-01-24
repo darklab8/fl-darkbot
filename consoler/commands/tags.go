@@ -30,7 +30,7 @@ func (t *TagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagAdd.consoler running with args=", args)
-			err := t.cfgTags.TagsAdd(t.ChannelInfo.ChannelID, args...).GetError()
+			err := t.cfgTags.TagsAdd(t.ChannelInfo.ChannelID, strings.Join(args, " ")).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -50,7 +50,7 @@ func (t *TagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagRemove.consoler running with args=", args)
-			err := t.cfgTags.TagsRemove(t.ChannelInfo.ChannelID, args...).GetError()
+			err := t.cfgTags.TagsRemove(t.ChannelInfo.ChannelID, strings.Join(args, " ")).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -96,7 +96,7 @@ func (t *TagCommands) CreateTagList() {
 			fmt.Println("tags=", tags)
 			var sb strings.Builder
 			for number, tag := range tags {
-				sb.WriteString(tag)
+				sb.WriteString(fmt.Sprintf("\"%s\"", tag))
 
 				if number != len(tags)-1 {
 					sb.WriteString(", ")

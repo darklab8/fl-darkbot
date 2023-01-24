@@ -13,10 +13,12 @@ spec:
     metadata:
       labels:
         app: darkbot-app
+        triggerRedeploy: "1"
     spec:
       containers:
         - name: darkbot-ctr
           image: darkwind8/darkbot:v0.1.0
+          imagePullPolicy: Always
           env:
             - name: SCRAPPY_PLAYER_URL
               value: "{{ .Values.SCRAPPY_PLAYER_URL }}"
