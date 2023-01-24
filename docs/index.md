@@ -11,6 +11,10 @@ Darkbot repeatedly updates information to discord channel
 
 - Adding player bases for tracking in discord channel
 
+# Project status
+
+in active development until at least all planned features are added from the list "Comin soon" and "For later"
+
 # Future plans: Comming Soon
 
 - Adding players for tracking based on tag in nickname or star systems / regions to track
