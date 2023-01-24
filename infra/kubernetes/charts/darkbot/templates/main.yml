@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: darkbot-ctr
-          image: darkwind8/darkbot:v0.1.0-a.2
+          image: darkwind8/darkbot:v0.1.0
           env:
             - name: SCRAPPY_PLAYER_URL
               value: "{{ .Values.SCRAPPY_PLAYER_URL }}"

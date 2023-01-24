@@ -5,6 +5,10 @@ tasks:
     cmds:
       - ansible-playbook -i hosts.prod.yml deploy.yml
 
+  prod:download:
+    cmds:
+      - ansible-playbook -i hosts.prod.yml download.yml
+
   install:
     cmds:
       - ansible-galaxy collection install community.general

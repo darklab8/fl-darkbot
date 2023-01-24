@@ -12,7 +12,7 @@ RUN go mod download -x
 
 RUN mkdir data
 COPY main.go ./
-COPY cmd cmd
+COPY management management
 COPY configurator configurator
 COPY consoler consoler
 COPY discorder discorder

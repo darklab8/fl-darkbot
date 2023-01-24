@@ -5,10 +5,6 @@
   
   tasks:
 
-    - name: Installing wireguard at the server
-      import_role:
-        name: install_microk8s
-
     - name: download_config of microk8s
       import_role:
         name: install_microk8s
