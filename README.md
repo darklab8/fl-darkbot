@@ -2,7 +2,7 @@
 
 Darkbot3
 
-**[Invite Link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bothttps:/)**
+**[Invite Link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)**
 
 # Description
 

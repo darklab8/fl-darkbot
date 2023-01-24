@@ -27,7 +27,7 @@ Darkbot repeatedly updates information to discord channel
 
 # How to get started
 
-- invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bothttps:/)
+- invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
 - add to some channel by writing `. connect`
 - get help which commands are available by `. --help` or requesting help on sub commands `. base --help`
 - add base tag for tracking `. base add Research Station`
@@ -45,3 +45,7 @@ Darkbot repeatedly updates information to discord channel
 
 
 # Contacts
+
+- [join Darklab discord server](https://discord.gg/zFzSs82y3W)
+- [write to Discovery forum account](https://discoverygc.com/forums/member.php?action=profile&uid=42166)
+- [or write to email dark.dreamflyer@gmail.com]
