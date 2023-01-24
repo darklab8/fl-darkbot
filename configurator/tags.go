@@ -91,12 +91,15 @@ func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) *Configurato
 		})
 	}
 
-	foundObjs := []models.TagBase{}
-	c.db.Find(&foundObjs, objs)
-	if len(foundObjs) > 0 {
-		fmt.Println("TagsAdd.len(foundObjs)=", len(foundObjs))
-		errors.AppenError(StorageErrorExists{items: utils.CompL(foundObjs, func(x models.TagBase) string { return x.Tag })})
-		return errors
+	presentTags, _ := c.TagsList(channelID)
+	for _, tag := range presentTags {
+		for _, newtag := range tags {
+			if tag == newtag {
+				fmt.Printf("TagsAdd. Tag %s is already present in channelID=%s\n", tag, channelID)
+				errors.AppenError(StorageErrorExists{items: []string{tag}})
+				return errors
+			}
+		}
 	}
 
 	res := c.db.Create(objs)
