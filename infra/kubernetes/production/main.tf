@@ -17,9 +17,9 @@ resource "helm_release" "experiment" {
   chart            = "../charts/darkbot"
   create_namespace = true
   namespace        = "darkbot-${local.environment}"
-  force_update     = true
-  reset_values     = true
-  recreate_pods    = true
+  # force_update     = true
+  # reset_values     = true
+  # recreate_pods = true
 
   set {
     name  = "chartHash"
@@ -49,5 +49,10 @@ resource "helm_release" "experiment" {
   set {
     name  = "ENVIRONMENT"
     value = "prod"
+  }
+
+  set {
+    name  = "HOSTNAME"
+    value = "production-cluster"
   }
 }

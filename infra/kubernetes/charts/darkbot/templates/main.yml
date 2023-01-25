@@ -15,6 +15,10 @@ spec:
         app: darkbot-app
         triggerRedeploy: "1"
     spec:
+      volumes:
+        - name: darkbot-persistent-storage
+          persistentVolumeClaim:
+            claimName: darkbot-{{ .Values.ENVIRONMENT }}-claim
       containers:
         - name: darkbot-ctr
           image: darkwind8/darkbot:v0.1.0
@@ -29,17 +33,39 @@ spec:
             - name: CONFIGURATOR_DBNAME
               value: "{{ .Values.PRODUCTION_CONFIGURATOR_DBNAME }}"
           volumeMounts:
-            - mountPath: "/var/lib/darklab/{{ .Values.ENVIRONMENT }}/darkbot"
-              name: darkbot-{{ .Values.ENVIRONMENT }}-volume
-      volumes:
-        - name: darkbot-{{ .Values.ENVIRONMENT }}-volume
-          ephemeral:
-            volumeClaimTemplate:
-              metadata:
-                labels:
-                  type: my-volume
-              spec:
-                accessModes: ["ReadWriteOnce"]
-                resources:
-                  requests:
-                    storage: 10Gi
+            - mountPath: "/code/data"
+              name: darkbot-persistent-storage
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: darkbot-{{ .Values.ENVIRONMENT }}-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: my-local-storage
+  local:
+    path: "/var/lib/darklab/{{ .Values.ENVIRONMENT }}/darkbot"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - "{{ .Values.HOSTNAME }}"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: darkbot-{{ .Values.ENVIRONMENT }}-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: my-local-storage
+  resources:
+    requests:
+      storage: 10Gi
