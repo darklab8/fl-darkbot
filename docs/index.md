@@ -13,8 +13,9 @@ Darkbot repeatedly updates information to discord channel
 
 # Project status
 
-in active development until at least all planned features are added from the list "Comin soon" and "For later"
-
+- in active development until at least all planned features are added from the list "Comin soon" and "For later"
+- May have some issues which will be resolved as soon as possible
+- May went through database wipes during deployments of new releases. Announcement about new releases will be made into Discord channel where it joined and here.
 # Future plans: Comming Soon
 
 - Adding players for tracking based on tag in nickname or star systems / regions to track

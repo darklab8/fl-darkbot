@@ -9,7 +9,7 @@ Darkbot3
 - This project is a discord bot **Darkbot3** for open source game community [Freelancer Discovery](https://discoverygc.com/)
 - It underwent a major refactorization and now reimplemented in golang with clean architecture for code scalability to add new features
 - and for general stability, because all errors are now handled way better with Golang approach that handles most of them at compile time.
-- project saves ready for deployment docker images [at docker hub](https://hub.docker.com/repository/docker/darkwind8/darkbot/general)
+- project saves ready for deployment docker images [at docker hub](https://hub.docker.com/repository/docker/darkwind8/darkbot/general), see [settings here](https://github.com/darklab8/darklab_darkbot/blob/master/infra/kubernetes/charts/darkbot/templates/main.yml)
 
 ![](docs/index_assets/base_render.png)
 
