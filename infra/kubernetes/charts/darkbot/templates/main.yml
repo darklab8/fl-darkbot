@@ -35,6 +35,13 @@ spec:
           volumeMounts:
             - mountPath: "/code/data"
               name: darkbot-persistent-storage
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "1000m"
 ---
 apiVersion: v1
 kind: PersistentVolume
