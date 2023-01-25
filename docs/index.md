@@ -56,3 +56,4 @@ Darkbot repeatedly updates information to discord channel
 - [join Darklab discord server](https://discord.gg/zFzSs82y3W)
 - [write to Discovery forum account](https://discoverygc.com/forums/member.php?action=profile&uid=42166)
 - [or write to email dark.dreamflyer@gmail.com]
+- [Github repository of the project](https://github.com/darklab8/darklab_darkbot)
