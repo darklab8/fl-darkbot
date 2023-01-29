@@ -6,7 +6,6 @@ import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/shared/records"
 	"darkbot/settings"
-	"darkbot/viewer/apis"
 	"fmt"
 	"os"
 	"testing"
@@ -28,10 +27,9 @@ func TestBaseViewer(t *testing.T) {
 	record.Add("Station2", base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
 	bases.Add(record)
 
-	base := TemplateBase{}
-	base.API = apis.NewAPI(channelID)
+	base := NewTemplateBase(channelID)
 	base.Render()
-	fmt.Println(base.Content)
+	fmt.Println(base.main.Content)
 }
 
 // func TestIntegrationTesting(t *testing.T) {

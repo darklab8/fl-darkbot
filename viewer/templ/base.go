@@ -11,10 +11,6 @@ import (
 	"time"
 )
 
-const (
-	BaseViewHeader = "#darkbot-base-view"
-)
-
 //go:embed base_template.md
 var baseMarkup string
 var baseTemplate *template.Template
@@ -26,17 +22,17 @@ func init() {
 // Base
 
 type TemplateBase struct {
-	TemplateShared
+	main TemplateShared
 }
 
 func NewTemplateBase(channelID string) *TemplateBase {
 	base := TemplateBase{}
-	base.API = apis.NewAPI(channelID)
-	base.Header = BaseViewHeader
+	base.main.API = apis.NewAPI(channelID)
+	base.main.Header = "#darkbot-base-view"
 	return &base
 }
 
-type BaseInput struct {
+type TemplateRendererBaseInput struct {
 	Header      string
 	LastUpdated string
 	Bases       []base.Base
@@ -53,12 +49,12 @@ func BaseContainsTag(bas *base.Base, tags []string) bool {
 }
 
 func (b *TemplateBase) Render() {
-	input := BaseInput{
-		Header:      b.Header,
+	input := TemplateRendererBaseInput{
+		Header:      b.main.Header,
 		LastUpdated: time.Now().String(),
 	}
 
-	record, err := b.Scrappy.BaseStorage.GetLatestRecord()
+	record, err := b.main.Scrappy.BaseStorage.GetLatestRecord()
 	if err != nil {
 		return
 	}
@@ -66,7 +62,7 @@ func (b *TemplateBase) Render() {
 		return record.List[i].Name < record.List[j].Name
 	})
 
-	tags, _ := b.Bases.TagsList(b.ChannelID)
+	tags, _ := b.main.Bases.TagsList(b.main.ChannelID)
 
 	for _, base := range record.List {
 
@@ -81,5 +77,23 @@ func (b *TemplateBase) Render() {
 		return
 	}
 
-	b.Content = utils.TmpRender(baseTemplate, input)
+	b.main.Content = utils.TmpRender(baseTemplate, input)
+}
+
+func (t *TemplateBase) Send() {
+	t.main.Send()
+}
+
+func (t *TemplateBase) MatchMessageID(messageID string) bool {
+
+	if messageID == t.main.MessageID {
+		return true
+	}
+	return false
+}
+
+func (t *TemplateBase) DiscoverMessageID(content string, msgID string) {
+	if strings.Contains(content, t.main.Header) {
+		t.main.MessageID = msgID
+	}
 }
