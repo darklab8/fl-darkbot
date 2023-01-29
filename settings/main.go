@@ -17,7 +17,7 @@ type ConfigScheme struct {
 
 	ConfiguratorDbname string `env:"CONFIGURATOR_DBNAME"`
 
-	ConsolerPrefix string `env:"CONSOLER_PREFIX" envDefault:"."`
+	ConsolerPrefix string `env:"CONSOLER_PREFIX" envDefault:","`
 }
 
 var Config ConfigScheme

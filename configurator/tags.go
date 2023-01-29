@@ -4,8 +4,6 @@ import (
 	"darkbot/configurator/models"
 	"darkbot/utils"
 	"fmt"
-
-	"gorm.io/gorm"
 )
 
 type IConfiguratorTags interface {
@@ -15,72 +13,31 @@ type IConfiguratorTags interface {
 	TagsClear(channelID string) *ConfiguratorError
 }
 
-type ConfiguratorBase struct {
+type taggable interface {
+	models.TagBase |
+		models.TagSystem |
+		models.TagRegion |
+		models.TagPlayerFriend |
+		models.TagPlayerEnemy
+	GetTag() string
+}
+
+type ConfiguratorTags[T taggable] struct {
 	Configurator
 }
 
-type ConfiguratorError struct {
-	rowAffected []int
-	errors      []error
-}
+type ConfiguratorBase = ConfiguratorTags[models.TagBase]
+type ConfiguratorSystem = ConfiguratorTags[models.TagSystem]
+type ConfiguratorRegion = ConfiguratorTags[models.TagRegion]
+type ConfiguratorPlayerFriend = ConfiguratorTags[models.TagPlayerFriend]
+type ConfiguratorPlayerEnemy = ConfiguratorTags[models.TagPlayerEnemy]
 
-func (s *ConfiguratorError) AppendSQLError(res *gorm.DB) *ConfiguratorError {
-	s.rowAffected = append(s.rowAffected, int(res.RowsAffected))
-	s.errors = append(s.errors, res.Error)
-	return s
-}
-
-func (s *ConfiguratorError) AppenError(err error) *ConfiguratorError {
-	s.errors = append(s.errors, err)
-	return s
-}
-
-type ZeroAffectedRows struct {
-}
-
-func (z ZeroAffectedRows) Error() string {
-	return "Zero affected rows. Expected more."
-}
-
-func (s *ConfiguratorError) GetError() error {
-	for _, row := range s.rowAffected {
-		if row != 0 {
-			return nil
-		}
-	}
-
-	for _, err := range s.errors {
-		if err != nil {
-			return err
-		}
-	}
-
-	return ZeroAffectedRows{}
-}
-
-func (s *ConfiguratorError) GetErrorWithAllowedZeroRows() error {
-	for _, err := range s.errors {
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-type StorageErrorExists struct {
-	items []string
-}
-
-func (s StorageErrorExists) Error() string {
-	return fmt.Sprintf("database already has those items=%v", s.items)
-}
-
-func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) *ConfiguratorError {
-	objs := []models.TagBase{}
+// T =
+func (c ConfiguratorTags[T]) TagsAdd(channelID string, tags ...string) *ConfiguratorError {
+	objs := []T{}
 	errors := &ConfiguratorError{}
 	for _, tag := range tags {
-		objs = append(objs, models.TagBase{
+		objs = append(objs, T{
 			TagTemplate: models.TagTemplate{
 				ChannelShared: models.ChannelShared{
 
@@ -108,27 +65,27 @@ func (c ConfiguratorBase) TagsAdd(channelID string, tags ...string) *Configurato
 	return errors
 }
 
-func (c ConfiguratorBase) TagsRemove(channelID string, tags ...string) *ConfiguratorError {
+func (c ConfiguratorTags[T]) TagsRemove(channelID string, tags ...string) *ConfiguratorError {
 	errors := &ConfiguratorError{}
 	for _, tag := range tags {
-		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&models.TagBase{})
+		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&T{})
 		utils.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
 		errors.AppendSQLError(result)
 	}
 	return errors
 }
 
-func (c ConfiguratorBase) TagsList(channelID string) ([]string, *ConfiguratorError) {
-	objs := []models.TagBase{}
+func (c ConfiguratorTags[T]) TagsList(channelID string) ([]string, *ConfiguratorError) {
+	objs := []T{}
 	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
 	utils.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 
 	return utils.CompL(objs,
-		func(x models.TagBase) string { return x.Tag }), (&ConfiguratorError{}).AppendSQLError(result)
+		func(x T) string { return x.GetTag() }), (&ConfiguratorError{}).AppendSQLError(result)
 }
 
-func (c ConfiguratorBase) TagsClear(channelID string) *ConfiguratorError {
-	var tags []models.TagBase
+func (c ConfiguratorTags[T]) TagsClear(channelID string) *ConfiguratorError {
+	var tags []T
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
 	fmt.Println("Clear.Find.rowsAffected=", result.RowsAffected)
 	fmt.Println("Clear.Find.err=", result.Error)

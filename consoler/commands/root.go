@@ -46,6 +46,26 @@ func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
 		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"}),
 	}).Bootstrap()
 
+	(&TagCommands{
+		cfgTags:  configurator.ConfiguratorSystem{Configurator: configurator.NewConfigurator()},
+		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "system", ShortDesc: "System commands"}),
+	}).Bootstrap()
+
+	(&TagCommands{
+		cfgTags:  configurator.ConfiguratorRegion{Configurator: configurator.NewConfigurator()},
+		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "region", ShortDesc: "Region commands"}),
+	}).Bootstrap()
+
+	(&TagCommands{
+		cfgTags:  configurator.ConfiguratorPlayerFriend{Configurator: configurator.NewConfigurator()},
+		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "friend", ShortDesc: "Player friend commands"}),
+	}).Bootstrap()
+
+	(&TagCommands{
+		cfgTags:  configurator.ConfiguratorPlayerEnemy{Configurator: configurator.NewConfigurator()},
+		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "enemy", ShortDesc: "Player enemy commands"}),
+	}).Bootstrap()
+
 	return consolerCmd
 }
 

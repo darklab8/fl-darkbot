@@ -14,13 +14,13 @@ type CmdGroup struct {
 	ChannelInfo  helper.ChannelInfo
 }
 
-func (c *CmdGroup) GetChild(
+func (c CmdGroup) GetChild(
 	parentCmd *cobra.Command,
 	props CmdGroupProps,
 ) *CmdGroup {
 	c.ParentCmd = parentCmd
 	c.setProps(props)
-	return c
+	return &c
 }
 
 func (c *CmdGroup) setProps(

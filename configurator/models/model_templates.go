@@ -13,6 +13,10 @@ type TagTemplate struct {
 	Tag string
 }
 
+func (t TagTemplate) GetTag() string {
+	return t.Tag
+}
+
 type AlertTemplate struct {
 	gorm.Model
 	ChannelShared
