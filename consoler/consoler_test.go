@@ -36,10 +36,9 @@ func TestAddBaseTag(t *testing.T) {
 func TestSystemCommands(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
-		cons := Consoler{}.New(`, --help`)
+		cons := Consoler{}.New(`, player --help`)
 		result := cons.Execute(helper.ChannelInfo{ChannelID: channelID, Dbpath: dbpath}).String()
 		_ = result
-		// TODO activate for new test
-		// assert.Contains(t, result, "System commands")
+		assert.Contains(t, result, "System commands")
 	})
 }
