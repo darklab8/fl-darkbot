@@ -15,6 +15,13 @@ func (b *Records[T]) Add(record T) {
 	defer b.mu.Unlock()
 
 	b.records = append(b.records, &record)
+
+	cutterStart := len(b.records) - 10
+	if cutterStart < 0 {
+		cutterStart = 0
+	}
+
+	b.records = b.records[cutterStart:]
 }
 
 func (b *Records[T]) GetLatestRecord() (*T, error) {
