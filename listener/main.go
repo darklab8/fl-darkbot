@@ -88,7 +88,7 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	rendered := consoler.Consoler{}.New(m.Content).Execute(helper.ChannelInfo{ChannelID: m.ChannelID}).String()
+	rendered := consoler.Consoler{}.New(m.Content).Execute(helper.ChannelInfo{ChannelID: m.ChannelID, Dbpath: settings.Dbpath}).String()
 
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)

@@ -6,6 +6,7 @@ package management
 import (
 	"darkbot/configurator"
 	"darkbot/discorder"
+	"darkbot/settings"
 	"darkbot/viewer/templ"
 	"fmt"
 	"strings"
@@ -24,7 +25,7 @@ var amounceCmd = &cobra.Command{
 		// go listener.Run()
 		// time.Sleep(5 * time.Second)
 
-		channels := configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator()}
+		channels := configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator(settings.Dbpath)}
 		channelIDs, _ := channels.List()
 
 		for _, channeID := range channelIDs {

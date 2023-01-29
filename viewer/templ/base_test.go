@@ -2,34 +2,32 @@ package templ
 
 import (
 	"darkbot/configurator"
+	"darkbot/dtypes"
 	"darkbot/scrappy"
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/shared/records"
-	"darkbot/settings"
 	"fmt"
-	"os"
 	"testing"
 )
 
 func TestBaseViewer(t *testing.T) {
-	os.Remove(settings.Dbpath)
-	channelID := "123"
-	configurator.NewConfigurator().Migrate()
-	configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator()}.Add(channelID)
+	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+		channelID, _ := configurator.FixtureChannel(dbpath)
 
-	cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()}
-	cg.TagsAdd(channelID, []string{"Station"}...)
+		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
+		cg.TagsAdd(channelID, []string{"Station"}...)
 
-	bases := base.BaseStorage{}
-	scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: &bases}
-	record := records.StampedObjects[base.Base]{}.New()
-	record.Add("Station1", base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
-	record.Add("Station2", base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
-	bases.Add(record)
+		bases := base.BaseStorage{}
+		scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: &bases}
+		record := records.StampedObjects[base.Base]{}.New()
+		record.Add("Station1", base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
+		record.Add("Station2", base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
+		bases.Add(record)
 
-	base := NewTemplateBase(channelID)
-	base.Render()
-	fmt.Println(base.main.Content)
+		base := NewTemplateBase(channelID, dbpath)
+		base.Render()
+		fmt.Println(base.main.Content)
+	})
 }
 
 // func TestIntegrationTesting(t *testing.T) {

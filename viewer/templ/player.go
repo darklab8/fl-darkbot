@@ -1,6 +1,7 @@
 package templ
 
 import (
+	"darkbot/dtypes"
 	"darkbot/viewer/apis"
 	"strings"
 )
@@ -30,11 +31,11 @@ type PlayersTemplates struct {
 	enemies PlayersEnemies
 }
 
-func NewTemplatePlayers(channelID string) *PlayersTemplates {
+func NewTemplatePlayers(channelID string, dbpath dtypes.Dbpath) *PlayersTemplates {
 	templator := PlayersTemplates{}
-	templator.friends.API = apis.NewAPI(channelID)
-	templator.all.API = apis.NewAPI(channelID)
-	templator.enemies.API = apis.NewAPI(channelID)
+	templator.friends.API = apis.NewAPI(channelID, dbpath)
+	templator.all.API = apis.NewAPI(channelID, dbpath)
+	templator.enemies.API = apis.NewAPI(channelID, dbpath)
 	templator.friends.Header = "#darkbot-players-friends"
 	templator.all.Header = "#darkbot-players-all"
 	templator.enemies.Header = "#darkbot-players-enemies"

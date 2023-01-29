@@ -6,6 +6,7 @@ package configurator
 
 import (
 	"darkbot/configurator/models"
+	"darkbot/dtypes"
 	"darkbot/settings"
 	"darkbot/utils"
 
@@ -21,11 +22,11 @@ func (cg Configurator) GetClient() *gorm.DB {
 	return cg.db
 }
 
-func NewConfigurator() Configurator {
+func NewConfigurator(dbpath dtypes.Dbpath) Configurator {
 	db, err := gorm.Open(
-		sqlite.Open(settings.Dbpath+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{},
+		sqlite.Open(string(dbpath)+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{},
 	)
-	utils.CheckPanic(err, "failed to connect database at dbpath=", settings.Dbpath)
+	utils.CheckPanic(err, "failed to connect database at dbpath=", string(settings.Dbpath))
 
 	return Configurator{db: db}
 }

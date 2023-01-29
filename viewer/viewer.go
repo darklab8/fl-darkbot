@@ -2,6 +2,7 @@ package viewer
 
 import (
 	"darkbot/configurator"
+	"darkbot/dtypes"
 	"darkbot/utils"
 	"fmt"
 	"time"
@@ -15,11 +16,13 @@ type ViewerDelays struct {
 type Viewer struct {
 	channels configurator.ConfiguratorChannel
 	delays   ViewerDelays
+	dbpath   dtypes.Dbpath
 }
 
-func NewViewer() Viewer {
+func NewViewer(dbpath dtypes.Dbpath) Viewer {
 	return Viewer{
-		channels: configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator()},
+		dbpath:   dbpath,
+		channels: configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator(dbpath)},
 		delays: ViewerDelays{
 			betweenChannels: 1,
 			betweenLoops:    10,
@@ -36,7 +39,7 @@ func (v Viewer) Update() {
 
 	// For each channel
 	for _, channelID := range channelIDs {
-		view := NewChannelView(channelID)
+		view := NewChannelView(channelID, v.dbpath)
 		view.Discover()
 		view.Render()
 		view.Send()

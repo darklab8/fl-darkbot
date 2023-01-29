@@ -1,6 +1,7 @@
 package templ
 
 import (
+	"darkbot/dtypes"
 	"darkbot/scrappy/base"
 	"darkbot/utils"
 	"darkbot/viewer/apis"
@@ -25,9 +26,9 @@ type TemplateBase struct {
 	main TemplateShared
 }
 
-func NewTemplateBase(channelID string) *TemplateBase {
+func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) *TemplateBase {
 	base := TemplateBase{}
-	base.main.API = apis.NewAPI(channelID)
+	base.main.API = apis.NewAPI(channelID, dbpath)
 	base.main.Header = "#darkbot-base-view"
 	return &base
 }

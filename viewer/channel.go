@@ -1,6 +1,7 @@
 package viewer
 
 import (
+	"darkbot/dtypes"
 	"darkbot/utils"
 	"darkbot/viewer/apis"
 	"darkbot/viewer/templ"
@@ -17,11 +18,11 @@ type ChannelView struct {
 	PlayersView *templ.PlayersTemplates
 }
 
-func NewChannelView(channelID string) ChannelView {
+func NewChannelView(channelID string, dbpath dtypes.Dbpath) ChannelView {
 	view := ChannelView{}
-	view.API = apis.NewAPI(channelID)
-	view.BaseView = templ.NewTemplateBase(channelID)
-	view.PlayersView = templ.NewTemplatePlayers(channelID)
+	view.API = apis.NewAPI(channelID, dbpath)
+	view.BaseView = templ.NewTemplateBase(channelID, dbpath)
+	view.PlayersView = templ.NewTemplatePlayers(channelID, dbpath)
 	return view
 }
 

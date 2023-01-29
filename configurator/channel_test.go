@@ -1,35 +1,36 @@
 package configurator
 
 import (
-	"darkbot/settings"
+	"darkbot/dtypes"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestChannels(t *testing.T) {
-	os.Remove(settings.Dbpath)
-	cg := ConfiguratorChannel{Configurator: NewConfigurator().Migrate()}
+	FixtureMigrator(func(dbpath dtypes.Dbpath) {
+		channelID, cg := FixtureChannel(dbpath)
+		cg.Remove(channelID)
 
-	cg.Add("1")
-	cg.Add("2")
-	cg.Add("3")
+		cg.Add("1")
+		cg.Add("2")
+		cg.Add("3")
 
-	channels, _ := cg.List()
-	fmt.Println(channels)
-	assert.Len(t, channels, 3)
+		channels, _ := cg.List()
+		fmt.Println(channels)
+		assert.Len(t, channels, 3)
 
-	cg.Remove("3")
+		cg.Remove("3")
 
-	channels, _ = cg.List()
-	fmt.Println(channels)
-	assert.Len(t, channels, 2)
+		channels, _ = cg.List()
+		fmt.Println(channels)
+		assert.Len(t, channels, 2)
 
-	cg.Add("3")
+		cg.Add("3")
 
-	channels, _ = cg.List()
-	fmt.Println(channels)
-	assert.Len(t, channels, 3)
+		channels, _ = cg.List()
+		fmt.Println(channels)
+		assert.Len(t, channels, 3)
+	})
 }

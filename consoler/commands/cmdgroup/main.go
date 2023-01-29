@@ -46,7 +46,7 @@ func New(
 ) CmdGroup {
 	result := CmdGroup{
 		ParentCmd:    rootCmdPrefix,
-		Configurator: configurator.NewConfigurator(),
+		Configurator: configurator.NewConfigurator(channelInfo.Dbpath),
 		ChannelInfo:  channelInfo,
 	}
 	result.setProps(props)

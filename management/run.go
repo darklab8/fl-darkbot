@@ -7,6 +7,7 @@ import (
 	"darkbot/configurator"
 	"darkbot/listener"
 	"darkbot/scrappy"
+	"darkbot/settings"
 	"darkbot/utils"
 	"darkbot/viewer"
 	"fmt"
@@ -21,7 +22,7 @@ var runCmd = &cobra.Command{
 		fmt.Println("run called")
 
 		// migrate db
-		configurator.NewConfigurator().Migrate()
+		configurator.NewConfigurator(settings.Dbpath).Migrate()
 
 		go scrappy.Run()
 		go listener.Run()

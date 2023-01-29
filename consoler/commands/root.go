@@ -42,28 +42,28 @@ func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
 	root := (&rootCommands{CmdGroup: &rootGroup}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator()},
+		cfgTags:  configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
 		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"}),
 	}).Bootstrap()
 
 	playerGroup := root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player", ShortDesc: "Player commands"})
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorSystem{Configurator: configurator.NewConfigurator()},
+		cfgTags:  configurator.ConfiguratorSystem{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "system", ShortDesc: "System commands"}),
 	}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorRegion{Configurator: configurator.NewConfigurator()},
+		cfgTags:  configurator.ConfiguratorRegion{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "region", ShortDesc: "Region commands"}),
 	}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorPlayerFriend{Configurator: configurator.NewConfigurator()},
+		cfgTags:  configurator.ConfiguratorPlayerFriend{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "friend", ShortDesc: "Player friend commands"}),
 	}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorPlayerEnemy{Configurator: configurator.NewConfigurator()},
+		cfgTags:  configurator.ConfiguratorPlayerEnemy{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "enemy", ShortDesc: "Player enemy commands"}),
 	}).Bootstrap()
 
