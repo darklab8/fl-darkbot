@@ -34,3 +34,7 @@ tasks:
   mkdocs:dev:
     cmds:
       - poetry run -- mkdocs serve
+
+  backup: # /var/lib/darklab/prod/darkbot
+    cmds: # ssh -i ~/.ssh/id_rsa.darklab root@5.161.179.34
+      - echo "TODO write command for backup"
