@@ -14,3 +14,5 @@
         name: install_microk8s
         tasks_from: download_config.yml
 
+    - name: Create data folder
+      shell: mkdir -p /var/lib/darklab/darkbot

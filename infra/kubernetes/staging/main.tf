@@ -9,7 +9,7 @@ locals {
   chart_path = "${path.module}/../charts/darkbot"
   # This hash forces Terraform to redeploy if a new template file is added or changed, or values are updated
   chart_hash  = sha1(join("", [for f in fileset(local.chart_path, "**/*ml") : filesha1("${local.chart_path}/${f}")]))
-  environment = "prod"
+  environment = "staging"
 }
 
 resource "helm_release" "experiment" {
@@ -17,9 +17,6 @@ resource "helm_release" "experiment" {
   chart            = "../charts/darkbot"
   create_namespace = true
   namespace        = "darkbot-${local.environment}"
-  # force_update     = true
-  # reset_values     = true
-  # recreate_pods = true
 
   set {
     name  = "chartHash"
@@ -38,26 +35,26 @@ resource "helm_release" "experiment" {
 
   set_sensitive {
     name  = "DISCORDER_BOT_TOKEN"
-    value = var.PRODUCTION_DISCORDER_BOT_TOKEN
+    value = var.STAGING_DISCORDER_BOT_TOKEN
   }
 
   set {
     name  = "CONFIGURATOR_DBNAME"
-    value = "prod"
+    value = "dev"
   }
 
   set {
     name  = "ENVIRONMENT"
-    value = "prod"
+    value = "staging"
   }
 
   set {
     name  = "HOSTNAME"
-    value = "production-cluster"
+    value = "staging-cluster"
   }
 
   set {
     name  = "CONSOLER_PREFIX"
-    value = "."
+    value = ","
   }
 }

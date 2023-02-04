@@ -31,9 +31,9 @@ spec:
             - name: DISCORDER_BOT_TOKEN
               value: "{{ .Values.DISCORDER_BOT_TOKEN }}"
             - name: CONFIGURATOR_DBNAME
-              value: "{{ .Values.PRODUCTION_CONFIGURATOR_DBNAME }}"
+              value: "{{ .Values.CONFIGURATOR_DBNAME }}"
             - name: CONSOLER_PREFIX
-              value: "."
+              value: "{{ .Values.CONSOLER_PREFIX }}"
           volumeMounts:
             - mountPath: "/code/data"
               name: darkbot-persistent-storage
@@ -57,7 +57,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: my-local-storage
   local:
-    path: "/var/lib/darklab/{{ .Values.ENVIRONMENT }}/darkbot"
+    path: "/var/lib/darklab/darkbot"
   nodeAffinity:
     required:
       nodeSelectorTerms:

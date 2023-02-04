@@ -1,13 +1,21 @@
 version: "3"
 
 tasks:
-  deploy:prod:
+  prod:deploy:
     cmds:
       - ansible-playbook -i hosts.prod.yml deploy.yml
 
   prod:download:
     cmds:
       - ansible-playbook -i hosts.prod.yml download.yml
+
+  staging:deploy:
+    cmds:
+      - ansible-playbook -i hosts.staging.yml deploy.yml
+
+  staging:download:
+    cmds:
+      - ansible-playbook -i hosts.staging.yml download.yml
 
   install:
     cmds:

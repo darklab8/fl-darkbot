@@ -24,3 +24,7 @@ module "stack" {
   source      = "../modules/darkbot"
   environment = "staging"
 }
+
+output "cluster_ip" {
+  value = module.stack.cluster_ip
+}
