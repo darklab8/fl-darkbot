@@ -1,0 +1,17 @@
+---
+- hosts: cluster
+  become: yes
+  gather_facts: true
+  
+  tasks:
+
+    - name: Archive
+      community.general.archive:
+        path: /var/lib/darklab
+        dest: /var/lib/darklab.tgz
+
+    - name: Backup darkbot
+      ansible.builtin.fetch:
+        src: /var/lib/darklab.tgz
+        dest: backups/darkbot-{{hostvars[inventory_hostname]['varenv']}}/
+        flat: yes

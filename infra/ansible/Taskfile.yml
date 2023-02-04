@@ -20,3 +20,19 @@ tasks:
   install:
     cmds:
       - ansible-galaxy collection install community.general
+
+  staging:backup:
+    cmds:
+      - ansible-playbook -i hosts.staging.yml backup.yml
+
+  staging:restore:
+    cmds:
+      - ansible-playbook -i hosts.staging.yml restore.yml
+
+  prod:backup:
+    cmds:
+      - ansible-playbook -i hosts.prod.yml backup.yml
+
+  prod:restore:
+    cmds:
+      - ansible-playbook -i hosts.prod.yml restore.yml
