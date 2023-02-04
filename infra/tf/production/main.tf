@@ -22,7 +22,7 @@ provider "hcloud" {
 
 module "stack" {
   source      = "../modules/darkbot"
-  environment = "production"
+  environment = "prod"
 }
 
 output "cluster_ip" {

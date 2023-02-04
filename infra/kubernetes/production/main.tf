@@ -8,7 +8,7 @@ provider "helm" {
 module "darkbot" {
   source = "../modules/darkbot"
 
-  environment         = "staging"
+  environment         = "prod"
   CONSOLER_PREFIX     = "."
   SCRAPPY_PLAYER_URL  = var.SCRAPPY_PLAYER_URL
   SCRAPPY_BASE_URL    = var.SCRAPPY_BASE_URL
