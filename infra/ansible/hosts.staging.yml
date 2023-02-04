@@ -8,3 +8,6 @@ all:
   children:
     cluster:
       hosts: 5.161.43.86
+      vars:
+        varenv: staging
+        app: darklab

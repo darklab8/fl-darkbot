@@ -9,4 +9,3 @@
       import_role:
         name: install_microk8s
         tasks_from: download_config.yml
-

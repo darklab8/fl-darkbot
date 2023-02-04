@@ -1,16 +1,16 @@
 ---
-  - name: Microk8s - extracting config
-    shell: microk8s config > config
+- name: Microk8s - extracting config
+  shell: microk8s config > config
 
-  - name: Downloading config
-    ansible.builtin.fetch:
-      src: "config"
-      dest: "config"
-      flat: "yes"
+- name: Downloading config
+  ansible.builtin.fetch:
+    src: "config"
+    dest: "config"
+    flat: "yes"
 
-  - name: ansible copy file locally.
-    copy:
-      src: "config"
-      dest: "~/.kube/config"
-    delegate_to: localhost
-    become: false    
+- name: ansible copy file locally.
+  copy:
+    src: "config"
+    dest: "~/.kube/{{hostvars[inventory_hostname]['varenv']}}_{{hostvars[inventory_hostname]['app']}}_config"
+  delegate_to: localhost
+  become: false

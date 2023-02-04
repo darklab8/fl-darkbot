@@ -8,3 +8,6 @@ all:
   children:
     cluster:
       hosts: 5.161.179.34
+      vars:
+        varenv: prod
+        app: darklab
