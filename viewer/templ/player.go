@@ -43,7 +43,12 @@ func NewTemplatePlayers(channelID string, dbpath dtypes.Dbpath) *PlayersTemplate
 }
 
 func (t *PlayersTemplates) Render() {
+	record, err := t.friends.Scrappy.PlayerStorage.GetLatestRecord()
+	if err != nil {
+		return
+	}
 
+	_ = record
 }
 
 func (t *PlayersTemplates) Send() {

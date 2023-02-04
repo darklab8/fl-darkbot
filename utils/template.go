@@ -6,7 +6,7 @@ import (
 )
 
 func TmpRender(templateRef *template.Template, data interface{}) string {
-	var header bytes.Buffer
+	header := bytes.Buffer{}
 	err := templateRef.Execute(&header, data)
 	CheckFatal(err)
 	return header.String()

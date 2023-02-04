@@ -85,7 +85,7 @@ func (c ConfiguratorTags[T]) TagsList(channelID string) ([]string, *Configurator
 }
 
 func (c ConfiguratorTags[T]) TagsClear(channelID string) *ConfiguratorError {
-	var tags []T
+	tags := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
 	fmt.Println("Clear.Find.rowsAffected=", result.RowsAffected)
 	fmt.Println("Clear.Find.err=", result.Error)

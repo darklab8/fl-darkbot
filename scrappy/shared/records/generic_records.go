@@ -2,6 +2,7 @@ package records
 
 import (
 	"darkbot/utils"
+	"darkbot/utils/logger"
 	"sync"
 )
 
@@ -31,6 +32,7 @@ func (b *Records[T]) GetLatestRecord() (*T, error) {
 	if len(b.records) == 0 {
 		return nil, utils.ErrorNotFound{}
 	}
+	logger.Info("records.GetLatestRecord.len(b.records)=", len(b.records))
 
 	return b.records[len(b.records)-1], nil
 }

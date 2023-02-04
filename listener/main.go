@@ -60,7 +60,7 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 		return false
 	}
 
-	var isBotController bool
+	isBotController := false
 	for _, roleID := range m.Member.Roles {
 		role, err := s.State.Role(m.GuildID, roleID)
 		if err != nil {

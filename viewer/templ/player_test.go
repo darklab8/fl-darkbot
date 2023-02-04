@@ -20,8 +20,9 @@ func TestPlayerViewer(t *testing.T) {
 		players := player.PlayerStorage{}
 		scrappy.Storage = &scrappy.ScrappyStorage{PlayerStorage: &players}
 		record := records.StampedObjects[player.Player]{}.New()
-		record.Add("Station1", player.Player{Name: "Abc", System: "New York"})
-		record.Add("Station2", player.Player{Name: "Qwe", System: "Hamburg"})
+		record.Add("abc_123", player.Player{Name: "abc_123", System: "New York"})
+		record.Add("abc_456", player.Player{Name: "abc_456", System: "Hamburg"})
+		record.Add("456456", player.Player{Name: "456456", System: "Hamburg"})
 		players.Add(record)
 
 		playerView := NewTemplatePlayers(channelID, dbpath)

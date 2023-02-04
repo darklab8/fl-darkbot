@@ -23,7 +23,7 @@ type playerParser struct {
 func (b playerParser) Parse(body []byte) records.StampedObjects[Player] {
 	record := records.StampedObjects[Player]{}.New()
 
-	var playerData SerializedPlayers
+	playerData := SerializedPlayers{}
 	if err := json.Unmarshal(body, &playerData); err != nil {
 		utils.CheckPanic(err, "unable to unmarshal base request")
 	}
