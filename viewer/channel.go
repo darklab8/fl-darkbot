@@ -2,7 +2,7 @@ package viewer
 
 import (
 	"darkbot/dtypes"
-	"darkbot/utils"
+	"darkbot/utils/logger"
 	"darkbot/viewer/apis"
 	"darkbot/viewer/templ"
 	"strings"
@@ -29,7 +29,7 @@ func NewChannelView(channelID string, dbpath dtypes.Dbpath) ChannelView {
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
 func (v *ChannelView) Discover() {
-	utils.LogInfo("viewer.Init.channelID=", v.ChannelID)
+	logger.Info("viewer.Init.channelID=", v.ChannelID)
 	msgs := v.Discorder.GetLatestMessages(v.ChannelID)
 	for _, msg := range msgs {
 		v.BaseView.DiscoverMessageID(msg.Content, msg.ID)
@@ -79,7 +79,7 @@ func (v ChannelView) DeleteOld() {
 		}
 
 		v.Discorder.DeleteMessage(v.ChannelID, msg.ID)
-		utils.LogInfo("deleted message with id", msg.ID)
+		logger.Info("deleted message with id", msg.ID)
 		deleteLimit--
 	}
 }

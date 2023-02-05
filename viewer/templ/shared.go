@@ -1,7 +1,7 @@
 package templ
 
 import (
-	"darkbot/utils"
+	"darkbot/utils/logger"
 	"darkbot/viewer/apis"
 	"fmt"
 	"strings"
@@ -44,7 +44,7 @@ func CheckTooLongMsgErr(err error, api *apis.API, header string, action MsgActio
 }
 
 func ChannelCheckWarn(err error, channelID string, msg string) {
-	utils.CheckWarn(err, "channelID=", channelID, msg)
+	logger.CheckWarn(err, "channelID=", channelID, msg)
 }
 
 func (v *TemplateShared) Send() {

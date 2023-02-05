@@ -4,7 +4,7 @@ import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/shared/parser"
 	"darkbot/scrappy/shared/records"
-	"darkbot/utils"
+	"darkbot/utils/logger"
 )
 
 type Player struct {
@@ -25,7 +25,7 @@ func (b *PlayerStorage) Update() {
 	data := b.api.New().GetData()
 	record := b.parser.Parse(data)
 	b.Add(record)
-	utils.LogInfo("updated player storage")
+	logger.Info("updated player storage")
 }
 
 func (b *PlayerStorage) New() *PlayerStorage {

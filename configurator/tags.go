@@ -3,6 +3,7 @@ package configurator
 import (
 	"darkbot/configurator/models"
 	"darkbot/utils"
+	"darkbot/utils/logger"
 	"fmt"
 )
 
@@ -60,7 +61,7 @@ func (c ConfiguratorTags[T]) TagsAdd(channelID string, tags ...string) *Configur
 	}
 
 	res := c.db.Create(objs)
-	utils.CheckWarn(res.Error, "unsuccesful result of c.db.Create")
+	logger.CheckWarn(res.Error, "unsuccesful result of c.db.Create")
 	errors.AppendSQLError(res)
 	return errors
 }
@@ -69,7 +70,7 @@ func (c ConfiguratorTags[T]) TagsRemove(channelID string, tags ...string) *Confi
 	errors := &ConfiguratorError{}
 	for _, tag := range tags {
 		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&T{})
-		utils.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
+		logger.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
 		errors.AppendSQLError(result)
 	}
 	return errors
@@ -78,7 +79,7 @@ func (c ConfiguratorTags[T]) TagsRemove(channelID string, tags ...string) *Confi
 func (c ConfiguratorTags[T]) TagsList(channelID string) ([]string, *ConfiguratorError) {
 	objs := []T{}
 	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
-	utils.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
+	logger.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 
 	return utils.CompL(objs,
 		func(x T) string { return x.GetTag() }), (&ConfiguratorError{}).AppendSQLError(result)

@@ -3,6 +3,7 @@ package logger
 import (
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"runtime"
 )
@@ -28,24 +29,40 @@ func FormatTag(tag LogTag) string {
 	return fmt.Sprintf("t:%s ", string(tag))
 }
 
+func print(v ...any) {
+	if os.Getenv("LOGGING") == "false" {
+		return
+	}
+
+	log.Print(fmt.Sprintln(v...))
+}
+
 func Debug(v ...any) {
-	log.Print(FormatTag(DEBUG), GetCallingFile(), fmt.Sprintln(v...))
+	print(FormatTag(DEBUG), GetCallingFile(), fmt.Sprint(v...))
 }
 
 func Info(v ...any) {
-	log.Print(FormatTag(INFO), GetCallingFile(), fmt.Sprintln(v...))
+	print(FormatTag(INFO), GetCallingFile(), fmt.Sprint(v...))
 }
 
 func Warn(v ...any) {
-	log.Print(FormatTag(WARN), GetCallingFile(), fmt.Sprintln(v...))
+	print(FormatTag(WARN), GetCallingFile(), fmt.Sprint(v...))
 }
 
 func Fatal(v ...any) {
-	log.Fatal(FormatTag(FATAL), GetCallingFile(), fmt.Sprintln(v...))
+	print(FormatTag(FATAL), GetCallingFile(), fmt.Sprint(v...))
 }
 
 func Panic(v ...any) {
-	log.Panic(FormatTag(PANIC), GetCallingFile(), fmt.Sprintln(v...))
+	print(FormatTag(PANIC), GetCallingFile(), fmt.Sprint(v...))
+}
+
+func CheckWarn(err error, v ...any) {
+	if err == nil {
+		return
+	}
+
+	Warn(err, fmt.Sprint(v...))
 }
 
 func CheckFatal(err error, v ...any) {

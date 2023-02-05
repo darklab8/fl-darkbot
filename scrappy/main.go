@@ -3,8 +3,7 @@ package scrappy
 import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/player"
-	"darkbot/utils"
-	"runtime"
+	"darkbot/utils/logger"
 	"time"
 )
 
@@ -27,16 +26,15 @@ func (s *ScrappyStorage) Update() {
 var Storage *ScrappyStorage
 
 func init() {
-	utils.LogInfo("initialized scrappy")
+	logger.Info("initialized scrappy")
 	Storage = (&ScrappyStorage{}).New()
 }
 
 func Run() {
-	utils.LogInfo("starting scrappy infinity update loop")
+	logger.Info("starting scrappy infinity update loop")
 	for {
 		Storage.Update()
 		time.Sleep(10 * time.Second)
-		runtime.GC()
 	}
-	utils.LogInfo("gracefully shutdown scrappy infinity loop")
+	logger.Info("gracefully shutdown scrappy infinity loop")
 }

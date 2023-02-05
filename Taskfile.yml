@@ -21,15 +21,16 @@ tasks:
 
   docker:build:
     cmds:
-      - docker build --tag darkwind8/darkbot:v0.2.0-a.1 .
+      - docker build --tag darkwind8/darkbot:v0.2.0-a.2 .
 
   docker:push:
     cmds:
-      - docker push darkwind8/darkbot:v0.2.0-a.1
+      - docker push darkwind8/darkbot:v0.2.0-a.2
 
-  mkdocs:init:
+  docker:buildpush:
     cmds:
-      - poetry install
+      - task: docker:build
+      - task: docker:push
 
   mkdocs:dev:
     cmds:
@@ -38,3 +39,30 @@ tasks:
   backup: # /var/lib/darklab/prod/darkbot
     cmds: # ssh -i ~/.ssh/id_rsa.darklab root@5.161.179.34
       - echo "TODO write command for backup"
+
+  profile:run:
+    cmds:
+      - go run . run
+
+  profile:render:
+    cmds:
+      - curl http://localhost:8080/debug/pprof/heap > heap.{{.DATE}}.pprof
+      - go tool pprof --pdf ~/repos/pet_projects/darklab_darkbot/main heap.{{.DATE}}.pprof > file_{{.DATE}}.pdf
+      - rm heap.{{.DATE}}.pprof
+    vars:
+      DATE:
+        sh: date +%s
+
+  profile:render2:
+    cmds:
+      - curl http://localhost:8080/debug/pprof/heap > heap.{{.DATE}}.pprof
+      - go tool pprof --base heap.1675610376.pprof --pdf ~/repos/pet_projects/darklab_darkbot/main heap.{{.DATE}}.pprof > file_diff_{{.DATE}}.pdf
+      - rm heap.{{.DATE}}.pprof
+    vars:
+      DATE:
+        sh: date +%s
+
+  profile:render3:
+    cmds:
+      - task: profile:render
+      - task: profile:render2

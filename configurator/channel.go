@@ -3,6 +3,7 @@ package configurator
 import (
 	"darkbot/configurator/models"
 	"darkbot/utils"
+	"darkbot/utils/logger"
 )
 
 type ConfiguratorChannel struct {
@@ -17,13 +18,13 @@ func (c ConfiguratorChannel) Add(channelID string) *ConfiguratorError {
 	}
 
 	if result.Error != nil {
-		utils.LogInfo("channels.Add.Error1=", result.Error.Error())
+		logger.Info("channels.Add.Error1=", result.Error.Error())
 	}
 
 	channel := models.Channel{ChannelID: channelID}
 	result = c.db.Create(&channel)
 	if result.Error != nil {
-		utils.LogInfo("channels.Add.Error2=", result.Error.Error())
+		logger.Info("channels.Add.Error2=", result.Error.Error())
 	}
 	return (&ConfiguratorError{}).AppendSQLError(result)
 }

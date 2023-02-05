@@ -8,3 +8,6 @@ settings.json
 .terraform/
 *.svg.bkp
 config
+/mem.pprof
+file_*.pdf
+heap.*.pprof

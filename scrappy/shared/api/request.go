@@ -1,7 +1,7 @@
 package api
 
 import (
-	"darkbot/utils"
+	"darkbot/utils/logger"
 	"io/ioutil"
 	"net/http"
 )
@@ -12,9 +12,9 @@ type APIrequest struct {
 
 func (a APIrequest) GetData() []byte {
 	resp, err := http.Get(a.url)
-	utils.CheckWarn(err, "unable to get url")
+	logger.CheckWarn(err, "unable to get url")
 	body, err := ioutil.ReadAll(resp.Body)
-	utils.CheckWarn(err, "unable to read base body")
+	logger.CheckWarn(err, "unable to read base body")
 	return body
 }
 

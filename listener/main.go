@@ -9,6 +9,7 @@ import (
 	"darkbot/consoler/helper"
 	"darkbot/settings"
 	"darkbot/utils"
+	"darkbot/utils/logger"
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
@@ -16,7 +17,7 @@ import (
 
 func Run() {
 	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
-	utils.CheckPanic(err, "failed to init discord")
+	logger.CheckPanic(err, "failed to init discord")
 
 	// Register the messageCreate func as a callback for MessageCreate events.
 	dg.AddHandler(consolerHandler)
@@ -26,7 +27,7 @@ func Run() {
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
-	utils.CheckPanic(err, "error opening connection,")
+	logger.CheckPanic(err, "error opening connection,")
 	defer dg.Close()
 
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")

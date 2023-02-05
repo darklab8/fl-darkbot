@@ -2,12 +2,18 @@ package settings
 
 import (
 	"darkbot/utils"
+	"darkbot/utils/logger"
 	"path/filepath"
 
 	"darkbot/dtypes"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
+)
+
+const (
+	EnvFalse = "false"
+	EnvTrue  = "true"
 )
 
 type ConfigScheme struct {
@@ -19,7 +25,8 @@ type ConfigScheme struct {
 
 	ConfiguratorDbname string `env:"CONFIGURATOR_DBNAME"`
 
-	ConsolerPrefix string `env:"CONSOLER_PREFIX" envDefault:","`
+	ConsolerPrefix   string `env:"CONSOLER_PREFIX" envDefault:","`
+	ProfilingEnabled string `env:"PROFILING" envDefault:"false"`
 }
 
 var Config ConfigScheme
@@ -34,25 +41,25 @@ func NewDBPath(dbname string) dtypes.Dbpath {
 }
 
 func load() {
-	utils.LogInfo("identifying folder of settings")
+	logger.Info("identifying folder of settings")
 	Workdir = filepath.Dir(utils.GetCurrrentFolder())
 
 	err := godotenv.Load(filepath.Join(Workdir, ".env"))
 	if err == nil {
-		utils.LogInfo("loadded settings from .env")
+		logger.Info("loadded settings from .env")
 	}
 
 	opts := env.Options{RequiredIfNoDef: true}
 	err = env.Parse(&Config, opts)
 
-	utils.CheckPanic(err, "settings have unset variable")
+	logger.CheckPanic(err, "settings have unset variable")
 
-	utils.LogInfo("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
+	logger.Info("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
 
 	Dbpath = NewDBPath(Config.ConfiguratorDbname)
 }
 
 func init() {
-	utils.LogInfo("attempt to load settings")
+	logger.Info("attempt to load settings")
 	load()
 }

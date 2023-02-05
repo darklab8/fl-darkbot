@@ -9,9 +9,13 @@ import (
 	"darkbot/scrappy"
 	"darkbot/settings"
 	"darkbot/utils"
+	"darkbot/utils/logger"
 	"darkbot/viewer"
-	"fmt"
 
+	"net/http"
+	_ "net/http/pprof"
+
+	"github.com/pkg/profile"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +23,7 @@ import (
 var runCmd = &cobra.Command{
 	Use: "run",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("run called")
+		logger.Info("run called")
 
 		// migrate db
 		configurator.NewConfigurator(settings.Dbpath).Migrate()
@@ -27,6 +31,16 @@ var runCmd = &cobra.Command{
 		go scrappy.Run()
 		go listener.Run()
 		go viewer.Run()
+
+		if settings.Config.ProfilingEnabled == settings.EnvTrue {
+			p := profile.Start(profile.MemProfile, profile.ProfilePath("."), profile.NoShutdownHook)
+			defer p.Stop()
+
+			go func() {
+				http.ListenAndServe(":8080", nil)
+			}()
+		}
+
 		utils.SleepAwaitCtrlC()
 	},
 }

@@ -1,8 +1,8 @@
 package utils
 
 import (
+	"darkbot/utils/logger"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 )
@@ -21,6 +21,6 @@ func ShellRunArgs(program string, args ...string) {
 	err := command.Run()
 
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 }

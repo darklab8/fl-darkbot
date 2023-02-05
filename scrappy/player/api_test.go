@@ -4,6 +4,7 @@ import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
 	"darkbot/utils"
+	"darkbot/utils/logger"
 	"io/ioutil"
 	"os"
 	"path"
@@ -16,7 +17,7 @@ func TestRegeneratePlayerData(t *testing.T) {
 		path_testdata := tests.FixtureCreateTestDataFolder()
 		path_testfile := path.Join(path_testdata, "playerdata.json")
 		err := ioutil.WriteFile(path_testfile, data, os.ModePerm)
-		utils.CheckPanic(err, "unable to write file")
+		logger.CheckPanic(err, "unable to write file")
 		return nil
 	})
 }
@@ -34,6 +35,6 @@ func (a APIPlayerSpy) GetData() []byte {
 	path_testdata := tests.FixtureCreateTestDataFolder()
 	path_testfile := path.Join(path_testdata, "playerdata.json")
 	data, err := ioutil.ReadFile(path_testfile)
-	utils.CheckPanic(err, "unable to read file")
+	logger.CheckPanic(err, "unable to read file")
 	return data
 }

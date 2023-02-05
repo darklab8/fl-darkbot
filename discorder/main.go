@@ -9,7 +9,7 @@ package discorder
 
 import (
 	"darkbot/settings"
-	"darkbot/utils"
+	"darkbot/utils/logger"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -21,7 +21,7 @@ type Discorder struct {
 func NewClient() Discorder {
 	d := Discorder{}
 	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
-	utils.CheckPanic(err, "failed to init discord")
+	logger.CheckPanic(err, "failed to init discord")
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
 	d.dg = dg
@@ -30,26 +30,26 @@ func NewClient() Discorder {
 
 func (d Discorder) SengMessage(channelID string, content string) error {
 	_, err := d.dg.ChannelMessageSend(channelID, content)
-	utils.CheckWarn(err)
+	logger.CheckWarn(err)
 	return err
 }
 
 func (d Discorder) EditMessage(channelID string, messageID string, content string) error {
 	_, err := d.dg.ChannelMessageEdit(channelID, messageID, content)
-	utils.CheckWarn(err)
+	logger.CheckWarn(err)
 	return err
 }
 
 func (d Discorder) DeleteMessage(channelID string, messageID string) {
 	err := d.dg.ChannelMessageDelete(channelID, messageID)
-	utils.CheckWarn(err)
+	logger.CheckWarn(err)
 }
 
 func (d Discorder) GetLatestMessages(channelID string) []*discordgo.Message {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(channelID, messagesLimitToGrab, "", "", "")
 	if err != nil {
-		utils.CheckWarn(err, "Unable to get messages from channelId=", channelID)
+		logger.CheckWarn(err, "Unable to get messages from channelId=", channelID)
 		return []*discordgo.Message{}
 	}
 

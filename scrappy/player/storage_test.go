@@ -1,7 +1,7 @@
 package player
 
 import (
-	"darkbot/utils"
+	"darkbot/utils/logger"
 	"fmt"
 	"testing"
 
@@ -19,7 +19,7 @@ func TestGetBases(t *testing.T) {
 	storage.Update()
 
 	bases, err := storage.GetLatestRecord()
-	utils.CheckPanic(err, "not found latest base record")
+	logger.CheckPanic(err, "not found latest base record")
 
 	assert.True(t, len(bases.List) > 0)
 	fmt.Println(bases.List)
