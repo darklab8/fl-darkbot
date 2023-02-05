@@ -7,6 +7,7 @@ package viewer
 import (
 	"darkbot/settings"
 	"darkbot/utils"
+	"runtime"
 )
 
 func Run() {
@@ -14,5 +15,6 @@ func Run() {
 
 	for {
 		NewViewer(settings.Dbpath).Update()
+		runtime.GC()
 	}
 }
