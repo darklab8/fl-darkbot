@@ -22,6 +22,12 @@ func (b *Records[T]) Add(record T) {
 		cutterStart = 0
 	}
 
+	// Golang has bug with array of pointers, they will not be free until nilled
+	// This code ensures proper deletion
+	for index, _ := range b.records[:cutterStart] {
+		b.records[index] = nil
+	}
+
 	b.records = b.records[cutterStart:]
 }
 

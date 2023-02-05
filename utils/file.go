@@ -28,7 +28,7 @@ func (f *File) Close() {
 func (f *File) ReadLines() []string {
 
 	scanner := bufio.NewScanner(f.file)
-
+	f.lines = []string{}
 	for scanner.Scan() {
 		f.lines = append(f.lines, scanner.Text())
 	}
