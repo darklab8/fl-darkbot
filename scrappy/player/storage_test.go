@@ -1,7 +1,6 @@
 package player
 
 import (
-	"darkbot/utils"
 	"darkbot/utils/logger"
 	"fmt"
 	"testing"
@@ -23,5 +22,5 @@ func TestGetPlayers(t *testing.T) {
 	logger.CheckPanic(err, "not found latest base record")
 
 	assert.True(t, len(bases.List) > 0)
-	fmt.Println(utils.CompL(bases.List, func(x *Player) Player { return *x }))
+	fmt.Println(bases.List)
 }

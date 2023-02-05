@@ -39,7 +39,7 @@ type TemplateRendererBaseInput struct {
 	Bases       []base.Base
 }
 
-func BaseContainsTag(bas *base.Base, tags []string) bool {
+func BaseContainsTag(bas base.Base, tags []string) bool {
 	for _, tag := range tags {
 		if strings.Contains(bas.Name, tag) {
 			return true
@@ -71,7 +71,7 @@ func (b *TemplateBase) Render() {
 			continue
 		}
 
-		input.Bases = append(input.Bases, *base)
+		input.Bases = append(input.Bases, base)
 	}
 
 	if len(input.Bases) == 0 {
