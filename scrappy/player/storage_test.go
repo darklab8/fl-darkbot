@@ -1,6 +1,7 @@
 package player
 
 import (
+	"darkbot/utils"
 	"darkbot/utils/logger"
 	"fmt"
 	"testing"
@@ -8,19 +9,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func FixtureBaseStorageMockified() *PlayerStorage {
+func FixturePlayerStorageMockified() *PlayerStorage {
 	storage := (&PlayerStorage{}).New()
 	storage.api = APIPlayerSpy{}
 	return storage
 }
 
-func TestGetBases(t *testing.T) {
-	storage := FixtureBaseStorageMockified()
+func TestGetPlayers(t *testing.T) {
+	storage := FixturePlayerStorageMockified()
 	storage.Update()
 
 	bases, err := storage.GetLatestRecord()
 	logger.CheckPanic(err, "not found latest base record")
 
 	assert.True(t, len(bases.List) > 0)
-	fmt.Println(bases.List)
+	fmt.Println(utils.CompL(bases.List, func(x *Player) Player { return *x }))
 }
