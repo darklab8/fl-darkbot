@@ -86,6 +86,24 @@ func (v ChannelView) DeleteOld() {
 
 func (v *ChannelView) Delete() {
 	for index, _ := range v.Msgs {
+		for index2, _ := range v.Msgs[index].Attachments {
+			v.Msgs[index].Attachments[index2] = nil
+		}
+		for index2, _ := range v.Msgs[index].Embeds {
+			v.Msgs[index].Embeds[index2] = nil
+		}
+		for index2, _ := range v.Msgs[index].MentionChannels {
+			v.Msgs[index].MentionChannels[index2] = nil
+		}
+		for index2, _ := range v.Msgs[index].Mentions {
+			v.Msgs[index].Mentions[index2] = nil
+		}
+		for index2, _ := range v.Msgs[index].Reactions {
+			v.Msgs[index].Reactions[index2] = nil
+		}
+		for index2, _ := range v.Msgs[index].StickerItems {
+			v.Msgs[index].StickerItems[index2] = nil
+		}
 		v.Msgs[index] = nil
 	}
 
