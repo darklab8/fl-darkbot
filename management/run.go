@@ -11,6 +11,8 @@ import (
 	"darkbot/utils"
 	"darkbot/utils/logger"
 	"darkbot/viewer"
+	"runtime"
+	"time"
 
 	"net/http"
 	_ "net/http/pprof"
@@ -42,6 +44,14 @@ var runCmd = &cobra.Command{
 				http.ListenAndServe(":8080", nil)
 			}()
 		}
+
+		// May be garbage collector will help
+		go func() {
+			for {
+				time.Sleep(time.Second * 10)
+				runtime.GC()
+			}
+		}()
 
 		utils.SleepAwaitCtrlC()
 	},
