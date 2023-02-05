@@ -10,32 +10,30 @@ type Deletable interface {
 }
 
 type Records[T Deletable] struct {
-	records []*T
+	records []T
 	mu      sync.Mutex
 }
 
-func (b *Records[T]) Add(record T) []*T {
+func (b *Records[T]) Add(record T) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
-	b.records = append(b.records, &record)
+	b.records = append(b.records, record)
 
 	cutterStart := len(b.records) - 10
 	if cutterStart < 0 {
 		cutterStart = 0
 	}
-
-	returnable := b.records[:cutterStart]
 	b.records = b.records[cutterStart:]
-	return returnable
 }
 
-func (b *Records[T]) GetLatestRecord() (*T, error) {
+func (b *Records[T]) GetLatestRecord() (T, error) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
 	if len(b.records) == 0 {
-		return nil, utils.ErrorNotFound{}
+		var obj T
+		return obj, utils.ErrorNotFound{}
 	}
 	logger.Info("records.GetLatestRecord.len(b.records)=", len(b.records))
 

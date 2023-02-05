@@ -14,8 +14,8 @@ type API struct {
 	Bases     configurator.ConfiguratorBase
 }
 
-func NewAPI(channelID string, dbpath dtypes.Dbpath) *API {
-	return &API{
+func NewAPI(channelID string, dbpath dtypes.Dbpath) API {
+	return API{
 		Discorder: discorder.NewClient(),
 		ChannelID: channelID,
 		Scrappy:   scrappy.Storage,

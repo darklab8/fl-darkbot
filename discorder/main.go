@@ -10,6 +10,7 @@ package discorder
 import (
 	"darkbot/settings"
 	"darkbot/utils/logger"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -45,18 +46,52 @@ func (d Discorder) DeleteMessage(channelID string, messageID string) {
 	logger.CheckWarn(err)
 }
 
-func (d Discorder) GetLatestMessages(channelID string) []*discordgo.Message {
+type DiscordMessage struct {
+	ID        string
+	Content   string
+	Timestamp time.Time
+}
+
+func (d Discorder) GetLatestMessages(channelID string) []DiscordMessage {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(channelID, messagesLimitToGrab, "", "", "")
 	if err != nil {
 		logger.CheckWarn(err, "Unable to get messages from channelId=", channelID)
-		return []*discordgo.Message{}
+		return []DiscordMessage{}
 	}
 
-	// Checking messages content
-	// for _, msg := range messages {
-	// 	fmt.Println(msg.Content)
-	// }
+	result := []DiscordMessage{}
 
-	return messages
+	for _, msg := range messages {
+		result = append(result, DiscordMessage{
+			ID:        msg.ID,
+			Content:   msg.Content,
+			Timestamp: msg.Timestamp,
+		})
+	}
+
+	// Just to be sure to have it deleted
+	for index, _ := range messages {
+		for index2, _ := range messages[index].Attachments {
+			messages[index].Attachments[index2] = nil
+		}
+		for index2, _ := range messages[index].Embeds {
+			messages[index].Embeds[index2] = nil
+		}
+		for index2, _ := range messages[index].MentionChannels {
+			messages[index].MentionChannels[index2] = nil
+		}
+		for index2, _ := range messages[index].Mentions {
+			messages[index].Mentions[index2] = nil
+		}
+		for index2, _ := range messages[index].Reactions {
+			messages[index].Reactions[index2] = nil
+		}
+		for index2, _ := range messages[index].StickerItems {
+			messages[index].StickerItems[index2] = nil
+		}
+		messages[index] = nil
+	}
+
+	return result
 }

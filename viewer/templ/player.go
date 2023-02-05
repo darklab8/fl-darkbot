@@ -31,7 +31,7 @@ type PlayersTemplates struct {
 	enemies PlayersEnemies
 }
 
-func NewTemplatePlayers(channelID string, dbpath dtypes.Dbpath) *PlayersTemplates {
+func NewTemplatePlayers(channelID string, dbpath dtypes.Dbpath) PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.friends.API = apis.NewAPI(channelID, dbpath)
 	templator.all.API = apis.NewAPI(channelID, dbpath)
@@ -39,7 +39,7 @@ func NewTemplatePlayers(channelID string, dbpath dtypes.Dbpath) *PlayersTemplate
 	templator.friends.Header = "#darkbot-players-friends"
 	templator.all.Header = "#darkbot-players-all"
 	templator.enemies.Header = "#darkbot-players-enemies"
-	return &templator
+	return templator
 }
 
 func (t *PlayersTemplates) Render() {

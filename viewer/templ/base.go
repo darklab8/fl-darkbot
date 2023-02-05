@@ -26,17 +26,21 @@ type TemplateBase struct {
 	main TemplateShared
 }
 
-func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) *TemplateBase {
+func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) TemplateBase {
 	base := TemplateBase{}
 	base.main.API = apis.NewAPI(channelID, dbpath)
 	base.main.Header = "#darkbot-base-view"
-	return &base
+	return base
 }
 
 type TemplateRendererBaseInput struct {
 	Header      string
 	LastUpdated string
 	Bases       []base.Base
+}
+
+func (t *TemplateRendererBaseInput) Delete() {
+	t.Bases = nil
 }
 
 func BaseContainsTag(bas base.Base, tags []string) bool {
@@ -67,11 +71,11 @@ func (b *TemplateBase) Render() {
 
 	for _, base := range record.List {
 
-		if !BaseContainsTag(*base, tags) {
+		if !BaseContainsTag(base, tags) {
 			continue
 		}
 
-		input.Bases = append(input.Bases, *base)
+		input.Bases = append(input.Bases, base)
 	}
 
 	if len(input.Bases) == 0 {
@@ -79,6 +83,7 @@ func (b *TemplateBase) Render() {
 	}
 
 	b.main.Content = utils.TmpRender(baseTemplate, input)
+	input.Delete()
 }
 
 func (t *TemplateBase) Send() {

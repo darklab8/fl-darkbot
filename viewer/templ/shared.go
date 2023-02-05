@@ -19,10 +19,10 @@ type TemplateShared struct {
 	MessageID string
 	Content   string
 	Header    string
-	*apis.API
+	apis.API
 }
 
-func CheckTooLongMsgErr(err error, api *apis.API, header string, action MsgAction, MessageID string) {
+func CheckTooLongMsgErr(err error, api apis.API, header string, action MsgAction, MessageID string) {
 	if err == nil {
 		return
 	}

@@ -24,13 +24,7 @@ type PlayerStorage struct {
 func (b *PlayerStorage) Update() {
 	data := b.api.New().GetData()
 	record := b.parser.Parse(data)
-	deletables := b.Add(record)
-
-	// Anti memory bug?
-	for index, deletable := range deletables {
-		deletable.Delete()
-		deletables[index] = nil
-	}
+	b.Add(record)
 	logger.Info("updated player storage")
 }
 

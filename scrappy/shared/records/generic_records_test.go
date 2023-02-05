@@ -22,11 +22,11 @@ func TestCleanup(t *testing.T) {
 	}
 
 	latest, _ := storage.GetLatestRecord()
-	assert.Equal(t, 11, (*latest).Value)
+	assert.Equal(t, 11, (latest).Value)
 	assert.Equal(t, 10, storage.Length())
 
 	storage.Add(DeletableInt{100})
 	latest, _ = storage.GetLatestRecord()
-	assert.Equal(t, 100, (*latest).Value)
+	assert.Equal(t, 100, (latest).Value)
 	assert.Equal(t, 10, storage.Length())
 }

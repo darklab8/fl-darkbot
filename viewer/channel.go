@@ -1,21 +1,20 @@
 package viewer
 
 import (
+	"darkbot/discorder"
 	"darkbot/dtypes"
 	"darkbot/utils/logger"
 	"darkbot/viewer/apis"
 	"darkbot/viewer/templ"
 	"strings"
 	"time"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 type ChannelView struct {
-	*apis.API
-	BaseView    *templ.TemplateBase
-	Msgs        []*discordgo.Message
-	PlayersView *templ.PlayersTemplates
+	apis.API
+	BaseView    templ.TemplateBase
+	Msgs        []discorder.DiscordMessage
+	PlayersView templ.PlayersTemplates
 }
 
 func NewChannelView(channelID string, dbpath dtypes.Dbpath) ChannelView {
@@ -82,32 +81,4 @@ func (v ChannelView) DeleteOld() {
 		logger.Info("deleted message with id", msg.ID)
 		deleteLimit--
 	}
-}
-
-func (v *ChannelView) Delete() {
-	for index, _ := range v.Msgs {
-		for index2, _ := range v.Msgs[index].Attachments {
-			v.Msgs[index].Attachments[index2] = nil
-		}
-		for index2, _ := range v.Msgs[index].Embeds {
-			v.Msgs[index].Embeds[index2] = nil
-		}
-		for index2, _ := range v.Msgs[index].MentionChannels {
-			v.Msgs[index].MentionChannels[index2] = nil
-		}
-		for index2, _ := range v.Msgs[index].Mentions {
-			v.Msgs[index].Mentions[index2] = nil
-		}
-		for index2, _ := range v.Msgs[index].Reactions {
-			v.Msgs[index].Reactions[index2] = nil
-		}
-		for index2, _ := range v.Msgs[index].StickerItems {
-			v.Msgs[index].StickerItems[index2] = nil
-		}
-		v.Msgs[index] = nil
-	}
-
-	v.BaseView = nil
-	v.PlayersView = nil
-	v.API = nil
 }
