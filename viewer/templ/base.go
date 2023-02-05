@@ -67,11 +67,11 @@ func (b *TemplateBase) Render() {
 
 	for _, base := range record.List {
 
-		if !BaseContainsTag(base, tags) {
+		if !BaseContainsTag(*base, tags) {
 			continue
 		}
 
-		input.Bases = append(input.Bases, base)
+		input.Bases = append(input.Bases, *base)
 	}
 
 	if len(input.Bases) == 0 {

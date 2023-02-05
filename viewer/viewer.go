@@ -44,6 +44,7 @@ func (v Viewer) Update() {
 		view.Render()
 		view.Send()
 		view.DeleteOld()
+		view.Delete()
 		time.Sleep(time.Duration(v.delays.betweenChannels) * time.Second)
 	}
 	time.Sleep(time.Duration(v.delays.betweenLoops) * time.Second)

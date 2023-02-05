@@ -83,3 +83,13 @@ func (v ChannelView) DeleteOld() {
 		deleteLimit--
 	}
 }
+
+func (v *ChannelView) Delete() {
+	for index, _ := range v.Msgs {
+		v.Msgs[index] = nil
+	}
+
+	v.BaseView = nil
+	v.PlayersView = nil
+	v.API = nil
+}

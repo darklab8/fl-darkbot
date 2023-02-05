@@ -6,19 +6,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type DeletableInt struct {
+	Value int
+}
+
+func (d DeletableInt) Delete() {
+
+}
+
 func TestCleanup(t *testing.T) {
-	storage := Records[int]{}
+	storage := Records[DeletableInt]{}
 
 	for i := 0; i < 12; i++ {
-		storage.Add(i)
+		storage.Add(DeletableInt{i})
 	}
 
 	latest, _ := storage.GetLatestRecord()
-	assert.Equal(t, 11, latest)
+	assert.Equal(t, 11, latest.Value)
 	assert.Equal(t, 10, storage.Length())
 
-	storage.Add(100)
+	storage.Add(DeletableInt{100})
 	latest, _ = storage.GetLatestRecord()
-	assert.Equal(t, 100, latest)
+	assert.Equal(t, 100, latest.Value)
 	assert.Equal(t, 10, storage.Length())
 }
