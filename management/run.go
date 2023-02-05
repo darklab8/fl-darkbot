@@ -28,10 +28,12 @@ var runCmd = &cobra.Command{
 		// migrate db
 		configurator.NewConfigurator(settings.Dbpath).Migrate()
 
+		scrappy.Storage.Update()
 		go scrappy.Run()
 		go listener.Run()
 		go viewer.Run()
 
+		// profiler
 		if settings.Config.ProfilingEnabled == settings.EnvTrue {
 			p := profile.Start(profile.MemProfile, profile.ProfilePath("."), profile.NoShutdownHook)
 			defer p.Stop()
