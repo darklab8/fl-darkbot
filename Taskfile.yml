@@ -21,11 +21,11 @@ tasks:
 
   docker:build:
     cmds:
-      - docker build --tag darkwind8/darkbot:v0.2.0-a.3 .
+      - docker build --tag darkwind8/darkbot:v0.2.0-a.5 .
 
   docker:push:
     cmds:
-      - docker push darkwind8/darkbot:v0.2.0-a.3
+      - docker push darkwind8/darkbot:v0.2.0-a.5
 
   docker:buildpush:
     cmds:
