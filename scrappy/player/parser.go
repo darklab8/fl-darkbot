@@ -30,7 +30,6 @@ func (b playerParser) Parse(body []byte) records.StampedObjects[Player] {
 
 	for _, serializedPlayer := range playerData.Players {
 		record.Add(
-			serializedPlayer.Name,
 			Player{
 				Time:   serializedPlayer.Time,
 				Name:   serializedPlayer.Name,

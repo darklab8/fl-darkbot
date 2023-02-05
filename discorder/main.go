@@ -92,6 +92,7 @@ func (d Discorder) GetLatestMessages(channelID string) []DiscordMessage {
 		}
 		messages[index] = nil
 	}
+	messages = nil
 
 	return result
 }

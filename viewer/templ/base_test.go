@@ -20,8 +20,8 @@ func TestBaseViewer(t *testing.T) {
 		bases := base.BaseStorage{}
 		scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: &bases}
 		record := records.StampedObjects[base.Base]{}.New()
-		record.Add("Station1", base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
-		record.Add("Station2", base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
+		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
+		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
 		bases.Add(record)
 
 		base := NewTemplateBase(channelID, dbpath)
