@@ -20,11 +20,13 @@ func (b *StampedObjects[T]) Add(key string, obj T) {
 	b.List = append(b.List, &obj)
 }
 
-func (b StampedObjects[T]) Delete() {
+func (b *StampedObjects[T]) Delete() {
 	for key, _ := range b.Dict {
 		delete(b.Dict, key)
 	}
 	for index, _ := range b.List {
 		b.List[index] = nil
 	}
+	b.Dict = nil
+	b.List = nil
 }

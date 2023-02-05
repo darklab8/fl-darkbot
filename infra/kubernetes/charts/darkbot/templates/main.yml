@@ -36,6 +36,8 @@ spec:
               value: "{{ .Values.CONSOLER_PREFIX }}"
             - name: LOGGING
               value: "{{ .Values.LOGGING }}"
+            - name: LOOP_DELAY
+              value: "{{ .Values.LOOP_DELAY }}"
           volumeMounts:
             - mountPath: "/code/data"
               name: darkbot-persistent-storage

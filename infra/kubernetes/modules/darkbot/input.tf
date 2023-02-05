@@ -5,6 +5,7 @@ variable "environ" {
     DISCORDER_BOT_TOKEN = string
     CONSOLER_PREFIX     = string
     LOGGING             = bool
+    LOOP_DELAY          = number
   })
 }
 

@@ -26,6 +26,7 @@ resource "helm_release" "experiment" {
     CONFIGURATOR_DBNAME: "${var.environment}"
     CONSOLER_PREFIX: "${var.environ.CONSOLER_PREFIX}"
     LOGGING: "${var.environ.LOGGING}"
+    LOOP_DELAY: "${var.environ.LOOP_DELAY}"
     EOT
   ]
   set {

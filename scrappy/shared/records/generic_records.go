@@ -7,7 +7,6 @@ import (
 )
 
 type Deletable interface {
-	Delete()
 }
 
 type Records[T Deletable] struct {
@@ -15,7 +14,7 @@ type Records[T Deletable] struct {
 	mu      sync.Mutex
 }
 
-func (b *Records[T]) Add(record T) {
+func (b *Records[T]) Add(record T) []*T {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
@@ -26,13 +25,9 @@ func (b *Records[T]) Add(record T) {
 		cutterStart = 0
 	}
 
-	// Anti golang bug?
-	for index, value := range b.records[:cutterStart] {
-		(*value).Delete()
-		b.records[index] = nil
-	}
-
+	returnable := b.records[:cutterStart]
 	b.records = b.records[cutterStart:]
+	return returnable
 }
 
 func (b *Records[T]) GetLatestRecord() (*T, error) {

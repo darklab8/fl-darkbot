@@ -3,6 +3,7 @@ package viewer
 import (
 	"darkbot/configurator"
 	"darkbot/dtypes"
+	"darkbot/settings"
 	"darkbot/utils/logger"
 	"fmt"
 	"time"
@@ -25,7 +26,7 @@ func NewViewer(dbpath dtypes.Dbpath) Viewer {
 		channels: configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator(dbpath)},
 		delays: ViewerDelays{
 			betweenChannels: 1,
-			betweenLoops:    10,
+			betweenLoops:    settings.LoopDelay,
 		},
 	}
 }

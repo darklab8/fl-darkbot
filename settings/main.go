@@ -4,6 +4,7 @@ import (
 	"darkbot/utils"
 	"darkbot/utils/logger"
 	"path/filepath"
+	"strconv"
 
 	"darkbot/dtypes"
 
@@ -27,8 +28,11 @@ type ConfigScheme struct {
 
 	ConsolerPrefix   string `env:"CONSOLER_PREFIX" envDefault:","`
 	ProfilingEnabled string `env:"PROFILING" envDefault:"false"`
+
+	LoopDelay string `env:"LOOP_DELAY" envDefault:"10"`
 }
 
+var LoopDelay int
 var Config ConfigScheme
 
 type dbpath dtypes.Dbpath
@@ -57,6 +61,10 @@ func load() {
 	logger.Info("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
 
 	Dbpath = NewDBPath(Config.ConfiguratorDbname)
+
+	LoopDelay, err = strconv.Atoi(Config.LoopDelay)
+	logger.CheckPanic(err, "failed to parse LoopDelay")
+	logger.Info("settings.LoopDelay=", LoopDelay)
 }
 
 func init() {
