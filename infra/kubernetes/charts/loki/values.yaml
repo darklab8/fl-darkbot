@@ -1,0 +1,17 @@
+loki-stack:
+  grafana:
+    enabled: true
+  prometheus:
+    enabled: true
+    alertmanager:
+      persistentVolume:
+        enabled: false
+    server:
+      persistentVolume:
+        enabled: false
+
+  loki:
+    config:
+      table_manager:
+        retention_deletes_enabled: true
+        retention_period: 168h
