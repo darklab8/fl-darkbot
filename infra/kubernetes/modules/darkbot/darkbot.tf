@@ -25,6 +25,7 @@ resource "helm_release" "experiment" {
     ENVIRONMENT: "${var.environment}"
     CONFIGURATOR_DBNAME: "${var.environment}"
     CONSOLER_PREFIX: "${var.environ.CONSOLER_PREFIX}"
+    LOGGING: "${var.environ.LOGGING}"
     EOT
   ]
   set {

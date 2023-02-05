@@ -18,6 +18,7 @@ module "darkbot" {
     SCRAPPY_PLAYER_URL  = var.SCRAPPY_PLAYER_URL
     SCRAPPY_BASE_URL    = var.SCRAPPY_BASE_URL
     DISCORDER_BOT_TOKEN = var.PRODUCTION_DISCORDER_BOT_TOKEN
+    LOGGING             = true
   }
   limit = {
     hard_memory = 2000

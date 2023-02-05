@@ -34,6 +34,8 @@ spec:
               value: "{{ .Values.CONFIGURATOR_DBNAME }}"
             - name: CONSOLER_PREFIX
               value: "{{ .Values.CONSOLER_PREFIX }}"
+            - name: LOGGING
+              value: "{{ .Values.LOGGING }}"
           volumeMounts:
             - mountPath: "/code/data"
               name: darkbot-persistent-storage

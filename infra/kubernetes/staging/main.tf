@@ -13,10 +13,11 @@ module "darkbot" {
     SCRAPPY_PLAYER_URL  = var.SCRAPPY_PLAYER_URL
     SCRAPPY_BASE_URL    = var.SCRAPPY_BASE_URL
     DISCORDER_BOT_TOKEN = var.STAGING_DISCORDER_BOT_TOKEN
+    LOGGING             = false
   }
   limit = {
     hard_memory = 2000
     hard_cpu    = 2000
   }
-  image_version = "v0.2.0-a.2"
+  image_version = "v0.2.0-a.3"
 }

@@ -4,6 +4,7 @@ variable "environ" {
     SCRAPPY_BASE_URL    = string
     DISCORDER_BOT_TOKEN = string
     CONSOLER_PREFIX     = string
+    LOGGING             = bool
   })
 }
 
