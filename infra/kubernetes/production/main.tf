@@ -7,11 +7,21 @@ provider "helm" {
 
 module "darkbot" {
   source = "../modules/darkbot"
+}
 
-  environment         = "prod"
-  CONSOLER_PREFIX     = "."
-  SCRAPPY_PLAYER_URL  = var.SCRAPPY_PLAYER_URL
-  SCRAPPY_BASE_URL    = var.SCRAPPY_BASE_URL
-  DISCORDER_BOT_TOKEN = var.PRODUCTION_DISCORDER_BOT_TOKEN
-  DARKBOT_VERSION     = "v0.1.1"
+module "darkbot" {
+  source = "../modules/darkbot"
+
+  environment = "prod"
+  environ = {
+    CONSOLER_PREFIX     = "."
+    SCRAPPY_PLAYER_URL  = var.SCRAPPY_PLAYER_URL
+    SCRAPPY_BASE_URL    = var.SCRAPPY_BASE_URL
+    DISCORDER_BOT_TOKEN = var.PRODUCTION_DISCORDER_BOT_TOKEN
+  }
+  limit = {
+    hard_memory = 2000
+    hard_cpu    = 2000
+  }
+  image_version = "v0.1.1"
 }

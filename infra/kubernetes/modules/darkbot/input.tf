@@ -1,24 +1,24 @@
-variable "SCRAPPY_PLAYER_URL" {
-  type = string
-}
-
-variable "SCRAPPY_BASE_URL" {
-  type = string
-}
-
-variable "DISCORDER_BOT_TOKEN" {
-  type = string
+variable "environ" {
+  type = object({
+    SCRAPPY_PLAYER_URL  = string
+    SCRAPPY_BASE_URL    = string
+    DISCORDER_BOT_TOKEN = string
+    CONSOLER_PREFIX     = string
+  })
 }
 
 variable "environment" {
   type = string
 }
 
-variable "CONSOLER_PREFIX" {
-  type = string
-}
-
-variable "DARKBOT_VERSION" {
+variable "image_version" {
   type        = string
   description = "darkbot image version"
+}
+
+variable "limit" {
+  type = object({
+    hard_memory = string
+    hard_cpu    = string
+  })
 }

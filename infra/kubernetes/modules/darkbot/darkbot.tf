@@ -15,6 +15,18 @@ resource "helm_release" "experiment" {
   reset_values     = true
   recreate_pods    = true
 
+  values = [
+    <<-EOT
+    hard_memory_limit: "${var.limit.hard_memory}"
+    hard_cpu_limit: "${var.limit.hard_cpu}"
+    hostname: "${var.environment}-cluster"
+    image_version: "${var.image_version}"
+
+    ENVIRONMENT: "${var.environment}"
+    CONFIGURATOR_DBNAME: "${var.environment}"
+    CONSOLER_PREFIX: "${var.environ.CONSOLER_PREFIX}"
+    EOT
+  ]
   set {
     name  = "chartHash"
     value = local.chart_hash
@@ -22,41 +34,16 @@ resource "helm_release" "experiment" {
 
   set_sensitive {
     name  = "SCRAPPY_PLAYER_URL"
-    value = var.SCRAPPY_PLAYER_URL
+    value = var.environ.SCRAPPY_PLAYER_URL
   }
 
   set_sensitive {
     name  = "SCRAPPY_BASE_URL"
-    value = var.SCRAPPY_BASE_URL
+    value = var.environ.SCRAPPY_BASE_URL
   }
 
   set_sensitive {
     name  = "DISCORDER_BOT_TOKEN"
-    value = var.DISCORDER_BOT_TOKEN
-  }
-
-  set {
-    name  = "CONFIGURATOR_DBNAME"
-    value = var.environment
-  }
-
-  set {
-    name  = "ENVIRONMENT"
-    value = var.environment
-  }
-
-  set {
-    name  = "HOSTNAME"
-    value = "${var.environment}-cluster"
-  }
-
-  set {
-    name  = "CONSOLER_PREFIX"
-    value = var.CONSOLER_PREFIX
-  }
-
-  set {
-    name  = "DARKBOT_VERSION"
-    value = var.DARKBOT_VERSION
+    value = var.environ.DISCORDER_BOT_TOKEN
   }
 }

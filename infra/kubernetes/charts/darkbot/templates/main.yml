@@ -21,7 +21,7 @@ spec:
             claimName: darkbot-{{ .Values.ENVIRONMENT }}-claim
       containers:
         - name: darkbot-ctr
-          image: darkwind8/darkbot:{{ .Values.DARKBOT_VERSION }}
+          image: darkwind8/darkbot:{{ .Values.image_version }}
           imagePullPolicy: Always
           env:
             - name: SCRAPPY_PLAYER_URL
@@ -42,8 +42,8 @@ spec:
               memory: "250Mi"
               cpu: "500m"
             limits:
-              memory: "2000Mi"
-              cpu: "2000m"
+              memory: "{{.Values.hard_memory_limit}}Mi"
+              cpu: "{{.Values.hard_cpu_limit}}m"
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -65,7 +65,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - "{{ .Values.HOSTNAME }}"
+                - "{{ .Values.hostname }}"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
