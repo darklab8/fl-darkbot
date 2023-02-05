@@ -1,6 +1,7 @@
 version: "3"
 
 tasks:
+  # 1860 and 405 grafana imported dashboards
   grafana:connect:
     cmds:
       - kubectl port-forward service/loki-grafana 5000:80

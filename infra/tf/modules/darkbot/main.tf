@@ -1,7 +1,7 @@
 locals {
   datacenter  = "ash-dc1" # USA
   image       = "ubuntu-22.04"
-  server_type = "cpx11"
+  server_type = var.server_power
   task_name   = "cluster"
 }
 

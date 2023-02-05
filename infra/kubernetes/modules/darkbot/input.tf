@@ -17,3 +17,8 @@ variable "environment" {
 variable "CONSOLER_PREFIX" {
   type = string
 }
+
+variable "DARKBOT_VERSION" {
+  type        = string
+  description = "darkbot image version"
+}

@@ -1,6 +1,6 @@
 
 locals {
-  chart_path = "${path.module}/../charts/darkbot"
+  chart_path = "${path.module}/../../charts/darkbot"
   # This hash forces Terraform to redeploy if a new template file is added or changed, or values are updated
   chart_hash  = sha1(join("", [for f in fileset(local.chart_path, "**/*ml") : filesha1("${local.chart_path}/${f}")]))
   environment = var.environment
@@ -53,5 +53,10 @@ resource "helm_release" "experiment" {
   set {
     name  = "CONSOLER_PREFIX"
     value = var.CONSOLER_PREFIX
+  }
+
+  set {
+    name  = "DARKBOT_VERSION"
+    value = var.DARKBOT_VERSION
   }
 }

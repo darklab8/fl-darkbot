@@ -21,7 +21,7 @@ spec:
             claimName: darkbot-{{ .Values.ENVIRONMENT }}-claim
       containers:
         - name: darkbot-ctr
-          image: darkwind8/darkbot:v0.1.1
+          image: darkwind8/darkbot:{{ .Values.DARKBOT_VERSION }}
           imagePullPolicy: Always
           env:
             - name: SCRAPPY_PLAYER_URL

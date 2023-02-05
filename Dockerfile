@@ -21,6 +21,7 @@ COPY scrappy scrappy
 COPY settings settings
 COPY utils utils
 COPY viewer viewer
+COPY dtypes dtypes
 RUN go build -v -o main main.go
 
 FROM debian:11.6-slim as runner

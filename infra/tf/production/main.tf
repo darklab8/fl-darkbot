@@ -21,8 +21,9 @@ provider "hcloud" {
 }
 
 module "stack" {
-  source      = "../modules/darkbot"
-  environment = "prod"
+  source       = "../modules/darkbot"
+  environment  = "prod"
+  server_power = "cpx21"
 }
 
 output "cluster_ip" {
