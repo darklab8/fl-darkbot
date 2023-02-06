@@ -11,25 +11,37 @@ import (
 )
 
 type ChannelView struct {
-	apis.API
+	api         apis.API
 	BaseView    templ.TemplateBase
 	Msgs        []discorder.DiscordMessage
 	PlayersView templ.PlayersTemplates
+	ChannelID   string
 }
 
-func NewChannelView(channelID string, dbpath dtypes.Dbpath) ChannelView {
+func NewChannelView(dbpath dtypes.Dbpath) ChannelView {
 	view := ChannelView{}
-	view.API = apis.NewAPI(channelID, dbpath)
-	view.BaseView = templ.NewTemplateBase(channelID, dbpath)
-	view.PlayersView = templ.NewTemplatePlayers(channelID, dbpath)
+	view.ChannelID = ""
+	view.api = apis.NewAPI(view.ChannelID, dbpath)
+	view.BaseView = templ.NewTemplateBase(view.ChannelID, dbpath)
+	view.PlayersView = templ.NewTemplatePlayers(view.ChannelID, dbpath)
+
 	return view
+}
+
+// Query all Discord messages
+// Try to grab already sent message by ID, if yes, assign to found objects with message ID.
+func (v *ChannelView) Setup(channelID string) {
+	v.ChannelID = channelID
+	v.api.ChannelID = channelID
+	v.BaseView.Setup(channelID)
+	v.PlayersView.Setup(channelID)
 }
 
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
 func (v *ChannelView) Discover() {
 	logger.Info("viewer.Init.channelID=", v.ChannelID)
-	msgs := v.Discorder.GetLatestMessages(v.ChannelID)
+	msgs := v.api.Discorder.GetLatestMessages(v.ChannelID)
 	for _, msg := range msgs {
 		v.BaseView.DiscoverMessageID(msg.Content, msg.ID)
 		v.PlayersView.DiscoverMessageID(msg.Content, msg.ID)
@@ -77,7 +89,7 @@ func (v ChannelView) DeleteOld() {
 			continue
 		}
 
-		v.Discorder.DeleteMessage(v.ChannelID, msg.ID)
+		v.api.Discorder.DeleteMessage(v.ChannelID, msg.ID)
 		logger.Info("deleted message with id", msg.ID)
 		deleteLimit--
 	}

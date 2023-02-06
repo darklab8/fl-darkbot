@@ -42,6 +42,18 @@ func NewTemplatePlayers(channelID string, dbpath dtypes.Dbpath) PlayersTemplates
 	return templator
 }
 
+func (b *PlayersTemplates) Setup(channelID string) {
+	b.all.MessageID = ""
+	b.enemies.MessageID = ""
+	b.friends.MessageID = ""
+	b.all.Content = ""
+	b.enemies.Content = ""
+	b.friends.Content = ""
+	b.all.API.ChannelID = channelID
+	b.enemies.API.ChannelID = channelID
+	b.friends.API.ChannelID = channelID
+}
+
 func (t *PlayersTemplates) Render() {
 	record, err := t.friends.Scrappy.PlayerStorage.GetLatestRecord()
 	if err != nil {

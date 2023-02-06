@@ -53,6 +53,12 @@ func BaseContainsTag(bas base.Base, tags []string) bool {
 	return false
 }
 
+func (b *TemplateBase) Setup(channelID string) {
+	b.main.MessageID = ""
+	b.main.Content = ""
+	b.main.API.ChannelID = channelID
+}
+
 func (b *TemplateBase) Render() {
 	input := TemplateRendererBaseInput{
 		Header:      b.main.Header,

@@ -12,7 +12,8 @@ import (
 func Run() {
 	logger.Info("Viewer is now running.")
 
+	view := NewViewer(settings.Dbpath)
 	for {
-		NewViewer(settings.Dbpath).Update()
+		view.Update()
 	}
 }

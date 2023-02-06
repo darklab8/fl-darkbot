@@ -18,6 +18,7 @@ type Viewer struct {
 	channels configurator.ConfiguratorChannel
 	delays   ViewerDelays
 	dbpath   dtypes.Dbpath
+	channel  ChannelView
 }
 
 func NewViewer(dbpath dtypes.Dbpath) Viewer {
@@ -28,6 +29,7 @@ func NewViewer(dbpath dtypes.Dbpath) Viewer {
 			betweenChannels: 1,
 			betweenLoops:    settings.LoopDelay,
 		},
+		channel: NewChannelView(dbpath),
 	}
 }
 
@@ -40,11 +42,11 @@ func (v Viewer) Update() {
 
 	// For each channel
 	for _, channelID := range channelIDs {
-		view := NewChannelView(channelID, v.dbpath)
-		view.Discover()
-		view.Render()
-		view.Send()
-		view.DeleteOld()
+		v.channel.Setup(channelID)
+		v.channel.Discover()
+		v.channel.Render()
+		v.channel.Send()
+		v.channel.DeleteOld()
 		time.Sleep(time.Duration(v.delays.betweenChannels) * time.Second)
 	}
 	time.Sleep(time.Duration(v.delays.betweenLoops) * time.Second)
