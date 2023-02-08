@@ -4,8 +4,8 @@ import (
 	"darkbot/configurator"
 	"darkbot/dtypes"
 	"darkbot/scrappy"
+	"darkbot/scrappy/base"
 	"darkbot/scrappy/player"
-	"darkbot/scrappy/shared/records"
 	"fmt"
 	"testing"
 )
@@ -17,13 +17,10 @@ func TestPlayerViewer(t *testing.T) {
 		playerCfg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
 		playerCfg.TagsAdd(channelID, []string{"Station"}...)
 
-		players := player.PlayerStorage{}
-		scrappy.Storage = &scrappy.ScrappyStorage{PlayerStorage: &players}
-		record := records.StampedObjects[player.Player]{}.New()
-		record.Add(player.Player{Name: "abc_123", System: "New York"})
-		record.Add(player.Player{Name: "abc_456", System: "Hamburg"})
-		record.Add(player.Player{Name: "456456", System: "Hamburg"})
-		players.Add(record)
+		scrappy.Storage.BaseStorage.Api = base.APIBasespy{}
+		scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}
+		scrappy.Storage.Update()
+		// See TestBaseViewer for recipe to add manually players
 
 		playerView := NewTemplatePlayers(channelID, dbpath)
 		playerView.Render()

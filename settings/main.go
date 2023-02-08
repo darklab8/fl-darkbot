@@ -29,7 +29,8 @@ type ConfigScheme struct {
 	ConsolerPrefix   string `env:"CONSOLER_PREFIX" envDefault:","`
 	ProfilingEnabled string `env:"PROFILING" envDefault:"false"`
 
-	LoopDelay string `env:"LOOP_DELAY" envDefault:"10"`
+	LoopDelay     string `env:"LOOP_DELAY" envDefault:"10"`
+	DevEnvMockApi string `env:"DEVENV_MOCK_API"`
 }
 
 var LoopDelay int

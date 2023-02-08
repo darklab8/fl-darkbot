@@ -17,13 +17,13 @@ type Base struct {
 
 type BaseStorage struct {
 	records.Records[records.StampedObjects[Base]]
-	api    api.APIinterface
+	Api    api.APIinterface
 	parser parser.Parser[records.StampedObjects[Base]]
 }
 
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
-	data := b.api.New().GetData()
+	data := b.Api.New().GetData()
 	record := b.parser.Parse(data)
 	b.Add(record)
 	logger.Info("updated base storage")
@@ -31,6 +31,6 @@ func (b *BaseStorage) Update() {
 
 func (b *BaseStorage) New() *BaseStorage {
 	b.parser = baseParser{}
-	b.api = basesAPI{}
+	b.Api = basesAPI{}
 	return b
 }

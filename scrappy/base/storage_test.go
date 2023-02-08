@@ -10,7 +10,7 @@ import (
 
 func FixtureBaseStorageMockified() *BaseStorage {
 	storage := (&BaseStorage{}).New()
-	storage.api = APIBasespy{}
+	storage.Api = APIBasespy{}
 	return storage
 }
 

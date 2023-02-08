@@ -5,7 +5,7 @@ import (
 	"darkbot/dtypes"
 	"darkbot/scrappy"
 	"darkbot/scrappy/base"
-	"darkbot/scrappy/shared/records"
+	"darkbot/scrappy/player"
 	"fmt"
 	"testing"
 )
@@ -17,12 +17,17 @@ func TestBaseViewer(t *testing.T) {
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
 		cg.TagsAdd(channelID, []string{"Station"}...)
 
-		bases := base.BaseStorage{}
-		scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: &bases}
-		record := records.StampedObjects[base.Base]{}.New()
-		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
-		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
-		bases.Add(record)
+		scrappy.Storage.BaseStorage.Api = base.APIBasespy{}
+		scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}
+		scrappy.Storage.Update()
+
+		// If you want to add information explicitely
+		// bases := base.BaseStorage{}
+		// scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: &bases}
+		// record := records.StampedObjects[base.Base]{}.New()
+		// record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
+		// record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
+		// bases.Add(record)
 
 		base := NewTemplateBase(channelID, dbpath)
 		base.Render()

@@ -11,3 +11,4 @@ config
 /mem.pprof
 file_*.pdf
 heap.*.pprof
+.env.secret

@@ -7,6 +7,8 @@ import (
 	"darkbot/configurator"
 	"darkbot/listener"
 	"darkbot/scrappy"
+	"darkbot/scrappy/base"
+	"darkbot/scrappy/player"
 	"darkbot/settings"
 	"darkbot/utils"
 	"darkbot/utils/logger"
@@ -29,6 +31,12 @@ var runCmd = &cobra.Command{
 
 		// migrate db
 		configurator.NewConfigurator(settings.Dbpath).Migrate()
+
+		if settings.Config.DevEnvMockApi == "true" {
+			scrappy.Storage.BaseStorage.Api = base.APIBasespy{}
+			scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}
+			scrappy.Storage.Update()
+		}
 
 		scrappy.Storage.Update()
 		go scrappy.Run()
