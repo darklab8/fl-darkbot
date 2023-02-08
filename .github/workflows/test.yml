@@ -25,7 +25,7 @@ jobs:
       - name: Setup deps
         run: |
           echo 'ci version' > settings/version.txt
-          cp .env.example .env
+          cp .env.dev.example .env
 
       - name: Test
         run: task test
