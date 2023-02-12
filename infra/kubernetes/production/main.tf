@@ -7,10 +7,6 @@ provider "helm" {
 
 module "darkbot" {
   source = "../modules/darkbot"
-}
-
-module "darkbot" {
-  source = "../modules/darkbot"
 
   environment = "prod"
   environ = {
