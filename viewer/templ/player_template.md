@@ -1,6 +1,6 @@
 **{{.Header}}** (last updated: {{.LastUpdated}})
 {{.TableName}}
-{{- if contains .TableName "Neutral" }}```arm
+{{- if contains .TableName "Neutral" }}```json
 {{range $val := .Players -}}
 name: {{$val.Name | printf "%q"}}, #system: {{$val.System | printf "%q"}}, #region: {{$val.Region | printf "%q"}}, #time: {{$val.Time | printf "%q"}}
 {{ end -}}
