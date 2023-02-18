@@ -39,10 +39,6 @@ type TemplateRendererBaseInput struct {
 	Bases       []base.Base
 }
 
-func (t *TemplateRendererBaseInput) Delete() {
-	t.Bases = nil
-}
-
 func BaseContainsTag(bas base.Base, tags []string) bool {
 	for _, tag := range tags {
 		if strings.Contains(bas.Name, tag) {
@@ -89,7 +85,6 @@ func (b *TemplateBase) Render() {
 	}
 
 	b.main.Content = utils.TmpRender(baseTemplate, input)
-	input.Delete()
 }
 
 func (t *TemplateBase) Send() {

@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"darkbot/utils/logger"
+	"strings"
 	"text/template"
 )
 
@@ -14,8 +15,13 @@ func TmpRender(templateRef *template.Template, data interface{}) string {
 }
 
 func TmpInit(content string) *template.Template {
+	funcs := map[string]any{
+		"contains":  strings.Contains,
+		"hasPrefix": strings.HasPrefix,
+		"hasSuffix": strings.HasSuffix}
+
 	var err error
-	templateRef, err := template.New("test").Parse(content)
+	templateRef, err := template.New("test").Funcs(funcs).Parse(content)
 	logger.CheckPanic(err)
 	return templateRef
 }
