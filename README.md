@@ -12,7 +12,9 @@ Darkbot3
 - project saves ready for deployment docker images [at docker hub](https://hub.docker.com/repository/docker/darkwind8/darkbot/general), see [settings here](https://github.com/darklab8/darklab_darkbot/blob/master/infra/kubernetes/charts/darkbot/templates/main.yml)
 - darkbot has its own server now only for itself
 
-![](docs/index_assets/base_render.png)
+![](docs/index_assets/base_render2.png)
+
+![](docs/index_assets/player_render2.png)
 
 User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track.
 Darkbot repeatedly updates information to discord channel
