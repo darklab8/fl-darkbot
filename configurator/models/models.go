@@ -74,3 +74,12 @@ type AlertBaseIfHealthDecreasing struct {
 type AlertBaseIfUnderAttack struct {
 	AlertTemplate
 }
+
+type AlertPingMessage struct {
+	AlertTemplate
+	Value string
+}
+
+func (a AlertPingMessage) GetValue() string {
+	return a.Value
+}

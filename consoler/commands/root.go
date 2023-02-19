@@ -100,6 +100,11 @@ func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_friend_count_above", ShortDesc: "Set threshold, if above amount of friendly players will be preesent, you will receive alert"}),
 	}).Bootstrap()
 
+	(&AlertSetStringCommand[models.AlertPingMessage]{
+		cfgTags:  configurator.CfgAlertPingMessage{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "ping_message", ShortDesc: "By default `<@DiscordServer.Owner.ID>`. You can change it to something else like `@here` or `@role`"}),
+	}).Bootstrap()
+
 	return consolerCmd
 }
 

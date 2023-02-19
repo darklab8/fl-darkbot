@@ -161,3 +161,80 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 	}
 	t.CurrentCmd.AddCommand(command)
 }
+
+///////// string //////////////
+
+type AlertSetStringCommand[T configurator.AlertStringType] struct {
+	*cmdgroup.CmdGroup
+	cfgTags configurator.IConfiguratorAlertString[T]
+}
+
+func (t *AlertSetStringCommand[T]) Bootstrap() *AlertSetStringCommand[T] {
+	t.CreateSetCmd()
+	t.CreateUnsetCmd()
+	t.CreateStatusCmd()
+	return t
+}
+
+func (t *AlertSetStringCommand[T]) CreateSetCmd() {
+	command := &cobra.Command{
+		Use:   "set",
+		Short: "Set Value (provide 'set StringValue')",
+		Args:  cobra.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("CreateSetAlertCmd.consoler running with args=", args)
+			str := args[0]
+			err := t.cfgTags.Set(t.ChannelInfo.ChannelID, str).GetError()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				return
+			}
+			fmt.Println(len(args))
+
+			helper.Printer{Cmd: cmd}.Println("OK value is set")
+		},
+	}
+	t.CurrentCmd.AddCommand(command)
+}
+
+func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
+	command := &cobra.Command{
+		Use:   "unset",
+		Short: "Unsert / Clear ",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("CreateUnsetCmd.consoler running with args=", args)
+			err := t.cfgTags.Unset(t.ChannelInfo.ChannelID).GetError()
+			if err != nil {
+				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				return
+			}
+			helper.Printer{Cmd: cmd}.Println("OK value is unset")
+		},
+	}
+	t.CurrentCmd.AddCommand(command)
+}
+
+func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
+	command := &cobra.Command{
+		Use:   "status",
+		Short: "Status",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("CreateStatusCmd.consoler running with args=", args)
+			str, err := t.cfgTags.Status(t.ChannelInfo.ChannelID)
+			if err.GetError() != nil {
+				errMsg := err.GetError().Error()
+
+				if strings.Contains(errMsg, "record not found") {
+					helper.Printer{Cmd: cmd}.Println("OK status of alert is disabled")
+					return
+				} else {
+					cmd.OutOrStdout().Write([]byte("ERR =" + errMsg))
+					return
+				}
+			}
+
+			helper.Printer{Cmd: cmd}.Println("OK value is = " + str)
+		},
+	}
+	t.CurrentCmd.AddCommand(command)
+}

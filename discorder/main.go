@@ -96,3 +96,21 @@ func (d Discorder) GetLatestMessages(channelID string) []DiscordMessage {
 
 	return result
 }
+
+func (d Discorder) GetOwnerID(channelID string) (string, error) {
+	channel, err := d.dg.Channel(channelID)
+	logger.Debug("GetOwnerID.err=", err)
+	if err != nil {
+		return "", err
+	}
+
+	logger.Debug("channel.OwnerID=", channel.OwnerID)
+	guildID := channel.GuildID
+
+	guild, err := d.dg.Guild(guildID)
+	if err != nil {
+		return "", err
+	}
+
+	return guild.OwnerID, nil
+}

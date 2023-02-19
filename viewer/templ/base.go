@@ -24,11 +24,12 @@ func init() {
 
 type TemplateBase struct {
 	main TemplateShared
+	API  apis.API
 }
 
 func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) TemplateBase {
 	base := TemplateBase{}
-	base.main.API = apis.NewAPI(channelID, dbpath)
+	base.API = apis.NewAPI(channelID, dbpath)
 	base.main.Header = "#darkbot-base-view"
 	return base
 }
@@ -52,7 +53,7 @@ func BaseContainsTag(bas base.Base, tags []string) bool {
 func (b *TemplateBase) Setup(channelID string) {
 	b.main.MessageID = ""
 	b.main.Content = ""
-	b.main.API.ChannelID = channelID
+	b.API.ChannelID = channelID
 }
 
 func (b *TemplateBase) Render() {
@@ -61,7 +62,7 @@ func (b *TemplateBase) Render() {
 		LastUpdated: time.Now().String(),
 	}
 
-	record, err := b.main.Scrappy.BaseStorage.GetLatestRecord()
+	record, err := b.API.Scrappy.BaseStorage.GetLatestRecord()
 	if err != nil {
 		return
 	}
@@ -69,7 +70,7 @@ func (b *TemplateBase) Render() {
 		return record.List[i].Name < record.List[j].Name
 	})
 
-	tags, _ := b.main.Bases.TagsList(b.main.ChannelID)
+	tags, _ := b.API.Bases.TagsList(b.API.ChannelID)
 
 	for _, base := range record.List {
 
@@ -88,7 +89,7 @@ func (b *TemplateBase) Render() {
 }
 
 func (t *TemplateBase) Send() {
-	t.main.Send()
+	t.main.Send(t.API)
 }
 
 func (t *TemplateBase) MatchMessageID(messageID string) bool {

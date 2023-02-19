@@ -19,7 +19,6 @@ type TemplateShared struct {
 	MessageID string
 	Content   string
 	Header    string
-	apis.API
 }
 
 func CheckTooLongMsgErr(err error, api apis.API, header string, action MsgAction, MessageID string) {
@@ -47,9 +46,9 @@ func ChannelCheckWarn(err error, channelID string, msg string) {
 	logger.CheckWarn(err, "channelID=", channelID, msg)
 }
 
-func (v *TemplateShared) Send() {
+func (v *TemplateShared) Send(api apis.API) {
 	if v.Content == "" && v.MessageID != "" {
-		v.Discorder.DeleteMessage(v.ChannelID, v.MessageID)
+		api.Discorder.DeleteMessage(api.ChannelID, v.MessageID)
 	}
 
 	if v.Content == "" {
@@ -58,13 +57,13 @@ func (v *TemplateShared) Send() {
 
 	var err error
 	if v.MessageID == "" {
-		err = v.Discorder.SengMessage(v.ChannelID, v.Content)
-		ChannelCheckWarn(err, v.ChannelID, "unable to send msg")
-		CheckTooLongMsgErr(err, v.API, v.Header, ActSend, "")
+		err = api.Discorder.SengMessage(api.ChannelID, v.Content)
+		ChannelCheckWarn(err, api.ChannelID, "unable to send msg")
+		CheckTooLongMsgErr(err, api, v.Header, ActSend, "")
 
 	} else {
-		err = v.Discorder.EditMessage(v.ChannelID, v.MessageID, v.Content)
-		ChannelCheckWarn(err, v.ChannelID, "unable to edit msg")
-		CheckTooLongMsgErr(err, v.API, v.Header, ActEdit, v.MessageID)
+		err = api.Discorder.EditMessage(api.ChannelID, v.MessageID, v.Content)
+		ChannelCheckWarn(err, api.ChannelID, "unable to edit msg")
+		CheckTooLongMsgErr(err, api, v.Header, ActEdit, v.MessageID)
 	}
 }

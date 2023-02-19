@@ -48,6 +48,7 @@ func (cg Configurator) Migrate() Configurator {
 		&models.AlertBaseHealthLowerThan{},
 		&models.AlertBaseIfHealthDecreasing{},
 		&models.AlertBaseIfUnderAttack{},
+		&models.AlertPingMessage{},
 	)
 	return cg
 }

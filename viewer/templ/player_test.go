@@ -30,9 +30,9 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 		playerView := NewTemplatePlayers(channelID, dbpath)
 		playerView.Render()
-		fmt.Println(playerView.friends.Content)
-		fmt.Println(playerView.enemies.Content)
-		fmt.Println(playerView.neutral.Content)
+		fmt.Println(playerView.friends.MainTable.Content)
+		fmt.Println(playerView.enemies.MainTable.Content)
+		fmt.Println(playerView.neutral.MainTable.Content)
 		fmt.Println("test TestPlayerViewer is finished")
 	})
 }
