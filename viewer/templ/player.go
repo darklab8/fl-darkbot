@@ -112,7 +112,7 @@ func (t *PlayersTemplates) Render() {
 	logger.Debug("enemyPlayers=", enemyPlayers)
 	logger.Debug("neutralPlayers=", neutralPlayers)
 
-	if len(neutralPlayers) > 0 {
+	if len(systemTags) > 0 || len(regionTags) > 0 {
 		t.neutral.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
 			Header:      t.neutral.Header,
 			LastUpdated: time.Now().String(),
@@ -121,7 +121,7 @@ func (t *PlayersTemplates) Render() {
 		})
 	}
 
-	if len(enemyPlayers) > 0 {
+	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
 		t.enemies.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
 			Header:      t.enemies.Header,
 			LastUpdated: time.Now().String(),
@@ -130,7 +130,7 @@ func (t *PlayersTemplates) Render() {
 		})
 	}
 
-	if len(friendPlayers) > 0 {
+	if len(friendTags) > 0 {
 		t.friends.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
 			Header:      t.friends.Header,
 			LastUpdated: time.Now().String(),
