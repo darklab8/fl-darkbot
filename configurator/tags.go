@@ -40,11 +40,8 @@ func (c ConfiguratorTags[T]) TagsAdd(channelID string, tags ...string) *Configur
 	for _, tag := range tags {
 		objs = append(objs, T{
 			TagTemplate: models.TagTemplate{
-				ChannelShared: models.ChannelShared{
-
-					ChannelID: channelID,
-				},
-				Tag: tag,
+				ChannelID: channelID,
+				Tag:       tag,
 			},
 		})
 	}

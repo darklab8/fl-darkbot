@@ -39,24 +39,71 @@ type TagForumPostIgnore struct {
 
 // =========== Alerts ===============
 
-type AlertPlayerUnrecognized struct {
+type AlertNeutralPlayersEqualOrGreater struct {
 	AlertTemplate
-	Threshold int
+	Threshold int `gorm:"check:threshold > 0"`
 }
 
-type AlertPlayerEnemy struct {
+type AlertEnemiesEqualOrGreater struct {
 	AlertTemplate
-	Threshold int
+	Threshold int `gorm:"check:threshold > 0"`
 }
 
-type AlertPlayerFriend struct {
+type AlertFriendsEqualOrGreater struct {
 	AlertTemplate
-	Threshold int
+	Threshold int `gorm:"check:threshold > 0"`
 }
 
 // Shared alerts for all bases
-type AlertBase struct {
+type AlertBaseHealthLowerThan struct {
 	AlertTemplate
-	HealthIsLowerThan  float64
-	HealthIsDecreasing float64
+	Threshold int `gorm:"check:threshold > 0; check:threshold <= 100"`
+}
+
+func (t AlertNeutralPlayersEqualOrGreater) GetThreshold() int {
+	return t.Threshold
+}
+func (t AlertEnemiesEqualOrGreater) GetThreshold() int {
+	return t.Threshold
+}
+func (t AlertFriendsEqualOrGreater) GetThreshold() int {
+	return t.Threshold
+}
+func (t AlertBaseHealthLowerThan) GetThreshold() int {
+	return t.Threshold
+}
+
+type alertThreshold interface {
+	AlertNeutralPlayersEqualOrGreater |
+		AlertEnemiesEqualOrGreater |
+		AlertFriendsEqualOrGreater |
+		AlertBaseHealthLowerThan
+}
+
+func (t AlertNeutralPlayersEqualOrGreater) SetThreshold(channelID string, value int) AlertNeutralPlayersEqualOrGreater {
+	t.ChannelID = channelID
+	t.Threshold = value
+	return t
+}
+func (t AlertEnemiesEqualOrGreater) SetThreshold(channelID string, value int) AlertEnemiesEqualOrGreater {
+	t.ChannelID = channelID
+	t.Threshold = value
+	return t
+}
+func (t AlertFriendsEqualOrGreater) SetThreshold(channelID string, value int) AlertFriendsEqualOrGreater {
+	t.ChannelID = channelID
+	t.Threshold = value
+	return t
+}
+func (t AlertBaseHealthLowerThan) SetThreshold(channelID string, value int) AlertBaseHealthLowerThan {
+	t.ChannelID = channelID
+	t.Threshold = value
+	return t
+}
+
+type AlertBaseIfHealthDecreasing struct {
+	AlertTemplate
+}
+type AlertBaseIfUnderAttack struct {
+	AlertTemplate
 }

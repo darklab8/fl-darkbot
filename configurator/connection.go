@@ -42,10 +42,12 @@ func (cg Configurator) Migrate() Configurator {
 		&models.TagRegion{},
 		&models.TagForumPostTrack{},
 		&models.TagForumPostIgnore{},
-		&models.AlertPlayerUnrecognized{},
-		&models.AlertPlayerEnemy{},
-		&models.AlertPlayerFriend{},
-		&models.AlertBase{},
+		&models.AlertNeutralPlayersEqualOrGreater{},
+		&models.AlertEnemiesEqualOrGreater{},
+		&models.AlertFriendsEqualOrGreater{},
+		&models.AlertBaseHealthLowerThan{},
+		&models.AlertBaseIfHealthDecreasing{},
+		&models.AlertBaseIfUnderAttack{},
 	)
 	return cg
 }

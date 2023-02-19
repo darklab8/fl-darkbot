@@ -2,22 +2,23 @@ package models
 
 import "gorm.io/gorm"
 
-type ChannelShared struct {
-	ChannelID string
-	Channel   Channel `gorm:"references:ChannelID"`
-}
-
 type TagTemplate struct {
 	gorm.Model
-	ChannelShared
-	Tag string
+	ChannelID string
+	Channel   Channel `gorm:"references:ChannelID"`
+	Tag       string
 }
 
 func (t TagTemplate) GetTag() string {
 	return t.Tag
 }
 
+type AlertPlayerMoreThan struct {
+	PlayersMoreThan int
+}
+
 type AlertTemplate struct {
 	gorm.Model
-	ChannelShared
+	ChannelID string
+	Channel   Channel `gorm:"references:ChannelID,unique"`
 }
