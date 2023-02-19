@@ -14,18 +14,13 @@ type iConfiguratorThresholdAlert interface {
 	Status(channelID string) (*int, *ConfiguratorError)
 }
 
-type alertMethods[T any] interface {
-	GetThreshold() int
-	SetThreshold(channelID string, value int) T
-}
-
-type alertThreshold[T any] interface {
+type alertThreshold interface {
 	models.AlertNeutralPlayersEqualOrGreater |
 		models.AlertEnemiesEqualOrGreater |
 		models.AlertFriendsEqualOrGreater |
 		models.AlertBaseHealthLowerThan
 
-	alertMethods[T]
+	GetThreshold() int
 }
 
 type alertBool interface {
@@ -33,43 +28,45 @@ type alertBool interface {
 		models.AlertBaseIfUnderAttack
 }
 
-type ConfiguratorAlertThreshold[T alertThreshold[T]] struct {
+type IConfiguratorAlertThreshold[T alertThreshold] struct {
 	Configurator
 }
 
-type ConfiguratorAlertBool[T alertBool] struct {
+type IConfiguratorAlertBool[T alertBool] struct {
 	Configurator
 }
 
-type CfgAlertNeutralPlayersGreaterThan = ConfiguratorAlertThreshold[models.AlertNeutralPlayersEqualOrGreater]
-type CfgAlertEnemyPlayersGreaterThan = ConfiguratorAlertThreshold[models.AlertEnemiesEqualOrGreater]
-type CfgAlertFriendPlayersGreaterThan = ConfiguratorAlertThreshold[models.AlertFriendsEqualOrGreater]
-type CfgAlertBaseHealthLowerThan = ConfiguratorAlertThreshold[models.AlertBaseHealthLowerThan]
-type CfgAlertBaseHealthIsDecreasing = ConfiguratorAlertBool[models.AlertBaseIfHealthDecreasing]
-type CfgAlertBaseIsUnderAttack = ConfiguratorAlertBool[models.AlertBaseIfUnderAttack]
+type CfgAlertNeutralPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertNeutralPlayersEqualOrGreater]
+type CfgAlertEnemyPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertEnemiesEqualOrGreater]
+type CfgAlertFriendPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertFriendsEqualOrGreater]
+type CfgAlertBaseHealthLowerThan = IConfiguratorAlertThreshold[models.AlertBaseHealthLowerThan]
+type CfgAlertBaseHealthIsDecreasing = IConfiguratorAlertBool[models.AlertBaseIfHealthDecreasing]
+type CfgAlertBaseIsUnderAttack = IConfiguratorAlertBool[models.AlertBaseIfUnderAttack]
 
-func (c ConfiguratorAlertThreshold[T]) Set(channelID string, value int) *ConfiguratorError {
-	var obj T
-	result := obj.SetThreshold(channelID, value)
-	result2 := c.db.Create(&result)
+func (c IConfiguratorAlertThreshold[T]) Set(channelID string, value int) *ConfiguratorError {
+	obj := T{
+		AlertTemplate:       models.AlertTemplate{ChannelID: channelID},
+		AlertTresholdShared: models.AlertTresholdShared{Threshold: value},
+	}
+	result2 := c.db.Create(&obj)
 	return (&ConfiguratorError{}).AppendSQLError(result2)
 }
 
-func (c ConfiguratorAlertThreshold[T]) Unset(channelID string) *ConfiguratorError {
+func (c IConfiguratorAlertThreshold[T]) Unset(channelID string) *ConfiguratorError {
 	objs := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
 	result = c.db.Unscoped().Delete(&objs)
 	return (&ConfiguratorError{}).AppendSQLError(result)
 }
 
-func (c ConfiguratorAlertBool[T]) Disable(channelID string) *ConfiguratorError {
+func (c IConfiguratorAlertBool[T]) Disable(channelID string) *ConfiguratorError {
 	objs := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
 	result = c.db.Unscoped().Delete(&objs)
 	return (&ConfiguratorError{}).AppendSQLError(result)
 }
 
-func (c ConfiguratorAlertBool[T]) Enable(channelID string) *ConfiguratorError {
+func (c IConfiguratorAlertBool[T]) Enable(channelID string) *ConfiguratorError {
 	obj := T{
 		AlertTemplate: models.AlertTemplate{ChannelID: channelID},
 	}
@@ -77,14 +74,14 @@ func (c ConfiguratorAlertBool[T]) Enable(channelID string) *ConfiguratorError {
 	return (&ConfiguratorError{}).AppendSQLError(result)
 }
 
-func (c ConfiguratorAlertBool[T]) Status(channelID string) (bool, *ConfiguratorError) {
+func (c IConfiguratorAlertBool[T]) Status(channelID string) (bool, *ConfiguratorError) {
 	obj := T{}
 	result := c.db.Where("channel_id = ?", channelID).First(&obj)
 
 	return result.Error == nil, (&ConfiguratorError{}).AppendSQLError(result)
 }
 
-func (c ConfiguratorAlertThreshold[T]) Status(channelID string) (*int, *ConfiguratorError) {
+func (c IConfiguratorAlertThreshold[T]) Status(channelID string) (*int, *ConfiguratorError) {
 	var obj T
 	result := c.db.Where("channel_id = ?", channelID).First(&obj)
 	if result.Error != nil {
