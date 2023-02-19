@@ -2,6 +2,7 @@ package commands
 
 import (
 	"darkbot/configurator"
+	"darkbot/configurator/models"
 	"darkbot/consoler/commands/cmdgroup"
 	"darkbot/consoler/helper"
 	"darkbot/settings"
@@ -65,6 +66,38 @@ func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
 	(&TagCommands{
 		cfgTags:  configurator.ConfiguratorPlayerEnemy{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "enemy", ShortDesc: "Player enemy commands"}),
+	}).Bootstrap()
+
+	alertGroup := root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "alert", ShortDesc: "Alert commands"})
+
+	(&AlertBoolCommands[models.AlertBaseIfHealthDecreasing]{
+		cfgTags:  configurator.CfgAlertBaseHealthIsDecreasing{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_decreasing", ShortDesc: "Turn on to receive alert if base health is decreasing"}),
+	}).Bootstrap()
+
+	(&AlertBoolCommands[models.AlertBaseIfUnderAttack]{
+		cfgTags:  configurator.CfgAlertBaseIsUnderAttack{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_is_under_attack", ShortDesc: "Turn on if base health is rapidly decreasing or attack declaration was declared"}),
+	}).Bootstrap()
+
+	(&AlertThresholdCommands[models.AlertBaseHealthLowerThan]{
+		cfgTags:  configurator.CfgAlertBaseHealthLowerThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_lower_than", ShortDesc: "Set threshold of base health, below which you will receive alert"}),
+	}).Bootstrap()
+
+	(&AlertThresholdCommands[models.AlertNeutralPlayersEqualOrGreater]{
+		cfgTags:  configurator.CfgAlertNeutralPlayersGreaterThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_neutral_count_above", ShortDesc: "Set threshold, if above amount of neutral players will be preesent, you will receive alert"}),
+	}).Bootstrap()
+
+	(&AlertThresholdCommands[models.AlertEnemiesEqualOrGreater]{
+		cfgTags:  configurator.CfgAlertEnemyPlayersGreaterThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_enemy_count_above", ShortDesc: "Set threshold, if above amount of enemy players will be preesent, you will receive alert"}),
+	}).Bootstrap()
+
+	(&AlertThresholdCommands[models.AlertFriendsEqualOrGreater]{
+		cfgTags:  configurator.CfgAlertFriendPlayersGreaterThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_friend_count_above", ShortDesc: "Set threshold, if above amount of friendly players will be preesent, you will receive alert"}),
 	}).Bootstrap()
 
 	return consolerCmd

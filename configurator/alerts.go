@@ -14,7 +14,7 @@ type iConfiguratorThresholdAlert interface {
 	Status(channelID string) (*int, *ConfiguratorError)
 }
 
-type alertThreshold interface {
+type AlertThresholdType interface {
 	models.AlertNeutralPlayersEqualOrGreater |
 		models.AlertEnemiesEqualOrGreater |
 		models.AlertFriendsEqualOrGreater |
@@ -23,16 +23,16 @@ type alertThreshold interface {
 	GetThreshold() int
 }
 
-type alertBool interface {
+type AlertBoolType interface {
 	models.AlertBaseIfHealthDecreasing |
 		models.AlertBaseIfUnderAttack
 }
 
-type IConfiguratorAlertThreshold[T alertThreshold] struct {
+type IConfiguratorAlertThreshold[T AlertThresholdType] struct {
 	Configurator
 }
 
-type IConfiguratorAlertBool[T alertBool] struct {
+type IConfiguratorAlertBool[T AlertBoolType] struct {
 	Configurator
 }
 
