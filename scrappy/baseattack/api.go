@@ -20,7 +20,7 @@ type BaseAttackStorage struct {
 }
 
 func (b *BaseAttackStorage) New() *BaseAttackStorage {
-	b.Api = b.Api.New()
+	b.Api = basesattackAPI{}.New()
 	return b
 }
 
