@@ -48,8 +48,8 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 
 		for i := 0; i < len(baseHealthHistory)-1; i++ {
 			derivative := baseHealthHistory[i+1] - baseHealthHistory[i]
-			baseDerivatives[baseName] += derivative
 			if math.Abs(derivative) > 1e-10 {
+				baseDerivatives[baseName] = derivative
 				normalizer++
 			}
 		}
