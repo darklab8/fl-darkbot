@@ -17,8 +17,9 @@ spec:
     spec:
       volumes:
         - name: darkbot-persistent-storage
-          persistentVolumeClaim:
-            claimName: darkbot-{{ .Values.ENVIRONMENT }}-claim
+          hostPath:
+            path: /var/lib/darklab/darkbot
+            type: DirectoryOrCreate
       containers:
         - name: darkbot-ctr
           image: darkwind8/darkbot:{{ .Values.image_version }}
@@ -48,37 +49,3 @@ spec:
             limits:
               memory: "{{.Values.hard_memory_limit}}Mi"
               cpu: "{{.Values.hard_cpu_limit}}m"
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: darkbot-{{ .Values.ENVIRONMENT }}-pv
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: my-local-storage
-  local:
-    path: "/var/lib/darklab/darkbot"
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - "{{ .Values.hostname }}"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: darkbot-{{ .Values.ENVIRONMENT }}-claim
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: my-local-storage
-  resources:
-    requests:
-      storage: 10Gi
