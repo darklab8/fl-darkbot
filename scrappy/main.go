@@ -2,6 +2,7 @@ package scrappy
 
 import (
 	"darkbot/scrappy/base"
+	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
 	"darkbot/settings"
 	"darkbot/utils/logger"
@@ -9,13 +10,15 @@ import (
 )
 
 type ScrappyStorage struct {
-	BaseStorage   *base.BaseStorage
-	PlayerStorage *player.PlayerStorage
+	BaseStorage       *base.BaseStorage
+	PlayerStorage     *player.PlayerStorage
+	BaseAttackStorage *baseattack.BaseAttackStorage
 }
 
 func (s *ScrappyStorage) New() *ScrappyStorage {
 	s.BaseStorage = (&base.BaseStorage{}).New()
 	s.PlayerStorage = (&player.PlayerStorage{}).New()
+	s.BaseAttackStorage = (&baseattack.BaseAttackStorage{}).New()
 	return s
 }
 

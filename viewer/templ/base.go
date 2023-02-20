@@ -154,7 +154,9 @@ func (b *TemplateBase) Render() {
 	}
 
 	for _, base := range input.Bases {
-		if base.IsUnderAttack {
+		if strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name) {
+			b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base name %s is found in Attack declaration forum thread", base.Name), b.API)
+		} else if base.IsUnderAttack {
 			b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %f is dropping faster than %f", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.API)
 			break
 		}
