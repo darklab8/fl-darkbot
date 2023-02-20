@@ -14,13 +14,15 @@ type Records[T Deletable] struct {
 	mu      sync.Mutex
 }
 
+const recordLimit = 100
+
 func (b *Records[T]) Add(record T) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
 	b.records = append(b.records, record)
 
-	cutterStart := len(b.records) - 10
+	cutterStart := len(b.records) - recordLimit
 	if cutterStart < 0 {
 		cutterStart = 0
 	}
@@ -38,6 +40,13 @@ func (b *Records[T]) GetLatestRecord() (T, error) {
 	logger.Info("records.GetLatestRecord.len(b.records)=", len(b.records))
 
 	return b.records[len(b.records)-1], nil
+}
+
+func (b *Records[T]) List(callback func(values []T)) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	callback(b.records)
 }
 
 func (b *Records[T]) Length() int {

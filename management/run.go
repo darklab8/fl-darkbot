@@ -33,8 +33,8 @@ var runCmd = &cobra.Command{
 		configurator.NewConfigurator(settings.Dbpath).Migrate()
 
 		if settings.Config.DevEnvMockApi == "true" {
-			scrappy.Storage.BaseStorage.Api = base.APIBasespy{}
-			scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}
+			scrappy.Storage.BaseStorage.Api = base.APIBasespy{}.New()
+			scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}.New()
 			scrappy.Storage.Update()
 		}
 

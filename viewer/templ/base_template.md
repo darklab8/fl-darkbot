@@ -4,7 +4,10 @@
 ```scss
 BaseName({{$val.Name | printf "%q"}});
 Health({{$val.Health | printf "\"%.1f\""}});
+HealthChange({{$val.HealthChange | printf "\"%.6f\""}});
 Affiliation({{$val.Affiliation | printf "%q"}});
+{{ if .IsHealthDecreasing -}}@healthDecreasing;{{- end }}
+{{ if .isUnderAttack -}}@underAttack;{{- end }}
 ```
 {{ end -}}
 

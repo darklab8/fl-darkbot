@@ -3,6 +3,7 @@ package templ
 import (
 	"darkbot/dtypes"
 	"darkbot/scrappy/base"
+	"darkbot/scrappy/shared/records"
 	"darkbot/utils"
 	"darkbot/viewer/apis"
 	_ "embed"
@@ -41,10 +42,17 @@ func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) TemplateBase {
 	return base
 }
 
+type AugmentedBase struct {
+	base.Base
+	HealthChange       float64
+	IsHealthDecreasing bool
+	IsUnderAttack      bool
+}
+
 type TemplateRendererBaseInput struct {
 	Header      string
 	LastUpdated string
-	Bases       []base.Base
+	Bases       []AugmentedBase
 }
 
 func BaseContainsTag(bas base.Base, tags []string) bool {
@@ -55,6 +63,19 @@ func BaseContainsTag(bas base.Base, tags []string) bool {
 	}
 
 	return false
+}
+
+func MatchBases(record records.StampedObjects[base.Base], tags []string) []base.Base {
+	result := []base.Base{}
+	for _, base := range record.List {
+
+		if !BaseContainsTag(base, tags) {
+			continue
+		}
+
+		result = append(result, base)
+	}
+	return result
 }
 
 func (b *TemplateBase) Setup(channelID string) {
@@ -85,20 +106,25 @@ func (b *TemplateBase) Render() {
 
 	tags, _ := b.API.Bases.TagsList(b.API.ChannelID)
 
-	for _, base := range record.List {
+	matchedBases := MatchBases(record, tags)
+	healthDeritives := CalculateDerivates(tags, b.API)
 
-		if !BaseContainsTag(base, tags) {
-			continue
-		}
+	for _, base := range matchedBases {
+		healthDeritive, _ := healthDeritives[base.Name]
 
-		input.Bases = append(input.Bases, base)
+		HealthDecreasing := healthDeritive < 0
+		UnderAttack := healthDeritive < -0.002200*2
+		input.Bases = append(input.Bases, AugmentedBase{
+			Base:               base,
+			HealthChange:       healthDeritive,
+			IsHealthDecreasing: HealthDecreasing,
+			IsUnderAttack:      UnderAttack,
+		})
 	}
 
-	if len(input.Bases) == 0 {
-		return
+	if len(input.Bases) != 0 {
+		b.main.Content = utils.TmpRender(baseTemplate, input)
 	}
-
-	b.main.Content = utils.TmpRender(baseTemplate, input)
 
 	// Alerts
 	if healthThreshold, _ := b.API.Alerts.BaseHealthLowerThan.Status(b.API.ChannelID); healthThreshold != nil {
@@ -109,6 +135,12 @@ func (b *TemplateBase) Render() {
 		}
 	}
 
+	// baseTimeseries := [][]base.Base{}
+	// b.API.Scrappy.BaseStorage.Records.ForEach(func(record records.StampedObjects[base.Base]) {
+	// 	baseTimeseries = append(baseTimeseries, MatchBases(record, tags))
+	// })
+
+	// Calculate if health is decreasing slowly, or even rapidly and it is under attack.
 }
 
 func (t *TemplateBase) Send() {

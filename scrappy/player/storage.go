@@ -22,7 +22,7 @@ type PlayerStorage struct {
 
 // Conveniently born some factory
 func (b *PlayerStorage) Update() {
-	data := b.Api.New().GetData()
+	data := b.Api.GetData()
 	record := b.parser.Parse(data)
 	b.Add(record)
 	logger.Info("updated player storage")
@@ -30,6 +30,6 @@ func (b *PlayerStorage) Update() {
 
 func (b *PlayerStorage) New() *PlayerStorage {
 	b.parser = playerParser{}
-	b.Api = PlayerAPI{}
+	b.Api = PlayerAPI{}.New()
 	return b
 }

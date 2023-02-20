@@ -23,7 +23,7 @@ type BaseStorage struct {
 
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
-	data := b.Api.New().GetData()
+	data := b.Api.GetData()
 	record := b.parser.Parse(data)
 	b.Add(record)
 	logger.Info("updated base storage")
@@ -31,6 +31,6 @@ func (b *BaseStorage) Update() {
 
 func (b *BaseStorage) New() *BaseStorage {
 	b.parser = baseParser{}
-	b.Api = basesAPI{}
+	b.Api = basesAPI{}.New()
 	return b
 }

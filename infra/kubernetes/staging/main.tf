@@ -14,7 +14,7 @@ module "darkbot" {
     SCRAPPY_BASE_URL    = var.SCRAPPY_BASE_URL
     DISCORDER_BOT_TOKEN = var.STAGING_DISCORDER_BOT_TOKEN
     LOGGING             = false
-    LOOP_DELAY          = 1
+    LOOP_DELAY          = 60
   }
   limit = {
     hard_memory = 2000
