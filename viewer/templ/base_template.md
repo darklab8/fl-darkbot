@@ -6,7 +6,7 @@ BaseName({{$val.Name | printf "%q"}});
 Health({{$val.Health | printf "\"%.1f\""}});
 HealthChange({{$val.HealthChange | printf "\"%.6f\""}});
 Affiliation({{$val.Affiliation | printf "%q"}});
-{{ $val.IsHealthDecreasing }}
-{{ $val.isUnderAttack }}
+{{- if $val.IsHealthDecreasing -}}{{ $val.HealthDecreasePhrase }}{{- end -}}
+{{- if $val.IsUnderAttack -}}{{ $val.UnderAttackPhrase }}{{- end -}}
 '''
 {{ end }}

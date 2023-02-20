@@ -44,17 +44,19 @@ func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) TemplateBase {
 
 type AugmentedBase struct {
 	base.Base
-	HealthChange           float64
-	IsHealthDecreasing     bool
-	IsUnderAttack          bool
-	IsHealthDecreasingView string
-	IsUnderAttackView      string
+	HealthChange         float64
+	IsHealthDecreasing   bool
+	IsUnderAttack        bool
+	HealthDecreasePhrase string
+	UnderAttackPhrase    string
 }
 
 type TemplateRendererBaseInput struct {
-	Header      string
-	LastUpdated string
-	Bases       []AugmentedBase
+	Header               string
+	LastUpdated          string
+	Bases                []AugmentedBase
+	HealthDecreasePhrase string
+	UnderAttackPhrase    string
 }
 
 func BaseContainsTag(bas base.Base, tags []string) bool {
@@ -96,8 +98,10 @@ const HealthRateDecreasingThreshold = -0.002200 * 2
 
 func (b *TemplateBase) Render() {
 	input := TemplateRendererBaseInput{
-		Header:      b.main.Header,
-		LastUpdated: time.Now().String(),
+		Header:               b.main.Header,
+		LastUpdated:          time.Now().String(),
+		HealthDecreasePhrase: "\n@healthDecreasing;\n",
+		UnderAttackPhrase:    "\n@underAttack;\n",
 	}
 
 	record, err := b.API.Scrappy.BaseStorage.GetLatestRecord()
@@ -118,23 +122,14 @@ func (b *TemplateBase) Render() {
 
 		HealthDecreasing := healthDeritive < 0
 		UnderAttack := healthDeritive < HealthRateDecreasingThreshold
-		var IsHealthDecreasingView string
-		if HealthDecreasing {
-			IsHealthDecreasingView = "@healthDecreasing;\n"
-		}
-
-		var IsUnderAttackView string
-		if HealthDecreasing {
-			IsUnderAttackView = "@underAttack;\n"
-		}
 
 		input.Bases = append(input.Bases, AugmentedBase{
-			Base:                   base,
-			HealthChange:           healthDeritive,
-			IsHealthDecreasing:     HealthDecreasing,
-			IsUnderAttack:          UnderAttack,
-			IsHealthDecreasingView: IsHealthDecreasingView,
-			IsUnderAttackView:      IsUnderAttackView,
+			Base:                 base,
+			HealthChange:         healthDeritive,
+			IsHealthDecreasing:   HealthDecreasing,
+			IsUnderAttack:        UnderAttack,
+			HealthDecreasePhrase: input.HealthDecreasePhrase,
+			UnderAttackPhrase:    input.UnderAttackPhrase,
 		})
 	}
 
