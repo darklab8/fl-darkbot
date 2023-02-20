@@ -54,6 +54,9 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 			}
 		}
 
+		if normalizer == 0 {
+			normalizer = 1
+		}
 		baseDerivatives[baseName] = baseDerivatives[baseName] / float64(normalizer)
 
 	}
