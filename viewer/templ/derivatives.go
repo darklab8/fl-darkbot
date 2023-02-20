@@ -36,8 +36,8 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 	}
 
 	baseDerivatives := make(map[string]float64)
+	wasThereNonZeroDeravatives := false
 	for baseName, baseHealthHistory := range baseHealths {
-		var normalizer int = 0
 		if len(baseHealthHistory) <= 1 {
 			continue
 		}
@@ -50,15 +50,15 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 			derivative := baseHealthHistory[i+1] - baseHealthHistory[i]
 			if math.Abs(derivative) > 1e-10 {
 				baseDerivatives[baseName] = derivative
-				normalizer++
+				wasThereNonZeroDeravatives = true
 			}
 		}
+	}
 
-		if normalizer == 0 {
-			normalizer = 1
+	if !wasThereNonZeroDeravatives {
+		for baseName, _ := range baseDerivatives {
+			baseDerivatives[baseName] = math.NaN()
 		}
-		baseDerivatives[baseName] = baseDerivatives[baseName] / float64(normalizer)
-
 	}
 
 	return baseDerivatives
