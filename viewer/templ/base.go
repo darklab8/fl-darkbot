@@ -100,8 +100,8 @@ func (b *TemplateBase) Render() {
 	input := TemplateRendererBaseInput{
 		Header:               b.main.Header,
 		LastUpdated:          time.Now().String(),
-		HealthDecreasePhrase: "\n@healthDecreasing;\n",
-		UnderAttackPhrase:    "\n@underAttack;\n",
+		HealthDecreasePhrase: "\n@healthDecreasing;",
+		UnderAttackPhrase:    "\n@underAttack;",
 	}
 
 	record, err := b.API.Scrappy.BaseStorage.GetLatestRecord()

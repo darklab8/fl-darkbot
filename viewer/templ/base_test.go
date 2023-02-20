@@ -40,7 +40,7 @@ func TestBaseViewerRealData(t *testing.T) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
-		cg.TagsAdd(channelID, []string{"Stockholm Base"}...)
+		cg.TagsAdd(channelID, []string{"Station"}...)
 
 		scrappy.Storage.BaseStorage.Api = base.NewMock("basedata.json")
 		scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}
