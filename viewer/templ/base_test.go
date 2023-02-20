@@ -5,6 +5,7 @@ import (
 	"darkbot/dtypes"
 	"darkbot/scrappy"
 	"darkbot/scrappy/base"
+	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
 	"darkbot/scrappy/shared/records"
 	"darkbot/utils/logger"
@@ -21,8 +22,9 @@ func TestBaseViewerMocked(t *testing.T) {
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
 		cg.TagsAdd(channelID, []string{"Station"}...)
 
-		bases := base.BaseStorage{}
-		scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: &bases}
+		bases := (&base.BaseStorage{}).New()
+		baseAttack := (&baseattack.BaseAttackStorage{}).New()
+		scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: bases, BaseAttackStorage: baseAttack}
 		record := records.StampedObjects[base.Base]{}.New()
 		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
