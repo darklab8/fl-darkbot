@@ -146,19 +146,23 @@ func (b *TemplateBase) Render() {
 		}
 	}
 
-	for _, base := range input.Bases {
-		if base.IsHealthDecreasing {
-			b.AlertHealthIsDecreasing.Content = RenderAlertTemplate(b.AlertHealthIsDecreasing.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %f", base.Name, int(base.Health), base.HealthChange), b.API)
-			break
+	if isAlertEnabled, _ := b.API.Alerts.BaseHealthIsDecreasing.Status(b.API.ChannelID); isAlertEnabled {
+		for _, base := range input.Bases {
+			if base.IsHealthDecreasing {
+				b.AlertHealthIsDecreasing.Content = RenderAlertTemplate(b.AlertHealthIsDecreasing.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %f", base.Name, int(base.Health), base.HealthChange), b.API)
+				break
+			}
 		}
 	}
 
-	for _, base := range input.Bases {
-		if strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name) {
-			b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base name %s is found in Attack declaration forum thread", base.Name), b.API)
-		} else if base.IsUnderAttack {
-			b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %f is dropping faster than %f", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.API)
-			break
+	if isAlertEnabled, _ := b.API.Alerts.BaseIsUnderAttack.Status(b.API.ChannelID); isAlertEnabled {
+		for _, base := range input.Bases {
+			if strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name) {
+				b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base name %s is found in Attack declaration forum thread", base.Name), b.API)
+			} else if base.IsUnderAttack {
+				b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %f is dropping faster than %f", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.API)
+				break
+			}
 		}
 	}
 }

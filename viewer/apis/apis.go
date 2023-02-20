@@ -18,7 +18,7 @@ type Alerts struct {
 	EnemiesGreaterThan     configurator.CfgAlertEnemyPlayersGreaterThan
 	FriendsGreaterThan     configurator.CfgAlertFriendPlayersGreaterThan
 	BaseHealthLowerThan    configurator.CfgAlertBaseHealthLowerThan
-	BaseHealthIsDecreasign configurator.CfgAlertBaseHealthIsDecreasing
+	BaseHealthIsDecreasing configurator.CfgAlertBaseHealthIsDecreasing
 	BaseIsUnderAttack      configurator.CfgAlertBaseIsUnderAttack
 	PingMessage            configurator.CfgAlertPingMessage
 }
@@ -49,7 +49,7 @@ func NewAPI(channelID string, dbpath dtypes.Dbpath) API {
 			EnemiesGreaterThan:     configurator.CfgAlertEnemyPlayersGreaterThan{Configurator: dbconnection},
 			FriendsGreaterThan:     configurator.CfgAlertFriendPlayersGreaterThan{Configurator: dbconnection},
 			BaseHealthLowerThan:    configurator.CfgAlertBaseHealthLowerThan{Configurator: dbconnection},
-			BaseHealthIsDecreasign: configurator.CfgAlertBaseHealthIsDecreasing{Configurator: dbconnection},
+			BaseHealthIsDecreasing: configurator.CfgAlertBaseHealthIsDecreasing{Configurator: dbconnection},
 			BaseIsUnderAttack:      configurator.CfgAlertBaseIsUnderAttack{Configurator: dbconnection},
 			PingMessage:            configurator.CfgAlertPingMessage{Configurator: dbconnection},
 		},
