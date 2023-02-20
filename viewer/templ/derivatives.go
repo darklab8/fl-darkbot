@@ -4,6 +4,7 @@ import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/shared/records"
 	"darkbot/viewer/apis"
+	"math"
 )
 
 func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
@@ -36,6 +37,7 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 
 	baseDerivatives := make(map[string]float64)
 	for baseName, baseHealthHistory := range baseHealths {
+		var normalizer int = 0
 		if len(baseHealthHistory) <= 1 {
 			continue
 		}
@@ -47,13 +49,13 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 		for i := 0; i < len(baseHealthHistory)-1; i++ {
 			derivative := baseHealthHistory[i+1] - baseHealthHistory[i]
 			baseDerivatives[baseName] += derivative
+			if math.Abs(derivative) > 1e-10 {
+				normalizer++
+			}
 		}
 
-	}
+		baseDerivatives[baseName] = baseDerivatives[baseName] / float64(normalizer)
 
-	normalizer := TimeDiff.Minutes() / 15
-	for baseName, _ := range baseDerivatives {
-		baseDerivatives[baseName] = baseDerivatives[baseName] / normalizer
 	}
 
 	return baseDerivatives
