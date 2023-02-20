@@ -90,6 +90,8 @@ func (b *TemplateBase) Setup(channelID string) {
 	b.AlertBaseUnderAttack.Content = ""
 }
 
+const HealthRateDecreasingThreshold = -0.002200 * 2
+
 func (b *TemplateBase) Render() {
 	input := TemplateRendererBaseInput{
 		Header:      b.main.Header,
@@ -113,7 +115,7 @@ func (b *TemplateBase) Render() {
 		healthDeritive, _ := healthDeritives[base.Name]
 
 		HealthDecreasing := healthDeritive < 0
-		UnderAttack := healthDeritive < -0.002200*2
+		UnderAttack := healthDeritive < HealthRateDecreasingThreshold
 		input.Bases = append(input.Bases, AugmentedBase{
 			Base:               base,
 			HealthChange:       healthDeritive,
@@ -135,12 +137,19 @@ func (b *TemplateBase) Render() {
 		}
 	}
 
-	// baseTimeseries := [][]base.Base{}
-	// b.API.Scrappy.BaseStorage.Records.ForEach(func(record records.StampedObjects[base.Base]) {
-	// 	baseTimeseries = append(baseTimeseries, MatchBases(record, tags))
-	// })
+	for _, base := range input.Bases {
+		if base.IsHealthDecreasing {
+			b.AlertHealthIsDecreasing.Content = RenderAlertTemplate(b.AlertHealthIsDecreasing.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %f", base.Name, int(base.Health), base.HealthChange), b.API)
+			break
+		}
+	}
 
-	// Calculate if health is decreasing slowly, or even rapidly and it is under attack.
+	for _, base := range input.Bases {
+		if base.IsUnderAttack {
+			b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %f is dropping faster than %f", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.API)
+			break
+		}
+	}
 }
 
 func (t *TemplateBase) Send() {
