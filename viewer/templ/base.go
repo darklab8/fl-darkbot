@@ -44,9 +44,11 @@ func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) TemplateBase {
 
 type AugmentedBase struct {
 	base.Base
-	HealthChange       float64
-	IsHealthDecreasing bool
-	IsUnderAttack      bool
+	HealthChange           float64
+	IsHealthDecreasing     bool
+	IsUnderAttack          bool
+	IsHealthDecreasingView string
+	IsUnderAttackView      string
 }
 
 type TemplateRendererBaseInput struct {
@@ -116,11 +118,23 @@ func (b *TemplateBase) Render() {
 
 		HealthDecreasing := healthDeritive < 0
 		UnderAttack := healthDeritive < HealthRateDecreasingThreshold
+		var IsHealthDecreasingView string
+		if HealthDecreasing {
+			IsHealthDecreasingView = "@healthDecreasing;\n"
+		}
+
+		var IsUnderAttackView string
+		if HealthDecreasing {
+			IsUnderAttackView = "@underAttack;\n"
+		}
+
 		input.Bases = append(input.Bases, AugmentedBase{
-			Base:               base,
-			HealthChange:       healthDeritive,
-			IsHealthDecreasing: HealthDecreasing,
-			IsUnderAttack:      UnderAttack,
+			Base:                   base,
+			HealthChange:           healthDeritive,
+			IsHealthDecreasing:     HealthDecreasing,
+			IsUnderAttack:          UnderAttack,
+			IsHealthDecreasingView: IsHealthDecreasingView,
+			IsUnderAttackView:      IsUnderAttackView,
 		})
 	}
 
