@@ -121,7 +121,7 @@ func (b *TemplateBase) Render() {
 		healthDeritive, _ := healthDeritives[base.Name]
 
 		HealthDecreasing := healthDeritive < 0
-		UnderAttack := healthDeritive < HealthRateDecreasingThreshold
+		UnderAttack := healthDeritive < HealthRateDecreasingThreshold || strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name)
 
 		input.Bases = append(input.Bases, AugmentedBase{
 			Base:                 base,
@@ -142,6 +142,7 @@ func (b *TemplateBase) Render() {
 		for _, base := range record.List {
 			if int(base.Health) < *healthThreshold {
 				b.AlertHealthLowerThan.Content = RenderAlertTemplate(b.AlertHealthLowerThan.Header, b.API.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), *healthThreshold), b.API)
+				break
 			}
 		}
 	}
@@ -157,9 +158,7 @@ func (b *TemplateBase) Render() {
 
 	if isAlertEnabled, _ := b.API.Alerts.BaseIsUnderAttack.Status(b.API.ChannelID); isAlertEnabled {
 		for _, base := range input.Bases {
-			if strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name) {
-				b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base name %s is found in Attack declaration forum thread", base.Name), b.API)
-			} else if base.IsUnderAttack {
+			if base.IsUnderAttack {
 				b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %f is dropping faster than %f", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.API)
 				break
 			}

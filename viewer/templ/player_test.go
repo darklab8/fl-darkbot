@@ -8,6 +8,8 @@ import (
 	"darkbot/scrappy/shared/records"
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPlayerViewerMadeUpData(t *testing.T) {
@@ -34,6 +36,30 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		fmt.Println(playerView.enemies.MainTable.Content)
 		fmt.Println(playerView.neutral.MainTable.Content)
 		fmt.Println("test TestPlayerViewer is finished")
+
+		assert.NotEmpty(t, playerView.friends.MainTable.Content)
+		assert.NotEmpty(t, playerView.enemies.MainTable.Content)
+		assert.NotEmpty(t, playerView.neutral.MainTable.Content)
+
+		assert.Empty(t, playerView.friends.AlertTmpl.Content)
+		assert.Empty(t, playerView.enemies.AlertTmpl.Content)
+		assert.Empty(t, playerView.neutral.AlertTmpl.Content)
+
+		enemyAlerts := configurator.CfgAlertEnemyPlayersGreaterThan{Configurator: configurator.NewConfigurator(dbpath)}
+		integer, _ := enemyAlerts.Status(channelID)
+		assert.Nil(t, integer)
+
+		enemyAlerts.Set(channelID, 1)
+		integer, _ = enemyAlerts.Status(channelID)
+		assert.Equal(t, 1, *integer)
+
+		playerView = NewTemplatePlayers(channelID, dbpath)
+		playerView.Render()
+
+		assert.NotEmpty(t, playerView.enemies.AlertTmpl.Content)
+		assert.Empty(t, playerView.friends.AlertTmpl.Content)
+		assert.Empty(t, playerView.neutral.AlertTmpl.Content)
+
 	})
 }
 

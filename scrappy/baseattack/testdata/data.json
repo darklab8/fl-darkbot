@@ -1,0 +1,2216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Player Owned Bases Attack Declaration Thread</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="https://discoverygc.com/forums/syndication.php" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="https://discoverygc.com/forums/syndication.php?type=atom1.0" />
+<link href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,200italic,400italic,600italic' rel='stylesheet' type='text/css'>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/jquery.js?ver=1806"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/jquery.plugins.min.js?ver=1806"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/general.js?ver=1810"></script>
+<script type="text/javascript" src="images/revolution/jquery-ui.js"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/discoverygc.js"></script>
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/global.css?t=1616704865" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/css3.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/revolution.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/tabs.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/thread_status.css?t=1532880502" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/star_ratings.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/showthread.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/progressbar2.css?t=1522753518" />
+
+<link href="https://fonts.googleapis.com/css?family=Cinzel|Montserrat|Overpass|Oswald|Merienda+One|Orbitron|Open+Sans" rel="stylesheet">
+<script type="text/javascript">
+<!--
+	lang.unknown_error = "An unknown error has occurred.";
+
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";;
+
+        var templates = {
+                modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+                modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+        };
+
+	var cookieDomain = ".discoverygc.com";
+	var cookiePath = "/forums/";
+	var cookiePrefix = "";
+	var cookieSecureFlag = "1";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "e30c70a4c7dc8cc5594ab2135818b519";
+	var rootpath = "https://discoverygc.com/forums";
+	var imagepath = "https://discoverygc.com/forums/images/revolution";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "https://discoverygc.com/forums/images/revolution/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+// -->
+// By Alex., for the fldialogue MyBB Code
+$(function () {
+    var playNote = function (files) {
+        if (this.fileIndex + 1 >= files.length) {
+            this.removeEventListener('ended', playNote);
+            this.fileIndex = 0;
+            this.src = "https://discoverygc.com/fldialogue/" + files[0] + ".wav";
+        } else {
+            this.src = "https://discoverygc.com/fldialogue/" + files[++this.fileIndex] + ".wav";
+            this.play();
+        }
+    };
+
+    Array.from(document.getElementsByClassName('fldialogueplayer')).forEach(function (player) {
+        var files = player.dataset.audioseq.split(',');
+        player.fileIndex = 0;
+        player.src = "https://discoverygc.com/fldialogue/" + files[0] + ".wav";
+        if (files.length <= 8) { // no sequence of audio files go on more than 8 files
+            player.addEventListener('ended', playNote.bind(player, files));
+        }
+    });
+});
+</script>
+<!-- end: headerinclude -->
+<link rel="canonical" href="https://discoverygc.com/forums/showthread.php?tid=110046" />
+<script type="text/javascript">
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/report.js?ver=1800"></script>
+<script src="https://discoverygc.com/forums/jscripts/jeditable/jeditable.min.js"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/thread.js?ver=1800"></script>
+</head>
+<body id="forums">
+	<!-- start: header -->
+<a name="top" id="top"></a>
+<div class="menu">
+<ul>
+<li id="nav-portal"><a href="https://discoverygc.com/forums/portal.php"><i style="font-size: 12px;" class="fa fa-home fa-fw"></i> Home</a></li>
+<li id="nav-forumsshutupwiththatimage"> <a href="https://discoverygc.com/forums/index.php"><i style="font-size: 12px;" class="fa fa-comments fa-fw"></i> Index</a></li>
+<li id="nav-search"> <a href="https://discoverygc.com/forums/search.php"><i style="font-size: 12px;" class="fa fa-search fa-fw"></i>  Search</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=126999" style="color: #00FF00;"><i style="font-size: 12px;" class="fa fa-rocket fa-fw"></i>Download</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=2334"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>Server Rules</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=8584"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>House Roleplay Laws</a></li>
+<li><a href='javascript:;' id="playerslink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Player Utilities</a></li>
+<li><a href='javascript:;' id="playerhelplink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Player Help</a></li>
+<li><a href='javascript:;' id="extraslink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Forum Utilities</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=151935" style="color: #00FF00;"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>Returning Player?</a></li>
+<li><a href='javascript:;' id="togglesidebar"><i style="font-size: 14px;" class="fa fa-flask fa-fw"></i>Toggle Sidebar</a></li>
+      <ul>
+            </div> 
+  <div id="playerslink_popup" class="popup_menu" style="display: none;">
+<!--	  <div class="popup_item_container">
+        <a href="https://ref.discoverygc.com/" class="popup_item">Information Reference</a>
+      </div>-->
+	  <div class="popup_item_container">
+        <a href="https://space.discoverygc.com/navmap/" class="popup_item">Interactive Nav-Map</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=150826" class="popup_item">Tutorials</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/wiki/" class="popup_item">Wiki (mostly outdated)</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/techcompat/techcompat_table.php" class="popup_item">Technology Chart</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="http://lh.discoverygc.com/software/transponder" class="popup_item">Rep hack list</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/ids.php" class="popup_item">ID reference</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/restarts.php" class="popup_item">Restart reference</a>
+      </div>
+<!--	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/eventinterface.php" class="popup_item">Server Events</a>
+     </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/serverinterface.php" class="popup_item">Server Stats</a>
+      </div>-->
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=players_online" class="popup_item">Players Online</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=players" class="popup_item">Player Activity</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=faction_summary" class="popup_item">Faction Activity</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/bases.php" class="popup_item">Player Base Status</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discord.gg/FdSkbZ8" class="popup_item">Discord Help Channel</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="http://lh.discoverygc.com/software/index" class="popup_item">Mactan Network</a>
+     </div>
+  </div>
+	<div id="playerhelplink_popup" class="popup_menu" style="display: none;">
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=127003" class="popup_item">Missing Powerplant</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=81037" class="popup_item">Stuck in Connecticut</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=91864" class="popup_item">Account Banned</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=97064" class="popup_item">Lost Ship/Account</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=147083" class="popup_item">POB Restoration</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=42531" class="popup_item">Disconnected</a>
+      </div>
+  </div>
+  <div id="extraslink_popup" class="popup_menu" style="display: none;">
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/memberlist.php" class="popup_item">Member List</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/stats.php" class="popup_item">Forum Stats</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showteam.php" class="popup_item">Show Team</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/search.php?action=getnew" class="popup_item">View New Posts</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/search.php?action=getdaily" class="popup_item">View Today's Posts</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/calendar.php" class="popup_item">Calendar</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/misc.php?action=help" class="popup_item">Help</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/archive/index.php" class="popup_item">Archive Mode</a>
+      </div>	 
+</div>
+<br />
+<br />
+<br />
+<br />
+</div>
+
+<div id="container">
+		<div id="header">
+		<div id="content">
+			<div class="wrapper"> 
+<div class="navMenu2" style="padding-bottom:  10px;"><!-- start: header_welcomeblock_guest -->
+<font color="#a4a1a1"><i class="fa fa-info-circle fa-fw"></i> Hi there Guest,</font> &nbsp;
+<div class="float_right"><font color="#a4a1a1"> Existing user?</font> 
+
+<a href="https://discoverygc.com/forums/member.php?action=login" onclick="$('#quick_login').modal({ opacity: 0.2, fadeDuration: 250, keepelement: true }); return false;" class="login"><font color="white">  &nbsp; Sign in</font></a> &nbsp;  
+
+  <a href="https://discoverygc.com/forums/member.php?action=register" class="fstat"><font color="white"> <i class="fa fa-check-square fa-fw"></i>&nbsp;Create account</font></a></div>
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="https://discoverygc.com/forums/member.php">
+<!-- live DGC hack to fix MyBB 1.8.16 bug -->
+<input name="my_post_key" type="hidden" value="e30c70a4c7dc8cc5594ab2135818b519" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table style="padding: 20px;" width="100%" cellspacing="0" cellpadding="5" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%" style="text-shadow: 1px 1px 0px #000;"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2" style="text-shadow: 1px 1px 0px #000;"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="https://discoverygc.com/forums/member.php?action=lostpw" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me" style="text-shadow: 1px 1px 0px #000;">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest --></div>
+              <font color="white">  </font>
+				
+				
+
+
+				
+
+				<!-- BAM --><!-- start: bam_announcement_container -->
+<style>
+	.bam_announcement.yellow {
+		/*background: #FFF6BF;*/
+		border: 1px solid #FFD324;
+		box-shadow: #FFD324 0px 0px 5px inset, #FFD324 0px 0px 2px;
+	}
+	.bam_announcement.yellow:before, .bam_announcement.yellow:after {
+		/*content: "\26a0";*/ color: #FFD324; font-size: 36px; line-height: 26px; display: block;
+	}
+	.bam_announcement.yellow:before {
+		float: left;
+	}
+	.bam_announcement.yellow:after {
+		float: right;
+	}
+	.bam_announcement.yellow a {
+		color: #ffffff;
+	}
+
+	.bam_announcement.green {
+		/*background: #D6ECA6;*/
+		border: 1px solid #8DC93E;
+		box-shadow: #8DC93E 0px 0px 5px inset, #8DC93E 0px 0px 2px;
+		font-size: 1.25em;
+	}
+
+	.bam_announcement.blue {
+		/*background: #ADCBE7;*/
+		border: 1px solid #0F5C8E;
+		box-shadow: #0462DD 0px 0px 5px inset, #0462DD 0px 0px 2px;
+		font-size: 1.25em;
+	}
+	.bam_announcement.blue:before, .bam_announcement.blue:after {
+		/*content: "*";*/ color: #0F5C8E; font-size: 36px; line-height: 26px; display: block;
+	}
+	.bam_announcement.blue:before {
+		float: left;
+	}
+	.bam_announcement.blue:after {
+		float: right;
+	}
+
+
+	.bam_announcement.red {
+		/*background: #FBE3E4;*/
+		border: 1px solid #A5161A;
+		box-shadow: #FFD324 0px 0px 5px inset;
+	}
+
+	.bam_announcement {
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px; 
+		text-align: center;
+		font-size: 1.5em;
+		margin: 10px auto;
+		padding: 8px 12px;
+		/*background: #EBEBEB;*/
+		background: #111111;
+		color: #000000;
+		border: 1px solid #ADADAD;
+	}
+
+	.bam_date {
+		color: #636161;
+		font-size: 0.78em;
+		margin-left: 6px;
+	}	
+
+	/* Insert Custom CSS Here */
+
+.bam_announcement
+{
+color: #ccc !important;
+}
+
+.bam_announcement.red
+{
+background: #EA1922 !important;
+}
+</style>
+<div class="bam_announcements"></div>
+<!-- end: bam_announcement_container --><!-- /BAM -->  
+              	 <!-- start: nav -->
+<div class="navigation">
+&nbsp; <i style="font-size: 14px;" class="fa fa-home fa-fw"></i> <!-- start: nav_bit -->
+<a href="https://discoverygc.com/forums/index.php">Discovery Gaming Community</a><!-- start: nav_sep -->
+ <i style="font-size: 14px;" class="fa fa-chevron-circle-right fa-fw"></i>
+<!-- end: nav_sep -->
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<a href="forumdisplay.php?fid=9">Role-Playing</a><!-- start: nav_sep -->
+ <i style="font-size: 14px;" class="fa fa-chevron-circle-right fa-fw"></i>
+<!-- end: nav_sep -->
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<a href="forumdisplay.php?fid=61">Player Owned Bases</a><!-- start: nav_dropdown -->
+ <!-- start: multipage_breadcrumb -->
+<div id="breadcrumb_multipage_popup" class="pagination pagination_breadcrumb" style="display: none;">
+<!-- start: multipage_page_link_current -->
+ <a href="forumdisplay.php?fid=61" class="pagination_current">1</a>
+<!-- end: multipage_page_link_current --><!-- start: multipage_page -->
+<a href="forumdisplay.php?fid=61&amp;page=2" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="forumdisplay.php?fid=61&amp;page=3" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="forumdisplay.php?fid=61&amp;page=4" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="forumdisplay.php?fid=61&amp;page=5" class="pagination_page">5</a>
+<!-- end: multipage_page --><!-- start: multipage_end -->
+&hellip;  <a href="forumdisplay.php?fid=61&amp;page=22" class="pagination_last">22</a>
+<!-- end: multipage_end --><!-- start: multipage_nextpage -->
+<a href="forumdisplay.php?fid=61&amp;page=2" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<script type="text/javascript">
+// <!--
+	if(use_xmlhttprequest == "1")
+	{
+		$("#breadcrumb_multipage").popupMenu();
+	}
+// -->
+</script>
+<!-- end: multipage_breadcrumb -->
+<!-- end: nav_dropdown -->
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+<i style="font-size: 14px;" class="fa fa-chevron-circle-right fa-fw"></i>
+<!-- end: nav_sep_active --><!-- start: nav_bit_active -->
+<span class="active">Player Owned Bases Attack Declaration Thread</span>
+<!-- end: nav_bit_active -->
+</div>
+<!-- end: nav --><br />
+                                   
+<script type="text/javascript">
+// <!--
+    if(use_xmlhttprequest == "1")
+    {
+        $("#extraslink").popupMenu();
+		$("#playerslink").popupMenu();
+		$("#playerhelplink").popupMenu();
+    }
+// -->
+</script>
+<div id="side">
+	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Server Time (24h)</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<div style="text-align: center; color: #FFF;/* align-self: initial; */margin: auto auto;padding-top: 5px;"><iframe src="https://free.timeanddate.com/clock/i4m040z3/n1440/fn2/fcfff/tct/pct/ftb/th1/ts1/ta1" frameborder="0" width="83" height="20" allowTransparency="true"></iframe>
+
+
+
+</div>
+</td>
+</tr>
+</table>
+<br />
+
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Players Online</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<a href="api_interface.php?action=players_online"><div style="text-align: center; color: #FFF;/* align-self: initial; */margin: auto auto;padding-top: 5px;" id="playercount"></div></a>
+</td>
+</tr>
+</table>
+  
+  <br />
+
+<table border="0" cellspacing="0" cellpadding="5" class="tborder" style="display: none;">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Events</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1" id="events">
+If you can see this you have JavaScript disabled
+</td>
+</tr>
+</table>
+  
+  <br />
+
+ <!--- 
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Twitter feed</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/discolancer" data-widget-id="642044018902331393">Tweets by @discolancer</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</td>
+</tr>
+</table>
+
+  <br />  
+
+	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Donations Needed</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<embed allowscriptaccess="never" src="https://pitchinbox.com/widget/widget.swf?id=6505579471" type="application/x-shockwave-flash" width="100%" wmode="transparent">
+</div>
+</td>
+</tr>
+</table>
+
+  
+  <br />  
+-->
+ <!--- 	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Active Events - <a href="https://discoverygc.com/forums/eventinterface.php"><font color="green">Scoreboard</font></a></strong></div> 
+</td>
+</tr>
+<tr>
+
+	<td class="trow1">	
+	<-would-be-php?php include 'srvint_cache/event_status.html'; ?->
+	</td>
+	</tr>
+</table>
+
+  <br />  
+ -->
+<!---<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Next Game Patch</strong></div> 
+</td></tr>
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Initial 100%</div>
+<span style="width: 100%"></span></div></td></tr>
+
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Middle 40.0%</div>
+<span style="width: 40.0%"></span></div></td></tr>
+
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Final 10%</div>
+<span style="width: 10%"></span></div></td></tr>
+
+</table>
+
+  <br/>-->
+
+  <script type="text/javascript">
+	jQuery(function(){
+		jQuery(".latestthreads").load("//discoverygc.com/forums/portal.php .latestthreads_portal");
+		$.get('players_online.php').done(function (ret) {
+                        var d = new Date(ret.AsOf + "Z");
+			$('#playercount').empty().append($('<span>').text(ret.PlayerCount).css('font-weight', 'bold').css('font-size', '20px'), $('<br>'), $('<span>').text('as of ' + d.toLocaleString(undefined, {timeZone: 'UTC'}) + ' UTC'));
+		});
+
+		$.get('events.php').done(function (ret) {
+			var allEvents = {};
+			ret.events.forEach(function (event) {
+				var sectionName = event[0],
+					kvs = event[1],
+					kvDict = {};
+				if (sectionName == "config") {
+					return;
+				}
+				kvs.forEach(function (kv) {
+					var key = kv[0],
+						value = kv[1];
+					if (["allowedid", "targetid", "system", "targetnpc"].indexOf(key) == -1) {
+						kvDict[key] = value;
+					} else {
+						if (key in kvDict) {
+							kvDict[key].push(value);
+						} else {
+							kvDict[key] = [value];
+						}
+					}
+				});
+				kvDict.type = sectionName;
+				allEvents[kvDict.id] = kvDict;
+			});
+			ret.events_status.forEach(function (event) {
+				var sectionName = event[0],
+					kvs = event[1],
+					kvDict = {};
+				kvs.forEach(function (kv) {
+					var key = kv[0],
+						value = kv[1];
+					kvDict[key] = value;
+				});
+				allEvents[kvDict.id].currentCount = Number.parseInt(kvDict.currentcount);
+			});
+
+			$('#events').empty();
+			$.each(allEvents, function (eventId, event) {
+				$('#events').append($('<span>').append(
+					$('<a>').attr('href', 'events_ui.php?id=' + eventId).text(event.name),
+					$('<span>').text(' - ' + event.currentCount + ' / ' + event.objectivemax),
+					$('<br>')
+				));
+			});
+			//$('#events').parent().parent().parent().show();
+		});
+	});
+	</script>
+  
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Latest activity</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+				<div class="latestthreads float_left"></div>
+		</td>
+</tr>
+</table>
+  
+  <br />
+  
+  
+  
+  
+  
+  
+</div>
+<div id="forum">
+<!-- end: header -->
+        
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="showthread.php?tid=110046&amp;page=2" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="showthread.php?tid=110046&amp;page=3" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="showthread.php?tid=110046&amp;page=2" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+			
+	</div>
+
+	<table border="0" cellspacing="0" cellpadding="5" class="tborder tfixed clear">
+		<tr>
+			<td class="thead">
+				<div class="float_right">
+					<span class="smalltext"><strong><a href="javascript:;" id="thread_modes"></a></strong></span>
+				</div>
+				<div>
+					<strong>Player Owned Bases Attack Declaration Thread</strong>
+				</div>
+			</td>
+		</tr>
+<tr><td id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a name="pid1464497" id="pid1464497"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="border-top-width: 0;  margin: 5px 0;" id="post_1464497">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=11406">Garrett Jax</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-11-2014, 02:19 AM, <span class="post_edit" id="edited_by_1464497"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_1464497">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(1464497,'Garrett Jax',1389403142);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=1464497#pid1464497" title="Player Owned Bases Attack Declaration Thread">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Xenomorph Admin<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=11406"><img src="http://discoverygc.com/forums/uploads/avatars/av-35088.jpg?dateline=1396320938?dateline=1396493767" alt="" width="90" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 2,733<br />
+	Threads: 600<br />
+	Joined: Feb 2009
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_1464497" class="post_body">
+				<span style="color: #32CD32;" class="mycode_color">This is a dedicated thread for people/factions to state their intent to attack POB's.<br />
+<br />
+In order to attack a POB, a player/faction must have RP on the forums prior to attack as stated in Rule 2.4</span><br />
+<br />
+<blockquote class="mycode_quote"><cite>Quote:</cite>2.4 Roleplay is required before attacking or destroying a player owned base. The roleplay regarding this must be properly documented on forums, with the link(s) posted in <a href="http://discoverygc.com/forums/showthread.php?tid=110046" target="_blank" rel="noopener" class="mycode_url">this thread</a> and should match the roleplay and conduct of the characters involved based on the faction they belong to.</blockquote>
+<br />
+<span style="color: #32CD32;" class="mycode_color">However, it is difficult for the owners of POB's to find those threads on the forums, and it's ridiculous to expect a player to have to search the entire forum everyday to make sure no statement of intent to attack has been issued.<br />
+<br />
+Therefore, this thread is created in order to centralize all communications regarding attacking POB's.<br />
+<br />
+What to do:<br />
+<br />
+Player/Faction must provide RP on the forums stating in some fashion their intent to attack a particular POB.  This can be done in any RP section of the forum, Message Dump, Communications Channel, etc. <br />
+<br />
+Player/Faction must follow the template below and post in this thread his intent to attack.  This must be done prior to attacking.  <br />
+<br />
+The template includes:<br />
+<br />
+1. Name of player/faction attacking.<br />
+2. The name of POB to be attacked.<br />
+3. The link to the roleplay thread stating their intent to attack.<br />
+<br />
+A template is provided to standardize things and make it easier to read.  Please follow it.<br />
+<br />
+<div class="codeblock"><div class="title">Code:</div><div class="body" dir="ltr"><code>Name of player(s)/faction(s): [color=#32CD32][b]Name[/b][/color]<br />
+Name of Player Owned Base: [color=#32CD32][b]Name[/b][/color]<br />
+Link to RP showing intent to attack: &lt;Link&gt;</code></div></div><br />
+<div style="text-align: center;" class="mycode_align">Please note an Attack Declaration is valid for 2 weeks after posting.</span></div>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_1464497">
+			</div>
+         <!-- start: postbit_signature -->
+<div class="signature scaleimages">
+<hr class="signaturehr">
+<img src="https://i.imgur.com/rSYoqYY.png" loading="lazy"  alt="[Image: rSYoqYY.png]" class="mycode_img" />
+</div>
+<!-- end: postbit_signature -->
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=1464497" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2213687" id="pid2213687"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2213687">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=27302"><span style="color: #00ff00;"><strong>Squad</strong></span></a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">02-08-2021, 02:01 AM, <span class="post_edit" id="edited_by_2213687"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2213687">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2213687,'Squad',1612746095);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2213687#pid2213687" title="RE: Player Owned Bases Attack Declaration Thread">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Server Administrator<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=27302"><img src="https://discoverygc.com/forums/uploads/avatars/avatar_27302.png?dateline=1639714097" alt="" width="103" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 2,450<br />
+	Threads: 170<br />
+	Joined: May 2013
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2213687" class="post_body">
+				<span style="color: #ffcc00;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">As a reminder of the <a href="https://discoverygc.com/forums/showthread.php?tid=110046&amp;pid=1464497#pid1464497" target="_blank" rel="noopener" class="mycode_url">initial post</a>, official and unofficial factions may declare a siege on a player-owned base after proper roleplay, if required. The declaration should specify which official or unofficial faction is making the declaration. Players not a part of the declaring official or unofficial faction must comply with the declaration requirements separately.</span></span>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2213687">
+			</div>
+         <!-- start: postbit_signature -->
+<div class="signature scaleimages">
+<hr class="signaturehr">
+<div style="text-align: center;" class="mycode_align"><img src="https://imgur.com/QTMJiLb.png" loading="lazy"  alt="[Image: QTMJiLb.png]" class="mycode_img" /></div>
+</div>
+<!-- end: postbit_signature -->
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2213687" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280059" id="pid2280059"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280059">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44625"><span style="color: #ffcc00;"><strong>Darius</strong></span></a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-03-2023, 01:19 AM, <span class="post_edit" id="edited_by_2280059"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280059">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280059,'Darius',1672705191);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280059#pid2280059" title="RE: Player Owned Bases Attack Declaration Thread">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Enemy of Humanity<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=44625"><img src="https://imgur.com/SGOvdu0.gif?dateline=1655854042" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 822<br />
+	Threads: 152<br />
+	Joined: Aug 2020
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280059" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Bretonian Armed Forces</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Bank of Bretonia</span></span><br />
+Link to RP showing intent to attack: Core 1
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280059">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280059" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280163" id="pid2280163"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280163">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=52812">M.E.C.</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-04-2023, 09:21 PM, <span class="post_edit" id="edited_by_2280163"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280163">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280163,'M.E.C.',1672863695);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280163#pid2280163" title="RE: Player Owned Bases Attack Declaration Thread">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Member<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=52812"><img src="https://i.imgur.com/WoqiOWn.png?dateline=1672563238" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 5<br />
+	Threads: 3<br />
+	Joined: Jan 2023
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280163" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Outcasts</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Albany Police Academy</span></span><br />
+Link to RP showing intent to attack: <a href="https://discoverygc.com/forums/showthread.php?tid=195483&amp;pid=2280162#pid2280162" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...pid2280162</a>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280163">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280163" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280180" id="pid2280180"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280180">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=52812">M.E.C.</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-05-2023, 06:54 AM, <span class="post_edit" id="edited_by_2280180"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280180">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280180,'M.E.C.',1672898090);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280180#pid2280180" title="RE: Player Owned Bases Attack Declaration Thread">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Member<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=52812"><img src="https://i.imgur.com/WoqiOWn.png?dateline=1672563238" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 5<br />
+	Threads: 3<br />
+	Joined: Jan 2023
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280180" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Outcasts</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Martinique</span></span><br />
+Link to RP showing intent to attack: <a href="https://discoverygc.com/forums/showthread.php?tid=195489" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...tid=195489</a>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280180">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280180" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280849" id="pid2280849"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280849">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=51326">Traudel Habermeyer</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-13-2023, 01:19 AM, <span class="post_edit" id="edited_by_2280849"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280849">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280849,'Traudel Habermeyer',1673569166);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280849#pid2280849" title="RE: Player Owned Bases Attack Declaration Thread">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Member<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=51326"><img src="https://i.imgur.com/Ca728Ot.jpg?dateline=1661648140" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 259<br />
+	Threads: 16<br />
+	Joined: Aug 2022
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280849" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Rheinland Military</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Feldberg</span></span><br />
+Link to RP showing intent to attack: <a href="https://discoverygc.com/forums/showthread.php?tid=195613&amp;pid=2280848#pid2280848" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...pid2280848</a>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280849">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280849" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280850" id="pid2280850"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280850">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=51326">Traudel Habermeyer</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-13-2023, 01:19 AM, <span class="post_edit" id="edited_by_2280850"><!-- start: postbit_editedby -->
+<span class="edited_post">(This post was last modified: 01-13-2023, 01:19 AM by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=51326">Traudel Habermeyer</a>.)</span>
+<!-- end: postbit_editedby --></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280850">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280850,'Traudel Habermeyer',1673569185);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280850#pid2280850" title="RE: Player Owned Bases Attack Declaration Thread">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Member<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=51326"><img src="https://i.imgur.com/Ca728Ot.jpg?dateline=1661648140" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 259<br />
+	Threads: 16<br />
+	Joined: Aug 2022
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280850" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Rheinland Military</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Feldbergdef1</span></span><br />
+Link to RP showing intent to attack: <a href="https://discoverygc.com/forums/showthread.php?tid=195613&amp;pid=2280848#pid2280848" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...pid2280848</a>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280850">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280850" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280851" id="pid2280851"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280851">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=51326">Traudel Habermeyer</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-13-2023, 01:20 AM, <span class="post_edit" id="edited_by_2280851"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280851">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280851,'Traudel Habermeyer',1673569213);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280851#pid2280851" title="RE: Player Owned Bases Attack Declaration Thread">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Member<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=51326"><img src="https://i.imgur.com/Ca728Ot.jpg?dateline=1661648140" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 259<br />
+	Threads: 16<br />
+	Joined: Aug 2022
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280851" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Rheinland Military</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Feldbergdef2</span></span><br />
+Link to RP showing intent to attack: <a href="https://discoverygc.com/forums/showthread.php?tid=195613&amp;pid=2280848#pid2280848" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...pid2280848</a>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280851">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280851" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280852" id="pid2280852"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280852">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=51326">Traudel Habermeyer</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-13-2023, 01:20 AM, <span class="post_edit" id="edited_by_2280852"><!-- start: postbit_editedby -->
+<span class="edited_post">(This post was last modified: 01-13-2023, 01:21 AM by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=51326">Traudel Habermeyer</a>.)</span>
+<!-- end: postbit_editedby --></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280852">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280852,'Traudel Habermeyer',1673569242);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280852#pid2280852" title="RE: Player Owned Bases Attack Declaration Thread">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Member<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=51326"><img src="https://i.imgur.com/Ca728Ot.jpg?dateline=1661648140" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 259<br />
+	Threads: 16<br />
+	Joined: Aug 2022
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280852" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Rheinland Military</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">CWW-Shipyard</span></span><br />
+Link to RP showing intent to attack: <a href="https://discoverygc.com/forums/showthread.php?tid=195613&amp;pid=2280848#pid2280848" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...pid2280848</a>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280852">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280852" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a name="pid2280856" id="pid2280856"></a>
+<table border="0" cellspacing="0" cellpadding="6" class="postborder" style="margin-top: 5px;  margin: 5px 0;" id="post_2280856">
+	<tr>
+	<td class="postcat" align="center" style="padding: 8px 8px 8px 8px;">
+     <div class="largetext centered" style="padding-bottom: 0px;"><!-- start: postbit_offline -->
+<img src="https://discoverygc.com/forums/images/revolution/buddy_offline.png" title="Offline" alt="Offline" class="buddy_status" />
+<!-- end: postbit_offline --> <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=51326">Traudel Habermeyer</a>
+	</div>
+    </td>
+<td class="postcat" valign="middle" style="padding: 8px 6px 4px 6px;">
+<span class="smalltext">01-13-2023, 02:32 AM, <span class="post_edit" id="edited_by_2280856"></span>  </span> <!-- start: postbit_quickquote -->
+<button style="display: none;" id="qr_pid_2280856">Reply</button>
+<script type="text/javascript">
+	$(document).ready(function() {
+		quick_quote(2280856,'Traudel Habermeyer',1673573546);
+	});
+</script>
+<!-- end: postbit_quickquote --> 
+
+<div style="float: right; width: auto; vertical-align: top;"><span class="smalltext"><!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="showthread.php?tid=110046&amp;pid=2280856#pid2280856" title="RE: Player Owned Bases Attack Declaration Thread">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl --></span></div>
+</tr>
+     <tr>
+		<td class="trow1 " width="15%" valign="top" style="text-align: center; border-right: 1px solid #; padding: 5px 0px 0px 0px;">
+		Member<br />
+		<span class="smalltext">
+		    <!-- start: postbit_avatar -->
+<div class="author_avatar"><a href="member.php?action=profile&amp;uid=51326"><img src="https://i.imgur.com/Ca728Ot.jpg?dateline=1661648140" alt="" width="120" height="120" /></a></div>
+<!-- end: postbit_avatar -->
+			
+          <div class="author_statistics" style="margin: 0 auto; width: 120px;">
+			<!-- start: postbit_author_user -->
+
+	Posts: 259<br />
+	Threads: 16<br />
+	Joined: Aug 2022
+	
+<!-- end: postbit_author_user -->
+          </div>
+            <br />
+		
+            </span></div></div>
+   </td>
+	<td class="trow1 " valign="top" style="display: compact;">
+		<table style="width:100%">
+			<tr>
+                        <td>
+			<div id="pid_2280856" class="post_body">
+				Name of player(s)/faction(s): <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Rheinland Military</span></span><br />
+Name of Player Owned Base: <span style="color: #32CD32;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">CWW-Ministry of Defence</span></span><br />
+Link to RP showing intent to attack: <a href="https://discoverygc.com/forums/showthread.php?tid=195613&amp;pid=2280855#pid2280855" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...pid2280855</a>
+			<div style="text-align: right; vertical-align: bottom;" id="post_meta_2280856">
+			</div>
+         
+		</td>
+     </tr>
+  </table>
+</td>
+</tr>
+<tr valign="bottom">
+	<td class="buttons" align="left" valign="bottom">
+<span class="float_left"></span></td>
+	<td class="buttons" align="right" valign="bottom"><span class="float_left"></span>
+<span class="float_right"><!-- start: postbit_quote -->
+<a href="newreply.php?tid=110046&amp;replyto=2280856" title="Quote this message in a reply" class="postbit_quote"><span><i style="font-size: 14px;" class="fa fa-comments-o fa-fw"></i> Reply</span></a> &nbsp;
+<!-- end: postbit_quote -->
+	
+</span>
+</td>
+</tr>
+</table>
+<!-- end: postbit_classic -->
+	</div>
+</td></tr>
+		<tr>
+			<td class="tfoot">
+			</td>
+		</tr>
+	</table>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="showthread.php?tid=110046&amp;page=2" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="showthread.php?tid=110046&amp;page=3" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="showthread.php?tid=110046&amp;page=2" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div style="padding-top: 4px;" class="float_right">
+			
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<li class="printable"><i style="font-size: 14px;" class="fa fa-print fa-fw"></i> <a href="printthread.php?tid=110046">View a Printable Version</a></li>
+			
+			<li class="subscription_add"><i style="font-size: 14px;" class="fa fa-check-circle-o fa-fw"></i> <a href="usercp2.php?action=addsubscription&amp;tid=110046&amp;my_post_key=e30c70a4c7dc8cc5594ab2135818b519">Subscribe to this thread</a></li>
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="forumdisplay.php" method="get">
+<select name="fid" class="forumjump">
+<option value="-1" ></option>
+<option value="-1">--------------------</option>
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="399" > Welcome</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="15" >-- Introduce Yourself</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="400" >-- Looking for Group</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="26" >-- Help &amp; Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="178" >---- Tutorials &amp; Tools</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="430" >------ Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="211" >---- Discovery Launcher</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="3" > Discovery General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- News and Announcements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="638" >---- Patch Notes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="627" >-- Community Feedback</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="411" >-- Server Events</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="550" >---- Official</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="274" >------ Event Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="28" >---- Community</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="27" >-- Marketplace</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="65" >---- Ship Dealers</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >---- Equipment Vendors</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Discovery RP 24/7 General Discussions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Role-Playing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="591" >-- Lore</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="254" >---- CNS &amp; Beats</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="593" >---- The Vault</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="594" >---- Stories</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="596" >------ Story Submissions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="595" >---- The Library</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="597" >------ Library Submissions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >-- Stories and Biographies</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="149" >---- Watering Holes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- RP Stories Feedback Forum</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >-- Communication Channel</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="57" >---- Sirius News and Commerce</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="63" >-- Bounty Offices</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="145" >---- Contract Boards</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="146" >---- One-Time Contracts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="147" >---- Bounty Board Registrations</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="321" >---- Bounty Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="61" selected="selected">-- Player Owned Bases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="60" >-- Official Player Factions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Gallia</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="433" >------ Government of House Gallia</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="662" >------  Gallic Navy Combined Fleet</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="665" >-------- Gendarmerie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="663" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="664" >-------- Security Bureau</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="633" >------ Front de Libération de Gallia</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="634" >-------- Projects of The Front</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="635" >-------- Les Héros du Front</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="636" >-------- Martinique</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="641" >------ Unione Corse</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="643" >-------- Provence Affairs</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="642" >-------- Spulsione Squadron</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >---- Bretonia</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="170" >------ Bretonian Government Channel</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="124" >------ BAF|</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="657" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="143" >-------- BAF|MN- Bretonia Merchant Navy </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="330" >------ BMF-</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="126" >------ Bowex)</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="249" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="75" >---- Kusari</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="172" >------ Kusari Government Channel</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="537" >------ GC-</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="547" >-------- Kinkaku-ji</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="538" >-------- Central Database</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="539" >-------- Command Center</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="622" >-------- Projects</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="669" >------ &gt;BD</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="670" >-------- Communication &amp; Diplomacy Records</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="671" >-------- Operations &amp; Projects</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="117" >------ [KNF]</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="285" >-------- Experimental Module Yokosuka</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="283" >-------- Faction Regulation</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="268" >-------- KNF Special Divisions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="284" >-------- Archives</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="123" >------ Samura|-</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >---- Liberty</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="173" >------ Liberty Government Channel</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="489" >-------- License Requisition Center</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="650" >------ Liberty Navy 46th Fleet</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="677" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="651" >-------- Supremacy Project</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="652" >-------- Recoil &amp; RDI Divisions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="653" >-------- Fleet Headquarters</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="654" >-------- Projects &amp; Events</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="261" >------ 5th Fleet</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="542" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="549" >-------- Juneau Shipyard</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="98" >------ US|</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="492" >-------- Archived Projects &amp; Contracts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="676" >------ AWES-</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="609" >------ [R]- The Rogues</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="100" >------ LH~</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="512" >------ XA-</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="73" >---- Rheinland</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="174" >------ Rheinland Government Channel</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="432" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="604" >------ [RM]</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="615" >-------- Archiv</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="655" >-------- Rheinwehr Geheimdienst</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="602" >------ {DHC}</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="672" >------ The Unioners</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="675" >-------- GEIST</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="673" >-------- Projects</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="674" >-------- Tales of The Union</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="177" >------ Kruger|</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="543" >-------- Archiv</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="72" >---- Edge Worlds</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="659" >------ Deterrence</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="660" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="661" >-------- Internal Affairs and Intelligence</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="461" >------ Coalition Government Portal </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="462" >-------- State Duma</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="464" >-------- Revolutionary Army</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="469" >---------- Mykolaiv Military Division</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="472" >---------- Military Doctrine</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="667" >-------- Expeditionary Corps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="668" >-------- Volgograd Industrial</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="473" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="616" >------ (\^/) Phoenix</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="621" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="644" >------ HS&gt; Malta Hyperspace Starfleet</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="645" >--------  Data Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="646" >-------- Research &amp; Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="647" >-------- Fleet Intelligence</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="78" >------ [TBH]</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="405" >-------- Brotherhood Neural Net Archives</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="406" >---------- OOC Files</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >------ Order|</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="287" >-------- Wedjat</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="320" >-------- Black Fleet</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="510" >-------- Order Science Division</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="509" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" >------ OSI-</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="246" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="353" >-------- Nichols Upgrade Project</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="69" >---- Inter-House</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="572" >------ GMG|</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="599" >-------- Ship Registry</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="586" >------ Bristol Constructions &amp; Manufacturing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="587" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="601" >------ Orbital Spa and Cruise</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="605" >-------- Captain Profiles</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="606" >-------- Ship Profiles</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="607" >-------- Division Profiles</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="608" >-------- Publications</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="311" >------ A/)- Technocracy of Auxo</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="342" >-------- Research and Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="442" >---------- Commissions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="506" >---------- Expeditionary Division</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="443" >---------- Shared Research</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="312" >-------- Military Arm</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="334" >-------- Affiliates Network</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="344" >-------- Suspects Database</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="328" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="376" >-------- Intel Database</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="142" >------ =CR=</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="589" >-------- Crayter Government</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="333" >-------- Crayter Intelligence Service</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="332" >-------- Crayter Industries</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="352" >-------- Crayter Military</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="348" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >------ IMG|</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="85" >------ .:j:.</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="300" >-------- Archives</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="190" >---- Nomads</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >------ Slomon K'Hara</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="288" >-------- Morph Logs</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="355" >-------- Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="356" >------ The Nomad Vagrants</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="357" >-------- The Nomad Vagrants — Character Profiles</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="412" >-------- Cauldron</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="639" >------ The Void Faes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="640" >-------- Research Array</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="491" >-------- Important Information</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="67" >-- Unofficial Factions and Groups</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > Rules &amp; Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="25" >-- Rules</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="306" >---- Official Disco Rules</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="44" >---- Violation Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="43" >---- Sanctions and Warnings</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="46" >---- Faction Rules</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="282" >------ Faction Activity</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="135" >------ Faction Review and Feedback</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="484" >-------- Archived Feedback Threads</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="14" >-- Site &amp; Forum Feedback</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Discovery Wiki</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="244" >-- Player Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="186" >---- Player Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="427" >---- Staff Applications</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="548" >------ Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="245" >---- Official Faction Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="134" >------ Official Faction Creation Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="290" >-------- Archived Creation Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="136" >-------- Approved Faction Creation Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="212" >------ Official Faction Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="167" >---- Player Owned Bases Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="45" >---- Special Roleplay Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="403" >------ Approved Special Roleplay Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="343" >---- Official Faction Event Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Discovery Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="37" >-- Discovery Mod General Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="573" >---- Discovery Mod Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="574" >------ Fixed or invalid</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="576" >------ Fix awaiting release</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="35" >------ Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Discovery Mod Balance</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="183" >-- Discovery Developers Forum</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="184" >---- Discovery Mod Development Requests</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="530" >------ Bug Bounties</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="389" >---- Discovery Unofficial Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="260" >------ Discovery Mod Community Contribution</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >------ Discovery Mod Content Submissions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="204" >------ Discovery ModDB &amp; Promotional Content</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="205" >-------- Image Submissions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="208" >-------- Video Submissions</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="266" >------ Discovery Mod FLHook Projects</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="36" >---- Freelancer Modding Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="4" > The Community</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="257" >-- Community Games</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="258" >---- Minecraft</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="409" >---- Livestreamer's Lair</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Real Life Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >---- Birthday Threads</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >---- Software &amp; Hardware</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="11" >-- Freelancer Forum</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="38" >---- Other Discovery Servers</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Media Center</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Flood</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="141" >---- Spambot home</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="350" >---- Leaving Threads</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+<!--
+	$(".forumjump").change(function() {
+		var option = $(".forumjump").get(0).selectedIndex.value;
+
+		if(option < 0)
+		{
+			window.location=('forumdisplay.php?fid='+option)
+			return
+		}
+
+		window.location=('forumdisplay.php?fid='+option)
+	})
+//-->
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr><td class="thead"><strong>Users browsing this thread: </strong></td></tr>
+<tr><td class="trow1">
+<span class="smalltext">2 Guest(s)</span>
+</td></tr>
+</table>
+<br />
+<!-- end: showthread_usersbrowsing -->
+</div>
+	<!-- start: footer -->
+<!-- The following piece of code allows MyBB to run scheduled tasks. DO NOT REMOVE --><!-- End task image code -->
+<br />
+<br />
+
+
+<div id="footer">
+	<div class="upper">
+		<div class="float_right" style="margin-right: 4%;"> 
+          <span id="copyright smalltext">Powered By <a href="http://www.mybb.com" target="_blank">MyBB</a>, &copy; 2002-2023 <a href="http://www.mybb.com" target="_blank">MyBB Group</a>.</span><span id="copyright"> Theme © 2014 iAndrew & DiscoveryGC</span></div>
+      
+			<div class="float_left" style="margin-top:-15px; margin-left: 1%;"> 
+               <ul class="footermenu bottom_links" style="text-shadow: 1px 1px 0px #0d0d0d;">
+<li><a href="#top" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-chevron-circle-up fa-fw"></i></a></li>
+<!-- start: footer_contactus -->
+<li><a href="mailto:info@discoverygc.com" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-envelope-square fa-fw"></i> Contact Us</a></li>
+<!-- end: footer_contactus --> <!-- start: footer_themeselect -->
+<div class="theme">
+<form method="POST" action="/forums/showthread.php" id="theme_select">
+	<input type="hidden" name="tid" value="110046" />
+
+	<input type="hidden" name="my_post_key" value="e30c70a4c7dc8cc5594ab2135818b519" />
+	<!-- start: footer_themeselector -->
+<select name="theme" onchange="MyBB.changeTheme();" style="margin-top: 7px;">
+<optgroup label="Quick Theme Select">
+<!-- start: usercp_themeselector_option -->
+<option value="23">Carbon</option>
+<!-- end: usercp_themeselector_option --><!-- start: usercp_themeselector_option -->
+<option value="25">test</option>
+<!-- end: usercp_themeselector_option --><!-- start: usercp_themeselector_option -->
+<option value="19">Blue Revolution</option>
+<!-- end: usercp_themeselector_option -->
+</optgroup>
+</select>
+<!-- end: footer_themeselector -->
+	<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+</div>
+<!-- end: footer_themeselect --> 
+<li><a href="https://discoverygc.com/forums/archive/index.php?thread-110046.html" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-bars fa-fw"></i>&nbsp;Lite mode</a></li>
+			</ul>
+        </div></div>
+
+
+	
+	<!--<script type="text/javascript" src="https://discoverygc.com/forums/jspenguin/jspenguin.js"></script>
+	<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/snowstorm.js"></script> -->
+<!-- end: footer --><!-- start: yuibutquick -->
+<link rel="stylesheet" href="https://discoverygc.com/forums/jscripts/yui/editor/editor.css?ver=1.0.0" type="text/css" media="all" />
+<script type="text/javascript">
+<!--
+	var extrabut = '',
+	extrabutdesc = '',
+	emoticons = {
+		dropdown: {
+			":angel:": "https://discoverygc.com/forums/images/smilies/angel.png",":@": "https://discoverygc.com/forums/images/smilies/angry.png",":s": "https://discoverygc.com/forums/images/smilies/confused.png",":heart:": "https://discoverygc.com/forums/images/smilies/heart.png",":)": "https://discoverygc.com/forums/images/smilies/smiling.png",";)": "https://discoverygc.com/forums/images/smilies/winking.png",":cool:": "https://discoverygc.com/forums/images/smilies/cool.png",":D": "https://discoverygc.com/forums/images/smilies/happy_smiling.png",":P": "https://discoverygc.com/forums/images/smilies/tongue_out.png",":rolleyes:": "https://discoverygc.com/forums/images/smilies/madness.png",":shy:": "https://discoverygc.com/forums/images/smilies/unsure.png",":(": "https://discoverygc.com/forums/images/smilies/frowning.png",":aww": "https://discoverygc.com/forums/images/smilies/aww.png","(happy)": "https://discoverygc.com/forums/images/smilies/emoticon-0142-happy.gif","(sun)": "https://discoverygc.com/forums/images/smilies/emoticon-0157-sun.gif","(wait)": "https://discoverygc.com/forums/images/smilies/emoticon-0133-wait.gif",
+		},
+		more: {
+			
+		}
+	},
+	MYBB_SMILIES = '"https://discoverygc.com/forums/images/smilies/angel.png": ":angel:","https://discoverygc.com/forums/images/smilies/angry.png": ":@","https://discoverygc.com/forums/images/smilies/confused.png": ":s","https://discoverygc.com/forums/images/smilies/heart.png": ":heart:","https://discoverygc.com/forums/images/smilies/smiling.png": ":)","https://discoverygc.com/forums/images/smilies/winking.png": ";)","https://discoverygc.com/forums/images/smilies/cool.png": ":cool:","https://discoverygc.com/forums/images/smilies/happy_smiling.png": ":D","https://discoverygc.com/forums/images/smilies/tongue_out.png": ":P","https://discoverygc.com/forums/images/smilies/madness.png": ":rolleyes:","https://discoverygc.com/forums/images/smilies/unsure.png": ":shy:","https://discoverygc.com/forums/images/smilies/frowning.png": ":(","https://discoverygc.com/forums/images/smilies/aww.png": ":aww","https://discoverygc.com/forums/images/smilies/emoticon-0142-happy.gif": "(happy)","https://discoverygc.com/forums/images/smilies/emoticon-0157-sun.gif": "(sun)","https://discoverygc.com/forums/images/smilies/emoticon-0133-wait.gif": "(wait)",',
+	ye_savetime = '30',
+	ye_saveamount = '20',
+	ye_rest_lang = 'Restore',
+	iclid = '',
+	maxnamelength = '30',
+	yuivar = {
+	"Bold": "Bold",
+	"Italic": "Italic",
+	"Underline": "Underline",
+	"Strikethrough": "Strikethrough",
+	"Subscript": "Subscript",
+	"Superscript": "Superscript",
+	"Align left": "Align left",
+	"Center": "Center",
+	"Align right": "Align right",
+	"Justify": "Justify",
+	"Font Name": "Font Name",
+	"Font Size": "Font Size",
+	"Font Color": "Font Color",
+	"Remove Formatting": "Remove Formatting",
+	"Cut": "Cut",
+	"Your browser does not allow the cut command. Please use the keyboard shortcut Ctrl/Cmd-X": "Your browser does not allow the cut command. Please use the keyboard shortcut Ctrl/Cmd-X",
+	"Copy": "Copy",
+	"Your browser does not allow the copy command. Please use the keyboard shortcut Ctrl/Cmd-C": "Your browser does not allow the copy command. Please use the keyboard shortcut Ctrl/Cmd-C",
+	"Paste": "Paste",
+	"Your browser does not allow the paste command. Please use the keyboard shortcut Ctrl/Cmd-V": "Your browser does not allow the paste command. Please use the keyboard shortcut Ctrl/Cmd-V",
+	"Paste your text inside the following box:": "Paste your text inside the following box:",
+	"PasteText": "Paste Text",
+	"Numbered list": "Numbered list",
+	"Bullet list": "Bullet list",
+	"Undo": "Undo",
+	"Redo": "Redo",
+	"Rows:": "Rows:",
+	"Cols:": "Cols:",
+	"Insert a table": "Insert a table",
+	"Insert a horizontal rule": "Insert a horizontal rule",
+	"Code": "Code",
+	"Width (optional):": "Width (optional):",
+	"Height (optional):": "Height (optional):",
+	"Insert an image": "Insert an image",
+	"E-mail:": "E-mail:",
+	"Insert an email": "Insert an email",
+	"URL:": "URL:",
+	"Insert a link": "Insert a link",
+	"Unlink": "Unlink",
+	"More": "More",
+	"Insert an emoticon": "Insert an emoticon",
+	"Video URL:": "Video URL:",
+	"Video Type:": "Video Type:",
+	"Insert": "Insert",
+	"Insert a YouTube video": "Insert a YouTube video",
+	"Insert current date": "Insert current date",
+	"Insert current time": "Insert current time",
+	"Print": "Print",
+	"View source": "View source",
+	"Description (optional):": "Description (optional):",
+	"Enter the image URL:": "Enter the image URL:",
+	"Enter the e-mail address:": "Enter the e-mail address:",
+	"Enter the displayed text:": "Enter the displayed text:",
+	"Enter URL:": "Enter URL:",
+	"Enter the YouTube video URL or ID:": "Enter the YouTube video URL or ID:",
+	"Insert a Quote": "Insert a Quote",
+	"Invalid YouTube video": "Invalid YouTube video",
+	"Dailymotion": "Dailymotion",
+	"MetaCafe": "MetaCafe",
+	"Veoh": "",
+	"Vimeo": "Vimeo",
+	"Youtube": "Youtube",
+	"Facebook": "Facebook",
+	"LiveLeak": "LiveLeak",
+	"Insert a video": "Insert a video",
+	"PHP": "PHP",
+	"Maximize": "Maximize"
+};;
+// -->
+</script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/yui/editor/yui.editor.js?ver=1.0.0"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/yui/editor/yui.editor.helper.js?ver=1.0.0"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/yui/editor/thread.quickquote.js?ver=1.0.0"></script>
+<link rel="stylesheet" href="https://discoverygc.com/forums/jscripts/yui/editor/jquery.atwho.min.css?ver=1.0.0" type="text/css" media="all" />
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/yui/editor/jquery.caret.min.js?ver=1.0.0"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/yui/editor/jquery.atwho.min.js?ver=1.0.0"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/yui/editor/yui.mention.js?ver=1.0.0"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/yui/editor/yui.autosave.js?ver=1.0.0"></script>
+<!-- end: yuibutquick -->
+	<div id="thread_modes_popup" class="popup_menu" style="display: none;"><div class="popup_item_container"><a href="showthread.php?mode=linear&amp;tid=110046&amp;pid=1464497#pid1464497" class="popup_item">Linear Mode</a></div><div class="popup_item_container"><a href="showthread.php?mode=threaded&amp;tid=110046&amp;pid=1464497#pid1464497" class="popup_item">Threaded Mode</a></div></div>
+	<script type="text/javascript">
+	// <!--
+		if(use_xmlhttprequest == "1")
+		{
+			$("#thread_modes").popupMenu();
+		}
+	// -->
+	</script>
+	<script type="text/javascript">
+		$(".author_avatar img").error(function () {
+			$(this).unbind("error").closest('.author_avatar').remove();
+		});
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

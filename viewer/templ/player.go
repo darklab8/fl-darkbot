@@ -151,17 +151,17 @@ func (t *PlayersTemplates) Render() {
 	// Alerts
 
 	if alertNeutralCount, _ := t.API.Alerts.NeutralsGreaterThan.Status(t.API.ChannelID); alertNeutralCount != nil {
-		if len(neutralPlayers) > *alertNeutralCount {
+		if len(neutralPlayers) >= *alertNeutralCount {
 			t.neutral.AlertTmpl.Content = RenderAlertTemplate(t.neutral.AlertTmpl.Header, t.API.ChannelID, fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), *alertNeutralCount), t.API)
 		}
 	}
 	if alertEnemyCount, _ := t.API.Alerts.EnemiesGreaterThan.Status(t.API.ChannelID); alertEnemyCount != nil {
-		if len(enemyPlayers) > *alertEnemyCount {
+		if len(enemyPlayers) >= *alertEnemyCount {
 			t.enemies.AlertTmpl.Content = RenderAlertTemplate(t.enemies.AlertTmpl.Header, t.API.ChannelID, fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), *alertEnemyCount), t.API)
 		}
 	}
 	if alertFriendCount, _ := t.API.Alerts.FriendsGreaterThan.Status(t.API.ChannelID); alertFriendCount != nil {
-		if len(friendPlayers) > *alertFriendCount {
+		if len(friendPlayers) >= *alertFriendCount {
 			t.friends.AlertTmpl.Content = RenderAlertTemplate(t.friends.AlertTmpl.Header, t.API.ChannelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), *alertFriendCount), t.API)
 		}
 	}
