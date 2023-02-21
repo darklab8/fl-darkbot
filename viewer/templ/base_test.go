@@ -13,6 +13,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBaseViewerMocked(t *testing.T) {
@@ -30,9 +32,58 @@ func TestBaseViewerMocked(t *testing.T) {
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
 		bases.Add(record)
 
-		base := NewTemplateBase(channelID, dbpath)
-		base.Render()
-		fmt.Println(base.main.Content)
+		render := NewTemplateBase(channelID, dbpath)
+		render.Render()
+		fmt.Println(render.main.Content)
+
+		assert.NotEmpty(t, render.main.Content)
+		assert.Empty(t, render.AlertHealthLowerThan.Content)
+		assert.Empty(t, render.AlertHealthIsDecreasing.Content)
+		assert.Empty(t, render.AlertBaseUnderAttack.Content)
+
+		// alerts
+		baseAlertDecreasing := configurator.CfgAlertBaseHealthIsDecreasing{Configurator: configurator.NewConfigurator(dbpath)}
+		isEnabled, _ := baseAlertDecreasing.Status(channelID)
+		assert.False(t, isEnabled)
+
+		record = records.StampedObjects[base.Base]{}.New()
+		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
+		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 50})
+		bases.Add(record)
+
+		baseAlertDecreasing.Enable(channelID)
+		isEnabled, _ = baseAlertDecreasing.Status(channelID)
+		assert.True(t, isEnabled)
+
+		render = NewTemplateBase(channelID, dbpath)
+		render.Render()
+
+		assert.NotEmpty(t, render.main.Content)
+		assert.NotEmpty(t, render.AlertHealthIsDecreasing.Content)
+		assert.Empty(t, render.AlertHealthLowerThan.Content)
+		assert.Empty(t, render.AlertBaseUnderAttack.Content)
+
+		baseAlertBelowThreshold := configurator.CfgAlertBaseHealthLowerThan{Configurator: configurator.NewConfigurator(dbpath)}
+		threshold, _ := baseAlertBelowThreshold.Status(channelID)
+		assert.Nil(t, threshold)
+
+		baseAlertBelowThreshold.Set(channelID, 40)
+		render = NewTemplateBase(channelID, dbpath)
+		render.Render()
+
+		assert.NotEmpty(t, render.main.Content)
+		assert.NotEmpty(t, render.AlertHealthIsDecreasing.Content)
+		assert.Empty(t, render.AlertHealthLowerThan.Content)
+		assert.Empty(t, render.AlertBaseUnderAttack.Content)
+
+		baseAlertBelowThreshold.Set(channelID, 60)
+		render = NewTemplateBase(channelID, dbpath)
+		render.Render()
+
+		assert.NotEmpty(t, render.main.Content)
+		assert.NotEmpty(t, render.AlertHealthIsDecreasing.Content)
+		assert.NotEmpty(t, render.AlertHealthLowerThan.Content)
+		assert.Empty(t, render.AlertBaseUnderAttack.Content)
 	})
 }
 

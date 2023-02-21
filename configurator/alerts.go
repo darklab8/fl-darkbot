@@ -61,6 +61,7 @@ type CfgAlertBaseIsUnderAttack = IConfiguratorAlertBool[models.AlertBaseIfUnderA
 type CfgAlertPingMessage = IConfiguratorAlertString[models.AlertPingMessage]
 
 func (c IConfiguratorAlertThreshold[T]) Set(channelID string, value int) *ConfiguratorError {
+	c.Unset(channelID)
 	obj := T{
 		AlertTemplate:       models.AlertTemplate{ChannelID: channelID},
 		AlertTresholdShared: models.AlertTresholdShared{Threshold: value},
@@ -114,6 +115,7 @@ func (c IConfiguratorAlertBool[T]) Status(channelID string) (bool, *Configurator
 ////////////////////////////
 
 func (c IConfiguratorAlertString[T]) Set(channelID string, value string) *ConfiguratorError {
+	c.Unset(channelID)
 	obj := T{
 		AlertTemplate: models.AlertTemplate{ChannelID: channelID},
 		Value:         value,
