@@ -23,7 +23,7 @@ func NewMock(filename string) api.APIinterface {
 }
 
 func (a BaseAttackAPISpy) New() api.APIinterface {
-	return NewMock("basedata.json")
+	return NewMock("data.json")
 }
 
 func (a BaseAttackAPISpy) GetData() []byte {

@@ -26,6 +26,8 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		bases := (&base.BaseStorage{}).New()
 		baseAttack := (&baseattack.BaseAttackStorage{}).New()
+		baseAttack.Api = baseattack.BaseAttackAPISpy{}.New()
+		baseAttack.Update()
 		scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: bases, BaseAttackStorage: baseAttack}
 		record := records.StampedObjects[base.Base]{}.New()
 		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
@@ -84,6 +86,22 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.NotEmpty(t, render.AlertHealthIsDecreasing.Content)
 		assert.NotEmpty(t, render.AlertHealthLowerThan.Content)
 		assert.Empty(t, render.AlertBaseUnderAttack.Content)
+
+		record = records.StampedObjects[base.Base]{}.New()
+		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
+		bases.Add(record)
+		cg.TagsAdd(channelID, []string{"Bank"}...)
+		render = NewTemplateBase(channelID, dbpath)
+		render.Render()
+
+		assert.Empty(t, render.AlertBaseUnderAttack.Content)
+
+		baseUnderAttackalert := configurator.CfgAlertBaseIsUnderAttack{Configurator: configurator.NewConfigurator(dbpath)}
+		baseUnderAttackalert.Enable(channelID)
+		render = NewTemplateBase(channelID, dbpath)
+		render.Render()
+
+		assert.NotEmpty(t, render.AlertBaseUnderAttack.Content)
 	})
 }
 
