@@ -13,7 +13,7 @@ type LogTag string
 const (
 	DEBUG LogTag = "DEBUG"
 	INFO  LogTag = "INFO"
-	WARN  LogTag = "DEBUG"
+	WARN  LogTag = "WARN"
 	FATAL LogTag = "ERROR"
 	PANIC LogTag = "PANIC"
 )

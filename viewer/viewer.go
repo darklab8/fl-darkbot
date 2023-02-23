@@ -43,7 +43,10 @@ func (v Viewer) Update() {
 	// For each channel
 	for _, channelID := range channelIDs {
 		v.channel.Setup(channelID)
-		v.channel.Discover()
+		err := v.channel.Discover()
+		if err != nil {
+			continue
+		}
 		v.channel.Render()
 		v.channel.Send()
 		v.channel.DeleteOld()

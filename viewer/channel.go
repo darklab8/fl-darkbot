@@ -39,15 +39,21 @@ func (v *ChannelView) Setup(channelID string) {
 
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
-func (v *ChannelView) Discover() {
+func (v *ChannelView) Discover() error {
 	logger.Info("viewer.Init.channelID=", v.ChannelID)
-	msgs := v.api.Discorder.GetLatestMessages(v.ChannelID)
+	msgs, err := v.api.Discorder.GetLatestMessages(v.ChannelID)
+	if err != nil {
+		return err
+	}
+
 	for _, msg := range msgs {
 		v.BaseView.DiscoverMessageID(msg.Content, msg.ID)
 		v.PlayersView.DiscoverMessageID(msg.Content, msg.ID)
 	}
 
 	v.Msgs = msgs
+
+	return nil
 }
 
 // Render new messages (ensure preserved Message ID)

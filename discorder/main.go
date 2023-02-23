@@ -52,12 +52,12 @@ type DiscordMessage struct {
 	Timestamp time.Time
 }
 
-func (d Discorder) GetLatestMessages(channelID string) []DiscordMessage {
+func (d Discorder) GetLatestMessages(channelID string) ([]DiscordMessage, error) {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(channelID, messagesLimitToGrab, "", "", "")
 	if err != nil {
 		logger.CheckWarn(err, "Unable to get messages from channelId=", channelID)
-		return []DiscordMessage{}
+		return []DiscordMessage{}, err
 	}
 
 	result := []DiscordMessage{}
@@ -94,7 +94,7 @@ func (d Discorder) GetLatestMessages(channelID string) []DiscordMessage {
 	}
 	messages = nil
 
-	return result
+	return result, nil
 }
 
 func (d Discorder) GetOwnerID(channelID string) (string, error) {
