@@ -20,12 +20,13 @@ type SerializedPlayers struct {
 type playerParser struct {
 }
 
-func (b playerParser) Parse(body []byte) records.StampedObjects[Player] {
+func (b playerParser) Parse(body []byte) (records.StampedObjects[Player], error) {
 	record := records.StampedObjects[Player]{}.New()
 
 	playerData := SerializedPlayers{}
 	if err := json.Unmarshal(body, &playerData); err != nil {
-		logger.CheckPanic(err, "unable to unmarshal base request")
+		logger.CheckWarn(err, "unable to unmarshal player request")
+		return record, err
 	}
 
 	for _, serializedPlayer := range playerData.Players {
@@ -38,5 +39,5 @@ func (b playerParser) Parse(body []byte) records.StampedObjects[Player] {
 			},
 		)
 	}
-	return record
+	return record, nil
 }

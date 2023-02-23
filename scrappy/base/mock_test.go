@@ -12,7 +12,7 @@ import (
 
 func TestRegenerateBaseData(t *testing.T) {
 	utils.RegenerativeTest(func() error {
-		data := basesAPI{}.New().GetData()
+		data, _ := basesAPI{}.New().GetData()
 		path_testdata := tests.FixtureCreateTestDataFolder()
 		path_testfile := path.Join(path_testdata, "basedata.json")
 		err := ioutil.WriteFile(path_testfile, data, os.ModePerm)

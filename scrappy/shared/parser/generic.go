@@ -1,5 +1,5 @@
 package parser
 
 type Parser[T interface{}] interface {
-	Parse(body []byte) T
+	Parse(body []byte) (T, error)
 }

@@ -22,8 +22,16 @@ type PlayerStorage struct {
 
 // Conveniently born some factory
 func (b *PlayerStorage) Update() {
-	data := b.Api.GetData()
-	record := b.parser.Parse(data)
+	data, err := b.Api.GetData()
+	if err != nil {
+		logger.CheckWarn(err, "quering API with error in PlayerStorage")
+		return
+	}
+	record, err := b.parser.Parse(data)
+	if err != nil {
+		logger.CheckWarn(err, "received bad parser parsing result in PlayerStorage. Ignoring.")
+		return
+	}
 	b.Add(record)
 	logger.Info("updated player storage")
 }

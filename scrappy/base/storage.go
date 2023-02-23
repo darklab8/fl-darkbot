@@ -23,8 +23,16 @@ type BaseStorage struct {
 
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
-	data := b.Api.GetData()
-	record := b.parser.Parse(data)
+	data, err := b.Api.GetData()
+	if err != nil {
+		logger.CheckWarn(err, "quering API with error in BaseStorage")
+		return
+	}
+	record, err := b.parser.Parse(data)
+	if err != nil {
+		logger.CheckWarn(err, "received bad parser parsing result in BaseStorage. Ignoring.")
+		return
+	}
 	b.Add(record)
 	logger.Info("updated base storage")
 }

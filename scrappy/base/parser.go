@@ -15,12 +15,13 @@ type baseSerializer struct {
 type baseParser struct {
 }
 
-func (b baseParser) Parse(body []byte) records.StampedObjects[Base] {
+func (b baseParser) Parse(body []byte) (records.StampedObjects[Base], error) {
 	record := records.StampedObjects[Base]{}.New()
 
 	bases := map[string]baseSerializer{}
 	if err := json.Unmarshal(body, &bases); err != nil {
-		logger.CheckPanic(err, "unable to unmarshal base request")
+		logger.CheckWarn(err, "unable to unmarshal base request")
+		return record, err
 	}
 
 	for name, serializer := range bases {
@@ -33,5 +34,5 @@ func (b baseParser) Parse(body []byte) records.StampedObjects[Base] {
 			},
 		)
 	}
-	return record
+	return record, nil
 }

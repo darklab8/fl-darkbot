@@ -3,6 +3,7 @@ package baseattack
 import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/settings"
+	"darkbot/utils/logger"
 )
 
 type basesattackAPI struct {
@@ -25,5 +26,10 @@ func (b *BaseAttackStorage) New() *BaseAttackStorage {
 }
 
 func (b *BaseAttackStorage) Update() {
-	b.Data = string(b.Api.GetData())
+	data, err := b.Api.GetData()
+	if err != nil {
+		logger.CheckWarn(err, "quering API with error in BaseAttackStorage")
+		return
+	}
+	b.Data = string(data)
 }
