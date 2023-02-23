@@ -21,6 +21,7 @@ func (b baseParser) Parse(body []byte) (records.StampedObjects[Base], error) {
 	bases := map[string]baseSerializer{}
 	if err := json.Unmarshal(body, &bases); err != nil {
 		logger.CheckWarn(err, "unable to unmarshal base request")
+		logger.Warn("unable to marshal base body=", string(body))
 		return record, err
 	}
 
