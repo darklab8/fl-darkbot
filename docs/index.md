@@ -35,6 +35,7 @@ Darkbot repeatedly updates information to discord channel
 # How to get started
 
 - invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
+- You must be Server owner or having `bot_controller` role in order to command the bot.
 - add to some channel by writing `. connect`
 - get help which commands are available by `. --help` or requesting help on sub commands `. base --help`
 - add base tag for tracking `. base add Research Station`
