@@ -62,14 +62,16 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	}
 
 	isBotController := false
-	for _, roleID := range m.Member.Roles {
-		role, err := s.State.Role(m.GuildID, roleID)
-		if err != nil {
-			continue
-		}
-
-		if role.Name == "bot_controller" {
-			isBotController = true
+	gildMemberRoles, err2 := s.GuildRoles(m.GuildID)
+	if err2 == nil {
+		for _, PlayerRoleID := range m.Member.Roles {
+			for _, GuildRole := range gildMemberRoles {
+				if GuildRole.ID == PlayerRoleID {
+					if GuildRole.Name == "bot_controller" {
+						isBotController = true
+					}
+				}
+			}
 		}
 	}
 
