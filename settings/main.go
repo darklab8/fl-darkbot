@@ -20,7 +20,7 @@ const (
 type ConfigScheme struct {
 	// Example how to add `env:"S3_BUCKET_NAME" envDefault:"default_value"`
 	ScrappyBaseUrl       string `env:"SCRAPPY_BASE_URL"`
-	ScrappyBaseAttackUrl string `env:"SCRAPPY_BASE_ATTACK_URL" envDefault:"https://discoverygc.com/forums/showthread.php?tid=110046"`
+	ScrappyBaseAttackUrl string `env:"SCRAPPY_BASE_ATTACK_URL" envDefault:"https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"`
 	ScrappyPlayerUrl     string `env:"SCRAPPY_PLAYER_URL"`
 
 	DiscorderBotToken string `env:"DISCORDER_BOT_TOKEN"`

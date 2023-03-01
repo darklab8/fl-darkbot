@@ -10,4 +10,6 @@ func TestAPI(t *testing.T) {
 	result, _ := api.GetData()
 	data := string(result)
 	fmt.Println(data)
+
+	// assert.True(t, strings.Contains(data, "LP-7743"))
 }
