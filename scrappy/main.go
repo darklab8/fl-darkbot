@@ -25,6 +25,7 @@ func (s *ScrappyStorage) New() *ScrappyStorage {
 func (s *ScrappyStorage) Update() {
 	s.BaseStorage.Update()
 	s.PlayerStorage.Update()
+	s.BaseAttackStorage.Update()
 }
 
 var Storage *ScrappyStorage

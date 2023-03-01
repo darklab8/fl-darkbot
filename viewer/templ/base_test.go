@@ -11,6 +11,7 @@ import (
 	"darkbot/utils/logger"
 	"darkbot/viewer/apis"
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -176,5 +177,41 @@ func TestGetDerivative(t *testing.T) {
 			logger.Info("baseName=", baseName, " baseDeravative=", baseDeravative)
 		}
 		logger.Debug("6")
+	})
+}
+
+func TestDetectAttackOnLPBase(t *testing.T) {
+
+	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+		channelID, _ := configurator.FixtureChannel(dbpath)
+
+		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
+		cg.TagsAdd(channelID, []string{"LP-7743"}...)
+
+		scrappy.Storage = (&scrappy.ScrappyStorage{}).New()
+
+		scrappy.Storage.BaseStorage.Api = base.APIBasespy{}.New()
+		scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}.New()
+		scrappy.Storage.BaseAttackStorage.Api = baseattack.NewMock("data_lp.json")
+		scrappy.Storage.Update()
+
+		assert.True(t, strings.Contains(scrappy.Storage.BaseAttackStorage.Data, "LP-7743"))
+
+		bases := scrappy.Storage.BaseStorage
+		record := records.StampedObjects[base.Base]{}.New()
+		record.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 5})
+		bases.Add(record)
+		record2 := records.StampedObjects[base.Base]{}.New()
+		record2.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 6})
+		record2.Timestamp.Add(time.Hour * 1)
+		bases.Add(record2)
+
+		baseUnderAttackalert := configurator.CfgAlertBaseIsUnderAttack{Configurator: configurator.NewConfigurator(dbpath)}
+		baseUnderAttackalert.Enable(channelID)
+
+		render := NewTemplateBase(channelID, dbpath)
+		render.Render()
+
+		assert.NotEmpty(t, render.AlertBaseUnderAttack.Content)
 	})
 }
