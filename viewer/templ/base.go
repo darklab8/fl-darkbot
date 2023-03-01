@@ -3,7 +3,6 @@ package templ
 import (
 	"darkbot/dtypes"
 	"darkbot/scrappy/base"
-	"darkbot/scrappy/shared/records"
 	"darkbot/utils"
 	"darkbot/viewer/apis"
 	_ "embed"
@@ -69,9 +68,9 @@ func BaseContainsTag(bas base.Base, tags []string) bool {
 	return false
 }
 
-func MatchBases(record records.StampedObjects[base.Base], tags []string) []base.Base {
+func MatchBases(bases []base.Base, tags []string) []base.Base {
 	result := []base.Base{}
-	for _, base := range record.List {
+	for _, base := range bases {
 
 		if !BaseContainsTag(base, tags) {
 			continue
@@ -114,7 +113,7 @@ func (b *TemplateBase) Render() {
 
 	tags, _ := b.API.Bases.TagsList(b.API.ChannelID)
 
-	matchedBases := MatchBases(record, tags)
+	matchedBases := MatchBases(record.List, tags)
 	healthDeritives := CalculateDerivates(tags, b.API)
 
 	for _, base := range matchedBases {

@@ -25,7 +25,7 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 	}
 
 	for _, record := range res_records {
-		bases := MatchBases(record, tags)
+		bases := record.List
 
 		for _, base := range bases {
 			if _, ok := baseHealths[base.Name]; !ok {
