@@ -116,14 +116,14 @@ func (b *TemplateBase) Render() {
 
 	matchedBases := MatchBases(record.List, tags)
 	healthDeritives, healthDerivativeErr := CalculateDerivates(tags, b.API)
-	_, ZeroDerivatives := healthDerivativeErr.(NoNonZeroDerivativesWarning)
+	DerivativesInitializing := healthDerivativeErr != nil
 
 	for _, base := range matchedBases {
 		healthDeritiveNumber, _ := healthDeritives[base.Name]
 		healthDeritive := strconv.FormatFloat(healthDeritiveNumber, 'f', 4, 64)
 		var HealthDecreasing, UnderAttack bool
 
-		if ZeroDerivatives {
+		if DerivativesInitializing {
 			healthDeritive = "initializing"
 		} else {
 			HealthDecreasing = healthDeritiveNumber < 0
@@ -145,7 +145,7 @@ func (b *TemplateBase) Render() {
 	}
 
 	// Alerts
-	if ZeroDerivatives {
+	if DerivativesInitializing {
 		// Don't update alerts until bases are properly initalized. To avoid extra pings to players
 		return
 	}
