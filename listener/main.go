@@ -11,6 +11,7 @@ import (
 	"darkbot/utils"
 	"darkbot/utils/logger"
 	"fmt"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -40,6 +41,10 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	messageAuthorID := m.Author.ID
 	botCreatorID := "370435997974134785"
 
+	if !strings.HasPrefix(m.Content, settings.Config.ConsolerPrefix) {
+		return false
+	}
+
 	// Ignore all messages created by the bot itself
 	// This isn't required in this specific example but it's a good practice.
 	if messageAuthorID == botID {
@@ -62,12 +67,13 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	}
 
 	isBotController := false
+	allowed_role := "bot_controller"
 	gildMemberRoles, err2 := s.GuildRoles(m.GuildID)
 	if err2 == nil {
 		for _, PlayerRoleID := range m.Member.Roles {
 			for _, GuildRole := range gildMemberRoles {
 				if GuildRole.ID == PlayerRoleID {
-					if GuildRole.Name == "bot_controller" {
+					if GuildRole.Name == allowed_role {
 						isBotController = true
 					}
 				}
@@ -79,6 +85,7 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	if guild.OwnerID != messageAuthorID &&
 		botCreatorID != messageAuthorID &&
 		!isBotController {
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("ERR access denied. You must be server owner or person with role named '%s' in order to command me!", allowed_role))
 		return false
 	}
 
