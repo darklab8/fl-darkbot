@@ -7,6 +7,7 @@ import (
 	"darkbot/viewer/apis"
 	_ "embed"
 	"fmt"
+	"math"
 	"sort"
 	"strings"
 	"text/template"
@@ -137,6 +138,15 @@ func (b *TemplateBase) Render() {
 	}
 
 	// Alerts
+	for _, derivative := range healthDeritives {
+		if math.IsNaN(derivative) {
+			// Don't update alerts until bases are properly initalized. To avoid extra pings to players
+			return
+		}
+		break
+	}
+
+	b.AlertHealthLowerThan.Content = ""
 	if healthThreshold, _ := b.API.Alerts.BaseHealthLowerThan.Status(b.API.ChannelID); healthThreshold != nil {
 		for _, base := range record.List {
 			if int(base.Health) < *healthThreshold {
@@ -146,6 +156,7 @@ func (b *TemplateBase) Render() {
 		}
 	}
 
+	b.AlertHealthIsDecreasing.Content = ""
 	if isAlertEnabled, _ := b.API.Alerts.BaseHealthIsDecreasing.Status(b.API.ChannelID); isAlertEnabled {
 		for _, base := range input.Bases {
 			if base.IsHealthDecreasing {
@@ -155,6 +166,7 @@ func (b *TemplateBase) Render() {
 		}
 	}
 
+	b.AlertBaseUnderAttack.Content = ""
 	if isAlertEnabled, _ := b.API.Alerts.BaseIsUnderAttack.Status(b.API.ChannelID); isAlertEnabled {
 		for _, base := range input.Bases {
 			if base.IsUnderAttack {
@@ -192,14 +204,18 @@ func (t *TemplateBase) MatchMessageID(messageID string) bool {
 func (t *TemplateBase) DiscoverMessageID(content string, msgID string) {
 	if strings.Contains(content, t.main.Header) {
 		t.main.MessageID = msgID
+		t.main.Content = content
 	}
 	if strings.Contains(content, t.AlertHealthLowerThan.Header) {
 		t.AlertHealthLowerThan.MessageID = msgID
+		t.AlertHealthLowerThan.Content = content
 	}
 	if strings.Contains(content, t.AlertHealthIsDecreasing.Header) {
 		t.AlertHealthIsDecreasing.MessageID = msgID
+		t.AlertHealthIsDecreasing.Content = content
 	}
 	if strings.Contains(content, t.AlertBaseUnderAttack.Header) {
 		t.AlertBaseUnderAttack.MessageID = msgID
+		t.AlertBaseUnderAttack.Content = content
 	}
 }
