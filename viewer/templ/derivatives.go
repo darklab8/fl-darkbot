@@ -3,11 +3,30 @@ package templ
 import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/shared/records"
+	"darkbot/utils/logger"
 	"darkbot/viewer/apis"
 	"math"
 )
 
-func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
+type ErrorCalculatingDerivative struct {
+	msg string
+}
+
+func (t ErrorCalculatingDerivative) Error() string {
+	err_msg := "Some error calculating derivative :), msg=" + t.msg
+	logger.Warn("ErrorCalculatingDerivative.err_mesg=", err_msg)
+	return err_msg
+}
+
+type NoNonZeroDerivativesWarning struct {
+}
+
+func (t NoNonZeroDerivativesWarning) Error() string {
+	logger.Warn("No unzero derivatives")
+	return "No unzero derivatives"
+}
+
+func CalculateDerivates(tags []string, api apis.API) (map[string]float64, error) {
 	baseHealths := make(map[string][]float64)
 	var res_records []records.StampedObjects[base.Base]
 	api.Scrappy.BaseStorage.Records.List(func(records2 []records.StampedObjects[base.Base]) {
@@ -15,13 +34,13 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 	})
 
 	if len(res_records) < 2 {
-		return map[string]float64{}
+		return map[string]float64{}, ErrorCalculatingDerivative{msg: "amoung of records less than 2"}
 	}
 
 	TimeDiff := res_records[len(res_records)-1].Timestamp.Sub(res_records[0].Timestamp)
 
 	if TimeDiff.Seconds() == 0 {
-		return map[string]float64{}
+		return map[string]float64{}, ErrorCalculatingDerivative{msg: "insffucuient time diff. it is zero"}
 	}
 
 	for _, record := range res_records {
@@ -56,10 +75,8 @@ func CalculateDerivates(tags []string, api apis.API) map[string]float64 {
 	}
 
 	if !wasThereNonZeroDeravatives {
-		for baseName, _ := range baseDerivatives {
-			baseDerivatives[baseName] = math.NaN()
-		}
+		return baseDerivatives, NoNonZeroDerivativesWarning{}
 	}
 
-	return baseDerivatives
+	return baseDerivatives, nil
 }

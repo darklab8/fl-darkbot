@@ -7,8 +7,8 @@ import (
 	"darkbot/viewer/apis"
 	_ "embed"
 	"fmt"
-	"math"
 	"sort"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -44,7 +44,7 @@ func NewTemplateBase(channelID string, dbpath dtypes.Dbpath) TemplateBase {
 
 type AugmentedBase struct {
 	base.Base
-	HealthChange         float64
+	HealthChange         string
 	IsHealthDecreasing   bool
 	IsUnderAttack        bool
 	HealthDecreasePhrase string
@@ -115,13 +115,20 @@ func (b *TemplateBase) Render() {
 	tags, _ := b.API.Bases.TagsList(b.API.ChannelID)
 
 	matchedBases := MatchBases(record.List, tags)
-	healthDeritives := CalculateDerivates(tags, b.API)
+	healthDeritives, healthDerivativeErr := CalculateDerivates(tags, b.API)
+	_, ZeroDerivatives := healthDerivativeErr.(NoNonZeroDerivativesWarning)
 
 	for _, base := range matchedBases {
-		healthDeritive, _ := healthDeritives[base.Name]
+		healthDeritiveNumber, _ := healthDeritives[base.Name]
+		healthDeritive := strconv.FormatFloat(healthDeritiveNumber, 'f', 4, 64)
+		var HealthDecreasing, UnderAttack bool
 
-		HealthDecreasing := healthDeritive < 0
-		UnderAttack := healthDeritive < HealthRateDecreasingThreshold || strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name)
+		if ZeroDerivatives {
+			healthDeritive = "initializing"
+		} else {
+			HealthDecreasing = healthDeritiveNumber < 0
+			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name)
+		}
 
 		input.Bases = append(input.Bases, AugmentedBase{
 			Base:                 base,
@@ -138,12 +145,9 @@ func (b *TemplateBase) Render() {
 	}
 
 	// Alerts
-	for _, derivative := range healthDeritives {
-		if math.IsNaN(derivative) {
-			// Don't update alerts until bases are properly initalized. To avoid extra pings to players
-			return
-		}
-		break
+	if ZeroDerivatives {
+		// Don't update alerts until bases are properly initalized. To avoid extra pings to players
+		return
 	}
 
 	b.AlertHealthLowerThan.Content = ""

@@ -171,7 +171,7 @@ func TestGetDerivative(t *testing.T) {
 		_ = res2
 
 		logger.Debug("5")
-		baseDerivatives := CalculateDerivates(tags, api)
+		baseDerivatives, _ := CalculateDerivates(tags, api)
 		for baseName, baseDeravative := range baseDerivatives {
 			logger.Info("baseName=", baseName, " baseDeravative=", baseDeravative)
 		}
