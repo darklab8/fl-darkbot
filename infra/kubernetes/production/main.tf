@@ -21,5 +21,5 @@ module "darkbot" {
     hard_memory = 2000
     hard_cpu    = 2000
   }
-  image_version = "v0.3.7"
+  image_version = "v0.3.8"
 }
