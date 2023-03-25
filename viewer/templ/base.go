@@ -94,7 +94,7 @@ func (b *TemplateBase) Setup(channelID string) {
 	b.AlertBaseUnderAttack.Content = ""
 }
 
-const HealthRateDecreasingThreshold = -0.002200 * 2
+const HealthRateDecreasingThreshold = -0.01
 
 func (b *TemplateBase) Render() {
 	input := TemplateRendererBaseInput{
