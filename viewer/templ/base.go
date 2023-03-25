@@ -152,7 +152,7 @@ func (b *TemplateBase) Render() {
 
 	b.AlertHealthLowerThan.Content = ""
 	if healthThreshold, _ := b.API.Alerts.BaseHealthLowerThan.Status(b.API.ChannelID); healthThreshold != nil {
-		for _, base := range record.List {
+		for _, base := range input.Bases {
 			if int(base.Health) < *healthThreshold {
 				b.AlertHealthLowerThan.Content = RenderAlertTemplate(b.AlertHealthLowerThan.Header, b.API.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), *healthThreshold), b.API)
 				break
