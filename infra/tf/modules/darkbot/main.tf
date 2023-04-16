@@ -10,9 +10,13 @@ resource "hcloud_ssh_key" "darklab" {
   public_key = file("${path.module}/id_rsa.darklab.pub")
 }
 
+data "hcloud_image" "default" {
+  name              = "ubuntu-22.04"
+}
+
 resource "hcloud_server" "cluster" {
   name        = "${var.environment}-cluster"
-  image       = local.image
+  image       = data.hcloud_image.default.id
   datacenter  = local.datacenter
   server_type = local.server_type
   ssh_keys = [
