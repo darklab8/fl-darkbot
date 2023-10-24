@@ -11,7 +11,7 @@ resource "hcloud_ssh_key" "darklab" {
 }
 
 data "hcloud_image" "default" {
-  name              = "ubuntu-22.04"
+  name = "ubuntu-22.04"
 }
 
 resource "hcloud_server" "cluster" {
@@ -26,6 +26,14 @@ resource "hcloud_server" "cluster" {
     ipv4_enabled = true
     ipv6_enabled = true
   }
+
+  lifecycle {
+    ignore_changes = [
+      image,
+    ]
+  }
+
+  backups = var.backups
 }
 
 output "cluster_ip" {
