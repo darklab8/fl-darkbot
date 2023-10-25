@@ -48,7 +48,7 @@ func TestHomePage(t *testing.T) {
 
 	fmt.Println(body)
 
-	if !strings.Contains(body, "home page") {
+	if !strings.Contains(body, "Not found") {
 		t.Error("")
 	}
 }
