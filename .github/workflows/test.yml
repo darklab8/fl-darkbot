@@ -16,16 +16,12 @@ jobs:
       - name: Install Task
         run: |
           sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
-
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19
-
+          go-version: 1.21
       - name: Setup deps
         run: |
           echo 'ci version' > settings/version.txt
-          cp .env.dev.example .env
-
       - name: Test
         run: task test
