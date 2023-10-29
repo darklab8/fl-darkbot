@@ -2,8 +2,8 @@ package viewer
 
 import (
 	"darkbot/configurator"
-	"darkbot/dtypes"
 	"darkbot/settings"
+	"darkbot/settings/types"
 	"darkbot/settings/utils/logger"
 	"fmt"
 	"time"
@@ -17,11 +17,11 @@ type ViewerDelays struct {
 type Viewer struct {
 	channels configurator.ConfiguratorChannel
 	delays   ViewerDelays
-	dbpath   dtypes.Dbpath
+	dbpath   types.Dbpath
 	channel  ChannelView
 }
 
-func NewViewer(dbpath dtypes.Dbpath) Viewer {
+func NewViewer(dbpath types.Dbpath) Viewer {
 	return Viewer{
 		dbpath:   dbpath,
 		channels: configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator(dbpath)},

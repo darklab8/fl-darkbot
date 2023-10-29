@@ -2,7 +2,7 @@ package viewer
 
 import (
 	"darkbot/discorder"
-	"darkbot/dtypes"
+	"darkbot/settings/types"
 	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"darkbot/viewer/templ"
@@ -18,7 +18,7 @@ type ChannelView struct {
 	ChannelID   string
 }
 
-func NewChannelView(dbpath dtypes.Dbpath) ChannelView {
+func NewChannelView(dbpath types.Dbpath) ChannelView {
 	view := ChannelView{}
 	view.ChannelID = ""
 	view.api = apis.NewAPI(view.ChannelID, dbpath)

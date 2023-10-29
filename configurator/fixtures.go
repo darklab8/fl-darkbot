@@ -1,21 +1,21 @@
 package configurator
 
 import (
-	"darkbot/dtypes"
 	"darkbot/settings"
+	"darkbot/settings/types"
 	"darkbot/settings/utils"
 	"fmt"
 	"os"
 )
 
-func FixtureConfigurator(dbpath dtypes.Dbpath) Configurator {
+func FixtureConfigurator(dbpath types.Dbpath) Configurator {
 	cfg := NewConfigurator(dbpath)
 	return cfg
 }
 
-func FixtureMigrator(callback func(dbpath dtypes.Dbpath)) Configurator {
+func FixtureMigrator(callback func(dbpath types.Dbpath)) Configurator {
 	dbname := utils.TokenHex(8)
-	dbpath := dtypes.Dbpath(settings.NewDBPath(dbname))
+	dbpath := types.Dbpath(settings.NewDBPath(dbname))
 	// setup
 	fmt.Println(dbpath)
 	os.Remove(string(dbpath))
@@ -34,7 +34,7 @@ func FixtureMigrator(callback func(dbpath dtypes.Dbpath)) Configurator {
 	return cfg
 }
 
-func FixtureChannel(dbpath dtypes.Dbpath) (string, ConfiguratorChannel) {
+func FixtureChannel(dbpath types.Dbpath) (string, ConfiguratorChannel) {
 	channelID := "123"
 	configurator_ := FixtureConfigurator(dbpath)
 	cfg_channel := ConfiguratorChannel{Configurator: configurator_}

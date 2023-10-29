@@ -1,8 +1,8 @@
 package templ
 
 import (
-	"darkbot/dtypes"
 	"darkbot/scrappy/player"
+	"darkbot/settings/types"
 	"darkbot/settings/utils"
 	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
@@ -42,7 +42,7 @@ type PlayersTemplates struct {
 	API     apis.API
 }
 
-func NewTemplatePlayers(channelID string, dbpath dtypes.Dbpath) PlayersTemplates {
+func NewTemplatePlayers(channelID string, dbpath types.Dbpath) PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.API = apis.NewAPI(channelID, dbpath)
 	templator.friends.MainTable.Header = "#darkbot-players-friends-table"

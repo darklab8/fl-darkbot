@@ -1,7 +1,7 @@
 package configurator
 
 import (
-	"darkbot/dtypes"
+	"darkbot/settings/types"
 	"darkbot/settings/utils"
 	"fmt"
 	"testing"
@@ -10,7 +10,7 @@ import (
 )
 
 func TestAlertTreshold(t *testing.T) {
-	FixtureMigrator(func(dbpath dtypes.Dbpath) {
+	FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := FixtureChannel(dbpath)
 		genericCfg := NewConfigurator(dbpath).Migrate()
 		_ = channelID
@@ -33,7 +33,7 @@ func TestAlertTreshold(t *testing.T) {
 }
 
 func TestAlertBool(t *testing.T) {
-	FixtureMigrator(func(dbpath dtypes.Dbpath) {
+	FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := FixtureChannel(dbpath)
 		genericCfg := NewConfigurator(dbpath).Migrate()
 		_ = channelID

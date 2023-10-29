@@ -6,8 +6,8 @@ package configurator
 
 import (
 	"darkbot/configurator/models"
-	"darkbot/dtypes"
 	"darkbot/settings"
+	"darkbot/settings/types"
 	"darkbot/settings/utils/logger"
 
 	"gorm.io/driver/sqlite"
@@ -22,7 +22,7 @@ func (cg Configurator) GetClient() *gorm.DB {
 	return cg.db
 }
 
-func NewConfigurator(dbpath dtypes.Dbpath) Configurator {
+func NewConfigurator(dbpath types.Dbpath) Configurator {
 	db, err := gorm.Open(
 		sqlite.Open(string(dbpath)+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{},
 	)

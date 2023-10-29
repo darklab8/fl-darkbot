@@ -1,7 +1,7 @@
 package configurator
 
 import (
-	"darkbot/dtypes"
+	"darkbot/settings/types"
 	"fmt"
 	"testing"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func TestTags(t *testing.T) {
-	FixtureMigrator(func(dbname dtypes.Dbpath) {
+	FixtureMigrator(func(dbname types.Dbpath) {
 		channelID, _ := FixtureChannel(dbname)
 
 		cg := ConfiguratorBase{Configurator: NewConfigurator(dbname).Migrate()}
@@ -26,7 +26,7 @@ func TestTags(t *testing.T) {
 }
 
 func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
-	FixtureMigrator(func(dbname dtypes.Dbpath) {
+	FixtureMigrator(func(dbname types.Dbpath) {
 		configur := FixtureConfigurator(dbname)
 		cg := ConfiguratorBase{Configurator: configur}
 
@@ -52,7 +52,7 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 }
 
 func TestDoNotInputRepeatedTags(t *testing.T) {
-	FixtureMigrator(func(dbname dtypes.Dbpath) {
+	FixtureMigrator(func(dbname types.Dbpath) {
 		configur := FixtureConfigurator(dbname)
 		cg := ConfiguratorBase{Configurator: configur}
 

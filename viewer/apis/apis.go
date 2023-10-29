@@ -3,8 +3,8 @@ package apis
 import (
 	"darkbot/configurator"
 	"darkbot/discorder"
-	"darkbot/dtypes"
 	"darkbot/scrappy"
+	"darkbot/settings/types"
 )
 
 type Players struct {
@@ -31,7 +31,7 @@ type API struct {
 	Alerts    Alerts
 }
 
-func NewAPI(channelID string, dbpath dtypes.Dbpath) API {
+func NewAPI(channelID string, dbpath types.Dbpath) API {
 	dbconnection := configurator.NewConfigurator(dbpath)
 	return API{
 		Discorder: discorder.NewClient(),

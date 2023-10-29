@@ -1,12 +1,11 @@
 package settings
 
 import (
+	"darkbot/settings/types"
 	"darkbot/settings/utils"
 	"darkbot/settings/utils/logger"
 	"path/filepath"
 	"strconv"
-
-	"darkbot/dtypes"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
@@ -36,13 +35,13 @@ type ConfigScheme struct {
 var LoopDelay int
 var Config ConfigScheme
 
-type dbpath dtypes.Dbpath
+type dbpath types.Dbpath
 
-var Dbpath dtypes.Dbpath
+var Dbpath types.Dbpath
 var Workdir string
 
-func NewDBPath(dbname string) dtypes.Dbpath {
-	return dtypes.Dbpath(filepath.Join(Workdir, "data", dbname+".sqlite3"))
+func NewDBPath(dbname string) types.Dbpath {
+	return types.Dbpath(filepath.Join(Workdir, "data", dbname+".sqlite3"))
 }
 
 func load() {

@@ -2,12 +2,12 @@ package templ
 
 import (
 	"darkbot/configurator"
-	"darkbot/dtypes"
 	"darkbot/scrappy"
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
 	"darkbot/scrappy/shared/records"
+	"darkbot/settings/types"
 	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"fmt"
@@ -19,7 +19,7 @@ import (
 )
 
 func TestBaseViewerMocked(t *testing.T) {
-	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
@@ -108,7 +108,7 @@ func TestBaseViewerMocked(t *testing.T) {
 
 // TODO fix those tests... for some reason memory ref error :smile:
 // func TestBaseViewerRealData(t *testing.T) {
-// 	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+// 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 // 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 // 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
@@ -131,7 +131,7 @@ func TestBaseViewerMocked(t *testing.T) {
 
 // TEST TO FIND OUT derivative of base health
 func TestGetDerivative(t *testing.T) {
-	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		logger.Debug("1")
 		channelID, _ := configurator.FixtureChannel(dbpath)
 		api := apis.NewAPI(channelID, dbpath)
@@ -182,7 +182,7 @@ func TestGetDerivative(t *testing.T) {
 
 func TestDetectAttackOnLPBase(t *testing.T) {
 
-	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}

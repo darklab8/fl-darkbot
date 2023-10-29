@@ -1,7 +1,7 @@
 package configurator
 
 import (
-	"darkbot/dtypes"
+	"darkbot/settings/types"
 	"fmt"
 	"testing"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func TestChannels(t *testing.T) {
-	FixtureMigrator(func(dbpath dtypes.Dbpath) {
+	FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, cg := FixtureChannel(dbpath)
 		cg.Remove(channelID)
 

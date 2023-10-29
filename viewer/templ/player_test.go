@@ -2,10 +2,10 @@ package templ
 
 import (
 	"darkbot/configurator"
-	"darkbot/dtypes"
 	"darkbot/scrappy"
 	"darkbot/scrappy/player"
 	"darkbot/scrappy/shared/records"
+	"darkbot/settings/types"
 	"fmt"
 	"testing"
 
@@ -13,7 +13,7 @@ import (
 )
 
 func TestPlayerViewerMadeUpData(t *testing.T) {
-	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 		configurator.ConfiguratorRegion{Configurator: configurator.NewConfigurator(dbpath)}.TagsAdd(channelID, []string{"region1", "region0"}...)
@@ -65,7 +65,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 // TODO fix those tests... for some reason memory ref error :smile:
 // func TestPlayerViewerRealData(t *testing.T) {
-// 	configurator.FixtureMigrator(func(dbpath dtypes.Dbpath) {
+// 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 // 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 // 		scrappy.Storage.BaseStorage.Api = base.APIBasespy{}

@@ -1,8 +1,8 @@
 package helper
 
-import "darkbot/dtypes"
+import "darkbot/settings/types"
 
 type ChannelInfo struct {
 	ChannelID string
-	Dbpath    dtypes.Dbpath
+	Dbpath    types.Dbpath
 }
