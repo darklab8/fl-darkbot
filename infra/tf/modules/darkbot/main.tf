@@ -5,23 +5,23 @@ resource "docker_image" "darkbot" {
   keep_locally = true
 }
 
-variable configurator_dbname {
-    type = string
+variable "configurator_dbname" {
+  type = string
 }
 
-variable consoler_prefix {
-    type = string
+variable "consoler_prefix" {
+  type = string
 }
 
-variable secrets {
-    type = map(string)
+variable "secrets" {
+  type = map(string)
 }
 
 # # Create a docker container resource
 # # -> same as 'docker run --name nginx -p8080:80 -d nginx:latest'
 resource "docker_container" "darkbot" {
-  name    = "darkbot"
-  image   = docker_image.darkbot.image_id
+  name  = "darkbot"
+  image = docker_image.darkbot.image_id
 
   env = [
     "SCRAPPY_PLAYER_URL=${var.secrets["SCRAPPY_PLAYER_URL"]}",
@@ -35,8 +35,8 @@ resource "docker_container" "darkbot" {
 
   restart = "always"
   volumes {
-    container_path  = "/code/data"
-    read_only = false
-    host_path = "/var/lib/darklab/darkbot"
+    container_path = "/code/data"
+    read_only      = false
+    host_path      = "/var/lib/darklab/darkbot"
   }
 }
