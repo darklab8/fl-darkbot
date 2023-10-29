@@ -1,31 +1,41 @@
-terraform {
-  required_providers {
-    hcloud = {
-      source  = "hetznercloud/hcloud"
-      version = "~> 1.35.2"
-    }
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 2.7.0"
-    }
-  }
-}
-
-variable "staging_hcloud_token" {
-  type      = string
-  sensitive = true
-}
-
-provider "hcloud" {
-  token = var.staging_hcloud_token
-}
-
 module "stack" {
-  source       = "../modules/darkbot"
+  source       = "../modules/hetzner_server"
   environment  = "staging"
   server_power = "cpx21"
+  backups      = false
 }
 
 output "cluster_ip" {
   value = module.stack.cluster_ip
 }
+
+provider "docker" {
+  host     = "ssh://root@${module.stack.cluster_ip}:22"
+  ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-i", "~/.ssh/id_rsa.darklab"]
+}
+
+module "darkbot" {
+  source              = "../modules/darkbot"
+  configurator_dbname = "staging"
+  consoler_prefix     = ","
+  secrets             = local.secrets
+}
+
+# # Create a docker image resource
+# # -> docker pull nginx:latest
+# resource "docker_image" "nginx" {
+#   name         = "nginx:latest"
+#   keep_locally = true
+# }
+
+# # Create a docker container resource
+# # -> same as 'docker run --name nginx -p8080:80 -d nginx:latest'
+# resource "docker_container" "nginx" {
+#   name    = "nginx"
+#   image   = docker_image.nginx.image_id
+
+#   ports {
+#     external = 8080
+#     internal = 80
+#   }
+# }

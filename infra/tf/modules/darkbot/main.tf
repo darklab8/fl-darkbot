@@ -1,41 +1,42 @@
-locals {
-  datacenter  = "ash-dc1" # USA
-  image       = "ubuntu-22.04"
-  server_type = var.server_power
-  task_name   = "cluster"
+# Create a docker image resource
+# -> docker pull nginx:latest
+resource "docker_image" "darkbot" {
+  name         = "darkwind8/darkbot:v0.3.10"
+  keep_locally = true
 }
 
-resource "hcloud_ssh_key" "darklab" {
-  name       = "darklab_key"
-  public_key = file("${path.module}/id_rsa.darklab.pub")
+variable configurator_dbname {
+    type = string
 }
 
-data "hcloud_image" "default" {
-  name = "ubuntu-22.04"
+variable consoler_prefix {
+    type = string
 }
 
-resource "hcloud_server" "cluster" {
-  name        = "${var.environment}-cluster"
-  image       = data.hcloud_image.default.id
-  datacenter  = local.datacenter
-  server_type = local.server_type
-  ssh_keys = [
-    hcloud_ssh_key.darklab.id,
+variable secrets {
+    type = map(string)
+}
+
+# # Create a docker container resource
+# # -> same as 'docker run --name nginx -p8080:80 -d nginx:latest'
+resource "docker_container" "darkbot" {
+  name    = "darkbot"
+  image   = docker_image.darkbot.image_id
+
+  env = [
+    "SCRAPPY_PLAYER_URL=${var.secrets["SCRAPPY_PLAYER_URL"]}",
+    "SCRAPPY_BASE_URL=${var.secrets["SCRAPPY_BASE_URL"]}",
+    "DISCORDER_BOT_TOKEN=${var.secrets["DISCORDER_BOT_TOKEN"]}",
+    "CONFIGURATOR_DBNAME=${var.configurator_dbname}",
+    "CONSOLER_PREFIX=${var.consoler_prefix}",
+    "LOOP_DELAY=60",
+    "DEVENV_MOCK_API=false",
   ]
-  public_net {
-    ipv4_enabled = true
-    ipv6_enabled = true
+
+  restart = "always"
+  volumes {
+    container_path  = "/code/data"
+    read_only = false
+    host_path = "/var/lib/darklab/darkbot"
   }
-
-  lifecycle {
-    ignore_changes = [
-      image,
-    ]
-  }
-
-  backups = var.backups
-}
-
-output "cluster_ip" {
-  value = hcloud_server.cluster.ipv4_address
 }
