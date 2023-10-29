@@ -1,7 +1,7 @@
 package api
 
 import (
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"io/ioutil"
 	"net/http"
 )

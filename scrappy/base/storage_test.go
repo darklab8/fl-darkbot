@@ -1,7 +1,7 @@
 package base
 
 import (
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"fmt"
 	"testing"
 

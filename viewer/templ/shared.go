@@ -1,7 +1,7 @@
 package templ
 
 import (
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"fmt"
 	"strings"

@@ -5,7 +5,7 @@ import (
 	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
 	"darkbot/settings"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"time"
 )
 

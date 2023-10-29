@@ -2,7 +2,7 @@ package utils
 
 import (
 	"bufio"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"fmt"
 	"os"
 )

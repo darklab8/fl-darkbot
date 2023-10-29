@@ -2,7 +2,7 @@ package utils
 
 import (
 	"bytes"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"strings"
 	"text/template"
 )

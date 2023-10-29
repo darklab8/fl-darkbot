@@ -6,7 +6,7 @@ package viewer
 
 import (
 	"darkbot/settings"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 )
 
 func Run() {

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"fmt"
 	"regexp"
 )

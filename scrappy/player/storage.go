@@ -4,7 +4,7 @@ import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/shared/parser"
 	"darkbot/scrappy/shared/records"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 )
 
 type Player struct {

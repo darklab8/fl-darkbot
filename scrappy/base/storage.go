@@ -5,7 +5,7 @@ import (
 	"darkbot/scrappy/shared/parser"
 	"darkbot/scrappy/shared/records"
 
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 )
 
 type Base struct {

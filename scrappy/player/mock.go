@@ -3,8 +3,8 @@ package player
 import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
-	"darkbot/utils"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils"
+	"darkbot/settings/utils/logger"
 	"io/ioutil"
 	"os"
 	"path"

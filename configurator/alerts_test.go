@@ -2,7 +2,7 @@ package configurator
 
 import (
 	"darkbot/dtypes"
-	"darkbot/utils"
+	"darkbot/settings/utils"
 	"fmt"
 	"testing"
 

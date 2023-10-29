@@ -3,7 +3,7 @@ package viewer
 import (
 	"darkbot/discorder"
 	"darkbot/dtypes"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"darkbot/viewer/templ"
 	"strings"

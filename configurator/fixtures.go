@@ -3,7 +3,7 @@ package configurator
 import (
 	"darkbot/dtypes"
 	"darkbot/settings"
-	"darkbot/utils"
+	"darkbot/settings/utils"
 	"fmt"
 	"os"
 )

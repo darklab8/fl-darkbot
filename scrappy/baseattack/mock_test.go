@@ -2,8 +2,8 @@ package baseattack
 
 import (
 	"darkbot/scrappy/tests"
-	"darkbot/utils"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils"
+	"darkbot/settings/utils/logger"
 	"io/ioutil"
 	"os"
 	"path"

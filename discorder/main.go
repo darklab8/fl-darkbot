@@ -9,7 +9,7 @@ package discorder
 
 import (
 	"darkbot/settings"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"time"
 
 	"github.com/bwmarrin/discordgo"

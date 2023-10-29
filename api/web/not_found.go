@@ -1,7 +1,7 @@
 package web
 
 import (
-	"darkbot/utils"
+	"darkbot/settings/utils"
 	_ "embed"
 	"net/http"
 	"text/template"

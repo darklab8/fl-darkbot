@@ -8,8 +8,8 @@ import (
 	"darkbot/consoler"
 	"darkbot/consoler/helper"
 	"darkbot/settings"
-	"darkbot/utils"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils"
+	"darkbot/settings/utils/logger"
 	"fmt"
 	"strings"
 

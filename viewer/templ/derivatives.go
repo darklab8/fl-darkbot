@@ -3,7 +3,7 @@ package templ
 import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/shared/records"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"math"
 )

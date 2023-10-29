@@ -3,7 +3,7 @@ package templ
 import (
 	"darkbot/dtypes"
 	"darkbot/scrappy/base"
-	"darkbot/utils"
+	"darkbot/settings/utils"
 	"darkbot/viewer/apis"
 	_ "embed"
 	"fmt"

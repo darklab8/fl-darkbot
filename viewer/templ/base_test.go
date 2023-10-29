@@ -8,7 +8,7 @@ import (
 	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
 	"darkbot/scrappy/shared/records"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"fmt"
 	"strings"

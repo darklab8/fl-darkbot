@@ -4,7 +4,7 @@ import (
 	"darkbot/configurator"
 	"darkbot/dtypes"
 	"darkbot/settings"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"fmt"
 	"time"
 )

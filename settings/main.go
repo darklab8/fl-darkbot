@@ -1,8 +1,8 @@
 package settings
 
 import (
-	"darkbot/utils"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils"
+	"darkbot/settings/utils/logger"
 	"path/filepath"
 	"strconv"
 

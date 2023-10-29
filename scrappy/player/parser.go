@@ -2,7 +2,7 @@ package player
 
 import (
 	"darkbot/scrappy/shared/records"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"encoding/json"
 )
 

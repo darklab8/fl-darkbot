@@ -3,7 +3,7 @@ package base
 import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 	"io/ioutil"
 	"path"
 )

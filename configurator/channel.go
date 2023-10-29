@@ -2,8 +2,8 @@ package configurator
 
 import (
 	"darkbot/configurator/models"
-	"darkbot/utils"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils"
+	"darkbot/settings/utils/logger"
 )
 
 type ConfiguratorChannel struct {

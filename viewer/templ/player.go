@@ -3,8 +3,8 @@ package templ
 import (
 	"darkbot/dtypes"
 	"darkbot/scrappy/player"
-	"darkbot/utils"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils"
+	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	_ "embed"
 	"fmt"

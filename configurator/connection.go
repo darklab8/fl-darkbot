@@ -8,7 +8,7 @@ import (
 	"darkbot/configurator/models"
 	"darkbot/dtypes"
 	"darkbot/settings"
-	"darkbot/utils/logger"
+	"darkbot/settings/utils/logger"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
