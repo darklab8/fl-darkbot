@@ -29,7 +29,7 @@ func (t NoNonZeroDerivativesWarning) Error() string {
 func CalculateDerivates(tags []string, api apis.API) (map[string]float64, error) {
 	baseHealths := make(map[string][]float64)
 	var res_records []records.StampedObjects[base.Base]
-	api.Scrappy.BaseStorage.Records.List(func(records2 []records.StampedObjects[base.Base]) {
+	api.Scrappy.GetBaseStorage().Records.List(func(records2 []records.StampedObjects[base.Base]) {
 		res_records = records2
 	})
 

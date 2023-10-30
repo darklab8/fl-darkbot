@@ -22,7 +22,8 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		configurator.ConfiguratorPlayerFriend{Configurator: configurator.NewConfigurator(dbpath)}.TagsAdd(channelID, []string{"player4"}...)
 
 		players := player.PlayerStorage{}
-		scrappy.Storage = &scrappy.ScrappyStorage{PlayerStorage: &players}
+
+		scrappy.Storage = scrappy.FixtureNewStorage(&players)
 		record := records.StampedObjects[player.Player]{}.New()
 		record.Add(player.Player{Name: "player1", System: "system1", Region: "region1"})
 		record.Add(player.Player{Name: "player2", System: "system2", Region: "region2"})

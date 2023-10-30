@@ -25,15 +25,12 @@ func TestBaseViewerMocked(t *testing.T) {
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
 		cg.TagsAdd(channelID, []string{"Station"}...)
 
-		bases := (&base.BaseStorage{}).New()
-		baseAttack := (&baseattack.BaseAttackStorage{}).New()
-		baseAttack.Api = baseattack.BaseAttackAPISpy{}.New()
-		baseAttack.Update()
-		scrappy.Storage = &scrappy.ScrappyStorage{BaseStorage: bases, BaseAttackStorage: baseAttack}
+		scrappy.Storage = scrappy.FixtureMockedStorage()
+		scrappy.Storage.Update()
 		record := records.StampedObjects[base.Base]{}.New()
 		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
-		bases.Add(record)
+		scrappy.Storage.GetBaseStorage().Add(record)
 
 		render := NewTemplateBase(channelID, dbpath)
 		render.Render()
@@ -52,7 +49,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		record = records.StampedObjects[base.Base]{}.New()
 		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 50})
-		bases.Add(record)
+		scrappy.Storage.GetBaseStorage().Add(record)
 
 		baseAlertDecreasing.Enable(channelID)
 		isEnabled, _ = baseAlertDecreasing.Status(channelID)
@@ -90,7 +87,7 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		record = records.StampedObjects[base.Base]{}.New()
 		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
-		bases.Add(record)
+		scrappy.Storage.GetBaseStorage().Add(record)
 		cg.TagsAdd(channelID, []string{"Bank"}...)
 		render = NewTemplateBase(channelID, dbpath)
 		render.Render()
@@ -138,17 +135,15 @@ func TestGetDerivative(t *testing.T) {
 
 		tags := []string{""}
 		logger.Debug("2")
-		scrappy.Storage.BaseStorage = (&base.BaseStorage{}).New()
-		scrappy.Storage.PlayerStorage = (&player.PlayerStorage{}).New()
-		scrappy.Storage.BaseStorage.Api = base.NewMock("basedata.json")
+		scrappy.Storage = scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.NewPlayerMockAPI(), baseattack.NewBaseAttackAPIMock())
 		logger.Debug("2.1")
-		scrappy.Storage.PlayerStorage.Api = player.NewPlayerMockAPI()
 		logger.Debug("2.2")
 		scrappy.Storage.Update()
 		logger.Debug("2.3")
-		scrappy.Storage.BaseStorage.Api = base.NewMock("basedata2.json")
+
+		scrappy.FixtureSetBaseStorageAPI(base.NewMock("basedata2.json"))
 		scrappy.Storage.Update()
-		scrappy.Storage.BaseStorage.Records.List(func(values []records.StampedObjects[base.Base]) {
+		scrappy.Storage.GetBaseStorage().Records.List(func(values []records.StampedObjects[base.Base]) {
 			values[1].Timestamp = values[0].Timestamp.Add(time.Minute * 15)
 		})
 
@@ -156,7 +151,7 @@ func TestGetDerivative(t *testing.T) {
 
 		result1 := make(map[string]base.Base)
 		result2 := make(map[string]base.Base)
-		scrappy.Storage.BaseStorage.Records.List(func(values []records.StampedObjects[base.Base]) {
+		scrappy.Storage.GetBaseStorage().Records.List(func(values []records.StampedObjects[base.Base]) {
 			for _, base := range values[0].List {
 				result1[base.Name] = base
 			}
@@ -188,16 +183,12 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
 		cg.TagsAdd(channelID, []string{"LP-7743"}...)
 
-		scrappy.Storage = (&scrappy.ScrappyStorage{}).New()
-
-		scrappy.Storage.BaseStorage.Api = base.NewBaseApiMock()
-		scrappy.Storage.PlayerStorage.Api = player.NewPlayerMockAPI()
-		scrappy.Storage.BaseAttackStorage.Api = baseattack.NewMock("data_lp.json")
+		scrappy.Storage = scrappy.NewScrapyStorage(base.NewBaseApiMock(), player.NewPlayerMockAPI(), baseattack.NewMock("data_lp.json"))
 		scrappy.Storage.Update()
 
-		assert.True(t, strings.Contains(scrappy.Storage.BaseAttackStorage.Data, "LP-7743"))
+		assert.True(t, strings.Contains(string(scrappy.Storage.GetBaseAttackStorage().GetData()), "LP-7743"))
 
-		bases := scrappy.Storage.BaseStorage
+		bases := scrappy.Storage.GetBaseStorage()
 		record := records.StampedObjects[base.Base]{}.New()
 		record.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 5})
 		bases.Add(record)

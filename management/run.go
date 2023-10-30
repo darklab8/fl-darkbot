@@ -7,8 +7,6 @@ import (
 	"darkbot/configurator"
 	"darkbot/listener"
 	"darkbot/scrappy"
-	"darkbot/scrappy/base"
-	"darkbot/scrappy/player"
 	"darkbot/settings"
 	"darkbot/settings/utils"
 	"darkbot/settings/utils/logger"
@@ -33,8 +31,7 @@ var runCmd = &cobra.Command{
 		configurator.NewConfigurator(settings.Dbpath).Migrate()
 
 		if settings.Config.DevEnvMockApi == "true" {
-			scrappy.Storage.BaseStorage.Api = base.NewBaseApiMock()
-			scrappy.Storage.PlayerStorage.Api = player.NewPlayerAPI()
+			scrappy.Storage = scrappy.FixtureMockedStorage()
 			scrappy.Storage.Update()
 		}
 

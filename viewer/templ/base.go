@@ -104,7 +104,7 @@ func (b *TemplateBase) Render() {
 		UnderAttackPhrase:    "\n@underAttack;",
 	}
 
-	record, err := b.API.Scrappy.BaseStorage.GetLatestRecord()
+	record, err := b.API.Scrappy.GetBaseStorage().GetLatestRecord()
 	if err != nil {
 		return
 	}
@@ -127,7 +127,7 @@ func (b *TemplateBase) Render() {
 			healthDeritive = "initializing"
 		} else {
 			HealthDecreasing = healthDeritiveNumber < 0
-			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(b.API.Scrappy.BaseAttackStorage.Data, base.Name)
+			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(string(b.API.Scrappy.GetBaseAttackStorage().GetData()), base.Name)
 		}
 
 		input.Bases = append(input.Bases, AugmentedBase{

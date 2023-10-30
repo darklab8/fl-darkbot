@@ -80,7 +80,7 @@ func TagContains(name string, tags []string) bool {
 }
 
 func (t *PlayersTemplates) Render() {
-	record, err := t.API.Scrappy.PlayerStorage.GetLatestRecord()
+	record, err := t.API.Scrappy.GetPlayerStorage().GetLatestRecord()
 	if err != nil {
 		return
 	}

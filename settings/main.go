@@ -25,7 +25,7 @@ type ConfigScheme struct {
 
 	ConfiguratorDbname string `env:"CONFIGURATOR_DBNAME" envDefault:"dev"`
 
-	ConsolerPrefix   string `env:"CONSOLER_PREFIX" envDefault:","`
+	ConsolerPrefix   string `env:"CONSOLER_PREFIX" envDefault:";"`
 	ProfilingEnabled string `env:"PROFILING" envDefault:"false"`
 
 	LoopDelay     string `env:"LOOP_DELAY" envDefault:"10"`

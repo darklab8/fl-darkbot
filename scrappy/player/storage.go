@@ -16,13 +16,13 @@ type Player struct {
 
 type PlayerStorage struct {
 	records.Records[records.StampedObjects[Player]]
-	Api    api.APIinterface
+	api    api.APIinterface
 	parser parser.Parser[records.StampedObjects[Player]]
 }
 
 // Conveniently born some factory
 func (b *PlayerStorage) Update() {
-	data, err := b.Api.GetData()
+	data, err := b.api.GetData()
 	if err != nil {
 		logger.CheckWarn(err, "quering API with error in PlayerStorage")
 		return
@@ -36,8 +36,9 @@ func (b *PlayerStorage) Update() {
 	logger.Info("updated player storage")
 }
 
-func (b *PlayerStorage) New() *PlayerStorage {
+func NewPlayerStorage(api api.APIinterface) *PlayerStorage {
+	b := &PlayerStorage{}
 	b.parser = playerParser{}
-	b.Api = NewPlayerAPI()
+	b.api = api
 	return b
 }

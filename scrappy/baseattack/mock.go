@@ -4,7 +4,7 @@ import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
 	"darkbot/settings/utils/logger"
-	"io/ioutil"
+	"os"
 	"path"
 )
 
@@ -22,14 +22,14 @@ func NewMock(filename string) api.APIinterface {
 	return BaseAttackAPISpy{APIbasis{Filename: filename}}
 }
 
-func (a BaseAttackAPISpy) New() api.APIinterface {
+func NewBaseAttackAPIMock() api.APIinterface {
 	return NewMock("data.json")
 }
 
 func (a BaseAttackAPISpy) GetData() ([]byte, error) {
 	path_testdata := tests.FixtureCreateTestDataFolder()
 	path_testfile := path.Join(path_testdata, a.Filename)
-	data, err := ioutil.ReadFile(path_testfile)
+	data, err := os.ReadFile(path_testfile)
 	logger.CheckPanic(err, "unable to read file")
 	return data, nil
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func TestAPI(t *testing.T) {
-	api := basesattackAPI{}.New()
+	api := NewBaseAttackAPI()
 	result, _ := api.GetData()
 	data := string(result)
 	fmt.Println(data)

@@ -17,13 +17,13 @@ type Base struct {
 
 type BaseStorage struct {
 	records.Records[records.StampedObjects[Base]]
-	Api    api.APIinterface
+	api    api.APIinterface
 	parser parser.Parser[records.StampedObjects[Base]]
 }
 
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
-	data, err := b.Api.GetData()
+	data, err := b.api.GetData()
 	if err != nil {
 		logger.CheckWarn(err, "quering API with error in BaseStorage")
 		return
@@ -37,8 +37,9 @@ func (b *BaseStorage) Update() {
 	logger.Info("updated base storage")
 }
 
-func (b *BaseStorage) New() *BaseStorage {
+func NewBaseStorage(api api.APIinterface) *BaseStorage {
+	b := &BaseStorage{}
 	b.parser = baseParser{}
-	b.Api = NewBaseApi()
+	b.api = api
 	return b
 }

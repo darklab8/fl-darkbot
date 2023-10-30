@@ -10,26 +10,32 @@ type basesattackAPI struct {
 	api.APIrequest
 }
 
-func (a basesattackAPI) New() api.APIinterface {
+func NewBaseAttackAPI() api.APIinterface {
+	a := basesattackAPI{}
 	a.Init(settings.Config.ScrappyBaseAttackUrl)
 	return a
 }
 
 type BaseAttackStorage struct {
-	Data string
-	Api  api.APIinterface
+	data BaseAttackData
+	api  api.APIinterface
 }
 
-func (b *BaseAttackStorage) New() *BaseAttackStorage {
-	b.Api = basesattackAPI{}.New()
+func NewBaseAttackStorage(api api.APIinterface) *BaseAttackStorage {
+	b := &BaseAttackStorage{}
+	b.api = api
 	return b
 }
 
+type BaseAttackData string
+
+func (b *BaseAttackStorage) GetData() BaseAttackData { return BaseAttackData(b.data) }
+
 func (b *BaseAttackStorage) Update() {
-	data, err := b.Api.GetData()
+	data, err := b.api.GetData()
 	if err != nil {
 		logger.CheckWarn(err, "quering API with error in BaseAttackStorage")
 		return
 	}
-	b.Data = string(data)
+	b.data = BaseAttackData(string((data)))
 }

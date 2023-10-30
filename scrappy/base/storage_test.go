@@ -9,9 +9,7 @@ import (
 )
 
 func FixtureBaseStorageMockified() *BaseStorage {
-	storage := (&BaseStorage{}).New()
-	storage.Api = NewBaseApiMock()
-	return storage
+	return NewBaseStorage(NewBaseApiMock())
 }
 
 func TestGetBases(t *testing.T) {
