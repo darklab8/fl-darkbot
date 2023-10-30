@@ -10,7 +10,7 @@ import (
 
 func FixturePlayerStorageMockified() *PlayerStorage {
 	storage := (&PlayerStorage{}).New()
-	storage.Api = APIPlayerSpy{}
+	storage.Api = NewPlayerMockAPI()
 	return storage
 }
 

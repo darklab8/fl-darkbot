@@ -25,14 +25,14 @@ func TestRegeneratePlayerData(t *testing.T) {
 
 // SPY
 
-type APIPlayerSpy struct {
+type apiPlayerSpy struct {
 }
 
-func (a APIPlayerSpy) New() api.APIinterface {
-	return a
+func NewPlayerMockAPI() api.APIinterface {
+	return apiPlayerSpy{}
 }
 
-func (a APIPlayerSpy) GetData() ([]byte, error) {
+func (a apiPlayerSpy) GetData() ([]byte, error) {
 	path_testdata := tests.FixtureCreateTestDataFolder()
 	path_testfile := path.Join(path_testdata, "playerdata.json")
 	data, err := os.ReadFile(path_testfile)

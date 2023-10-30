@@ -142,7 +142,7 @@ func TestGetDerivative(t *testing.T) {
 		scrappy.Storage.PlayerStorage = (&player.PlayerStorage{}).New()
 		scrappy.Storage.BaseStorage.Api = base.NewMock("basedata.json")
 		logger.Debug("2.1")
-		scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}.New()
+		scrappy.Storage.PlayerStorage.Api = player.NewPlayerMockAPI()
 		logger.Debug("2.2")
 		scrappy.Storage.Update()
 		logger.Debug("2.3")
@@ -190,8 +190,8 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 
 		scrappy.Storage = (&scrappy.ScrappyStorage{}).New()
 
-		scrappy.Storage.BaseStorage.Api = base.APIBasespy{}.New()
-		scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}.New()
+		scrappy.Storage.BaseStorage.Api = base.NewBaseApiMock()
+		scrappy.Storage.PlayerStorage.Api = player.NewPlayerMockAPI()
 		scrappy.Storage.BaseAttackStorage.Api = baseattack.NewMock("data_lp.json")
 		scrappy.Storage.Update()
 
