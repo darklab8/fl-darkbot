@@ -39,6 +39,6 @@ func (b *BaseStorage) Update() {
 
 func (b *BaseStorage) New() *BaseStorage {
 	b.parser = baseParser{}
-	b.Api = basesAPI{}.New()
+	b.Api = NewBaseApi()
 	return b
 }

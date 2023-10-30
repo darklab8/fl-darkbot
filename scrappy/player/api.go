@@ -9,7 +9,8 @@ type PlayerAPI struct {
 	api.APIrequest
 }
 
-func (a PlayerAPI) New() api.APIinterface {
+func NewPlayerAPI() api.APIinterface {
+	a := PlayerAPI{}
 	a.Init(settings.Config.ScrappyPlayerUrl)
 	return a
 }

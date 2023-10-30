@@ -38,6 +38,6 @@ func (b *PlayerStorage) Update() {
 
 func (b *PlayerStorage) New() *PlayerStorage {
 	b.parser = playerParser{}
-	b.Api = PlayerAPI{}.New()
+	b.Api = NewPlayerAPI()
 	return b
 }

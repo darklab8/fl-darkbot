@@ -9,7 +9,8 @@ type basesAPI struct {
 	api.APIrequest
 }
 
-func (a basesAPI) New() api.APIinterface {
+func NewBaseApi() api.APIinterface {
+	a := basesAPI{}
 	a.Init(settings.Config.ScrappyBaseUrl)
 	return a
 }

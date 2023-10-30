@@ -6,5 +6,4 @@ package api
 
 type APIinterface interface {
 	GetData() ([]byte, error)
-	New() APIinterface
 }
