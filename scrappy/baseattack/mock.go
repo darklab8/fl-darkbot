@@ -1,7 +1,6 @@
 package baseattack
 
 import (
-	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
 	"darkbot/settings/utils/logger"
 	"os"
@@ -18,15 +17,15 @@ type BaseAttackAPISpy struct {
 	APIbasis
 }
 
-func NewMock(filename string) api.APIinterface {
+func NewMock(filename string) IbaseAttackAPI {
 	return BaseAttackAPISpy{APIbasis{Filename: filename}}
 }
 
-func NewBaseAttackAPIMock() api.APIinterface {
+func FixtureBaseAttackAPIMock() IbaseAttackAPI {
 	return NewMock("data.json")
 }
 
-func (a BaseAttackAPISpy) GetData() ([]byte, error) {
+func (a BaseAttackAPISpy) GetBaseAttackData() ([]byte, error) {
 	path_testdata := tests.FixtureCreateTestDataFolder()
 	path_testfile := path.Join(path_testdata, a.Filename)
 	data, err := os.ReadFile(path_testfile)

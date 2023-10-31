@@ -4,7 +4,6 @@ import (
 	"darkbot/scrappy/tests"
 	"darkbot/settings/utils"
 	"darkbot/settings/utils/logger"
-	"io/ioutil"
 	"os"
 	"path"
 	"testing"
@@ -13,10 +12,10 @@ import (
 func TestRegenerateBaseData(t *testing.T) {
 	utils.RegenerativeTest(
 		func() error {
-			data, _ := NewBaseAttackAPI().GetData()
+			data, _ := NewBaseAttackAPI().GetBaseAttackData()
 			path_testdata := tests.FixtureCreateTestDataFolder()
 			path_testfile := path.Join(path_testdata, "data.json")
-			err := ioutil.WriteFile(path_testfile, data, os.ModePerm)
+			err := os.WriteFile(path_testfile, data, os.ModePerm)
 			logger.CheckPanic(err, "unable to write file")
 			return nil
 		})

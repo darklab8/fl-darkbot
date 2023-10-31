@@ -1,7 +1,5 @@
 package base
 
-import "darkbot/scrappy/shared/api"
-
-func (s *BaseStorage) FixtureSetAPI(base_api api.APIinterface) {
+func (s *BaseStorage) FixtureSetAPI(base_api IbaseAPI) {
 	s.api = base_api
 }

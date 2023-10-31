@@ -1,7 +1,6 @@
 package base
 
 import (
-	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/shared/parser"
 	"darkbot/scrappy/shared/records"
 
@@ -17,13 +16,13 @@ type Base struct {
 
 type BaseStorage struct {
 	records.Records[records.StampedObjects[Base]]
-	api    api.APIinterface
+	api    IbaseAPI
 	parser parser.Parser[records.StampedObjects[Base]]
 }
 
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
-	data, err := b.api.GetData()
+	data, err := b.api.GetBaseData()
 	if err != nil {
 		logger.CheckWarn(err, "quering API with error in BaseStorage")
 		return
@@ -37,7 +36,7 @@ func (b *BaseStorage) Update() {
 	logger.Info("updated base storage")
 }
 
-func NewBaseStorage(api api.APIinterface) *BaseStorage {
+func NewBaseStorage(api IbaseAPI) *BaseStorage {
 	b := &BaseStorage{}
 	b.parser = baseParser{}
 	b.api = api

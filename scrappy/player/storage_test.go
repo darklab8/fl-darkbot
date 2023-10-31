@@ -9,7 +9,7 @@ import (
 )
 
 func FixturePlayerStorageMockified() *PlayerStorage {
-	return NewPlayerStorage(NewPlayerMockAPI())
+	return NewPlayerStorage(FixturePlayerAPIMock())
 }
 
 func TestGetPlayers(t *testing.T) {

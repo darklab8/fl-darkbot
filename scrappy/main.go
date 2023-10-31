@@ -4,7 +4,6 @@ import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
-	"darkbot/scrappy/shared/api"
 	"darkbot/settings"
 	"darkbot/settings/logus"
 	"time"
@@ -16,7 +15,7 @@ type ScrappyStorage struct {
 	baseAttackStorage *baseattack.BaseAttackStorage
 }
 
-func NewScrapyStorage(base_api api.APIinterface, player_api api.APIinterface, base_attack api.APIinterface) *ScrappyStorage {
+func NewScrapyStorage(base_api base.IbaseAPI, player_api player.IPlayerAPI, base_attack baseattack.IbaseAttackAPI) *ScrappyStorage {
 	s := &ScrappyStorage{}
 	s.baseStorage = base.NewBaseStorage(base_api)
 	s.playerStorage = player.NewPlayerStorage(player_api)
@@ -45,7 +44,7 @@ var Storage *ScrappyStorage
 
 func init() {
 	logus.Info("initialized scrappy")
-	Storage = NewScrapyStorage(base.NewBaseApi(), player.NewPlayerAPI(), base.NewBaseApi())
+	Storage = NewScrapyStorage(base.NewBaseApi(), player.NewPlayerAPI(), baseattack.NewBaseAttackAPI())
 }
 
 func Run() {

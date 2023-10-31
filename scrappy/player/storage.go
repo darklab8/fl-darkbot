@@ -1,7 +1,6 @@
 package player
 
 import (
-	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/shared/parser"
 	"darkbot/scrappy/shared/records"
 	"darkbot/settings/utils/logger"
@@ -16,13 +15,13 @@ type Player struct {
 
 type PlayerStorage struct {
 	records.Records[records.StampedObjects[Player]]
-	api    api.APIinterface
+	api    IPlayerAPI
 	parser parser.Parser[records.StampedObjects[Player]]
 }
 
 // Conveniently born some factory
 func (b *PlayerStorage) Update() {
-	data, err := b.api.GetData()
+	data, err := b.api.GetPlayerData()
 	if err != nil {
 		logger.CheckWarn(err, "quering API with error in PlayerStorage")
 		return
@@ -36,7 +35,7 @@ func (b *PlayerStorage) Update() {
 	logger.Info("updated player storage")
 }
 
-func NewPlayerStorage(api api.APIinterface) *PlayerStorage {
+func NewPlayerStorage(api IPlayerAPI) *PlayerStorage {
 	b := &PlayerStorage{}
 	b.parser = playerParser{}
 	b.api = api

@@ -135,7 +135,7 @@ func TestGetDerivative(t *testing.T) {
 
 		tags := []string{""}
 		logger.Debug("2")
-		scrappy.Storage = scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.NewPlayerMockAPI(), baseattack.NewBaseAttackAPIMock())
+		scrappy.Storage = scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.FixturePlayerAPIMock(), baseattack.FixtureBaseAttackAPIMock())
 		logger.Debug("2.1")
 		logger.Debug("2.2")
 		scrappy.Storage.Update()
@@ -183,7 +183,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
 		cg.TagsAdd(channelID, []string{"LP-7743"}...)
 
-		scrappy.Storage = scrappy.NewScrapyStorage(base.NewBaseApiMock(), player.NewPlayerMockAPI(), baseattack.NewMock("data_lp.json"))
+		scrappy.Storage = scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), player.FixturePlayerAPIMock(), baseattack.NewMock("data_lp.json"))
 		scrappy.Storage.Update()
 
 		assert.True(t, strings.Contains(string(scrappy.Storage.GetBaseAttackStorage().GetData()), "LP-7743"))

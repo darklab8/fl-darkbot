@@ -4,7 +4,6 @@ import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
-	"darkbot/scrappy/shared/api"
 )
 
 func FixtureNewStorage(players *player.PlayerStorage) *ScrappyStorage {
@@ -12,9 +11,13 @@ func FixtureNewStorage(players *player.PlayerStorage) *ScrappyStorage {
 }
 
 func FixtureMockedStorage() *ScrappyStorage {
-	return NewScrapyStorage(base.NewBaseApi(), player.NewPlayerMockAPI(), baseattack.NewBaseAttackAPIMock())
+	return NewScrapyStorage(
+		base.FixtureBaseApiMock(),
+		player.FixturePlayerAPIMock(),
+		baseattack.FixtureBaseAttackAPIMock(),
+	)
 }
 
-func FixtureSetBaseStorageAPI(base_api api.APIinterface) {
+func FixtureSetBaseStorageAPI(base_api base.IbaseAPI) {
 	Storage.baseStorage.FixtureSetAPI(base_api)
 }

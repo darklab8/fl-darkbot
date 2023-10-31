@@ -1,7 +1,6 @@
 package player
 
 import (
-	"darkbot/scrappy/shared/api"
 	"darkbot/scrappy/tests"
 	"darkbot/settings/logus"
 	"darkbot/settings/utils"
@@ -13,7 +12,7 @@ import (
 
 func TestRegeneratePlayerData(t *testing.T) {
 	utils.RegenerativeTest(func() error {
-		data, err := NewPlayerAPI().GetData()
+		data, err := NewPlayerAPI().GetPlayerData()
 		logus.CheckError(err, "new player api get data errored")
 		path_testdata := tests.FixtureCreateTestDataFolder()
 		path_testfile := path.Join(path_testdata, "playerdata.json")
@@ -28,11 +27,11 @@ func TestRegeneratePlayerData(t *testing.T) {
 type apiPlayerSpy struct {
 }
 
-func NewPlayerMockAPI() api.APIinterface {
+func FixturePlayerAPIMock() IPlayerAPI {
 	return apiPlayerSpy{}
 }
 
-func (a apiPlayerSpy) GetData() ([]byte, error) {
+func (a apiPlayerSpy) GetPlayerData() ([]byte, error) {
 	path_testdata := tests.FixtureCreateTestDataFolder()
 	path_testfile := path.Join(path_testdata, "playerdata.json")
 	data, err := os.ReadFile(path_testfile)

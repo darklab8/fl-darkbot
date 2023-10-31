@@ -13,3 +13,4 @@ file_*.pdf
 heap.*.pprof
 .env.secret
 __debug_bin
+cover.out
