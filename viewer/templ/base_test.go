@@ -194,7 +194,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		bases.Add(record)
 		record2 := records.NewStampedObjects[base.Base]()
 		record2.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 6})
-		record2.Timestamp.Add(time.Hour * 1) // TODO FIX not doing anything code line
+		record2.Timestamp = record2.Timestamp.Add(time.Hour * 1)
 		bases.Add(record2)
 
 		baseUnderAttackalert := configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(dbpath))
