@@ -12,7 +12,7 @@ func TestTags(t *testing.T) {
 	FixtureMigrator(func(dbname types.Dbpath) {
 		channelID, _ := FixtureChannel(dbname)
 
-		cg := NewConfiguratorBase(NewConfigurator(dbname).Migrate())
+		cg := NewConfiguratorBase(NewConfigurator(dbname).AutoMigrateSchema())
 		cg.TagsAdd(channelID, []string{"4"}...)
 		cg.TagsAdd(channelID, []string{"5", "6"}...)
 

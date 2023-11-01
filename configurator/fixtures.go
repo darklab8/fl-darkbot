@@ -22,7 +22,7 @@ func FixtureMigrator(callback func(dbpath types.Dbpath)) Configurator {
 	os.Remove(string(dbpath) + "-shm")
 	os.Remove(string(dbpath) + "-wal")
 	cfg := FixtureConfigurator(dbpath)
-	cfg.Migrate()
+	cfg.AutoMigrateSchema()
 
 	// teardown
 	defer os.Remove(string(dbpath))

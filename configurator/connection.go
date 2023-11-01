@@ -31,8 +31,7 @@ func NewConfigurator(dbpath types.Dbpath) Configurator {
 	return Configurator{db: db}
 }
 
-func (cg Configurator) Migrate() Configurator {
-	// Auto Migrate the schema
+func (cg Configurator) AutoMigrateSchema() Configurator {
 	cg.db.AutoMigrate(
 		&models.Channel{},
 		&models.TagBase{},

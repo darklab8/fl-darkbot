@@ -28,7 +28,7 @@ var runCmd = &cobra.Command{
 		logus.Info("run called")
 
 		// migrate db
-		configurator.NewConfigurator(settings.Dbpath).Migrate()
+		configurator.NewConfigurator(settings.Dbpath).AutoMigrateSchema()
 
 		if settings.Config.DevEnvMockApi == "true" {
 			scrappy.Storage = scrappy.FixtureMockedStorage()

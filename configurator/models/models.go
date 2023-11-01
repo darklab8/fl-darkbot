@@ -8,7 +8,7 @@ import (
 
 type Channel struct {
 	gorm.DeletedAt
-	ChannelID types.DiscordChannelID `gorm:"primarykey"` // Discord channel reference
+	ChannelID types.DiscordChannelID `gorm:"primarykey"`
 }
 
 // ================== Tag Tracking ====================
@@ -66,7 +66,7 @@ type AlertFriendsEqualOrGreater struct {
 	AlertTresholdShared
 }
 
-// Shared alerts for all bases
+// ====== Shared alerts for all bases =========
 type AlertBaseHealthLowerThan struct {
 	AlertTemplate
 	AlertTresholdShared

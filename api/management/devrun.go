@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	// Run the server
 	http.ListenAndServe(":8080", newApi())
 }
 

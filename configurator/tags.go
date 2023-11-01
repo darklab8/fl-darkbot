@@ -53,7 +53,6 @@ type ConfiguratorPlayerEnemy = ConfiguratorTags[models.TagPlayerEnemy]
 
 var NewConfiguratorPlayerEnemy = NewConfiguratorTags[models.TagPlayerEnemy]
 
-// T =
 func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...string) *ConfiguratorError {
 	objs := []T{}
 	errors := &ConfiguratorError{}

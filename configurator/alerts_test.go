@@ -12,7 +12,7 @@ import (
 func TestAlertTreshold(t *testing.T) {
 	FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := FixtureChannel(dbpath)
-		genericCfg := NewConfigurator(dbpath).Migrate()
+		genericCfg := NewConfigurator(dbpath).AutoMigrateSchema()
 		_ = channelID
 
 		cfg := NewCfgAlertNeutralPlayersGreaterThan(genericCfg)
@@ -33,7 +33,7 @@ func TestAlertTreshold(t *testing.T) {
 func TestAlertBool(t *testing.T) {
 	FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := FixtureChannel(dbpath)
-		genericCfg := NewConfigurator(dbpath).Migrate()
+		genericCfg := NewConfigurator(dbpath).AutoMigrateSchema()
 		_ = channelID
 
 		cfg := NewCfgAlertBaseIsUnderAttack(genericCfg)
