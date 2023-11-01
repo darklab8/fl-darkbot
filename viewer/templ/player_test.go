@@ -16,10 +16,10 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
-		configurator.ConfiguratorRegion{Configurator: configurator.NewConfigurator(dbpath)}.TagsAdd(channelID, []string{"region1", "region0"}...)
-		configurator.ConfiguratorSystem{Configurator: configurator.NewConfigurator(dbpath)}.TagsAdd(channelID, []string{"system1", "system2"}...)
-		configurator.ConfiguratorPlayerEnemy{Configurator: configurator.NewConfigurator(dbpath)}.TagsAdd(channelID, []string{"player2"}...)
-		configurator.ConfiguratorPlayerFriend{Configurator: configurator.NewConfigurator(dbpath)}.TagsAdd(channelID, []string{"player4"}...)
+		configurator.NewConfiguratorRegion(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"region1", "region0"}...)
+		configurator.NewConfiguratorSystem(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"system1", "system2"}...)
+		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"player2"}...)
+		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"player4"}...)
 
 		players := player.PlayerStorage{}
 
@@ -46,7 +46,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		assert.Empty(t, playerView.enemies.AlertTmpl.Content)
 		assert.Empty(t, playerView.neutral.AlertTmpl.Content)
 
-		enemyAlerts := configurator.CfgAlertEnemyPlayersGreaterThan{Configurator: configurator.NewConfigurator(dbpath)}
+		enemyAlerts := configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(dbpath))
 		integer, _ := enemyAlerts.Status(channelID)
 		assert.Nil(t, integer)
 

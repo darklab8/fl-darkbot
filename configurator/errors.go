@@ -6,10 +6,10 @@ import (
 	"gorm.io/gorm"
 )
 
-type ZeroAffectedRows struct {
+type ErrorZeroAffectedRows struct {
 }
 
-func (z ZeroAffectedRows) Error() string {
+func (z ErrorZeroAffectedRows) Error() string {
 	return "Zero affected rows. Expected more."
 }
 
@@ -54,7 +54,7 @@ func (s *ConfiguratorError) GetError() error {
 		}
 	}
 
-	return ZeroAffectedRows{}
+	return ErrorZeroAffectedRows{}
 }
 
 func (s *ConfiguratorError) GetErrorWithAllowedZeroRows() error {

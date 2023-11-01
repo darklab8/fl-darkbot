@@ -23,7 +23,7 @@ type Viewer struct {
 func NewViewer(dbpath types.Dbpath) Viewer {
 	return Viewer{
 		dbpath:   dbpath,
-		channels: configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator(dbpath)},
+		channels: configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath)),
 		delays: ViewerDelays{
 			betweenChannels: 1,
 			betweenLoops:    settings.LoopDelay,

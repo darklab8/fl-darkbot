@@ -22,7 +22,7 @@ func TestBaseViewerMocked(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
-		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
+		cg := configurator.NewConfiguratorBase(configurator.NewConfigurator(dbpath))
 		cg.TagsAdd(channelID, []string{"Station"}...)
 
 		scrappy.Storage = scrappy.FixtureMockedStorage()
@@ -42,7 +42,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.Empty(t, render.AlertBaseUnderAttack.Content)
 
 		// alerts
-		baseAlertDecreasing := configurator.CfgAlertBaseHealthIsDecreasing{Configurator: configurator.NewConfigurator(dbpath)}
+		baseAlertDecreasing := configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(dbpath))
 		isEnabled, _ := baseAlertDecreasing.Status(channelID)
 		assert.False(t, isEnabled)
 
@@ -63,7 +63,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.Empty(t, render.AlertHealthLowerThan.Content)
 		assert.Empty(t, render.AlertBaseUnderAttack.Content)
 
-		baseAlertBelowThreshold := configurator.CfgAlertBaseHealthLowerThan{Configurator: configurator.NewConfigurator(dbpath)}
+		baseAlertBelowThreshold := configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(dbpath))
 		threshold, _ := baseAlertBelowThreshold.Status(channelID)
 		assert.Nil(t, threshold)
 
@@ -94,7 +94,7 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		assert.Empty(t, render.AlertBaseUnderAttack.Content)
 
-		baseUnderAttackalert := configurator.CfgAlertBaseIsUnderAttack{Configurator: configurator.NewConfigurator(dbpath)}
+		baseUnderAttackalert := configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(dbpath))
 		baseUnderAttackalert.Enable(channelID)
 		render = NewTemplateBase(channelID, dbpath)
 		render.Render()
@@ -180,7 +180,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
-		cg := configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(dbpath)}
+		cg := configurator.NewConfiguratorBase(configurator.NewConfigurator(dbpath))
 		cg.TagsAdd(channelID, []string{"LP-7743"}...)
 
 		scrappy.Storage = scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), player.FixturePlayerAPIMock(), baseattack.NewMock("data_lp.json"))
@@ -194,10 +194,10 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		bases.Add(record)
 		record2 := records.NewStampedObjects[base.Base]()
 		record2.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 6})
-		record2.Timestamp.Add(time.Hour * 1)
+		record2.Timestamp.Add(time.Hour * 1) // TODO FIX not doing anything code line
 		bases.Add(record2)
 
-		baseUnderAttackalert := configurator.CfgAlertBaseIsUnderAttack{Configurator: configurator.NewConfigurator(dbpath)}
+		baseUnderAttackalert := configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(dbpath))
 		baseUnderAttackalert.Enable(channelID)
 
 		render := NewTemplateBase(channelID, dbpath)

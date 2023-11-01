@@ -26,14 +26,14 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request, Routes map[route]*e
 	})))
 }
 
-type NotFoundException struct{}
+type ErrorNotFound struct{}
 
-func (n NotFoundException) Error() string { return "Not found" }
+func (n ErrorNotFound) Error() string { return "Not found" }
 
 func (e *endpoint) Check404(w http.ResponseWriter, r *http.Request) error {
 	if r.URL.Path != string(e.route) {
 		NotFoundHandler(w, r, e.server.router)
-		return NotFoundException{}
+		return ErrorNotFound{}
 	}
 	return nil
 }

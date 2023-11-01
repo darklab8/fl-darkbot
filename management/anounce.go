@@ -25,7 +25,7 @@ var amounceCmd = &cobra.Command{
 		// go listener.Run()
 		// time.Sleep(5 * time.Second)
 
-		channels := configurator.ConfiguratorChannel{Configurator: configurator.NewConfigurator(settings.Dbpath)}
+		channels := configurator.NewConfiguratorChannel(configurator.NewConfigurator(settings.Dbpath))
 		channelIDs, _ := channels.List()
 
 		for _, channeID := range channelIDs {

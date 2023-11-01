@@ -18,10 +18,10 @@ func (t ErrorCalculatingDerivative) Error() string {
 	return err_msg
 }
 
-type NoNonZeroDerivativesWarning struct {
+type WarningNoNonZeroDerivatives struct {
 }
 
-func (t NoNonZeroDerivativesWarning) Error() string {
+func (t WarningNoNonZeroDerivatives) Error() string {
 	logus.Warn("No unzero derivatives")
 	return "No unzero derivatives"
 }
@@ -75,7 +75,7 @@ func CalculateDerivates(tags []string, api apis.API) (map[string]float64, error)
 	}
 
 	if !wasThereNonZeroDeravatives {
-		return baseDerivatives, NoNonZeroDerivativesWarning{}
+		return baseDerivatives, WarningNoNonZeroDerivatives{}
 	}
 
 	return baseDerivatives, nil
