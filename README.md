@@ -60,4 +60,3 @@ task --list-all # to list other commands
 - testing coverage should be no less than 80%, ideally 90%+
 - following different OOP principles, like having minimum exposed interfaces to rest of a code
 - following semantic versioning with the help of [darklab_autogit](https://github.com/darklab8/darklab_autogit)
-
