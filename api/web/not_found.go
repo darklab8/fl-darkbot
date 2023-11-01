@@ -15,13 +15,13 @@ func init() {
 	NotFoundTemplate = utils.TmpInit(NotFoundPage)
 }
 
-type NotFoundPageVars struct {
+type TemplateNotFoundPageVars struct {
 	Routes map[route]*endpoint
 }
 
 func NotFoundHandler(w http.ResponseWriter, r *http.Request, Routes map[route]*endpoint) {
 	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte(utils.TmpRender(NotFoundTemplate, NotFoundPageVars{
+	w.Write([]byte(utils.TmpRender(NotFoundTemplate, TemplateNotFoundPageVars{
 		Routes: Routes,
 	})))
 }
