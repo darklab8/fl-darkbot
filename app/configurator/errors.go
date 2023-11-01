@@ -9,7 +9,7 @@ type ErrorZeroAffectedRows struct {
 }
 
 func (z ErrorZeroAffectedRows) Error() string {
-	return "Zero affected rows. Expected more." + z.ExtraMsg
+	return "Zero affected rows. not found records. Expected more." + z.ExtraMsg
 }
 
 /////////////////////
