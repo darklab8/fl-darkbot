@@ -28,11 +28,30 @@ type ConfiguratorTags[T taggable] struct {
 	Configurator
 }
 
+func NewConfiguratorTags[T taggable](configurator Configurator) ConfiguratorTags[T] {
+	t := ConfiguratorTags[T]{Configurator: configurator}
+	return t
+}
+
 type ConfiguratorBase = ConfiguratorTags[models.TagBase]
+
+var NewConfiguratorBase = NewConfiguratorTags[models.TagBase]
+
 type ConfiguratorSystem = ConfiguratorTags[models.TagSystem]
+
+var NewConfiguratorSystem = NewConfiguratorTags[models.TagSystem]
+
 type ConfiguratorRegion = ConfiguratorTags[models.TagRegion]
+
+var NewConfiguratorRegion = NewConfiguratorTags[models.TagRegion]
+
 type ConfiguratorPlayerFriend = ConfiguratorTags[models.TagPlayerFriend]
+
+var NewConfiguratorPlayerFriend = NewConfiguratorTags[models.TagPlayerFriend]
+
 type ConfiguratorPlayerEnemy = ConfiguratorTags[models.TagPlayerEnemy]
+
+var NewConfiguratorPlayerEnemy = NewConfiguratorTags[models.TagPlayerEnemy]
 
 // T =
 func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...string) *ConfiguratorError {

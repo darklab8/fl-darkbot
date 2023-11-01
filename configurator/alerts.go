@@ -55,13 +55,46 @@ type IConfiguratorAlertString[T AlertStringType] struct {
 	Configurator
 }
 
+func NewConfiguratorAlertThreshold[T AlertThresholdType](configurator Configurator) IConfiguratorAlertThreshold[T] {
+	t := IConfiguratorAlertThreshold[T]{Configurator: configurator}
+	return t
+}
+func NewConfiguratorAlertBool[T AlertBoolType](configurator Configurator) IConfiguratorAlertBool[T] {
+	t := IConfiguratorAlertBool[T]{Configurator: configurator}
+	return t
+}
+func NewConfiguratorAlertString[T AlertStringType](configurator Configurator) IConfiguratorAlertString[T] {
+	t := IConfiguratorAlertString[T]{Configurator: configurator}
+	return t
+}
+
 type CfgAlertNeutralPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertNeutralPlayersEqualOrGreater]
+
+var NewCfgAlertNeutralPlayersGreaterThan = NewConfiguratorAlertThreshold[models.AlertNeutralPlayersEqualOrGreater]
+
 type CfgAlertEnemyPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertEnemiesEqualOrGreater]
+
+var NewCfgAlertEnemyPlayersGreaterThan = NewConfiguratorAlertThreshold[models.AlertEnemiesEqualOrGreater]
+
 type CfgAlertFriendPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertFriendsEqualOrGreater]
+
+var NewCfgAlertFriendPlayersGreaterThan = NewConfiguratorAlertThreshold[models.AlertFriendsEqualOrGreater]
+
 type CfgAlertBaseHealthLowerThan = IConfiguratorAlertThreshold[models.AlertBaseHealthLowerThan]
+
+var NewCfgAlertBaseHealthLowerThan = NewConfiguratorAlertThreshold[models.AlertBaseHealthLowerThan]
+
 type CfgAlertBaseHealthIsDecreasing = IConfiguratorAlertBool[models.AlertBaseIfHealthDecreasing]
+
+var NewCfgAlertBaseHealthIsDecreasing = NewConfiguratorAlertBool[models.AlertBaseIfHealthDecreasing]
+
 type CfgAlertBaseIsUnderAttack = IConfiguratorAlertBool[models.AlertBaseIfUnderAttack]
+
+var NewCfgAlertBaseIsUnderAttack = NewConfiguratorAlertBool[models.AlertBaseIfUnderAttack]
+
 type CfgAlertPingMessage = IConfiguratorAlertString[models.AlertPingMessage]
+
+var NewCfgAlertPingMessage = NewConfiguratorAlertString[models.AlertPingMessage]
 
 func (c IConfiguratorAlertThreshold[T]) Set(channelID types.DiscordChannelID, value int) *ConfiguratorError {
 	c.Unset(channelID)

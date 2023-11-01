@@ -7,6 +7,10 @@ import (
 	"darkbot/settings/utils"
 )
 
+func NewConfiguratorChannel(con Configurator) ConfiguratorChannel {
+	return ConfiguratorChannel{Configurator: con}
+}
+
 type ConfiguratorChannel struct {
 	Configurator
 }

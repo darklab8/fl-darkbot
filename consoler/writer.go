@@ -7,7 +7,8 @@ type Writer struct {
 	sb *strings.Builder
 }
 
-func (w Writer) New() Writer {
+func NewWriter() Writer {
+	w := Writer{}
 	w.sb = &(strings.Builder{})
 	return w
 }

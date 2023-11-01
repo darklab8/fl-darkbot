@@ -16,11 +16,12 @@ type Consoler struct {
 	buffStderr Writer
 }
 
-func (c Consoler) New(cmd string) *Consoler {
+func NewConsoler(cmd string) *Consoler {
+	c := &Consoler{}
 	c.cmd = cmd
-	c.buffStdout = Writer{}.New()
-	c.buffStderr = Writer{}.New()
-	return &c
+	c.buffStdout = NewWriter()
+	c.buffStderr = NewWriter()
+	return c
 }
 
 func (c *Consoler) Execute(channelInfo helper.ChannelInfo) *Consoler {

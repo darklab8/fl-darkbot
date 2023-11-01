@@ -12,7 +12,7 @@ func TestTags(t *testing.T) {
 	FixtureMigrator(func(dbname types.Dbpath) {
 		channelID, _ := FixtureChannel(dbname)
 
-		cg := ConfiguratorBase{Configurator: NewConfigurator(dbname).Migrate()}
+		cg := NewConfiguratorBase(NewConfigurator(dbname).Migrate())
 		cg.TagsAdd(channelID, []string{"4"}...)
 		cg.TagsAdd(channelID, []string{"5", "6"}...)
 
@@ -28,7 +28,7 @@ func TestTags(t *testing.T) {
 func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 	FixtureMigrator(func(dbname types.Dbpath) {
 		configur := FixtureConfigurator(dbname)
-		cg := ConfiguratorBase{Configurator: configur}
+		cg := NewConfiguratorBase(configur)
 
 		ConfiguratorChannel{Configurator: NewConfigurator(dbname)}.Add("c1")
 		ConfiguratorChannel{Configurator: NewConfigurator(dbname)}.Add("c2")
@@ -54,7 +54,7 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 func TestDoNotInputRepeatedTags(t *testing.T) {
 	FixtureMigrator(func(dbname types.Dbpath) {
 		configur := FixtureConfigurator(dbname)
-		cg := ConfiguratorBase{Configurator: configur}
+		cg := NewConfiguratorBase(configur)
 
 		ConfiguratorChannel{Configurator: configur}.Add("c1")
 		cg.TagsAdd("c1", []string{"t1", "t2"}...)
