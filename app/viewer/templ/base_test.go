@@ -34,7 +34,7 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		render := NewTemplateBase(channelID, dbpath)
 		render.Render()
-		fmt.Println(render.main.Content)
+		logus.Debug("render.main.Content" + render.main.Content)
 
 		assert.NotEmpty(t, render.main.Content)
 		assert.Empty(t, render.AlertHealthLowerThan.Content)

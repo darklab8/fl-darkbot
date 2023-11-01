@@ -1,6 +1,7 @@
 package configurator
 
 import (
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"fmt"
@@ -17,7 +18,7 @@ func TestAlertTreshold(t *testing.T) {
 
 		cfg := NewCfgAlertNeutralPlayersGreaterThan(genericCfg)
 		status, _ := cfg.Status(channelID)
-		fmt.Println("status=", status)
+		logus.Debug(fmt.Sprintf("status=%v", status))
 		assert.Nil(t, status, "status is not Nil. failed aert")
 
 		cfg.Set(channelID, 5)
@@ -38,7 +39,7 @@ func TestAlertBool(t *testing.T) {
 
 		cfg := NewCfgAlertBaseIsUnderAttack(genericCfg)
 		status, _ := cfg.Status(channelID)
-		fmt.Println("status=", status)
+		logus.Debug(fmt.Sprintf("status=%t", status))
 		assert.False(t, status, "status is not true. failed aert")
 
 		cfg.Enable(channelID)

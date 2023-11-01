@@ -7,8 +7,8 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/discorder"
 	"darkbot/app/settings"
+	"darkbot/app/settings/logus"
 	"darkbot/app/viewer/templ"
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -19,7 +19,7 @@ var amounceCmd = &cobra.Command{
 	Use:   "anounce",
 	Short: "Anounce something",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Anounce is called with args=", args)
+		logus.Info("Anounce is called with args=", logus.Items(args, "args"))
 		dg := discorder.NewClient()
 
 		// go listener.Run()

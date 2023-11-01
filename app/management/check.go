@@ -5,7 +5,7 @@ package management
 
 import (
 	"darkbot/app/discorder"
-	"fmt"
+	"darkbot/app/settings/logus"
 
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ var checkCmd = &cobra.Command{
 	Use:   "check",
 	Short: "Experimental command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("check called")
+		logus.Info("check called")
 		// fmt.Println("result=", consoler.Consoler{}.New("").Execute().String())
 
 		// db := configurator.GetConnection()

@@ -31,9 +31,9 @@ func Run() {
 	logus.CheckFatal(err, "error opening connection,")
 	defer dg.Close()
 
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	logus.Info("Bot is now running.  Press CTRL-C to exit.")
 	utils.SleepAwaitCtrlC()
-	fmt.Println("gracefully closed discord conn")
+	logus.Info("gracefully closed discord conn")
 }
 
 func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
@@ -103,5 +103,5 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)
 	}
-	fmt.Println("ChannelID=", m.ChannelID)
+	logus.Debug("consolerHandler finished", logus.ChannelID(channelID))
 }

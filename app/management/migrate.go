@@ -6,7 +6,7 @@ package management
 import (
 	"darkbot/app/configurator"
 	"darkbot/app/settings"
-	"fmt"
+	"darkbot/app/settings/logus"
 
 	"github.com/spf13/cobra"
 )
@@ -16,7 +16,7 @@ var migrateCmd = &cobra.Command{
 	Use:   "migrate",
 	Short: "Migrate db",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("migrate called")
+		logus.Info("migrate called")
 		configurator.NewConfigurator(settings.Dbpath).AutoMigrateSchema()
 	},
 }

@@ -2,7 +2,6 @@ package api
 
 import (
 	"darkbot/app/settings/logus"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -23,7 +22,7 @@ func FixtureTestWebServer() {
 			if body == "pong!" {
 				break
 			}
-			fmt.Println("sleeping to acquire server pong")
+			logus.Debug("sleeping to acquire server pong")
 		}
 		time.Sleep(50 * time.Millisecond)
 	}
@@ -43,7 +42,7 @@ func TestHomePage(t *testing.T) {
 	FixtureTestWebServer()
 	body := testQuery("/")
 
-	fmt.Println(body)
+	logus.Debug(body)
 
 	if !strings.Contains(body, "Not found") {
 		t.Error("")
@@ -54,7 +53,7 @@ func TestPlayers(t *testing.T) {
 	FixtureTestWebServer()
 	body := testQuery("/players")
 
-	fmt.Println(body)
+	logus.Debug(body)
 
 	if !strings.Contains(body, "Another page") {
 		t.Error("")

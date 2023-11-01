@@ -6,8 +6,8 @@ import (
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/consoler_types"
 	"darkbot/app/settings"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
-	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -186,7 +186,7 @@ func (r *rootCommands) CreatePing() {
 		Use:   "ping",
 		Short: "Check stuff is working",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("ping called with args=", args)
+			logus.Debug("ping called with args=", logus.Items(args, "args"))
 			cmd.OutOrStdout().Write([]byte("Pong! from consoler"))
 		},
 	}

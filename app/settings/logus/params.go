@@ -74,11 +74,15 @@ func Regex(value types.RegExp) slogParam {
 	}
 }
 
-func Records[T any](value []T) slogParam {
+func Items[T any](value []T, item_name string) slogParam {
 	return func(c *slogGroup) {
-		c.params["records"] = fmt.Sprintf("%v", value)
-		c.params["records_len"] = fmt.Sprintf("%d", len(value))
+		c.params[item_name] = fmt.Sprintf("%v", value)
+		c.params[fmt.Sprintf("%s_len", item_name)] = fmt.Sprintf("%d", len(value))
 	}
+}
+
+func Records[T any](value []T) slogParam {
+	return Items[T](value, "records")
 }
 
 func APIUrl(value types.APIurl) slogParam {

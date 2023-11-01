@@ -89,12 +89,13 @@ func (t *PlayersTemplates) Render() {
 	regionTags, _ := t.API.Players.Regions.TagsList(t.API.ChannelID)
 	friendTags, _ := t.API.Players.Friends.TagsList(t.API.ChannelID)
 	enemyTags, _ := t.API.Players.Enemies.TagsList(t.API.ChannelID)
-	fmt.Println("systemTags=", systemTags)
-	fmt.Println("regionTags=", regionTags)
-	fmt.Println("friendTags=", friendTags)
-	fmt.Println("enemyTags=", enemyTags)
-	fmt.Println("record.List=", record.List)
-
+	logus.Debug(
+		"PlayerTemplatesRender next",
+		logus.Items(systemTags, "systemTags"),
+		logus.Items(friendTags, "friendTags"),
+		logus.Items(enemyTags, "enemyTags"),
+		logus.Items(record.List, "record.List"),
+	)
 	neutralPlayers := []player.Player{}
 	enemyPlayers := []player.Player{}
 	friendPlayers := []player.Player{}
@@ -117,9 +118,9 @@ func (t *PlayersTemplates) Render() {
 		neutralPlayers = append(neutralPlayers, player)
 	}
 
-	logus.Debug("friendPlayers=", logus.Records(friendPlayers))
-	logus.Debug("enemyPlayers=", logus.Records(enemyPlayers))
-	logus.Debug("neutralPlayers=", logus.Records(neutralPlayers))
+	logus.Debug("friendPlayers=", logus.Items(friendPlayers, "friendPlayers"))
+	logus.Debug("enemyPlayers=", logus.Items(enemyPlayers, "enemyPlayers"))
+	logus.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
 
 	if len(systemTags) > 0 || len(regionTags) > 0 {
 		t.neutral.MainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
