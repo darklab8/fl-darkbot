@@ -2,7 +2,7 @@ version: "3"
 tasks:
   build-version:
     cmds:
-      - autogit version > settings/version.txt || echo 'not installed autogit' > settings/version.txt
+      - autogit version > app/settings/version.txt || echo 'not installed autogit' > settings/version.txt
 
   build:
     cmds:
