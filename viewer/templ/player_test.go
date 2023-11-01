@@ -64,22 +64,22 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 	})
 }
 
-// TODO fix those tests... for some reason memory ref error :smile:
-// func TestPlayerViewerRealData(t *testing.T) {
-// 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
-// 		channelID, _ := configurator.FixtureChannel(dbpath)
+func TestPlayerViewerRealData(t *testing.T) {
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
+		channelID, _ := configurator.FixtureChannel(dbpath)
 
-// 		scrappy.Storage.BaseStorage.Api = base.APIBasespy{}
-// 		scrappy.Storage.PlayerStorage.Api = player.APIPlayerSpy{}
-// 		scrappy.Storage.Update()
+		scrappy.Storage = scrappy.FixtureMockedStorage()
+		scrappy.Storage.Update()
 
-// 		configurator.ConfiguratorPlayerFriend{Configurator: configurator.NewConfigurator(dbpath)}.TagsAdd(channelID, []string{"RM"}...)
+		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"RM"}...)
 
-// 		playerView := NewTemplatePlayers(channelID, dbpath)
-// 		playerView.Render()
-// 		fmt.Println(playerView.friends.Content)
-// 		fmt.Println(playerView.enemies.Content)
-// 		fmt.Println(playerView.neutral.Content)
-// 		fmt.Println("test TestPlayerViewer is finished")
-// 	})
-// }
+		playerView := NewTemplatePlayers(channelID, dbpath)
+		playerView.Render()
+
+		fmt.Println(playerView.friends.MainTable.Content)
+		fmt.Println(playerView.enemies.MainTable.Content)
+		fmt.Println(playerView.neutral.MainTable.Content)
+
+		fmt.Println("test TestPlayerViewer is finished")
+	})
+}
