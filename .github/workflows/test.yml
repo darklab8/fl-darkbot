@@ -20,8 +20,5 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.21
-      - name: Setup deps
-        run: |
-          echo 'ci version' > app/settings/version.txt
       - name: Test
         run: task test
