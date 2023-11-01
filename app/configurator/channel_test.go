@@ -3,7 +3,6 @@ package configurator
 import (
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -25,13 +24,13 @@ func TestChannels(t *testing.T) {
 		cg.Remove("3")
 
 		channels, _ = cg.List()
-		fmt.Println(channels)
+		logus.Debug("", logus.Items(channels, "channels"))
 		assert.Len(t, channels, 2)
 
 		cg.Add("3")
 
 		channels, _ = cg.List()
-		fmt.Println(channels)
+		logus.Debug("", logus.Items(channels, "channels"))
 		assert.Len(t, channels, 3)
 	})
 }

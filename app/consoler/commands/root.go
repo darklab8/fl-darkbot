@@ -186,7 +186,7 @@ func (r *rootCommands) CreatePing() {
 		Use:   "ping",
 		Short: "Check stuff is working",
 		Run: func(cmd *cobra.Command, args []string) {
-			logus.Debug("ping called with args=", logus.Items(args, "args"))
+			logus.Debug("ping called with args=", logus.Args(args))
 			cmd.OutOrStdout().Write([]byte("Pong! from consoler"))
 		},
 	}

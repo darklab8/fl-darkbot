@@ -4,6 +4,7 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/printer"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"fmt"
 	"strings"
@@ -31,13 +32,13 @@ func (t *tagCommands) CreateTagAdd() {
 		Short: "Add tags",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateTagAdd.consoler running with args=", args)
+			logus.Debug("CreateTagAdd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.TagsAdd(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
 			}
-			fmt.Println(len(args))
+			logus.Debug("CreateTagAdd", logus.Args(args))
 
 			printer.Println(cmd, "OK tags are added")
 		},
@@ -51,7 +52,7 @@ func (t *tagCommands) CreateTagRemove() {
 		Short: "Remove tags",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateTagRemove.consoler running with args=", args)
+			logus.Debug("CreateTagRemove.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.TagsRemove(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
@@ -69,7 +70,7 @@ func (t *tagCommands) CreateTagClear() {
 		Use:   "clear",
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateTagClear.consoler running with args=", args)
+			logus.Debug("CreateTagClear.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.TagsClear(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
@@ -87,7 +88,7 @@ func (t *tagCommands) CreateTagList() {
 		Use:   "list",
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateTagList.consoler running with args=", args)
+			logus.Debug("CreateTagList.consoler running with args=", logus.Args(args))
 			tags, cfgErr := t.cfgTags.TagsList(t.GetChannelID())
 			err := cfgErr
 			if err != nil {
@@ -95,7 +96,7 @@ func (t *tagCommands) CreateTagList() {
 				return
 			}
 
-			fmt.Println("tags=", tags)
+			logus.Debug("CreateTagList continuied", logus.Tags(tags))
 			var sb strings.Builder
 			for number, tag := range tags {
 				sb.WriteString(fmt.Sprintf("\"%s\"", tag))

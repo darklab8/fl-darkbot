@@ -4,6 +4,8 @@ import (
 	"darkbot/app/settings/types"
 	"fmt"
 	"log/slog"
+
+	"gorm.io/gorm"
 )
 
 func logGroupFiles() slog.Attr {
@@ -85,6 +87,14 @@ func Records[T any](value []T) slogParam {
 	return Items[T](value, "records")
 }
 
+func Args(value []string) slogParam {
+	return Items[string](value, "args")
+}
+
+func Tags(value []types.Tag) slogParam {
+	return Items[types.Tag](value, "tags")
+}
+
 func APIUrl(value types.APIurl) slogParam {
 	return func(c *slogGroup) {
 		c.params["api_url"] = string(value)
@@ -149,5 +159,13 @@ func Dbpath(value types.Dbpath) slogParam {
 func Tag(value types.Tag) slogParam {
 	return func(c *slogGroup) {
 		c.params["tag"] = string(value)
+	}
+}
+
+func GormResult(result *gorm.DB) slogParam {
+	return func(c *slogGroup) {
+		c.params["result.rows_affected"] = fmt.Sprintf("%d", result.RowsAffected)
+		c.params["result.error_msg"] = fmt.Sprintf("%v", result.Error)
+		c.params["result.error_type"] = fmt.Sprintf("%T", result.Error)
 	}
 }

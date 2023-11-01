@@ -5,8 +5,8 @@ import (
 	"darkbot/app/scrappy"
 	"darkbot/app/scrappy/player"
 	"darkbot/app/scrappy/shared/records"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -33,10 +33,10 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 		playerView := NewTemplatePlayers(channelID, dbpath)
 		playerView.Render()
-		fmt.Println(playerView.friends.MainTable.Content)
-		fmt.Println(playerView.enemies.MainTable.Content)
-		fmt.Println(playerView.neutral.MainTable.Content)
-		fmt.Println("test TestPlayerViewer is finished")
+		logus.Debug(playerView.friends.MainTable.Content)
+		logus.Debug(playerView.enemies.MainTable.Content)
+		logus.Debug(playerView.neutral.MainTable.Content)
+		logus.Debug("test TestPlayerViewer is finished")
 
 		assert.NotEmpty(t, playerView.friends.MainTable.Content)
 		assert.NotEmpty(t, playerView.enemies.MainTable.Content)
@@ -77,10 +77,10 @@ func TestPlayerViewerRealData(t *testing.T) {
 		playerView := NewTemplatePlayers(channelID, dbpath)
 		playerView.Render()
 
-		fmt.Println(playerView.friends.MainTable.Content)
-		fmt.Println(playerView.enemies.MainTable.Content)
-		fmt.Println(playerView.neutral.MainTable.Content)
+		logus.Debug(playerView.friends.MainTable.Content)
+		logus.Debug(playerView.enemies.MainTable.Content)
+		logus.Debug(playerView.neutral.MainTable.Content)
 
-		fmt.Println("test TestPlayerViewer is finished")
+		logus.Debug("test TestPlayerViewer is finished")
 	})
 }

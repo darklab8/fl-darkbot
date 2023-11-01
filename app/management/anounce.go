@@ -19,7 +19,7 @@ var amounceCmd = &cobra.Command{
 	Use:   "anounce",
 	Short: "Anounce something",
 	Run: func(cmd *cobra.Command, args []string) {
-		logus.Info("Anounce is called with args=", logus.Items(args, "args"))
+		logus.Info("Anounce is called with args=", logus.Args(args))
 		dg := discorder.NewClient()
 
 		// go listener.Run()

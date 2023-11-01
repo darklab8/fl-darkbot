@@ -5,7 +5,6 @@ import (
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
-	"fmt"
 )
 
 type IConfiguratorTags interface {
@@ -101,10 +100,8 @@ func (c ConfiguratorTags[T]) TagsList(channelID types.DiscordChannelID) ([]types
 func (c ConfiguratorTags[T]) TagsClear(channelID types.DiscordChannelID) error {
 	tags := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
-	fmt.Println("Clear.Find.rowsAffected=", result.RowsAffected)
-	fmt.Println("Clear.Find.err=", result.Error)
+	logus.Debug("Clear.Find", logus.GormResult(result))
 	result = c.db.Unscoped().Delete(&tags)
-	fmt.Println("Clear.Delete.rowsAffected=", result.RowsAffected)
-	fmt.Println("Clear.Delete.err=", result.Error)
+	logus.Debug("Clear.Detete", logus.GormResult(result))
 	return result.Error
 }

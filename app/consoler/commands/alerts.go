@@ -4,7 +4,7 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/printer"
-	"fmt"
+	"darkbot/app/settings/logus"
 	"strconv"
 	"strings"
 
@@ -33,17 +33,21 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 		Short: "Set alert (Works as set {number})",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateSetAlertCmd.consoler running with args=", args)
+			logus.Debug("CreateSetAlertCmd.consoler running with args=", logus.Args(args))
 			printer.Println(cmd, "Attempting to parse input into integer number")
 			rawInteger := args[0]
 			integer, err := strconv.Atoi(rawInteger)
+			if logus.CheckWarn(err, "Atoi result with warning", logus.OptError(err)) {
+				printer.Println(cmd, "failed to parse value to integer. Value="+rawInteger)
+			}
+
 			printer.Println(cmd, "Parsed integer = "+strconv.Itoa(integer))
 			err = t.cfgTags.Set(t.GetChannelID(), integer)
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
 			}
-			fmt.Println(len(args))
+			logus.Debug("checking args again?", logus.Args(args))
 
 			printer.Println(cmd, "OK alert threshold is set")
 		},
@@ -56,7 +60,7 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 		Use:   "unset",
 		Short: "Unsert alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateUnsetCmd.consoler running with args=", args)
+			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
@@ -73,7 +77,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 		Use:   "status",
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateStatusCmd.consoler running with args=", args)
+			logus.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
 			integer, err := t.cfgTags.Status(t.GetChannelID())
 			if err != nil {
 				errMsg := err.Error()
@@ -114,13 +118,13 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 		Use:   "enable",
 		Short: "Enable alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateEnableCmd.consoler running with args=", args)
+			logus.Debug("CreateEnableCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Enable(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
 			}
-			fmt.Println(len(args))
+			logus.Debug("Create Enable is finished", logus.Args(args))
 
 			printer.Println(cmd, "OK alert is enabled")
 		},
@@ -133,7 +137,7 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 		Use:   "disable",
 		Short: "Disable alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateDisableCmd.consoler running with args=", args)
+			logus.Debug("CreateDisableCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Disable(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
@@ -150,7 +154,7 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 		Use:   "status",
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateStatusCmd.consoler running with args=", args)
+			logus.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
 			_, err := t.cfgTags.Status(t.GetChannelID())
 			if err != nil {
 				errMsg := err.Error()
@@ -194,14 +198,14 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd() {
 		Short: "Set Value (provide 'set StringValue')",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateSetAlertCmd.consoler running with args=", args)
+			logus.Debug("CreateSetAlertCmd.consoler running with args=", logus.Args(args))
 			str := args[0]
 			err := t.cfgTags.Set(t.GetChannelID(), str)
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
 			}
-			fmt.Println(len(args))
+			logus.Debug("finished CreateSetCmd", logus.Args(args))
 
 			printer.Println(cmd, "OK value is set")
 		},
@@ -214,7 +218,7 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 		Use:   "unset",
 		Short: "Unsert / Clear ",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateUnsetCmd.consoler running with args=", args)
+			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
@@ -231,7 +235,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 		Use:   "status",
 		Short: "Status",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("CreateStatusCmd.consoler running with args=", args)
+			logus.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
 			str, err := t.cfgTags.Status(t.GetChannelID())
 			if err != nil {
 				errMsg := err.Error()

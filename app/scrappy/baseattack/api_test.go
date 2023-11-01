@@ -1,7 +1,7 @@
 package baseattack
 
 import (
-	"fmt"
+	"darkbot/app/settings/logus"
 	"strings"
 	"testing"
 
@@ -12,7 +12,7 @@ func TestAPI(t *testing.T) {
 	api := NewBaseAttackAPI()
 	result, _ := api.GetBaseAttackData()
 	data := string(result)
-	fmt.Println(data)
+	logus.Debug(data)
 }
 
 func TestDetectLPAttack(t *testing.T) {

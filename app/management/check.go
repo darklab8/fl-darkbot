@@ -16,13 +16,6 @@ var checkCmd = &cobra.Command{
 	Short: "Experimental command",
 	Run: func(cmd *cobra.Command, args []string) {
 		logus.Info("check called")
-		// fmt.Println("result=", consoler.Consoler{}.New("").Execute().String())
-
-		// db := configurator.GetConnection()
-		// channel1 := configurator.Channel{gorm.Model{ID: 123}, ChannelID: "123"}
-		// db.FirstOrCreate(&channel1)
-		// fmt.Println(channel1)
-
 		dg := discorder.NewClient()
 		// dg.SengMessage("838802002582175756", "123message")
 		dg.GetLatestMessages("838802002582175756")

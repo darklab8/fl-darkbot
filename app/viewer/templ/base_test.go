@@ -124,7 +124,7 @@ func TestBaseViewerRealData(t *testing.T) {
 
 		base := NewTemplateBase(channelID, dbpath)
 		base.Render()
-		fmt.Println(base.main.Content)
+		logus.Debug("base.main.Content=" + base.main.Content)
 	})
 }
 

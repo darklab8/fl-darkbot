@@ -8,7 +8,7 @@ import (
 )
 
 func ShellRunArgs(program string, args ...string) {
-	fmt.Printf("OK attempting to run: %s %s\n", program, args)
+	logus.Debug(fmt.Sprintf("OK attempting to run: %s", program), logus.Args(args))
 	executable, _ := exec.LookPath(program)
 
 	args = append([]string{""}, args...)
