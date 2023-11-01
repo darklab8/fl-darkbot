@@ -4,7 +4,7 @@ import (
 	"darkbot/configurator"
 	"darkbot/configurator/models"
 	"darkbot/consoler/commands/cmdgroup"
-	"darkbot/consoler/helper"
+	"darkbot/consoler/printer"
 	"darkbot/settings"
 	"fmt"
 
@@ -29,7 +29,7 @@ func createEntrance() *cobra.Command {
 	return command
 }
 
-func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
+func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 	consolerCmd := createEntrance()
 
 	rootGroup := cmdgroup.New(

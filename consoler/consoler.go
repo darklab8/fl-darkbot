@@ -5,7 +5,7 @@ package consoler
 
 import (
 	"darkbot/consoler/commands"
-	"darkbot/consoler/helper"
+	"darkbot/consoler/printer"
 	"darkbot/settings"
 	"strings"
 )
@@ -24,7 +24,7 @@ func NewConsoler(cmd string) *Consoler {
 	return c
 }
 
-func (c *Consoler) Execute(channelInfo helper.ChannelInfo) *Consoler {
+func (c *Consoler) Execute(channelInfo printer.ChannelInfo) *Consoler {
 	// only commands starting from prefix are allowed
 	if !strings.HasPrefix(c.cmd, settings.Config.ConsolerPrefix) {
 		return c

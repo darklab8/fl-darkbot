@@ -1,4 +1,4 @@
-package helper
+package printer
 
 import "darkbot/settings/types"
 

@@ -3,7 +3,7 @@ package commands
 import (
 	"darkbot/configurator"
 	"darkbot/consoler/commands/cmdgroup"
-	"darkbot/consoler/helper"
+	"darkbot/consoler/printer"
 	"fmt"
 	"strings"
 
@@ -38,7 +38,7 @@ func (t *tagCommands) CreateTagAdd() {
 			}
 			fmt.Println(len(args))
 
-			helper.Printer{Cmd: cmd}.Println("OK tags are added")
+			printer.Println(cmd, "OK tags are added")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -57,7 +57,7 @@ func (t *tagCommands) CreateTagRemove() {
 				return
 			}
 
-			helper.Printer{Cmd: cmd}.Println("OK tags are removed")
+			printer.Println(cmd, "OK tags are removed")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -75,7 +75,7 @@ func (t *tagCommands) CreateTagClear() {
 				return
 			}
 
-			helper.Printer{Cmd: cmd}.Println("OK tags are cleared")
+			printer.Println(cmd, "OK tags are cleared")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -103,9 +103,8 @@ func (t *tagCommands) CreateTagList() {
 					sb.WriteString(", ")
 				}
 			}
-			printer := helper.Printer{Cmd: cmd}
-			printer.Println("OK tags are listed")
-			printer.Println(sb.String())
+			printer.Println(cmd, "OK tags are listed")
+			printer.Println(cmd, sb.String())
 		},
 	}
 	t.CurrentCmd.AddCommand(command)

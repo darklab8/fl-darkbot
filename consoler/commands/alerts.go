@@ -3,7 +3,7 @@ package commands
 import (
 	"darkbot/configurator"
 	"darkbot/consoler/commands/cmdgroup"
-	"darkbot/consoler/helper"
+	"darkbot/consoler/printer"
 	"fmt"
 	"strconv"
 	"strings"
@@ -34,10 +34,10 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateSetAlertCmd.consoler running with args=", args)
-			helper.Printer{Cmd: cmd}.Println("Attempting to parse input into integer number")
+			printer.Println(cmd, "Attempting to parse input into integer number")
 			rawInteger := args[0]
 			integer, err := strconv.Atoi(rawInteger)
-			helper.Printer{Cmd: cmd}.Println("Parsed integer = " + strconv.Itoa(integer))
+			printer.Println(cmd, "Parsed integer = "+strconv.Itoa(integer))
 			err = t.cfgTags.Set(t.ChannelInfo.ChannelID, integer).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
@@ -45,7 +45,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 			}
 			fmt.Println(len(args))
 
-			helper.Printer{Cmd: cmd}.Println("OK alert threshold is set")
+			printer.Println(cmd, "OK alert threshold is set")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -62,7 +62,7 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
 			}
-			helper.Printer{Cmd: cmd}.Println("OK Alert is unset")
+			printer.Println(cmd, "OK Alert is unset")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -79,7 +79,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 				errMsg := err.GetError().Error()
 
 				if strings.Contains(errMsg, "record not found") {
-					helper.Printer{Cmd: cmd}.Println("OK status of alert is disabled")
+					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {
 					cmd.OutOrStdout().Write([]byte("ERR =" + errMsg))
@@ -87,7 +87,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 				}
 			}
 
-			helper.Printer{Cmd: cmd}.Println("OK status of alert threshold = " + strconv.Itoa(*integer))
+			printer.Println(cmd, "OK status of alert threshold = "+strconv.Itoa(*integer))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -122,7 +122,7 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 			}
 			fmt.Println(len(args))
 
-			helper.Printer{Cmd: cmd}.Println("OK alert is enabled")
+			printer.Println(cmd, "OK alert is enabled")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -139,7 +139,7 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
 			}
-			helper.Printer{Cmd: cmd}.Println("OK Alert is disabled")
+			printer.Println(cmd, "OK Alert is disabled")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -156,7 +156,7 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 				errMsg := err.GetError().Error()
 
 				if strings.Contains(errMsg, "record not found") {
-					helper.Printer{Cmd: cmd}.Println("OK status of alert is disabled")
+					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {
 					cmd.OutOrStdout().Write([]byte("ERR =" + errMsg))
@@ -164,7 +164,7 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 				}
 			}
 
-			helper.Printer{Cmd: cmd}.Println("OK status of alert is enabled")
+			printer.Println(cmd, "OK status of alert is enabled")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -203,7 +203,7 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd() {
 			}
 			fmt.Println(len(args))
 
-			helper.Printer{Cmd: cmd}.Println("OK value is set")
+			printer.Println(cmd, "OK value is set")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -220,7 +220,7 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
 			}
-			helper.Printer{Cmd: cmd}.Println("OK value is unset")
+			printer.Println(cmd, "OK value is unset")
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -237,7 +237,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 				errMsg := err.GetError().Error()
 
 				if strings.Contains(errMsg, "record not found") {
-					helper.Printer{Cmd: cmd}.Println("OK status of alert is disabled")
+					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {
 					cmd.OutOrStdout().Write([]byte("ERR =" + errMsg))
@@ -245,7 +245,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 				}
 			}
 
-			helper.Printer{Cmd: cmd}.Println("OK value is = " + string(str))
+			printer.Println(cmd, "OK value is = "+string(str))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
