@@ -1,0 +1,19 @@
+package consoler_types
+
+import "darkbot/settings/types"
+
+type ChannelParams struct {
+	channelID types.DiscordChannelID
+	dbpath    types.Dbpath
+}
+
+func NewChannelParams(
+	channelID types.DiscordChannelID,
+	dbpath types.Dbpath,
+
+) ChannelParams {
+	return ChannelParams{channelID: channelID, dbpath: dbpath}
+}
+
+func (c ChannelParams) GetChannelID() types.DiscordChannelID { return c.channelID }
+func (c ChannelParams) GetDbpath() types.Dbpath              { return c.dbpath }

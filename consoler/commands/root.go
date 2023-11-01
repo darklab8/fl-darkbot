@@ -4,8 +4,9 @@ import (
 	"darkbot/configurator"
 	"darkbot/configurator/models"
 	"darkbot/consoler/commands/cmdgroup"
-	"darkbot/consoler/printer"
+	"darkbot/consoler/consoler_types"
 	"darkbot/settings"
+	"darkbot/settings/types"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -29,8 +30,12 @@ func createEntrance() *cobra.Command {
 	return command
 }
 
-func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
+func CreateConsoler(
+	channelID types.DiscordChannelID,
+	dbpath types.Dbpath,
+) *cobra.Command {
 	consolerCmd := createEntrance()
+	channelInfo := consoler_types.NewChannelParams(channelID, dbpath)
 
 	rootGroup := cmdgroup.New(
 		consolerCmd,
@@ -46,7 +51,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("base"),
 			cmdgroup.ShortDesc("Base commands"),
 		),
-		configurator.NewConfiguratorBase(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewConfiguratorBase(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	playerGroup := root.GetChild(
@@ -60,7 +65,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("system"),
 			cmdgroup.ShortDesc("System commands"),
 		),
-		configurator.NewConfiguratorSystem(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewConfiguratorSystem(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewTagCommands(
@@ -69,7 +74,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("region"),
 			cmdgroup.ShortDesc("Region commands"),
 		),
-		configurator.NewConfiguratorRegion(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewConfiguratorRegion(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewTagCommands(
@@ -78,7 +83,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("friend"),
 			cmdgroup.ShortDesc("Player friend commands"),
 		),
-		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewTagCommands(
@@ -87,7 +92,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("enemy"),
 			cmdgroup.ShortDesc("Player enemy commands"),
 		),
-		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	alertGroup := root.GetChild(
@@ -102,7 +107,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("base_health_is_decreasing"),
 			cmdgroup.ShortDesc("Turn on to receive alert if base health is decreasing"),
 		),
-		configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewAlertBoolCommands[models.AlertBaseIfUnderAttack](
@@ -111,7 +116,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("base_is_under_attack"),
 			cmdgroup.ShortDesc("Turn on if base health is rapidly decreasing or attack declaration was declared"),
 		),
-		configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewAlertThresholdCommands[models.AlertBaseHealthLowerThan](
@@ -120,7 +125,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("base_health_is_lower_than"),
 			cmdgroup.ShortDesc("Set threshold of base health, below which you will receive alert"),
 		),
-		configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewAlertThresholdCommands[models.AlertNeutralPlayersEqualOrGreater](
@@ -129,7 +134,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("player_neutral_count_above"),
 			cmdgroup.ShortDesc("Set threshold, if above amount of neutral players will be preesent, you will receive alert"),
 		),
-		configurator.NewCfgAlertNeutralPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewCfgAlertNeutralPlayersGreaterThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewAlertThresholdCommands[models.AlertEnemiesEqualOrGreater](
@@ -138,7 +143,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("player_enemy_count_above"),
 			cmdgroup.ShortDesc("Set threshold, if above amount of enemy players will be preesent, you will receive alert"),
 		),
-		configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewAlertThresholdCommands[models.AlertFriendsEqualOrGreater](
@@ -147,7 +152,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("player_friend_count_above"),
 			cmdgroup.ShortDesc("Set threshold, if above amount of friendly players will be preesent, you will receive alert"),
 		),
-		configurator.NewCfgAlertFriendPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewCfgAlertFriendPlayersGreaterThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	NewAlertSetStringCommand[models.AlertPingMessage](
@@ -156,7 +161,7 @@ func CreateConsoler(channelInfo printer.ChannelInfo) *cobra.Command {
 			cmdgroup.Command("ping_message"),
 			cmdgroup.ShortDesc("By default `<@DiscordServer.Owner.ID>`. You can change it to something else like `@here` or `@role`"),
 		),
-		configurator.NewCfgAlertPingMessage(configurator.NewConfigurator(channelInfo.Dbpath)),
+		configurator.NewCfgAlertPingMessage(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
 	return consolerCmd
@@ -194,7 +199,7 @@ func (r *rootCommands) CreateConnect() {
 		Use:   "connect",
 		Short: "Connect bot to channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := r.channels.Add(r.ChannelInfo.ChannelID).GetError()
+			err := r.channels.Add(r.ChannelInfo.GetChannelID()).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR channel may be already connected, msg=" + err.Error()))
 				return
@@ -210,7 +215,7 @@ func (r *rootCommands) CreateDisconnect() {
 		Use:   "disconnect",
 		Short: "Disconnect bot from channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := r.channels.Remove(r.ChannelInfo.ChannelID).GetError()
+			err := r.channels.Remove(r.ChannelInfo.GetChannelID()).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR channel may be already disconnected, msg=" + err.Error()))
 				return

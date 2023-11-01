@@ -6,7 +6,6 @@ package listener
 
 import (
 	"darkbot/consoler"
-	"darkbot/consoler/printer"
 	"darkbot/settings"
 	"darkbot/settings/logus"
 	"darkbot/settings/types"
@@ -99,7 +98,7 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	channelID := types.DiscordChannelID(m.ChannelID)
-	rendered := consoler.NewConsoler(m.Content).Execute(printer.NewChannelInfo(channelID, settings.Dbpath)).String()
+	rendered := consoler.NewConsoler(m.Content, channelID, settings.Dbpath).Execute().String()
 
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)

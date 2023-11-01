@@ -2,7 +2,7 @@ package cmdgroup
 
 import (
 	"darkbot/configurator"
-	"darkbot/consoler/printer"
+	"darkbot/consoler/consoler_types"
 
 	"github.com/spf13/cobra"
 )
@@ -11,7 +11,7 @@ type CmdGroup struct {
 	ParentCmd    *cobra.Command
 	CurrentCmd   *cobra.Command
 	Configurator configurator.Configurator
-	ChannelInfo  printer.ChannelInfo
+	consoler_types.ChannelParams
 }
 
 func (c CmdGroup) GetChild(
@@ -39,13 +39,13 @@ type ShortDesc string
 
 func New(
 	rootCmdPrefix *cobra.Command,
-	channelInfo printer.ChannelInfo,
+	channelParams consoler_types.ChannelParams,
 	command Command, short_desc ShortDesc,
 ) CmdGroup {
 	result := CmdGroup{
-		ParentCmd:    rootCmdPrefix,
-		Configurator: configurator.NewConfigurator(channelInfo.Dbpath),
-		ChannelInfo:  channelInfo,
+		ParentCmd:     rootCmdPrefix,
+		Configurator:  configurator.NewConfigurator(channelParams.GetDbpath()),
+		ChannelParams: channelParams,
 	}
 	result.setProps(command, short_desc)
 

@@ -38,7 +38,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 			rawInteger := args[0]
 			integer, err := strconv.Atoi(rawInteger)
 			printer.Println(cmd, "Parsed integer = "+strconv.Itoa(integer))
-			err = t.cfgTags.Set(t.ChannelInfo.ChannelID, integer).GetError()
+			err = t.cfgTags.Set(t.ChannelInfo.GetChannelID(), integer).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -57,7 +57,7 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 		Short: "Unsert alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateUnsetCmd.consoler running with args=", args)
-			err := t.cfgTags.Unset(t.ChannelInfo.ChannelID).GetError()
+			err := t.cfgTags.Unset(t.ChannelInfo.GetChannelID()).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -74,7 +74,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateStatusCmd.consoler running with args=", args)
-			integer, err := t.cfgTags.Status(t.ChannelInfo.ChannelID)
+			integer, err := t.cfgTags.Status(t.ChannelInfo.GetChannelID())
 			if err.GetError() != nil {
 				errMsg := err.GetError().Error()
 
@@ -115,7 +115,7 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 		Short: "Enable alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateEnableCmd.consoler running with args=", args)
-			err := t.cfgTags.Enable(t.ChannelInfo.ChannelID).GetError()
+			err := t.cfgTags.Enable(t.ChannelInfo.GetChannelID()).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -134,7 +134,7 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 		Short: "Disable alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateDisableCmd.consoler running with args=", args)
-			err := t.cfgTags.Disable(t.ChannelInfo.ChannelID).GetError()
+			err := t.cfgTags.Disable(t.ChannelInfo.GetChannelID()).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -151,7 +151,7 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateStatusCmd.consoler running with args=", args)
-			_, err := t.cfgTags.Status(t.ChannelInfo.ChannelID)
+			_, err := t.cfgTags.Status(t.ChannelInfo.GetChannelID())
 			if err.GetError() != nil {
 				errMsg := err.GetError().Error()
 
@@ -196,7 +196,7 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd() {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateSetAlertCmd.consoler running with args=", args)
 			str := args[0]
-			err := t.cfgTags.Set(t.ChannelInfo.ChannelID, str).GetError()
+			err := t.cfgTags.Set(t.ChannelInfo.GetChannelID(), str).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -215,7 +215,7 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 		Short: "Unsert / Clear ",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateUnsetCmd.consoler running with args=", args)
-			err := t.cfgTags.Unset(t.ChannelInfo.ChannelID).GetError()
+			err := t.cfgTags.Unset(t.ChannelInfo.GetChannelID()).GetError()
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -232,7 +232,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 		Short: "Status",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateStatusCmd.consoler running with args=", args)
-			str, err := t.cfgTags.Status(t.ChannelInfo.ChannelID)
+			str, err := t.cfgTags.Status(t.GetChannelID())
 			if err.GetError() != nil {
 				errMsg := err.GetError().Error()
 
