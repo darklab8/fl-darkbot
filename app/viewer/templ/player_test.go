@@ -47,12 +47,13 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		assert.Empty(t, playerView.neutral.AlertTmpl.Content)
 
 		enemyAlerts := configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(dbpath))
-		integer, _ := enemyAlerts.Status(channelID)
-		assert.Nil(t, integer)
+		_, err := enemyAlerts.Status(channelID)
+		assert.ErrorContains(t, err, "not found")
 
 		enemyAlerts.Set(channelID, 1)
-		integer, _ = enemyAlerts.Status(channelID)
-		assert.Equal(t, 1, *integer)
+		integer, err := enemyAlerts.Status(channelID)
+		assert.Equal(t, 1, integer)
+		assert.Nil(t, err)
 
 		playerView = NewTemplatePlayers(channelID, dbpath)
 		playerView.Render()

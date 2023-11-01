@@ -199,7 +199,7 @@ func (r *rootCommands) CreateConnect() {
 		Use:   "connect",
 		Short: "Connect bot to channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := r.channels.Add(r.GetChannelID()).GetError()
+			err := r.channels.Add(r.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR channel may be already connected, msg=" + err.Error()))
 				return
@@ -215,7 +215,7 @@ func (r *rootCommands) CreateDisconnect() {
 		Use:   "disconnect",
 		Short: "Disconnect bot from channel",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := r.channels.Remove(r.GetChannelID()).GetError()
+			err := r.channels.Remove(r.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR channel may be already disconnected, msg=" + err.Error()))
 				return

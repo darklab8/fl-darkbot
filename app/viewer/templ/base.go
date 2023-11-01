@@ -152,17 +152,17 @@ func (b *TemplateBase) Render() {
 	}
 
 	b.AlertHealthLowerThan.Content = ""
-	if healthThreshold, _ := b.API.Alerts.BaseHealthLowerThan.Status(b.API.ChannelID); healthThreshold != nil {
+	if healthThreshold, err := b.API.Alerts.BaseHealthLowerThan.Status(b.API.ChannelID); err == nil {
 		for _, base := range input.Bases {
-			if int(base.Health) < *healthThreshold {
-				b.AlertHealthLowerThan.Content = RenderAlertTemplate(b.AlertHealthLowerThan.Header, b.API.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), *healthThreshold), b.API)
+			if int(base.Health) < healthThreshold {
+				b.AlertHealthLowerThan.Content = RenderAlertTemplate(b.AlertHealthLowerThan.Header, b.API.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), healthThreshold), b.API)
 				break
 			}
 		}
 	}
 
 	b.AlertHealthIsDecreasing.Content = ""
-	if isAlertEnabled, _ := b.API.Alerts.BaseHealthIsDecreasing.Status(b.API.ChannelID); isAlertEnabled {
+	if isAlertEnabled, err := b.API.Alerts.BaseHealthIsDecreasing.Status(b.API.ChannelID); err == nil && isAlertEnabled {
 		for _, base := range input.Bases {
 			if base.IsHealthDecreasing {
 				b.AlertHealthIsDecreasing.Content = RenderAlertTemplate(b.AlertHealthIsDecreasing.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(base.Health), base.HealthChange), b.API)

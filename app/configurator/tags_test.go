@@ -41,8 +41,10 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 		assert.Len(t, tags, 1)
 
 		err := cg.TagsAdd("c2", []string{"t1"}...)
-		assert.Contains(t, err.GetError().Error(), "database already has those items")
-		fmt.Println("err=", err.GetError().Error())
+
+		assert.Error(t, err, "expected error to get in test")
+		assert.Contains(t, err.Error(), "database already has those items")
+		fmt.Println("err=", err.Error())
 
 		// make a test to check? :thinking:
 		tags, _ = cg.TagsList("c2")

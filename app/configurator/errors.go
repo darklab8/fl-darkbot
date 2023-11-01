@@ -2,15 +2,14 @@ package configurator
 
 import (
 	"fmt"
-
-	"gorm.io/gorm"
 )
 
 type ErrorZeroAffectedRows struct {
+	ExtraMsg string
 }
 
 func (z ErrorZeroAffectedRows) Error() string {
-	return "Zero affected rows. Expected more."
+	return "Zero affected rows. Expected more." + z.ExtraMsg
 }
 
 /////////////////////
@@ -25,44 +24,23 @@ func (s StorageErrorExists) Error() string {
 
 ///////////////////////
 
-type ConfiguratorError struct {
-	rowAffected []int
-	errors      []error
+type errorAggregator struct {
+	errors []error
 }
 
-func (s *ConfiguratorError) AppendSQLError(res *gorm.DB) *ConfiguratorError {
-	s.rowAffected = append(s.rowAffected, int(res.RowsAffected))
-	s.errors = append(s.errors, res.Error)
-	return s
+func NewErrorAggregator() errorAggregator {
+	return errorAggregator{}
 }
 
-func (s *ConfiguratorError) AppenError(err error) *ConfiguratorError {
-	s.errors = append(s.errors, err)
-	return s
+func (e *errorAggregator) Append(err error) {
+	e.errors = append(e.errors, err)
 }
 
-func (s *ConfiguratorError) GetError() error {
-	for _, row := range s.rowAffected {
-		if row != 0 {
-			return nil
-		}
-	}
-
-	for _, err := range s.errors {
+func (e errorAggregator) TryToGetError() error {
+	for _, err := range e.errors {
 		if err != nil {
 			return err
 		}
 	}
-
-	return ErrorZeroAffectedRows{}
-}
-
-func (s *ConfiguratorError) GetErrorWithAllowedZeroRows() error {
-	for _, err := range s.errors {
-		if err != nil {
-			return err
-		}
-	}
-
 	return nil
 }

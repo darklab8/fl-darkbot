@@ -31,7 +31,7 @@ func (t *tagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagAdd.consoler running with args=", args)
-			err := t.cfgTags.TagsAdd(t.GetChannelID(), strings.Join(args, " ")).GetError()
+			err := t.cfgTags.TagsAdd(t.GetChannelID(), strings.Join(args, " "))
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -51,7 +51,7 @@ func (t *tagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagRemove.consoler running with args=", args)
-			err := t.cfgTags.TagsRemove(t.GetChannelID(), strings.Join(args, " ")).GetError()
+			err := t.cfgTags.TagsRemove(t.GetChannelID(), strings.Join(args, " "))
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -69,7 +69,7 @@ func (t *tagCommands) CreateTagClear() {
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagClear.consoler running with args=", args)
-			err := t.cfgTags.TagsClear(t.GetChannelID()).GetErrorWithAllowedZeroRows()
+			err := t.cfgTags.TagsClear(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -88,7 +88,7 @@ func (t *tagCommands) CreateTagList() {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagList.consoler running with args=", args)
 			tags, cfgErr := t.cfgTags.TagsList(t.GetChannelID())
-			err := cfgErr.GetErrorWithAllowedZeroRows()
+			err := cfgErr
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return

@@ -6,21 +6,21 @@ import (
 )
 
 type iConfiguratorBoolAlert interface {
-	Enable(channelID string) *ConfiguratorError
-	Disable(channelID string) *ConfiguratorError
-	Status(channelID string) *ConfiguratorError
+	Enable(channelID string) error
+	Disable(channelID string) error
+	Status(channelID string) error
 }
 
 type iConfiguratorThresholdAlert interface {
-	Set(channelID string, value int) *ConfiguratorError
-	Unset(channelID string) *ConfiguratorError
-	Status(channelID string) (*int, *ConfiguratorError)
+	Set(channelID string, value int) error
+	Unset(channelID string) error
+	Status(channelID string) (*int, error)
 }
 
 type iConfiguratorStringValue interface {
-	Set(channelID string, value string) *ConfiguratorError
-	Unset(channelID string) *ConfiguratorError
-	Status(channelID string) (string, *ConfiguratorError)
+	Set(channelID string, value string) error
+	Unset(channelID string) error
+	Status(channelID string) (string, error)
 }
 
 type AlertThresholdType interface {
@@ -96,84 +96,96 @@ type CfgAlertPingMessage = IConfiguratorAlertString[models.AlertPingMessage]
 
 var NewCfgAlertPingMessage = NewConfiguratorAlertString[models.AlertPingMessage]
 
-func (c IConfiguratorAlertThreshold[T]) Set(channelID types.DiscordChannelID, value int) *ConfiguratorError {
+func (c IConfiguratorAlertThreshold[T]) Set(channelID types.DiscordChannelID, value int) error {
 	c.Unset(channelID)
 	obj := T{
 		AlertTemplate:       models.AlertTemplate{ChannelID: channelID},
 		AlertTresholdShared: models.AlertTresholdShared{Threshold: value},
 	}
 	result2 := c.db.Create(&obj)
-	return (&ConfiguratorError{}).AppendSQLError(result2)
+
+	return result2.Error
 }
 
-func (c IConfiguratorAlertThreshold[T]) Unset(channelID types.DiscordChannelID) *ConfiguratorError {
+func (c IConfiguratorAlertThreshold[T]) Unset(channelID types.DiscordChannelID) error {
 	objs := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
+	if len(objs) == 0 {
+		return ErrorZeroAffectedRows{}
+	}
 	result = c.db.Unscoped().Delete(&objs)
-	return (&ConfiguratorError{}).AppendSQLError(result)
+
+	return result.Error
 }
 
-func (c IConfiguratorAlertThreshold[T]) Status(channelID types.DiscordChannelID) (*int, *ConfiguratorError) {
+func (c IConfiguratorAlertThreshold[T]) Status(channelID types.DiscordChannelID) (int, error) {
 	var obj T
 	result := c.db.Where("channel_id = ?", channelID).First(&obj)
 	if result.Error != nil {
-		return nil, (&ConfiguratorError{}).AppendSQLError(result)
+		return 0, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return 0, ErrorZeroAffectedRows{}
 	}
 
 	integer := obj.GetThreshold()
-	return &integer, (&ConfiguratorError{}).AppendSQLError(result)
+	return integer, result.Error
 }
 
 ///////////////////////////
 
-func (c IConfiguratorAlertBool[T]) Enable(channelID types.DiscordChannelID) *ConfiguratorError {
+func (c IConfiguratorAlertBool[T]) Enable(channelID types.DiscordChannelID) error {
 	obj := T{
 		AlertTemplate: models.AlertTemplate{ChannelID: channelID},
 	}
 	result := c.db.Create(&obj)
-	return (&ConfiguratorError{}).AppendSQLError(result)
+	return result.Error
 }
 
-func (c IConfiguratorAlertBool[T]) Disable(channelID types.DiscordChannelID) *ConfiguratorError {
+func (c IConfiguratorAlertBool[T]) Disable(channelID types.DiscordChannelID) error {
 	objs := []T{}
-	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
-	result = c.db.Unscoped().Delete(&objs)
-	return (&ConfiguratorError{}).AppendSQLError(result)
+	c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
+	if len(objs) == 0 {
+		return ErrorZeroAffectedRows{}
+	}
+	result := c.db.Unscoped().Delete(&objs)
+	return result.Error
 }
 
-func (c IConfiguratorAlertBool[T]) Status(channelID types.DiscordChannelID) (bool, *ConfiguratorError) {
+func (c IConfiguratorAlertBool[T]) Status(channelID types.DiscordChannelID) (bool, error) {
 	obj := T{}
 	result := c.db.Where("channel_id = ?", channelID).First(&obj)
 
-	return result.Error == nil, (&ConfiguratorError{}).AppendSQLError(result)
+	return result.Error == nil && result.RowsAffected == 1, result.Error
 }
 
 ////////////////////////////
 
-func (c IConfiguratorAlertString[T]) Set(channelID types.DiscordChannelID, value string) *ConfiguratorError {
+func (c IConfiguratorAlertString[T]) Set(channelID types.DiscordChannelID, value string) error {
 	c.Unset(channelID)
 	obj := T{
 		AlertTemplate: models.AlertTemplate{ChannelID: channelID},
 		Value:         value,
 	}
 	result2 := c.db.Create(&obj)
-	return (&ConfiguratorError{}).AppendSQLError(result2)
+	return result2.Error
 }
 
-func (c IConfiguratorAlertString[T]) Unset(channelID types.DiscordChannelID) *ConfiguratorError {
+func (c IConfiguratorAlertString[T]) Unset(channelID types.DiscordChannelID) error {
 	objs := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
 	result = c.db.Unscoped().Delete(&objs)
-	return (&ConfiguratorError{}).AppendSQLError(result)
+	return result.Error
 }
 
-func (c IConfiguratorAlertString[T]) Status(channelID types.DiscordChannelID) (types.PingMessage, *ConfiguratorError) {
+func (c IConfiguratorAlertString[T]) Status(channelID types.DiscordChannelID) (types.PingMessage, error) {
 	var obj T
 	result := c.db.Where("channel_id = ?", channelID).First(&obj)
 	if result.Error != nil {
-		return "", (&ConfiguratorError{}).AppendSQLError(result)
+		return "", result.Error
 	}
 
 	str := obj.GetValue()
-	return types.PingMessage(str), (&ConfiguratorError{}).AppendSQLError(result)
+	return types.PingMessage(str), result.Error
 }

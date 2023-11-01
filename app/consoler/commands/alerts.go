@@ -38,7 +38,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 			rawInteger := args[0]
 			integer, err := strconv.Atoi(rawInteger)
 			printer.Println(cmd, "Parsed integer = "+strconv.Itoa(integer))
-			err = t.cfgTags.Set(t.GetChannelID(), integer).GetError()
+			err = t.cfgTags.Set(t.GetChannelID(), integer)
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -57,7 +57,7 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 		Short: "Unsert alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateUnsetCmd.consoler running with args=", args)
-			err := t.cfgTags.Unset(t.GetChannelID()).GetError()
+			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -75,8 +75,8 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateStatusCmd.consoler running with args=", args)
 			integer, err := t.cfgTags.Status(t.GetChannelID())
-			if err.GetError() != nil {
-				errMsg := err.GetError().Error()
+			if err != nil {
+				errMsg := err.Error()
 
 				if strings.Contains(errMsg, "record not found") {
 					printer.Println(cmd, "OK status of alert is disabled")
@@ -87,7 +87,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 				}
 			}
 
-			printer.Println(cmd, "OK status of alert threshold = "+strconv.Itoa(*integer))
+			printer.Println(cmd, "OK status of alert threshold = "+strconv.Itoa(integer))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -115,7 +115,7 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 		Short: "Enable alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateEnableCmd.consoler running with args=", args)
-			err := t.cfgTags.Enable(t.GetChannelID()).GetError()
+			err := t.cfgTags.Enable(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -134,7 +134,7 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 		Short: "Disable alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateDisableCmd.consoler running with args=", args)
-			err := t.cfgTags.Disable(t.GetChannelID()).GetError()
+			err := t.cfgTags.Disable(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -152,8 +152,8 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateStatusCmd.consoler running with args=", args)
 			_, err := t.cfgTags.Status(t.GetChannelID())
-			if err.GetError() != nil {
-				errMsg := err.GetError().Error()
+			if err != nil {
+				errMsg := err.Error()
 
 				if strings.Contains(errMsg, "record not found") {
 					printer.Println(cmd, "OK status of alert is disabled")
@@ -196,7 +196,7 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd() {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateSetAlertCmd.consoler running with args=", args)
 			str := args[0]
-			err := t.cfgTags.Set(t.GetChannelID(), str).GetError()
+			err := t.cfgTags.Set(t.GetChannelID(), str)
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -215,7 +215,7 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 		Short: "Unsert / Clear ",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateUnsetCmd.consoler running with args=", args)
-			err := t.cfgTags.Unset(t.GetChannelID()).GetError()
+			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -233,8 +233,8 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateStatusCmd.consoler running with args=", args)
 			str, err := t.cfgTags.Status(t.GetChannelID())
-			if err.GetError() != nil {
-				errMsg := err.GetError().Error()
+			if err != nil {
+				errMsg := err.Error()
 
 				if strings.Contains(errMsg, "record not found") {
 					printer.Println(cmd, "OK status of alert is disabled")

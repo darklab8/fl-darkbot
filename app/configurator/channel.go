@@ -15,11 +15,11 @@ type ConfiguratorChannel struct {
 	Configurator
 }
 
-func (c ConfiguratorChannel) Add(channelID types.DiscordChannelID) *ConfiguratorError {
+func (c ConfiguratorChannel) Add(channelID types.DiscordChannelID) error {
 
 	result := c.db.Table("channels").Where("channel_id = ? AND deleted_at IS NOT NULL", channelID).Update("deleted_at", nil)
 	if result.RowsAffected > 0 {
-		return (&ConfiguratorError{}).AppendSQLError(result)
+		return result.Error
 	}
 
 	if result.Error != nil {
@@ -31,18 +31,18 @@ func (c ConfiguratorChannel) Add(channelID types.DiscordChannelID) *Configurator
 	if result.Error != nil {
 		logus.Info("channels.Add.Error2=", logus.OptError(result.Error))
 	}
-	return (&ConfiguratorError{}).AppendSQLError(result)
+	return result.Error
 }
 
-func (c ConfiguratorChannel) Remove(channelID types.DiscordChannelID) *ConfiguratorError {
+func (c ConfiguratorChannel) Remove(channelID types.DiscordChannelID) error {
 	result := c.db.Where("channel_id = ?", channelID).Delete(&models.Channel{})
-	return (&ConfiguratorError{}).AppendSQLError(result)
+	return result.Error
 }
 
-func (c ConfiguratorChannel) List() ([]types.DiscordChannelID, *ConfiguratorError) {
+func (c ConfiguratorChannel) List() ([]types.DiscordChannelID, error) {
 	objs := []models.Channel{}
 	result := c.db.Find(&objs)
 
 	return utils.CompL(objs,
-		func(x models.Channel) types.DiscordChannelID { return x.ChannelID }), (&ConfiguratorError{}).AppendSQLError(result)
+		func(x models.Channel) types.DiscordChannelID { return x.ChannelID }), result.Error
 }

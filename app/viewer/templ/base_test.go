@@ -64,8 +64,8 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.Empty(t, render.AlertBaseUnderAttack.Content)
 
 		baseAlertBelowThreshold := configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(dbpath))
-		threshold, _ := baseAlertBelowThreshold.Status(channelID)
-		assert.Nil(t, threshold)
+		_, err := baseAlertBelowThreshold.Status(channelID)
+		assert.Error(t, err)
 
 		baseAlertBelowThreshold.Set(channelID, 40)
 		render = NewTemplateBase(channelID, dbpath)

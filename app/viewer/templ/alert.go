@@ -29,8 +29,8 @@ type TemplateAlertInput struct {
 func RenderAlertTemplate(Header string, ChannelID types.DiscordChannelID, Msg string, api apis.API) string {
 
 	pingMessage, err := api.Alerts.PingMessage.Status(ChannelID)
-	logus.Debug("RenderAlertTemplate.PingMessage.Status", logus.OptError(err.GetError()), logus.PingMessage(pingMessage))
-	if err.GetError() != nil {
+	logus.Debug("RenderAlertTemplate.PingMessage.Status", logus.OptError(err), logus.PingMessage(pingMessage))
+	if err != nil {
 		ownerID, err := api.Discorder.GetOwnerID(ChannelID)
 		if logus.CheckWarn(err, "unable to acquire Discorder Channel Owner", logus.ChannelID(ChannelID)) {
 			ownerID = "TestOwnerID"

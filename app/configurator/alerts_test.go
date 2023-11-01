@@ -3,7 +3,6 @@ package configurator
 import (
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"fmt"
 	"testing"
 
@@ -17,17 +16,20 @@ func TestAlertTreshold(t *testing.T) {
 		_ = channelID
 
 		cfg := NewCfgAlertNeutralPlayersGreaterThan(genericCfg)
-		status, _ := cfg.Status(channelID)
+		status, err := cfg.Status(channelID)
 		logus.Debug(fmt.Sprintf("status=%v", status))
-		assert.Nil(t, status, "status is not Nil. failed aert")
+		assert.Error(t, err, "error not found")
+		assert.Contains(t, err.Error(), "not found")
 
 		cfg.Set(channelID, 5)
-		status, _ = cfg.Status(channelID)
-		assert.Equal(t, utils.Ptr(5), status)
+		status, err = cfg.Status(channelID)
+		assert.Nil(t, err, "result of status operation is without errors")
+		assert.Equal(t, 5, status)
 
 		cfg.Unset(channelID)
-		status, _ = cfg.Status(channelID)
-		assert.Nil(t, status)
+		_, err = cfg.Status(channelID)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "not found")
 	})
 }
 
