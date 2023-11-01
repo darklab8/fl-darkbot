@@ -11,19 +11,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type AlertThresholdCommands[T configurator.AlertThresholdType] struct {
+type alertThresholdCommands[T configurator.AlertThresholdType] struct {
 	*cmdgroup.CmdGroup
 	cfgTags configurator.IConfiguratorAlertThreshold[T]
 }
 
-func (t *AlertThresholdCommands[T]) Bootstrap() *AlertThresholdCommands[T] {
+func NewAlertThresholdCommands[T configurator.AlertThresholdType](
+	cmdGroup *cmdgroup.CmdGroup,
+	cfgTags configurator.IConfiguratorAlertThreshold[T],
+) *alertThresholdCommands[T] {
+	t := &alertThresholdCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags}
 	t.CreateSetAlertCmd()
 	t.CreateUnsetCmd()
 	t.CreateStatusCmd()
 	return t
 }
 
-func (t *AlertThresholdCommands[T]) CreateSetAlertCmd() {
+func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 	command := &cobra.Command{
 		Use:   "set",
 		Short: "Set alert (Works as set {number})",
@@ -47,7 +51,7 @@ func (t *AlertThresholdCommands[T]) CreateSetAlertCmd() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t *AlertThresholdCommands[T]) CreateUnsetCmd() {
+func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 	command := &cobra.Command{
 		Use:   "unset",
 		Short: "Unsert alert / Clear alert",
@@ -64,7 +68,7 @@ func (t *AlertThresholdCommands[T]) CreateUnsetCmd() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t *AlertThresholdCommands[T]) CreateStatusCmd() {
+func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 	command := &cobra.Command{
 		Use:   "status",
 		Short: "Status of alert",
@@ -94,7 +98,11 @@ type AlertBoolCommands[T configurator.AlertBoolType] struct {
 	cfgTags configurator.IConfiguratorAlertBool[T]
 }
 
-func (t *AlertBoolCommands[T]) Bootstrap() *AlertBoolCommands[T] {
+func NewAlertBoolCommands[T configurator.AlertBoolType](
+	cmdGroup *cmdgroup.CmdGroup,
+	cfgTags configurator.IConfiguratorAlertBool[T],
+) *AlertBoolCommands[T] {
+	t := &AlertBoolCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags}
 	t.CreateEnableCmd()
 	t.CreateDisableCmd()
 	t.CreateStatusCmd()
@@ -169,7 +177,11 @@ type AlertSetStringCommand[T configurator.AlertStringType] struct {
 	cfgTags configurator.IConfiguratorAlertString[T]
 }
 
-func (t *AlertSetStringCommand[T]) Bootstrap() *AlertSetStringCommand[T] {
+func NewAlertSetStringCommand[T configurator.AlertStringType](
+	cmdGroup *cmdgroup.CmdGroup,
+	cfgTags configurator.IConfiguratorAlertString[T],
+) *AlertSetStringCommand[T] {
+	t := &AlertSetStringCommand[T]{CmdGroup: cmdGroup, cfgTags: cfgTags}
 	t.CreateSetCmd()
 	t.CreateUnsetCmd()
 	t.CreateStatusCmd()

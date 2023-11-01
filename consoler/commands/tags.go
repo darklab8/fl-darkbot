@@ -10,12 +10,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type TagCommands struct {
+type tagCommands struct {
 	*cmdgroup.CmdGroup
 	cfgTags configurator.IConfiguratorTags
 }
 
-func (t *TagCommands) Bootstrap() *TagCommands {
+func NewTagCommands(cmd *cmdgroup.CmdGroup, cfgTags configurator.IConfiguratorTags) *tagCommands {
+	t := &tagCommands{CmdGroup: cmd, cfgTags: cfgTags}
 	t.CreateTagAdd()
 	t.CreateTagRemove()
 	t.CreateTagClear()
@@ -23,7 +24,7 @@ func (t *TagCommands) Bootstrap() *TagCommands {
 	return t
 }
 
-func (t *TagCommands) CreateTagAdd() {
+func (t *tagCommands) CreateTagAdd() {
 	command := &cobra.Command{
 		Use:   "add",
 		Short: "Add tags",
@@ -43,7 +44,7 @@ func (t *TagCommands) CreateTagAdd() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t *TagCommands) CreateTagRemove() {
+func (t *tagCommands) CreateTagRemove() {
 	command := &cobra.Command{
 		Use:   "remove",
 		Short: "Remove tags",
@@ -62,7 +63,7 @@ func (t *TagCommands) CreateTagRemove() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t *TagCommands) CreateTagClear() {
+func (t *tagCommands) CreateTagClear() {
 	command := &cobra.Command{
 		Use:   "clear",
 		Short: "Clear tags",
@@ -80,7 +81,7 @@ func (t *TagCommands) CreateTagClear() {
 	t.CurrentCmd.AddCommand(command)
 }
 
-func (t *TagCommands) CreateTagList() {
+func (t *tagCommands) CreateTagList() {
 	command := &cobra.Command{
 		Use:   "list",
 		Short: "List tags",

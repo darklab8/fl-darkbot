@@ -40,70 +40,70 @@ func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
 			ShortDesc: "Welcome to darkbot!",
 		},
 	)
-	root := (&rootCommands{CmdGroup: &rootGroup}).Bootstrap()
+	root := newRootCommands(&rootGroup)
 
-	(&TagCommands{
-		cfgTags:  configurator.NewConfiguratorBase(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"}),
-	}).Bootstrap()
+	NewTagCommands(
+		root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"}),
+		configurator.NewConfiguratorBase(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
 	playerGroup := root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player", ShortDesc: "Player commands"})
-	(&TagCommands{
-		cfgTags:  configurator.NewConfiguratorSystem(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "system", ShortDesc: "System commands"}),
-	}).Bootstrap()
+	NewTagCommands(
+		playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "system", ShortDesc: "System commands"}),
+		configurator.NewConfiguratorSystem(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&TagCommands{
-		cfgTags:  configurator.NewConfiguratorRegion(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "region", ShortDesc: "Region commands"}),
-	}).Bootstrap()
+	NewTagCommands(
+		playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "region", ShortDesc: "Region commands"}),
+		configurator.NewConfiguratorRegion(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&TagCommands{
-		cfgTags:  configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "friend", ShortDesc: "Player friend commands"}),
-	}).Bootstrap()
+	NewTagCommands(
+		playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "friend", ShortDesc: "Player friend commands"}),
+		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&TagCommands{
-		cfgTags:  configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "enemy", ShortDesc: "Player enemy commands"}),
-	}).Bootstrap()
+	NewTagCommands(
+		playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "enemy", ShortDesc: "Player enemy commands"}),
+		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
 	alertGroup := root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "alert", ShortDesc: "Alert commands"})
 
-	(&AlertBoolCommands[models.AlertBaseIfHealthDecreasing]{
-		cfgTags:  configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_decreasing", ShortDesc: "Turn on to receive alert if base health is decreasing"}),
-	}).Bootstrap()
+	NewAlertBoolCommands[models.AlertBaseIfHealthDecreasing](
+		alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_decreasing", ShortDesc: "Turn on to receive alert if base health is decreasing"}),
+		configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&AlertBoolCommands[models.AlertBaseIfUnderAttack]{
-		cfgTags:  configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_is_under_attack", ShortDesc: "Turn on if base health is rapidly decreasing or attack declaration was declared"}),
-	}).Bootstrap()
+	NewAlertBoolCommands[models.AlertBaseIfUnderAttack](
+		alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_is_under_attack", ShortDesc: "Turn on if base health is rapidly decreasing or attack declaration was declared"}),
+		configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&AlertThresholdCommands[models.AlertBaseHealthLowerThan]{
-		cfgTags:  configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_lower_than", ShortDesc: "Set threshold of base health, below which you will receive alert"}),
-	}).Bootstrap()
+	NewAlertThresholdCommands[models.AlertBaseHealthLowerThan](
+		alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_lower_than", ShortDesc: "Set threshold of base health, below which you will receive alert"}),
+		configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&AlertThresholdCommands[models.AlertNeutralPlayersEqualOrGreater]{
-		cfgTags:  configurator.NewCfgAlertNeutralPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_neutral_count_above", ShortDesc: "Set threshold, if above amount of neutral players will be preesent, you will receive alert"}),
-	}).Bootstrap()
+	NewAlertThresholdCommands[models.AlertNeutralPlayersEqualOrGreater](
+		alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_neutral_count_above", ShortDesc: "Set threshold, if above amount of neutral players will be preesent, you will receive alert"}),
+		configurator.NewCfgAlertNeutralPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&AlertThresholdCommands[models.AlertEnemiesEqualOrGreater]{
-		cfgTags:  configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_enemy_count_above", ShortDesc: "Set threshold, if above amount of enemy players will be preesent, you will receive alert"}),
-	}).Bootstrap()
+	NewAlertThresholdCommands[models.AlertEnemiesEqualOrGreater](
+		alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_enemy_count_above", ShortDesc: "Set threshold, if above amount of enemy players will be preesent, you will receive alert"}),
+		configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&AlertThresholdCommands[models.AlertFriendsEqualOrGreater]{
-		cfgTags:  configurator.NewCfgAlertFriendPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_friend_count_above", ShortDesc: "Set threshold, if above amount of friendly players will be preesent, you will receive alert"}),
-	}).Bootstrap()
+	NewAlertThresholdCommands[models.AlertFriendsEqualOrGreater](
+		alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_friend_count_above", ShortDesc: "Set threshold, if above amount of friendly players will be preesent, you will receive alert"}),
+		configurator.NewCfgAlertFriendPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
-	(&AlertSetStringCommand[models.AlertPingMessage]{
-		cfgTags:  configurator.NewCfgAlertPingMessage(configurator.NewConfigurator(channelInfo.Dbpath)),
-		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "ping_message", ShortDesc: "By default `<@DiscordServer.Owner.ID>`. You can change it to something else like `@here` or `@role`"}),
-	}).Bootstrap()
+	NewAlertSetStringCommand[models.AlertPingMessage](
+		alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "ping_message", ShortDesc: "By default `<@DiscordServer.Owner.ID>`. You can change it to something else like `@here` or `@role`"}),
+		configurator.NewCfgAlertPingMessage(configurator.NewConfigurator(channelInfo.Dbpath)),
+	)
 
 	return consolerCmd
 }
@@ -113,11 +113,12 @@ type rootCommands struct {
 	channels configurator.ConfiguratorChannel
 }
 
-func (r *rootCommands) Bootstrap() *rootCommands {
+func newRootCommands(
+	cmdgroup *cmdgroup.CmdGroup,
+) *rootCommands {
+	r := &rootCommands{CmdGroup: cmdgroup}
 	r.channels = configurator.NewConfiguratorChannel(r.Configurator)
 	r.CreatePing()
-	r.CreateConnect()
-	r.CreateDisconnect()
 	return r
 }
 
