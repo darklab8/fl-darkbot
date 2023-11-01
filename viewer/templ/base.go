@@ -43,7 +43,7 @@ func NewTemplateBase(channelID types.DiscordChannelID, dbpath types.Dbpath) Temp
 	return base
 }
 
-type AugmentedBase struct {
+type TemplateAugmentedBase struct {
 	base.Base
 	HealthChange         string
 	IsHealthDecreasing   bool
@@ -55,7 +55,7 @@ type AugmentedBase struct {
 type TemplateRendererBaseInput struct {
 	Header               string
 	LastUpdated          string
-	Bases                []AugmentedBase
+	Bases                []TemplateAugmentedBase
 	HealthDecreasePhrase string
 	UnderAttackPhrase    string
 }
@@ -131,7 +131,7 @@ func (b *TemplateBase) Render() {
 			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(string(b.API.Scrappy.GetBaseAttackStorage().GetData()), base.Name)
 		}
 
-		input.Bases = append(input.Bases, AugmentedBase{
+		input.Bases = append(input.Bases, TemplateAugmentedBase{
 			Base:                 base,
 			HealthChange:         healthDeritive,
 			IsHealthDecreasing:   HealthDecreasing,
