@@ -6,11 +6,11 @@ package viewer
 
 import (
 	"darkbot/settings"
-	"darkbot/settings/utils/logger"
+	"darkbot/settings/logus"
 )
 
 func Run() {
-	logger.Info("Viewer is now running.")
+	logus.Info("Viewer is now running.")
 
 	view := NewViewer(settings.Dbpath)
 	for {

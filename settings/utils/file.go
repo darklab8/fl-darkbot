@@ -2,7 +2,7 @@ package utils
 
 import (
 	"bufio"
-	"darkbot/settings/utils/logger"
+	"darkbot/settings/logus"
 	"fmt"
 	"os"
 )
@@ -17,7 +17,7 @@ func (f *File) OpenToReadF() *File {
 	file, err := os.Open(f.Filepath)
 	f.file = file
 
-	logger.CheckPanic(err, "failed to open ", f.Filepath)
+	logus.CheckFatal(err, "failed to open", logus.FilePath(f.Filepath))
 	return f
 }
 
@@ -44,12 +44,12 @@ func (f *File) FileReadLines() []string {
 func (f *File) CreateToWriteF() *File {
 	file, err := os.Create(f.Filepath)
 	f.file = file
-	logger.CheckPanic(err, "failed to open ", f.Filepath)
+	logus.CheckFatal(err, "failed to open ", logus.FilePath(f.Filepath))
 
 	return f
 }
 func (f *File) WritelnF(msg string) {
 	_, err := f.file.WriteString(fmt.Sprintf("%v\n", msg))
 
-	logger.CheckPanic(err, "failed to write string to file")
+	logus.CheckFatal(err, "failed to write string to file")
 }

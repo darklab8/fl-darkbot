@@ -1,10 +1,14 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"darkbot/settings/types"
+
+	"gorm.io/gorm"
+)
 
 type Channel struct {
 	gorm.DeletedAt
-	ChannelID string `gorm:"primarykey"` // Discord channel reference
+	ChannelID types.DiscordChannelID `gorm:"primarykey"` // Discord channel reference
 }
 
 // ================== Tag Tracking ====================

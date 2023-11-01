@@ -2,8 +2,8 @@ package viewer
 
 import (
 	"darkbot/discorder"
+	"darkbot/settings/logus"
 	"darkbot/settings/types"
-	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"darkbot/viewer/templ"
 	"strings"
@@ -15,7 +15,7 @@ type ChannelView struct {
 	BaseView    templ.TemplateBase
 	Msgs        []discorder.DiscordMessage
 	PlayersView templ.PlayersTemplates
-	ChannelID   string
+	ChannelID   types.DiscordChannelID
 }
 
 func NewChannelView(dbpath types.Dbpath) ChannelView {
@@ -30,7 +30,7 @@ func NewChannelView(dbpath types.Dbpath) ChannelView {
 
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
-func (v *ChannelView) Setup(channelID string) {
+func (v *ChannelView) Setup(channelID types.DiscordChannelID) {
 	v.ChannelID = channelID
 	v.api.ChannelID = channelID
 	v.BaseView.Setup(channelID)
@@ -40,7 +40,7 @@ func (v *ChannelView) Setup(channelID string) {
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
 func (v *ChannelView) Discover() error {
-	logger.Info("viewer.Init.channelID=", v.ChannelID)
+	logus.Info("viewer.Init.channelID=", logus.ChannelID(v.ChannelID))
 	msgs, err := v.api.Discorder.GetLatestMessages(v.ChannelID)
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func (v ChannelView) DeleteOld() {
 		}
 
 		v.api.Discorder.DeleteMessage(v.ChannelID, msg.ID)
-		logger.Info("deleted message with id", msg.ID)
+		logus.Info("deleted message with id", logus.MessageID(msg.ID))
 		deleteLimit--
 	}
 }

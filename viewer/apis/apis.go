@@ -24,14 +24,14 @@ type Alerts struct {
 }
 type API struct {
 	Discorder discorder.Discorder
-	ChannelID string
+	ChannelID types.DiscordChannelID
 	Scrappy   *scrappy.ScrappyStorage
 	Bases     configurator.ConfiguratorBase
 	Players   Players
 	Alerts    Alerts
 }
 
-func NewAPI(channelID string, dbpath types.Dbpath) API {
+func NewAPI(channelID types.DiscordChannelID, dbpath types.Dbpath) API {
 	dbconnection := configurator.NewConfigurator(dbpath)
 	return API{
 		Discorder: discorder.NewClient(),

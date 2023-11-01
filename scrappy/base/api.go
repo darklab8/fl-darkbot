@@ -3,11 +3,12 @@ package base
 import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/settings"
+	"darkbot/settings/types"
 )
 
 type basesAPI struct {
 	api.APIrequest
-	url api.APIurl
+	url types.APIurl
 }
 
 func (b basesAPI) GetBaseData() ([]byte, error) {
@@ -20,6 +21,6 @@ type IbaseAPI interface {
 
 func NewBaseApi() IbaseAPI {
 	b := basesAPI{}
-	b.url = api.APIurl(settings.Config.ScrappyBaseUrl)
+	b.url = types.APIurl(settings.Config.ScrappyBaseUrl)
 	return b
 }

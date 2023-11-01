@@ -32,7 +32,7 @@ type TemplateBase struct {
 	API                     apis.API
 }
 
-func NewTemplateBase(channelID string, dbpath types.Dbpath) TemplateBase {
+func NewTemplateBase(channelID types.DiscordChannelID, dbpath types.Dbpath) TemplateBase {
 	base := TemplateBase{}
 	base.API = apis.NewAPI(channelID, dbpath)
 	base.main.Header = "#darkbot-base-view"
@@ -82,7 +82,7 @@ func MatchBases(bases []base.Base, tags []string) []base.Base {
 	return result
 }
 
-func (b *TemplateBase) Setup(channelID string) {
+func (b *TemplateBase) Setup(channelID types.DiscordChannelID) {
 	b.API.ChannelID = channelID
 	b.main.MessageID = ""
 	b.main.Content = ""
@@ -188,7 +188,7 @@ func (t *TemplateBase) Send() {
 	t.AlertBaseUnderAttack.Send(t.API)
 }
 
-func (t *TemplateBase) MatchMessageID(messageID string) bool {
+func (t *TemplateBase) MatchMessageID(messageID types.DiscordMessageID) bool {
 
 	if messageID == t.main.MessageID {
 		return true
@@ -205,7 +205,7 @@ func (t *TemplateBase) MatchMessageID(messageID string) bool {
 	return false
 }
 
-func (t *TemplateBase) DiscoverMessageID(content string, msgID string) {
+func (t *TemplateBase) DiscoverMessageID(content string, msgID types.DiscordMessageID) {
 	if strings.Contains(content, t.main.Header) {
 		t.main.MessageID = msgID
 		t.main.Content = content

@@ -2,16 +2,17 @@ package configurator
 
 import (
 	"darkbot/configurator/models"
+	"darkbot/settings/logus"
+	"darkbot/settings/types"
 	"darkbot/settings/utils"
-	"darkbot/settings/utils/logger"
 	"fmt"
 )
 
 type IConfiguratorTags interface {
-	TagsAdd(channelID string, tags ...string) *ConfiguratorError
-	TagsRemove(channelID string, tags ...string) *ConfiguratorError
-	TagsList(channelID string) ([]string, *ConfiguratorError)
-	TagsClear(channelID string) *ConfiguratorError
+	TagsAdd(channelID types.DiscordChannelID, tags ...string) *ConfiguratorError
+	TagsRemove(channelID types.DiscordChannelID, tags ...string) *ConfiguratorError
+	TagsList(channelID types.DiscordChannelID) ([]string, *ConfiguratorError)
+	TagsClear(channelID types.DiscordChannelID) *ConfiguratorError
 }
 
 type taggable interface {
@@ -34,7 +35,7 @@ type ConfiguratorPlayerFriend = ConfiguratorTags[models.TagPlayerFriend]
 type ConfiguratorPlayerEnemy = ConfiguratorTags[models.TagPlayerEnemy]
 
 // T =
-func (c ConfiguratorTags[T]) TagsAdd(channelID string, tags ...string) *ConfiguratorError {
+func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...string) *ConfiguratorError {
 	objs := []T{}
 	errors := &ConfiguratorError{}
 	for _, tag := range tags {
@@ -58,31 +59,31 @@ func (c ConfiguratorTags[T]) TagsAdd(channelID string, tags ...string) *Configur
 	}
 
 	res := c.db.Create(objs)
-	logger.CheckWarn(res.Error, "unsuccesful result of c.db.Create")
+	logus.CheckWarn(res.Error, "unsuccesful result of c.db.Create")
 	errors.AppendSQLError(res)
 	return errors
 }
 
-func (c ConfiguratorTags[T]) TagsRemove(channelID string, tags ...string) *ConfiguratorError {
+func (c ConfiguratorTags[T]) TagsRemove(channelID types.DiscordChannelID, tags ...string) *ConfiguratorError {
 	errors := &ConfiguratorError{}
 	for _, tag := range tags {
 		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&T{})
-		logger.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
+		logus.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
 		errors.AppendSQLError(result)
 	}
 	return errors
 }
 
-func (c ConfiguratorTags[T]) TagsList(channelID string) ([]string, *ConfiguratorError) {
+func (c ConfiguratorTags[T]) TagsList(channelID types.DiscordChannelID) ([]string, *ConfiguratorError) {
 	objs := []T{}
 	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
-	logger.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
+	logus.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 
 	return utils.CompL(objs,
 		func(x T) string { return x.GetTag() }), (&ConfiguratorError{}).AppendSQLError(result)
 }
 
-func (c ConfiguratorTags[T]) TagsClear(channelID string) *ConfiguratorError {
+func (c ConfiguratorTags[T]) TagsClear(channelID types.DiscordChannelID) *ConfiguratorError {
 	tags := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
 	fmt.Println("Clear.Find.rowsAffected=", result.RowsAffected)

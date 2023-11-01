@@ -1,9 +1,9 @@
 package settings
 
 import (
+	"darkbot/settings/logus"
 	"darkbot/settings/types"
 	"darkbot/settings/utils"
-	"darkbot/settings/utils/logger"
 	"path/filepath"
 	"strconv"
 
@@ -17,9 +17,9 @@ const (
 )
 
 type ConfigScheme struct {
-	ScrappyBaseUrl       string `env:"SCRAPPY_BASE_URL" envDefault:"undefined"`
-	ScrappyPlayerUrl     string `env:"SCRAPPY_PLAYER_URL" envDefault:"undefined"`
-	ScrappyBaseAttackUrl string `env:"SCRAPPY_BASE_ATTACK_URL" envDefault:"https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"`
+	ScrappyBaseUrl       types.APIurl `env:"SCRAPPY_BASE_URL" envDefault:"undefined"`
+	ScrappyPlayerUrl     types.APIurl `env:"SCRAPPY_PLAYER_URL" envDefault:"undefined"`
+	ScrappyBaseAttackUrl types.APIurl `env:"SCRAPPY_BASE_ATTACK_URL" envDefault:"https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"`
 
 	DiscorderBotToken string `env:"DISCORDER_BOT_TOKEN" envDefault:"undefined"`
 
@@ -32,7 +32,7 @@ type ConfigScheme struct {
 	DevEnvMockApi string `env:"DEVENV_MOCK_API" envDefault:"true"`
 }
 
-var LoopDelay int
+var LoopDelay types.ScrappyLoopDelay
 var Config ConfigScheme
 
 type dbpath types.Dbpath
@@ -45,29 +45,30 @@ func NewDBPath(dbname string) types.Dbpath {
 }
 
 func load() {
-	logger.Info("identifying folder of settings")
+	logus.Info("identifying folder of settings")
 	Workdir = filepath.Dir(utils.GetCurrrentFolder())
 
 	err := godotenv.Load(filepath.Join(Workdir, ".env"))
 	if err == nil {
-		logger.Info("loadded settings from .env")
+		logus.Info("loadded settings from .env")
 	}
 
 	opts := env.Options{RequiredIfNoDef: true}
 	err = env.Parse(&Config, opts)
 
-	logger.CheckPanic(err, "settings have unset variable")
+	logus.CheckFatal(err, "settings have unset variable")
 
-	logger.Info("settings were downloaded. Scrappy base url=", Config.ScrappyBaseUrl)
+	logus.Debug("settings were downloaded. Scrappy base url=", logus.APIUrl(Config.ScrappyBaseUrl))
 
 	Dbpath = NewDBPath(Config.ConfiguratorDbname)
 
-	LoopDelay, err = strconv.Atoi(Config.LoopDelay)
-	logger.CheckPanic(err, "failed to parse LoopDelay")
-	logger.Info("settings.LoopDelay=", LoopDelay)
+	loop_delay, err := strconv.Atoi(Config.LoopDelay)
+	logus.CheckFatal(err, "failed to parse LoopDelay")
+	LoopDelay = types.ScrappyLoopDelay(loop_delay)
+	logus.Info("settings.LoopDelay=", logus.ScrappyLoopDelay(LoopDelay))
 }
 
 func init() {
-	logger.Info("attempt to load settings")
+	logus.Info("attempt to load settings")
 	load()
 }

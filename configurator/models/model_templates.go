@@ -1,10 +1,14 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"darkbot/settings/types"
+
+	"gorm.io/gorm"
+)
 
 type TagTemplate struct {
 	gorm.Model
-	ChannelID string
+	ChannelID types.DiscordChannelID
 	Channel   Channel `gorm:"references:ChannelID"`
 	Tag       string
 }
@@ -19,6 +23,6 @@ type AlertPlayerMoreThan struct {
 
 type AlertTemplate struct {
 	gorm.Model
-	ChannelID string
+	ChannelID types.DiscordChannelID
 	Channel   Channel `gorm:"references:ChannelID,unique"`
 }

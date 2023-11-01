@@ -9,7 +9,8 @@ package discorder
 
 import (
 	"darkbot/settings"
-	"darkbot/settings/utils/logger"
+	"darkbot/settings/logus"
+	"darkbot/settings/types"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -22,41 +23,41 @@ type Discorder struct {
 func NewClient() Discorder {
 	d := Discorder{}
 	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
-	logger.CheckPanic(err, "failed to init discord")
+	logus.CheckFatal(err, "failed to init discord")
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
 	d.dg = dg
 	return d
 }
 
-func (d Discorder) SengMessage(channelID string, content string) error {
-	_, err := d.dg.ChannelMessageSend(channelID, content)
-	logger.CheckWarn(err)
+func (d Discorder) SengMessage(channelID types.DiscordChannelID, content string) error {
+	_, err := d.dg.ChannelMessageSend(string(channelID), content)
+	logus.CheckWarn(err, "failed sending message in discorder", logus.ChannelID(channelID))
 	return err
 }
 
-func (d Discorder) EditMessage(channelID string, messageID string, content string) error {
-	_, err := d.dg.ChannelMessageEdit(channelID, messageID, content)
-	logger.CheckWarn(err)
+func (d Discorder) EditMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID, content string) error {
+	_, err := d.dg.ChannelMessageEdit(string(channelID), string(messageID), content)
+	logus.CheckWarn(err, "failed editing message in discorder", logus.ChannelID(channelID))
 	return err
 }
 
-func (d Discorder) DeleteMessage(channelID string, messageID string) {
-	err := d.dg.ChannelMessageDelete(channelID, messageID)
-	logger.CheckWarn(err)
+func (d Discorder) DeleteMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID) {
+	err := d.dg.ChannelMessageDelete(string(channelID), string(messageID))
+	logus.CheckWarn(err, "failed deleting message in discorder", logus.ChannelID(channelID))
 }
 
 type DiscordMessage struct {
-	ID        string
+	ID        types.DiscordMessageID
 	Content   string
 	Timestamp time.Time
 }
 
-func (d Discorder) GetLatestMessages(channelID string) ([]DiscordMessage, error) {
+func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]DiscordMessage, error) {
 	messagesLimitToGrab := 100 // max 100
-	messages, err := d.dg.ChannelMessages(channelID, messagesLimitToGrab, "", "", "")
+	messages, err := d.dg.ChannelMessages(string(channelID), messagesLimitToGrab, "", "", "")
 	if err != nil {
-		logger.CheckWarn(err, "Unable to get messages from channelId=", channelID)
+		logus.CheckWarn(err, "Unable to get messages from channelId=", logus.ChannelID(channelID))
 		return []DiscordMessage{}, err
 	}
 
@@ -64,7 +65,7 @@ func (d Discorder) GetLatestMessages(channelID string) ([]DiscordMessage, error)
 
 	for _, msg := range messages {
 		result = append(result, DiscordMessage{
-			ID:        msg.ID,
+			ID:        types.DiscordMessageID(msg.ID),
 			Content:   msg.Content,
 			Timestamp: msg.Timestamp,
 		})
@@ -97,20 +98,25 @@ func (d Discorder) GetLatestMessages(channelID string) ([]DiscordMessage, error)
 	return result, nil
 }
 
-func (d Discorder) GetOwnerID(channelID string) (string, error) {
-	channel, err := d.dg.Channel(channelID)
-	logger.Debug("GetOwnerID.err=", err)
+func (d Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOwnerID, error) {
+	channel, err := d.dg.Channel(string(channelID))
+	logus.Error("discord is not connected", logus.OptError(err))
 	if err != nil {
-		return "", err
+		return types.DiscordOwnerID(""), err
 	}
+	channel_owner := types.DiscordOwnerID(channel.OwnerID)
+	logus.CheckWarn(err, "GetOwnerID.err=")
 
-	logger.Debug("channel.OwnerID=", channel.OwnerID)
+	logus.Debug("channel.OwnerID=", logus.OwnerID(channel_owner))
 	guildID := channel.GuildID
 
 	guild, err := d.dg.Guild(guildID)
 	if err != nil {
 		return "", err
 	}
+	logus.CheckWarn(err, "Failed getting Guild ID")
+	guild_owner_id := types.DiscordOwnerID(guild.OwnerID)
+	logus.Debug("guild.OwnerID=", logus.OwnerID(guild_owner_id))
 
-	return guild.OwnerID, nil
+	return guild_owner_id, nil
 }

@@ -7,8 +7,8 @@ package configurator
 import (
 	"darkbot/configurator/models"
 	"darkbot/settings"
+	"darkbot/settings/logus"
 	"darkbot/settings/types"
-	"darkbot/settings/utils/logger"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -26,7 +26,7 @@ func NewConfigurator(dbpath types.Dbpath) Configurator {
 	db, err := gorm.Open(
 		sqlite.Open(string(dbpath)+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{},
 	)
-	logger.CheckPanic(err, "failed to connect database at dbpath=", string(settings.Dbpath))
+	logus.CheckFatal(err, "failed to connect database at dbpath=", logus.Dbpath(settings.Dbpath))
 
 	return Configurator{db: db}
 }

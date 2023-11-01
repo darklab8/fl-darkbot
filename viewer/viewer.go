@@ -3,15 +3,14 @@ package viewer
 import (
 	"darkbot/configurator"
 	"darkbot/settings"
+	"darkbot/settings/logus"
 	"darkbot/settings/types"
-	"darkbot/settings/utils/logger"
-	"fmt"
 	"time"
 )
 
 type ViewerDelays struct {
 	betweenChannels int
-	betweenLoops    int
+	betweenLoops    types.ScrappyLoopDelay
 }
 
 type Viewer struct {
@@ -34,11 +33,11 @@ func NewViewer(dbpath types.Dbpath) Viewer {
 }
 
 func (v Viewer) Update() {
-	logger.Info("Viewer.Update")
+	logus.Info("Viewer.Update")
 
 	// Query all channels
 	channelIDs, _ := v.channels.List()
-	logger.Info("Viewer.Update.channelIDs=", fmt.Sprintf("%v", channelIDs))
+	logus.Info("Viewer.Update.channelIDs=", logus.ChannelIDs(channelIDs))
 
 	// For each channel
 	for _, channelID := range channelIDs {

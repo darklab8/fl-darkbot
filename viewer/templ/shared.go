@@ -1,7 +1,8 @@
 package templ
 
 import (
-	"darkbot/settings/utils/logger"
+	"darkbot/settings/logus"
+	"darkbot/settings/types"
 	"darkbot/viewer/apis"
 	"fmt"
 	"strings"
@@ -16,12 +17,12 @@ const (
 )
 
 type TemplateShared struct {
-	MessageID string
+	MessageID types.DiscordMessageID
 	Content   string
 	Header    string
 }
 
-func CheckTooLongMsgErr(err error, api apis.API, header string, action MsgAction, MessageID string) {
+func CheckTooLongMsgErr(err error, api apis.API, header string, action MsgAction, MessageID types.DiscordMessageID) {
 	if err == nil {
 		return
 	}
@@ -42,10 +43,6 @@ func CheckTooLongMsgErr(err error, api apis.API, header string, action MsgAction
 
 }
 
-func ChannelCheckWarn(err error, channelID string, msg string) {
-	logger.CheckWarn(err, "channelID=", channelID, msg)
-}
-
 func (v *TemplateShared) Send(api apis.API) {
 	if v.Content == "" && v.MessageID != "" {
 		api.Discorder.DeleteMessage(api.ChannelID, v.MessageID)
@@ -58,12 +55,12 @@ func (v *TemplateShared) Send(api apis.API) {
 	var err error
 	if v.MessageID == "" {
 		err = api.Discorder.SengMessage(api.ChannelID, v.Content)
-		ChannelCheckWarn(err, api.ChannelID, "unable to send msg")
+		logus.CheckWarn(err, "unable to send msg", logus.ChannelID(api.ChannelID))
 		CheckTooLongMsgErr(err, api, v.Header, ActSend, "")
 
 	} else {
 		err = api.Discorder.EditMessage(api.ChannelID, v.MessageID, v.Content)
-		ChannelCheckWarn(err, api.ChannelID, "unable to edit msg")
+		logus.CheckWarn(err, "unable to edit msg", logus.ChannelID(api.ChannelID))
 		CheckTooLongMsgErr(err, api, v.Header, ActEdit, v.MessageID)
 	}
 }

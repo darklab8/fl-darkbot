@@ -3,7 +3,7 @@ package templ
 import (
 	"darkbot/scrappy/base"
 	"darkbot/scrappy/shared/records"
-	"darkbot/settings/utils/logger"
+	"darkbot/settings/logus"
 	"darkbot/viewer/apis"
 	"math"
 )
@@ -14,7 +14,7 @@ type ErrorCalculatingDerivative struct {
 
 func (t ErrorCalculatingDerivative) Error() string {
 	err_msg := "Some error calculating derivative :), msg=" + t.msg
-	logger.Warn("ErrorCalculatingDerivative.err_mesg=", err_msg)
+	logus.Warn("ErrorCalculatingDerivative", logus.ErrorMsg(err_msg))
 	return err_msg
 }
 
@@ -22,7 +22,7 @@ type NoNonZeroDerivativesWarning struct {
 }
 
 func (t NoNonZeroDerivativesWarning) Error() string {
-	logger.Warn("No unzero derivatives")
+	logus.Warn("No unzero derivatives")
 	return "No unzero derivatives"
 }
 

@@ -2,7 +2,7 @@ package base
 
 import (
 	"darkbot/scrappy/tests"
-	"darkbot/settings/utils/logger"
+	"darkbot/settings/logus"
 	"os"
 	"path"
 )
@@ -29,6 +29,6 @@ func (a apiBaseSpy) GetBaseData() ([]byte, error) {
 	path_testdata := tests.FixtureCreateTestDataFolder()
 	path_testfile := path.Join(path_testdata, a.Filename)
 	data, err := os.ReadFile(path_testfile)
-	logger.CheckPanic(err, "unable to read file")
+	logus.CheckFatal(err, "unable to read file")
 	return data, nil
 }

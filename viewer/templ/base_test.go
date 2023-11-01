@@ -7,8 +7,8 @@ import (
 	"darkbot/scrappy/baseattack"
 	"darkbot/scrappy/player"
 	"darkbot/scrappy/shared/records"
+	"darkbot/settings/logus"
 	"darkbot/settings/types"
-	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	"fmt"
 	"strings"
@@ -129,17 +129,17 @@ func TestBaseViewerMocked(t *testing.T) {
 // TEST TO FIND OUT derivative of base health
 func TestGetDerivative(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
-		logger.Debug("1")
+		logus.Debug("1")
 		channelID, _ := configurator.FixtureChannel(dbpath)
 		api := apis.NewAPI(channelID, dbpath)
 
 		tags := []string{""}
-		logger.Debug("2")
+		logus.Debug("2")
 		scrappy.Storage = scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.FixturePlayerAPIMock(), baseattack.FixtureBaseAttackAPIMock())
-		logger.Debug("2.1")
-		logger.Debug("2.2")
+		logus.Debug("2.1")
+		logus.Debug("2.2")
 		scrappy.Storage.Update()
-		logger.Debug("2.3")
+		logus.Debug("2.3")
 
 		scrappy.FixtureSetBaseStorageAPI(base.NewMock("basedata2.json"))
 		scrappy.Storage.Update()
@@ -147,7 +147,7 @@ func TestGetDerivative(t *testing.T) {
 			values[1].Timestamp = values[0].Timestamp.Add(time.Minute * 15)
 		})
 
-		logger.Debug("3")
+		logus.Debug("3")
 
 		result1 := make(map[string]base.Base)
 		result2 := make(map[string]base.Base)
@@ -160,18 +160,18 @@ func TestGetDerivative(t *testing.T) {
 				result2[base.Name] = base
 			}
 		})
-		logger.Debug("4")
+		logus.Debug("4")
 		res1 := result1["Stockholm Base"]
 		res2 := result2["Stockholm Base"]
 		_ = res1
 		_ = res2
 
-		logger.Debug("5")
+		logus.Debug("5")
 		baseDerivatives, _ := CalculateDerivates(tags, api)
 		for baseName, baseDeravative := range baseDerivatives {
-			logger.Info("baseName=", baseName, " baseDeravative=", baseDeravative)
+			logus.Info(fmt.Sprintf("baseName=%s, baseDeravative=%f", baseName, baseDeravative))
 		}
-		logger.Debug("6")
+		logus.Debug("6")
 	})
 }
 

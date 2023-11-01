@@ -34,8 +34,8 @@ func FixtureMigrator(callback func(dbpath types.Dbpath)) Configurator {
 	return cfg
 }
 
-func FixtureChannel(dbpath types.Dbpath) (string, ConfiguratorChannel) {
-	channelID := "123"
+func FixtureChannel(dbpath types.Dbpath) (types.DiscordChannelID, ConfiguratorChannel) {
+	channelID := types.DiscordChannelID("123")
 	configurator_ := FixtureConfigurator(dbpath)
 	cfg_channel := ConfiguratorChannel{Configurator: configurator_}
 	cfg_channel.Add(channelID)

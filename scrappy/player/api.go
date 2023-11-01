@@ -3,11 +3,12 @@ package player
 import (
 	"darkbot/scrappy/shared/api"
 	"darkbot/settings"
+	"darkbot/settings/types"
 )
 
 type PlayerAPI struct {
 	api.APIrequest
-	url api.APIurl
+	url types.APIurl
 }
 
 func (b PlayerAPI) GetPlayerData() ([]byte, error) {
@@ -20,6 +21,6 @@ type IPlayerAPI interface {
 
 func NewPlayerAPI() PlayerAPI {
 	a := PlayerAPI{}
-	a.url = api.APIurl(settings.Config.ScrappyPlayerUrl)
+	a.url = types.APIurl(settings.Config.ScrappyPlayerUrl)
 	return a
 }

@@ -2,7 +2,7 @@ package player
 
 import (
 	"darkbot/scrappy/shared/records"
-	"darkbot/settings/utils/logger"
+	"darkbot/settings/logus"
 	"encoding/json"
 )
 
@@ -25,7 +25,7 @@ func (b playerParser) Parse(body []byte) (records.StampedObjects[Player], error)
 
 	playerData := SerializedPlayers{}
 	if err := json.Unmarshal(body, &playerData); err != nil {
-		logger.CheckWarn(err, "unable to unmarshal player request")
+		logus.CheckWarn(err, "unable to unmarshal player request")
 		return record, err
 	}
 

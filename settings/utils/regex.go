@@ -1,14 +1,14 @@
 package utils
 
 import (
-	"darkbot/settings/utils/logger"
-	"fmt"
+	"darkbot/settings/logus"
+	"darkbot/settings/types"
 	"regexp"
 )
 
-func InitRegexExpression(regex **regexp.Regexp, expression string) {
+func InitRegexExpression(regex **regexp.Regexp, expression types.RegExp) {
 	var err error
 
-	*regex, err = regexp.Compile(expression)
-	logger.CheckPanic(err, fmt.Sprintf("failed to init regex={%s} in ", expression), GetCurrentFile())
+	*regex, err = regexp.Compile(string(expression))
+	logus.CheckFatal(err, "failed to init regex", logus.Regex(expression), logus.FilePath(GetCurrentFile()))
 }

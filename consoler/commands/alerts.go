@@ -233,7 +233,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 				}
 			}
 
-			helper.Printer{Cmd: cmd}.Println("OK value is = " + str)
+			helper.Printer{Cmd: cmd}.Println("OK value is = " + string(str))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)

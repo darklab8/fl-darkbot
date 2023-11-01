@@ -2,9 +2,9 @@ package templ
 
 import (
 	"darkbot/scrappy/player"
+	"darkbot/settings/logus"
 	"darkbot/settings/types"
 	"darkbot/settings/utils"
-	"darkbot/settings/utils/logger"
 	"darkbot/viewer/apis"
 	_ "embed"
 	"fmt"
@@ -42,7 +42,7 @@ type PlayersTemplates struct {
 	API     apis.API
 }
 
-func NewTemplatePlayers(channelID string, dbpath types.Dbpath) PlayersTemplates {
+func NewTemplatePlayers(channelID types.DiscordChannelID, dbpath types.Dbpath) PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.API = apis.NewAPI(channelID, dbpath)
 	templator.friends.MainTable.Header = "#darkbot-players-friends-table"
@@ -54,7 +54,7 @@ func NewTemplatePlayers(channelID string, dbpath types.Dbpath) PlayersTemplates 
 	return templator
 }
 
-func (b *PlayersTemplates) Setup(channelID string) {
+func (b *PlayersTemplates) Setup(channelID types.DiscordChannelID) {
 	b.API.ChannelID = channelID
 	b.neutral.MainTable.MessageID = ""
 	b.enemies.MainTable.MessageID = ""
@@ -117,9 +117,9 @@ func (t *PlayersTemplates) Render() {
 		neutralPlayers = append(neutralPlayers, player)
 	}
 
-	logger.Debug("friendPlayers=", friendPlayers)
-	logger.Debug("enemyPlayers=", enemyPlayers)
-	logger.Debug("neutralPlayers=", neutralPlayers)
+	logus.Debug("friendPlayers=", logus.Records(friendPlayers))
+	logus.Debug("enemyPlayers=", logus.Records(enemyPlayers))
+	logus.Debug("neutralPlayers=", logus.Records(neutralPlayers))
 
 	if len(systemTags) > 0 || len(regionTags) > 0 {
 		t.neutral.MainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
@@ -178,7 +178,7 @@ func (t *PlayersTemplates) Send() {
 
 }
 
-func (t *PlayersTemplates) MatchMessageID(messageID string) bool {
+func (t *PlayersTemplates) MatchMessageID(messageID types.DiscordMessageID) bool {
 
 	if messageID == t.friends.MainTable.MessageID {
 		return true
@@ -203,7 +203,7 @@ func (t *PlayersTemplates) MatchMessageID(messageID string) bool {
 	return false
 }
 
-func (t *PlayersTemplates) DiscoverMessageID(content string, msgID string) {
+func (t *PlayersTemplates) DiscoverMessageID(content string, msgID types.DiscordMessageID) {
 	if strings.Contains(content, t.friends.MainTable.Header) {
 		t.friends.MainTable.MessageID = msgID
 	}
