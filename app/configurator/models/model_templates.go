@@ -13,8 +13,8 @@ type TagTemplate struct {
 	Tag       string
 }
 
-func (t TagTemplate) GetTag() string {
-	return t.Tag
+func (t TagTemplate) GetTag() types.Tag {
+	return types.Tag(t.Tag)
 }
 
 type AlertPlayerMoreThan struct {

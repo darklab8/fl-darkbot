@@ -60,9 +60,9 @@ type TemplateRendererBaseInput struct {
 	UnderAttackPhrase    string
 }
 
-func BaseContainsTag(bas base.Base, tags []string) bool {
+func BaseContainsTag(bas base.Base, tags []types.Tag) bool {
 	for _, tag := range tags {
-		if strings.Contains(bas.Name, tag) {
+		if strings.Contains(bas.Name, string(tag)) {
 			return true
 		}
 	}
@@ -70,7 +70,7 @@ func BaseContainsTag(bas base.Base, tags []string) bool {
 	return false
 }
 
-func MatchBases(bases []base.Base, tags []string) []base.Base {
+func MatchBases(bases []base.Base, tags []types.Tag) []base.Base {
 	result := []base.Base{}
 	for _, base := range bases {
 

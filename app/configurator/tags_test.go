@@ -13,8 +13,8 @@ func TestTags(t *testing.T) {
 		channelID, _ := FixtureChannel(dbname)
 
 		cg := NewConfiguratorBase(NewConfigurator(dbname).AutoMigrateSchema())
-		cg.TagsAdd(channelID, []string{"4"}...)
-		cg.TagsAdd(channelID, []string{"5", "6"}...)
+		cg.TagsAdd(channelID, []types.Tag{"4"}...)
+		cg.TagsAdd(channelID, []types.Tag{"5", "6"}...)
 
 		baseTags, _ := cg.TagsList(channelID)
 		assert.Len(t, baseTags, 3)
@@ -32,15 +32,15 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 
 		ConfiguratorChannel{Configurator: NewConfigurator(dbname)}.Add("c1")
 		ConfiguratorChannel{Configurator: NewConfigurator(dbname)}.Add("c2")
-		cg.TagsAdd("c1", []string{"t1"}...)
-		cg.TagsAdd("c2", []string{"t1"}...)
+		cg.TagsAdd("c1", []types.Tag{"t1"}...)
+		cg.TagsAdd("c2", []types.Tag{"t1"}...)
 
 		tags, _ := cg.TagsList("c1")
 		assert.Len(t, tags, 1)
 		tags, _ = cg.TagsList("c2")
 		assert.Len(t, tags, 1)
 
-		err := cg.TagsAdd("c2", []string{"t1"}...)
+		err := cg.TagsAdd("c2", []types.Tag{"t1"}...)
 
 		assert.Error(t, err, "expected error to get in test")
 		assert.Contains(t, err.Error(), "database already has those items")
@@ -59,8 +59,8 @@ func TestDoNotInputRepeatedTags(t *testing.T) {
 		cg := NewConfiguratorBase(configur)
 
 		ConfiguratorChannel{Configurator: configur}.Add("c1")
-		cg.TagsAdd("c1", []string{"t1", "t2"}...)
-		cg.TagsAdd("c1", []string{"t1"}...)
+		cg.TagsAdd("c1", []types.Tag{"t1", "t2"}...)
+		cg.TagsAdd("c1", []types.Tag{"t1"}...)
 
 		tags, _ := cg.TagsList("c1")
 		assert.Len(t, tags, 2)

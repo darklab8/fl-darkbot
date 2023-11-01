@@ -145,3 +145,9 @@ func Dbpath(value types.Dbpath) slogParam {
 		c.params["db_path"] = string(value)
 	}
 }
+
+func Tag(value types.Tag) slogParam {
+	return func(c *slogGroup) {
+		c.params["tag"] = string(value)
+	}
+}

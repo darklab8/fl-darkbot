@@ -23,7 +23,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 		cg := configurator.NewConfiguratorBase(configurator.NewConfigurator(dbpath))
-		cg.TagsAdd(channelID, []string{"Station"}...)
+		cg.TagsAdd(channelID, []types.Tag{"Station"}...)
 
 		scrappy.Storage = scrappy.FixtureMockedStorage()
 		scrappy.Storage.Update()
@@ -88,7 +88,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		record = records.NewStampedObjects[base.Base]()
 		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
 		scrappy.Storage.GetBaseStorage().Add(record)
-		cg.TagsAdd(channelID, []string{"Bank"}...)
+		cg.TagsAdd(channelID, []types.Tag{"Bank"}...)
 		render = NewTemplateBase(channelID, dbpath)
 		render.Render()
 
@@ -108,7 +108,7 @@ func TestBaseViewerRealData(t *testing.T) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 		cg := configurator.NewConfiguratorBase(configurator.NewConfigurator(dbpath))
-		cg.TagsAdd(channelID, []string{"Station"}...)
+		cg.TagsAdd(channelID, []types.Tag{"Station"}...)
 
 		scrappy.Storage = scrappy.NewScrapyStorage(
 			base.NewMock("basedata.json"),
@@ -134,7 +134,7 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 		api := apis.NewAPI(channelID, dbpath)
 
-		tags := []string{""}
+		tags := []types.Tag{""}
 		logus.Debug("2")
 		scrappy.Storage = scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.FixturePlayerAPIMock(), baseattack.FixtureBaseAttackAPIMock())
 		logus.Debug("2.1")
@@ -182,7 +182,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
 		cg := configurator.NewConfiguratorBase(configurator.NewConfigurator(dbpath))
-		cg.TagsAdd(channelID, []string{"LP-7743"}...)
+		cg.TagsAdd(channelID, []types.Tag{"LP-7743"}...)
 
 		scrappy.Storage = scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), player.FixturePlayerAPIMock(), baseattack.NewMock("data_lp.json"))
 		scrappy.Storage.Update()

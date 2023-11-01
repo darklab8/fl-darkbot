@@ -70,9 +70,9 @@ func (b *PlayersTemplates) Setup(channelID types.DiscordChannelID) {
 	b.friends.AlertTmpl.Content = ""
 }
 
-func TagContains(name string, tags []string) bool {
+func TagContains(name string, tags []types.Tag) bool {
 	for _, tag := range tags {
-		if strings.Contains(name, tag) {
+		if strings.Contains(name, string(tag)) {
 			return true
 		}
 	}

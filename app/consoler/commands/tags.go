@@ -4,6 +4,7 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/printer"
+	"darkbot/app/settings/types"
 	"fmt"
 	"strings"
 
@@ -31,7 +32,7 @@ func (t *tagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagAdd.consoler running with args=", args)
-			err := t.cfgTags.TagsAdd(t.GetChannelID(), strings.Join(args, " "))
+			err := t.cfgTags.TagsAdd(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return
@@ -51,7 +52,7 @@ func (t *tagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("CreateTagRemove.consoler running with args=", args)
-			err := t.cfgTags.TagsRemove(t.GetChannelID(), strings.Join(args, " "))
+			err := t.cfgTags.TagsRemove(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
 			if err != nil {
 				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
 				return

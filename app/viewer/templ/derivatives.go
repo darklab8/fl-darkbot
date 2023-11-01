@@ -4,6 +4,7 @@ import (
 	"darkbot/app/scrappy/base"
 	"darkbot/app/scrappy/shared/records"
 	"darkbot/app/settings/logus"
+	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"math"
 )
@@ -26,7 +27,7 @@ func (t WarningNoNonZeroDerivatives) Error() string {
 	return "No unzero derivatives"
 }
 
-func CalculateDerivates(tags []string, api apis.API) (map[string]float64, error) {
+func CalculateDerivates(tags []types.Tag, api apis.API) (map[string]float64, error) {
 	baseHealths := make(map[string][]float64)
 	var res_records []records.StampedObjects[base.Base]
 	api.Scrappy.GetBaseStorage().Records.List(func(records2 []records.StampedObjects[base.Base]) {

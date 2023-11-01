@@ -16,10 +16,10 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
-		configurator.NewConfiguratorRegion(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"region1", "region0"}...)
-		configurator.NewConfiguratorSystem(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"system1", "system2"}...)
-		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"player2"}...)
-		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"player4"}...)
+		configurator.NewConfiguratorRegion(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []types.Tag{"region1", "region0"}...)
+		configurator.NewConfiguratorSystem(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []types.Tag{"system1", "system2"}...)
+		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []types.Tag{"player2"}...)
+		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []types.Tag{"player4"}...)
 
 		players := player.NewPlayerStorage(player.FixturePlayerAPIMock())
 
@@ -72,7 +72,7 @@ func TestPlayerViewerRealData(t *testing.T) {
 		scrappy.Storage = scrappy.FixtureMockedStorage()
 		scrappy.Storage.Update()
 
-		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []string{"RM"}...)
+		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []types.Tag{"RM"}...)
 
 		playerView := NewTemplatePlayers(channelID, dbpath)
 		playerView.Render()

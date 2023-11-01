@@ -17,3 +17,5 @@ type DiscordMessageID string
 type DiscordOwnerID string
 
 type PingMessage string
+
+type Tag string
