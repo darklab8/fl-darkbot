@@ -42,7 +42,7 @@ func (v *ChannelView) Setup(channelID types.DiscordChannelID) {
 func (v *ChannelView) Discover() error {
 	logus.Info("viewer.Init.channelID=", logus.ChannelID(v.ChannelID))
 	msgs, err := v.api.Discorder.GetLatestMessages(v.ChannelID)
-	if err != nil {
+	if logus.CheckWarn(err, "unable to grab latst msg", logus.ChannelID(v.ChannelID)) {
 		return err
 	}
 

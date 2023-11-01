@@ -12,13 +12,11 @@ type APIrequest struct {
 
 func (a APIrequest) GetData(url types.APIurl) ([]byte, error) {
 	resp, err := http.Get(string(url))
-	logus.CheckWarn(err, "unable to get url")
-	if err != nil {
+	if logus.CheckWarn(err, "unable to get url") {
 		return []byte{}, err
 	}
 	body, err := io.ReadAll(resp.Body)
-	logus.CheckWarn(err, "unable to read base body")
-	if err != nil {
+	if logus.CheckWarn(err, "unable to read base body") {
 		return []byte{}, err
 	}
 	return body, nil

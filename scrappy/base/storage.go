@@ -23,13 +23,11 @@ type BaseStorage struct {
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
 	data, err := b.api.GetBaseData()
-	if err != nil {
-		logus.CheckWarn(err, "quering API with error in BaseStorage")
+	if logus.CheckWarn(err, "quering API with error in BaseStorage") {
 		return
 	}
 	record, err := b.parser.Parse(data)
-	if err != nil {
-		logus.CheckWarn(err, "received bad parser parsing result in BaseStorage. Ignoring.")
+	if logus.CheckWarn(err, "received bad parser parsing result in BaseStorage. Ignoring.") {
 		return
 	}
 	b.Add(record)

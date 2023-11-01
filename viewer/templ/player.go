@@ -81,7 +81,7 @@ func TagContains(name string, tags []string) bool {
 
 func (t *PlayersTemplates) Render() {
 	record, err := t.API.Scrappy.GetPlayerStorage().GetLatestRecord()
-	if err != nil {
+	if logus.CheckWarn(err, "unable to get player msgs") {
 		return
 	}
 

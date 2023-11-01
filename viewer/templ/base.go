@@ -2,6 +2,7 @@ package templ
 
 import (
 	"darkbot/scrappy/base"
+	"darkbot/settings/logus"
 	"darkbot/settings/types"
 	"darkbot/settings/utils"
 	"darkbot/viewer/apis"
@@ -105,7 +106,7 @@ func (b *TemplateBase) Render() {
 	}
 
 	record, err := b.API.Scrappy.GetBaseStorage().GetLatestRecord()
-	if err != nil {
+	if logus.CheckWarn(err, "unable to render TemplateBase") {
 		return
 	}
 	sort.Slice(record.List, func(i, j int) bool {

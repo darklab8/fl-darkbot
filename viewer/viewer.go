@@ -43,7 +43,7 @@ func (v Viewer) Update() {
 	for _, channelID := range channelIDs {
 		v.channel.Setup(channelID)
 		err := v.channel.Discover()
-		if err != nil {
+		if logus.CheckWarn(err, "unable to grab Discord msgs", logus.ChannelID(channelID)) {
 			continue
 		}
 		v.channel.Render()

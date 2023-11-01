@@ -43,8 +43,7 @@ func (b *BaseAttackStorage) GetData() BaseAttackData { return BaseAttackData(b.d
 
 func (b *BaseAttackStorage) Update() {
 	data, err := b.api.GetBaseAttackData()
-	if err != nil {
-		logus.CheckWarn(err, "quering API with error in BaseAttackStorage")
+	if logus.CheckWarn(err, "quering API with error in BaseAttackStorage") {
 		return
 	}
 	b.data = BaseAttackData(string((data)))

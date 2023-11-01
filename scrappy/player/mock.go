@@ -12,7 +12,7 @@ import (
 func TestRegeneratePlayerData(t *testing.T) {
 	utils.RegenerativeTest(func() error {
 		data, err := NewPlayerAPI().GetPlayerData()
-		logus.CheckError(err, "new player api get data errored")
+		logus.CheckFatal(err, "new player api get data errored")
 		path_testdata := tests.FixtureCreateTestDataFolder()
 		path_testfile := path.Join(path_testdata, "playerdata.json")
 		err = os.WriteFile(path_testfile, data, os.ModePerm)

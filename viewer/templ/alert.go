@@ -32,7 +32,7 @@ func RenderAlertTemplate(Header string, ChannelID types.DiscordChannelID, Msg st
 	logus.Debug("RenderAlertTemplate.PingMessage.Status", logus.OptError(err.GetError()), logus.PingMessage(pingMessage))
 	if err.GetError() != nil {
 		ownerID, err := api.Discorder.GetOwnerID(ChannelID)
-		if err != nil {
+		if logus.CheckWarn(err, "unable to acquire Discorder Channel Owner", logus.ChannelID(ChannelID)) {
 			ownerID = "TestOwnerID"
 		}
 		pingMessage = types.PingMessage(fmt.Sprintf("<@%s>", ownerID))

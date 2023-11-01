@@ -56,8 +56,7 @@ type DiscordMessage struct {
 func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]DiscordMessage, error) {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(string(channelID), messagesLimitToGrab, "", "", "")
-	if err != nil {
-		logus.CheckWarn(err, "Unable to get messages from channelId=", logus.ChannelID(channelID))
+	if logus.CheckWarn(err, "Unable to get messages from channelId=", logus.ChannelID(channelID)) {
 		return []DiscordMessage{}, err
 	}
 
@@ -100,18 +99,16 @@ func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]Discor
 
 func (d Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOwnerID, error) {
 	channel, err := d.dg.Channel(string(channelID))
-	logus.Error("discord is not connected", logus.OptError(err))
-	if err != nil {
+	if logus.CheckError(err, "discord is not connected") {
 		return types.DiscordOwnerID(""), err
 	}
 	channel_owner := types.DiscordOwnerID(channel.OwnerID)
-	logus.CheckWarn(err, "GetOwnerID.err=")
 
 	logus.Debug("channel.OwnerID=", logus.OwnerID(channel_owner))
 	guildID := channel.GuildID
 
 	guild, err := d.dg.Guild(guildID)
-	if err != nil {
+	if logus.CheckWarn(err, "unable to get Guild Owner", logus.ChannelID(channelID)) {
 		return "", err
 	}
 	logus.CheckWarn(err, "Failed getting Guild ID")

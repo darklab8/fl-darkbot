@@ -22,13 +22,11 @@ type PlayerStorage struct {
 // Conveniently born some factory
 func (b *PlayerStorage) Update() {
 	data, err := b.api.GetPlayerData()
-	if err != nil {
-		logus.CheckWarn(err, "quering API with error in PlayerStorage")
+	if logus.CheckWarn(err, "quering API with error in PlayerStorage") {
 		return
 	}
 	record, err := b.parser.Parse(data)
-	if err != nil {
-		logus.CheckWarn(err, "received bad parser parsing result in PlayerStorage. Ignoring.")
+	if logus.CheckWarn(err, "received bad parser parsing result in PlayerStorage. Ignoring.") {
 		return
 	}
 	b.Add(record)

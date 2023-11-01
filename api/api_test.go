@@ -1,6 +1,7 @@
 package api
 
 import (
+	"darkbot/settings/logus"
 	"fmt"
 	"io"
 	"net/http"
@@ -18,7 +19,7 @@ func FixtureTestWebServer() {
 		is_webserver_active = true
 		go newApi()
 		for i := 0; i < 10; i++ {
-			body := query("/ping")
+			body := testQuery("/ping")
 			if body == "pong!" {
 				break
 			}
@@ -28,23 +29,19 @@ func FixtureTestWebServer() {
 	}
 }
 
-func query(url string) string {
+func testQuery(url string) string {
 	resp, err := http.Get("http://localhost:8080" + url)
-	if err != nil {
-		fmt.Println("query failed")
-	}
+	logus.CheckFatal(err, "query failed")
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("readAll failed")
-	}
+	logus.CheckFatal(err, "readAll failed")
 
 	return string(body)
 }
 
 func TestHomePage(t *testing.T) {
 	FixtureTestWebServer()
-	body := query("/")
+	body := testQuery("/")
 
 	fmt.Println(body)
 
@@ -55,7 +52,7 @@ func TestHomePage(t *testing.T) {
 
 func TestPlayers(t *testing.T) {
 	FixtureTestWebServer()
-	body := query("/players")
+	body := testQuery("/players")
 
 	fmt.Println(body)
 
