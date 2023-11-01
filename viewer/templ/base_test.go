@@ -27,7 +27,7 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		scrappy.Storage = scrappy.FixtureMockedStorage()
 		scrappy.Storage.Update()
-		record := records.StampedObjects[base.Base]{}.New()
+		record := records.NewStampedObjects[base.Base]()
 		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
 		scrappy.Storage.GetBaseStorage().Add(record)
@@ -46,7 +46,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		isEnabled, _ := baseAlertDecreasing.Status(channelID)
 		assert.False(t, isEnabled)
 
-		record = records.StampedObjects[base.Base]{}.New()
+		record = records.NewStampedObjects[base.Base]()
 		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 50})
 		scrappy.Storage.GetBaseStorage().Add(record)
@@ -85,7 +85,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.NotEmpty(t, render.AlertHealthLowerThan.Content)
 		assert.Empty(t, render.AlertBaseUnderAttack.Content)
 
-		record = records.StampedObjects[base.Base]{}.New()
+		record = records.NewStampedObjects[base.Base]()
 		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
 		scrappy.Storage.GetBaseStorage().Add(record)
 		cg.TagsAdd(channelID, []string{"Bank"}...)
@@ -189,10 +189,10 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		assert.True(t, strings.Contains(string(scrappy.Storage.GetBaseAttackStorage().GetData()), "LP-7743"))
 
 		bases := scrappy.Storage.GetBaseStorage()
-		record := records.StampedObjects[base.Base]{}.New()
+		record := records.NewStampedObjects[base.Base]()
 		record.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 5})
 		bases.Add(record)
-		record2 := records.StampedObjects[base.Base]{}.New()
+		record2 := records.NewStampedObjects[base.Base]()
 		record2.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 6})
 		record2.Timestamp.Add(time.Hour * 1)
 		bases.Add(record2)

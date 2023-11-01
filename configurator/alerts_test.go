@@ -15,9 +15,7 @@ func TestAlertTreshold(t *testing.T) {
 		genericCfg := NewConfigurator(dbpath).Migrate()
 		_ = channelID
 
-		cfg := CfgAlertNeutralPlayersGreaterThan{
-			Configurator: genericCfg,
-		}
+		cfg := NewCfgAlertNeutralPlayersGreaterThan(genericCfg)
 		status, _ := cfg.Status(channelID)
 		fmt.Println("status=", status)
 		assert.Nil(t, status, "status is not Nil. failed aert")
@@ -38,9 +36,7 @@ func TestAlertBool(t *testing.T) {
 		genericCfg := NewConfigurator(dbpath).Migrate()
 		_ = channelID
 
-		cfg := CfgAlertBaseIsUnderAttack{
-			Configurator: genericCfg,
-		}
+		cfg := NewCfgAlertBaseIsUnderAttack(genericCfg)
 		status, _ := cfg.Status(channelID)
 		fmt.Println("status=", status)
 		assert.False(t, status, "status is not true. failed aert")

@@ -7,7 +7,8 @@ type StampedObjects[T interface{}] struct {
 	Timestamp time.Time
 }
 
-func (b StampedObjects[T]) New() StampedObjects[T] {
+func NewStampedObjects[T interface{}]() StampedObjects[T] {
+	b := StampedObjects[T]{}
 	b.Timestamp = time.Now()
 	return b
 }

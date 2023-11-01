@@ -16,7 +16,7 @@ type baseParser struct {
 }
 
 func (b baseParser) Parse(body []byte) (records.StampedObjects[Base], error) {
-	record := records.StampedObjects[Base]{}.New()
+	record := records.NewStampedObjects[Base]()
 
 	bases := map[string]baseSerializer{}
 	if err := json.Unmarshal(body, &bases); err != nil {

@@ -21,7 +21,7 @@ type playerParser struct {
 }
 
 func (b playerParser) Parse(body []byte) (records.StampedObjects[Player], error) {
-	record := records.StampedObjects[Player]{}.New()
+	record := records.NewStampedObjects[Player]()
 
 	playerData := SerializedPlayers{}
 	if err := json.Unmarshal(body, &playerData); err != nil {

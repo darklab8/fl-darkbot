@@ -43,65 +43,65 @@ func CreateConsoler(channelInfo helper.ChannelInfo) *cobra.Command {
 	root := (&rootCommands{CmdGroup: &rootGroup}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorBase{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewConfiguratorBase(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base", ShortDesc: "Base commands"}),
 	}).Bootstrap()
 
 	playerGroup := root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player", ShortDesc: "Player commands"})
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorSystem{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewConfiguratorSystem(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "system", ShortDesc: "System commands"}),
 	}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorRegion{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewConfiguratorRegion(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "region", ShortDesc: "Region commands"}),
 	}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorPlayerFriend{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "friend", ShortDesc: "Player friend commands"}),
 	}).Bootstrap()
 
 	(&TagCommands{
-		cfgTags:  configurator.ConfiguratorPlayerEnemy{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: playerGroup.GetChild(playerGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "enemy", ShortDesc: "Player enemy commands"}),
 	}).Bootstrap()
 
 	alertGroup := root.GetChild(root.CurrentCmd, cmdgroup.CmdGroupProps{Command: "alert", ShortDesc: "Alert commands"})
 
 	(&AlertBoolCommands[models.AlertBaseIfHealthDecreasing]{
-		cfgTags:  configurator.CfgAlertBaseHealthIsDecreasing{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_decreasing", ShortDesc: "Turn on to receive alert if base health is decreasing"}),
 	}).Bootstrap()
 
 	(&AlertBoolCommands[models.AlertBaseIfUnderAttack]{
-		cfgTags:  configurator.CfgAlertBaseIsUnderAttack{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_is_under_attack", ShortDesc: "Turn on if base health is rapidly decreasing or attack declaration was declared"}),
 	}).Bootstrap()
 
 	(&AlertThresholdCommands[models.AlertBaseHealthLowerThan]{
-		cfgTags:  configurator.CfgAlertBaseHealthLowerThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "base_health_is_lower_than", ShortDesc: "Set threshold of base health, below which you will receive alert"}),
 	}).Bootstrap()
 
 	(&AlertThresholdCommands[models.AlertNeutralPlayersEqualOrGreater]{
-		cfgTags:  configurator.CfgAlertNeutralPlayersGreaterThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewCfgAlertNeutralPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_neutral_count_above", ShortDesc: "Set threshold, if above amount of neutral players will be preesent, you will receive alert"}),
 	}).Bootstrap()
 
 	(&AlertThresholdCommands[models.AlertEnemiesEqualOrGreater]{
-		cfgTags:  configurator.CfgAlertEnemyPlayersGreaterThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_enemy_count_above", ShortDesc: "Set threshold, if above amount of enemy players will be preesent, you will receive alert"}),
 	}).Bootstrap()
 
 	(&AlertThresholdCommands[models.AlertFriendsEqualOrGreater]{
-		cfgTags:  configurator.CfgAlertFriendPlayersGreaterThan{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewCfgAlertFriendPlayersGreaterThan(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "player_friend_count_above", ShortDesc: "Set threshold, if above amount of friendly players will be preesent, you will receive alert"}),
 	}).Bootstrap()
 
 	(&AlertSetStringCommand[models.AlertPingMessage]{
-		cfgTags:  configurator.CfgAlertPingMessage{Configurator: configurator.NewConfigurator(channelInfo.Dbpath)},
+		cfgTags:  configurator.NewCfgAlertPingMessage(configurator.NewConfigurator(channelInfo.Dbpath)),
 		CmdGroup: alertGroup.GetChild(alertGroup.CurrentCmd, cmdgroup.CmdGroupProps{Command: "ping_message", ShortDesc: "By default `<@DiscordServer.Owner.ID>`. You can change it to something else like `@here` or `@role`"}),
 	}).Bootstrap()
 
@@ -114,7 +114,7 @@ type rootCommands struct {
 }
 
 func (r *rootCommands) Bootstrap() *rootCommands {
-	r.channels = configurator.ConfiguratorChannel{Configurator: r.Configurator}
+	r.channels = configurator.NewConfiguratorChannel(r.Configurator)
 	r.CreatePing()
 	r.CreateConnect()
 	r.CreateDisconnect()

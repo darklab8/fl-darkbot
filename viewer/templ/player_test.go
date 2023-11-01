@@ -24,7 +24,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		players := player.PlayerStorage{}
 
 		scrappy.Storage = scrappy.FixtureNewStorage(&players)
-		record := records.StampedObjects[player.Player]{}.New()
+		record := records.NewStampedObjects[player.Player]()
 		record.Add(player.Player{Name: "player1", System: "system1", Region: "region1"})
 		record.Add(player.Player{Name: "player2", System: "system2", Region: "region2"})
 		record.Add(player.Player{Name: "player3", System: "system3", Region: "region3"})
