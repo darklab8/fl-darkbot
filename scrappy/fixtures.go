@@ -6,7 +6,7 @@ import (
 	"darkbot/scrappy/player"
 )
 
-func FixtureNewStorage(players *player.PlayerStorage) *ScrappyStorage {
+func FixtureNewStorageWithPlayers(players *player.PlayerStorage) *ScrappyStorage {
 	return &ScrappyStorage{playerStorage: players}
 }
 
