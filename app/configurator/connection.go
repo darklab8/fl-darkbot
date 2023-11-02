@@ -32,7 +32,7 @@ func NewConfigurator(dbpath types.Dbpath) Configurator {
 }
 
 func (cg Configurator) AutoMigrateSchema() Configurator {
-	cg.db.AutoMigrate(
+	err := cg.db.AutoMigrate(
 		&models.Channel{},
 		&models.TagBase{},
 		&models.TagPlayerFriend{},
@@ -49,5 +49,8 @@ func (cg Configurator) AutoMigrateSchema() Configurator {
 		&models.AlertBaseIfUnderAttack{},
 		&models.AlertPingMessage{},
 	)
+	if !logus.CheckWarn(err, "AutoMigrateSchema was executed with problems", logus.OptError(err)) {
+		logus.Info("AutoMigrateSchema was executed fine")
+	}
 	return cg
 }
