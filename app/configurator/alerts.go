@@ -159,7 +159,15 @@ func (c IConfiguratorAlertBool[T]) Status(channelID types.DiscordChannelID) (boo
 	obj := T{}
 	result := c.db.Where("channel_id = ?", channelID).Limit(1).Find(&obj)
 
-	return result.Error == nil && result.RowsAffected == 1, result.Error
+	if result.Error != nil {
+		return false, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return false, ErrorZeroAffectedRows{}
+	}
+
+	return true, nil
 }
 
 ////////////////////////////

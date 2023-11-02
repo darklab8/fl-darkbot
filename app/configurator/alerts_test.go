@@ -18,8 +18,8 @@ func TestAlertTreshold(t *testing.T) {
 		cfg := NewCfgAlertNeutralPlayersGreaterThan(genericCfg)
 		status, err := cfg.Status(channelID)
 		logus.Debug(fmt.Sprintf("status=%v", status))
-		assert.Error(t, err, "error not found")
-		assert.Contains(t, err.Error(), "not found")
+		assert.Error(t, err, ErrorZeroAffectedRowsMsg)
+		assert.ErrorContains(t, err, ErrorZeroAffectedRowsMsg)
 
 		cfg.Set(channelID, 5)
 		status, err = cfg.Status(channelID)
@@ -29,7 +29,7 @@ func TestAlertTreshold(t *testing.T) {
 		cfg.Unset(channelID)
 		_, err = cfg.Status(channelID)
 		assert.Error(t, err)
-		assert.Contains(t, err.Error(), "not found")
+		assert.ErrorContains(t, err, ErrorZeroAffectedRowsMsg)
 	})
 }
 

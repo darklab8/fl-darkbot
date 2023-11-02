@@ -6,7 +6,6 @@ import (
 	"darkbot/app/consoler/printer"
 	"darkbot/app/settings/logus"
 	"strconv"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -82,7 +81,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 			if err != nil {
 				errMsg := err.Error()
 
-				if strings.Contains(errMsg, "record not found") {
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
 					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {
@@ -121,7 +120,11 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 			logus.Debug("CreateEnableCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Enable(t.GetChannelID())
 			if err != nil {
-				printer.Println(cmd, "ERR msg="+err.Error())
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "ERR it was already enabled")
+				} else {
+					printer.Println(cmd, "ERR ="+err.Error())
+				}
 				return
 			}
 			logus.Debug("Create Enable is finished", logus.Args(args))
@@ -140,7 +143,11 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 			logus.Debug("CreateDisableCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Disable(t.GetChannelID())
 			if err != nil {
-				printer.Println(cmd, "ERR msg="+err.Error())
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "ERR it was already disabled")
+				} else {
+					printer.Println(cmd, "ERR ="+err.Error())
+				}
 				return
 			}
 			printer.Println(cmd, "OK Alert is disabled")
@@ -159,8 +166,8 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 			if err != nil {
 				errMsg := err.Error()
 
-				if strings.Contains(errMsg, "record not found") {
-					printer.Println(cmd, "OK status of alert is disabled")
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "OK status is disabled")
 					return
 				} else {
 					printer.Println(cmd, "ERR ="+errMsg)
@@ -221,7 +228,11 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
-				printer.Println(cmd, "ERR msg="+err.Error())
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "ERR it was already unset")
+				} else {
+					printer.Println(cmd, "ERR ="+err.Error())
+				}
 				return
 			}
 			printer.Println(cmd, "OK value is unset")
@@ -239,8 +250,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 			str, err := t.cfgTags.Status(t.GetChannelID())
 			if err != nil {
 				errMsg := err.Error()
-
-				if strings.Contains(errMsg, "record not found") {
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
 					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {

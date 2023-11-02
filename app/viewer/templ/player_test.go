@@ -48,7 +48,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 		enemyAlerts := configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(dbpath))
 		_, err := enemyAlerts.Status(channelID)
-		assert.ErrorContains(t, err, "not found")
+		assert.Error(t, err, configurator.ErrorZeroAffectedRowsMsg)
 
 		enemyAlerts.Set(channelID, 1)
 		integer, err := enemyAlerts.Status(channelID)

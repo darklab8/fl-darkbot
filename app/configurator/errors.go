@@ -8,8 +8,10 @@ type ErrorZeroAffectedRows struct {
 	ExtraMsg string
 }
 
+const ErrorZeroAffectedRowsMsg = "Zero affected rows. not found records. Expected more."
+
 func (z ErrorZeroAffectedRows) Error() string {
-	return "Zero affected rows. not found records. Expected more." + z.ExtraMsg
+	return ErrorZeroAffectedRowsMsg + z.ExtraMsg
 }
 
 /////////////////////
