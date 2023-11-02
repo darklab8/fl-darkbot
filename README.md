@@ -42,8 +42,8 @@ The project has 5 package parts parts:
 - cobra-cli
 - gorm (sqlite3)
 - docker
-- terraform (hetzner / helm)
-- microk8s (helm)
+- terraform (hetzner / docker cli ami image)
+- terraform docker provider
 
 # Dev commands
 
