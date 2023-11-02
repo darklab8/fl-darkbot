@@ -9,7 +9,7 @@ import (
 )
 
 func TestAPI(t *testing.T) {
-	api := NewBaseAttackAPI()
+	api := FixtureBaseAttackAPIMock()
 	result, _ := api.GetBaseAttackData()
 	data := string(result)
 	logus.Debug(data)

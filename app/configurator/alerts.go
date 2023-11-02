@@ -6,24 +6,6 @@ import (
 	"darkbot/app/settings/types"
 )
 
-type iConfiguratorBoolAlert interface {
-	Enable(channelID string) error
-	Disable(channelID string) error
-	Status(channelID string) error
-}
-
-type iConfiguratorThresholdAlert interface {
-	Set(channelID string, value int) error
-	Unset(channelID string) error
-	Status(channelID string) (*int, error)
-}
-
-type iConfiguratorStringValue interface {
-	Set(channelID string, value string) error
-	Unset(channelID string) error
-	Status(channelID string) (string, error)
-}
-
 type AlertThresholdType interface {
 	models.AlertNeutralPlayersEqualOrGreater |
 		models.AlertEnemiesEqualOrGreater |
@@ -111,7 +93,7 @@ func (c IConfiguratorAlertThreshold[T]) Set(channelID types.DiscordChannelID, va
 func (c IConfiguratorAlertThreshold[T]) Unset(channelID types.DiscordChannelID) error {
 	objs := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
-	if len(objs) == 0 {
+	if result.RowsAffected == 0 {
 		return ErrorZeroAffectedRows{}
 	}
 	result = c.db.Unscoped().Delete(&objs)
