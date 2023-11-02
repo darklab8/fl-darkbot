@@ -1,4 +1,8 @@
 version: "3"
+
+env:
+  tag_version: v0.3.11-a.3
+
 tasks:
   build-version:
     cmds:
@@ -34,15 +38,15 @@ tasks:
 
   docker:build:
     cmds:
-      - docker build --tag darkwind8/darkbot:v0.3.11-a.2 .
+      - docker build --tag darkwind8/darkbot:$tag_version .
 
   docker:push:
     cmds:
-      - docker push darkwind8/darkbot:v0.3.11-a.2
+      - docker push darkwind8/darkbot:$tag_version
 
   docker:run:
     cmds:
-      - docker run -it darkwind8/darkbot:v0.3.11-a.2
+      - docker run -it darkwind8/darkbot:$tag_version
 
   docker:buildpush:
     cmds:
