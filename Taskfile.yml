@@ -49,7 +49,7 @@ tasks:
       - task: docker:build
       - task: docker:push
 
-  shell:
+  shell:staging:
     cmds:
       - ssh -i ~/.ssh/id_rsa.darklab root@5.161.80.45
 

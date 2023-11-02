@@ -197,6 +197,10 @@ func (c IConfiguratorAlertString[T]) Status(channelID types.DiscordChannelID) (t
 		return "", result.Error
 	}
 
+	if result.RowsAffected == 0 {
+		return "", ErrorZeroAffectedRows{}
+	}
+
 	str := obj.GetValue()
 	return types.PingMessage(str), result.Error
 }

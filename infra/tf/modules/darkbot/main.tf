@@ -17,6 +17,10 @@ variable "consoler_prefix" {
   type = string
 }
 
+variable "debug" {
+  type = bool
+}
+
 variable "secrets" {
   type = map(string)
 }
@@ -35,6 +39,7 @@ resource "docker_container" "darkbot" {
     "CONSOLER_PREFIX=${var.consoler_prefix}",
     "LOOP_DELAY=60",
     "DEVENV_MOCK_API=false",
+    "DARKBOT_LOG_LEVEL=${var.debug ? "DEBUG" : "WARN"}"
   ]
 
   restart = "always"

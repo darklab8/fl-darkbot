@@ -20,6 +20,7 @@ module "darkbot" {
   consoler_prefix     = ","
   secrets             = local.secrets
   tag_version         = "v0.3.11-a.2"
+  debug               = true
 }
 
 # # Create a docker image resource
