@@ -93,8 +93,14 @@ func (c ConfiguratorTags[T]) TagsList(channelID types.DiscordChannelID) ([]types
 	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
 	logus.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 
-	return utils.CompL(objs,
-		func(x T) types.Tag { return x.GetTag() }), result.Error
+	tags := utils.CompL(objs,
+		func(x T) types.Tag { return x.GetTag() })
+
+	if result.RowsAffected == 0 {
+		return tags, ErrorZeroAffectedRows{}
+	}
+
+	return tags, result.Error
 }
 
 func (c ConfiguratorTags[T]) TagsClear(channelID types.DiscordChannelID) error {

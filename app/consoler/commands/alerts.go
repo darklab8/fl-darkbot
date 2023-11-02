@@ -62,7 +62,11 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
-				printer.Println(cmd, "ERR msg="+err.Error())
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "ERR it is already unset")
+				} else {
+					printer.Println(cmd, "ERR ="+err.Error())
+				}
 				return
 			}
 			printer.Println(cmd, "OK Alert is unset")
@@ -82,7 +86,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 				errMsg := err.Error()
 
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
-					printer.Println(cmd, "OK status of alert is disabled")
+					printer.Println(cmd, "OK state is disabled")
 					return
 				} else {
 					printer.Println(cmd, "ERR ="+errMsg)
@@ -121,7 +125,7 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 			err := t.cfgTags.Enable(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
-					printer.Println(cmd, "ERR it was already enabled")
+					printer.Println(cmd, "ERR state was already enabled")
 				} else {
 					printer.Println(cmd, "ERR ="+err.Error())
 				}
@@ -144,7 +148,7 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 			err := t.cfgTags.Disable(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
-					printer.Println(cmd, "ERR it was already disabled")
+					printer.Println(cmd, "ERR state was already disabled")
 				} else {
 					printer.Println(cmd, "ERR ="+err.Error())
 				}
@@ -167,7 +171,7 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 				errMsg := err.Error()
 
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
-					printer.Println(cmd, "OK status is disabled")
+					printer.Println(cmd, "OK alert status is disabled")
 					return
 				} else {
 					printer.Println(cmd, "ERR ="+errMsg)
@@ -229,7 +233,7 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
-					printer.Println(cmd, "ERR it was already unset")
+					printer.Println(cmd, "ERR state was already unset")
 				} else {
 					printer.Println(cmd, "ERR ="+err.Error())
 				}
@@ -251,7 +255,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 			if err != nil {
 				errMsg := err.Error()
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
-					printer.Println(cmd, "OK status of alert is disabled")
+					printer.Println(cmd, "OK state of alert is disabled")
 					return
 				} else {
 					printer.Println(cmd, "ERR ="+errMsg)

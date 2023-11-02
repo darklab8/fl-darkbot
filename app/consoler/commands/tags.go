@@ -79,7 +79,11 @@ func (t *tagCommands) CreateTagClear() {
 			logus.Debug("CreateTagClear.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.TagsClear(t.GetChannelID())
 			if err != nil {
-				printer.Println(cmd, "ERR msg="+err.Error())
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "ERR list is already empty. nothing to clear.")
+				} else {
+					printer.Println(cmd, "ERR ="+err.Error())
+				}
 				return
 			}
 
@@ -98,7 +102,11 @@ func (t *tagCommands) CreateTagList() {
 			tags, cfgErr := t.cfgTags.TagsList(t.GetChannelID())
 			err := cfgErr
 			if err != nil {
-				printer.Println(cmd, "ERR msg="+err.Error())
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "OK tag list is empty")
+				} else {
+					printer.Println(cmd, "ERR ="+err.Error())
+				}
 				return
 			}
 
