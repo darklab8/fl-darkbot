@@ -34,16 +34,24 @@ tasks:
 
   docker:build:
     cmds:
-      - docker build --tag darkwind8/darkbot:v0.3.11 .
+      - docker build --tag darkwind8/darkbot:v0.3.11-a.1 .
 
   docker:push:
     cmds:
-      - docker push darkwind8/darkbot:v0.3.11
+      - docker push darkwind8/darkbot:v0.3.11-a.1
+
+  docker:run:
+    cmds:
+      - docker run -it darkwind8/darkbot:v0.3.11-a.1
 
   docker:buildpush:
     cmds:
       - task: docker:build
       - task: docker:push
+
+  shell:
+    cmds:
+      - ssh -i ~/.ssh/id_rsa.darklab root@5.161.80.45
 
   mkdocs:dev:
     cmds:

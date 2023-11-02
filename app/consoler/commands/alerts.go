@@ -44,7 +44,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 			printer.Println(cmd, "Parsed integer = "+strconv.Itoa(integer))
 			err = t.cfgTags.Set(t.GetChannelID(), integer)
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			logus.Debug("checking args again?", logus.Args(args))
@@ -63,7 +63,7 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			printer.Println(cmd, "OK Alert is unset")
@@ -86,7 +86,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {
-					cmd.OutOrStdout().Write([]byte("ERR =" + errMsg))
+					printer.Println(cmd, "ERR ="+errMsg)
 					return
 				}
 			}
@@ -121,7 +121,7 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 			logus.Debug("CreateEnableCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Enable(t.GetChannelID())
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			logus.Debug("Create Enable is finished", logus.Args(args))
@@ -140,7 +140,7 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 			logus.Debug("CreateDisableCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Disable(t.GetChannelID())
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			printer.Println(cmd, "OK Alert is disabled")
@@ -163,7 +163,7 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {
-					cmd.OutOrStdout().Write([]byte("ERR =" + errMsg))
+					printer.Println(cmd, "ERR ="+errMsg)
 					return
 				}
 			}
@@ -202,7 +202,7 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd() {
 			str := args[0]
 			err := t.cfgTags.Set(t.GetChannelID(), str)
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			logus.Debug("finished CreateSetCmd", logus.Args(args))
@@ -221,7 +221,7 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			printer.Println(cmd, "OK value is unset")
@@ -244,7 +244,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 					printer.Println(cmd, "OK status of alert is disabled")
 					return
 				} else {
-					cmd.OutOrStdout().Write([]byte("ERR =" + errMsg))
+					printer.Println(cmd, "ERR ="+errMsg)
 					return
 				}
 			}

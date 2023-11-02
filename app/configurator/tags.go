@@ -100,6 +100,9 @@ func (c ConfiguratorTags[T]) TagsList(channelID types.DiscordChannelID) ([]types
 func (c ConfiguratorTags[T]) TagsClear(channelID types.DiscordChannelID) error {
 	tags := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
+	if len(tags) == 0 {
+		return ErrorZeroAffectedRows{ExtraMsg: "no tags found"}
+	}
 	logus.Debug("Clear.Find", logus.GormResult(result))
 	result = c.db.Unscoped().Delete(&tags)
 	logus.Debug("Clear.Detete", logus.GormResult(result))

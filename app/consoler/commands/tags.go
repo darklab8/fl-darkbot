@@ -35,7 +35,7 @@ func (t *tagCommands) CreateTagAdd() {
 			logus.Debug("CreateTagAdd.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.TagsAdd(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			logus.Debug("CreateTagAdd", logus.Args(args))
@@ -53,13 +53,19 @@ func (t *tagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateTagRemove.consoler running with args=", logus.Args(args))
-			err := t.cfgTags.TagsRemove(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
-			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+
+			if len(args) == 0 {
+				printer.Println(cmd, "No tags found to remove. Expected at least one")
 				return
 			}
 
-			printer.Println(cmd, "OK tags are removed")
+			err := t.cfgTags.TagsRemove(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
+			if err != nil {
+				printer.Println(cmd, "ERR msg="+err.Error())
+				return
+			}
+
+			printer.Println(cmd, "OK tags are removed"+strings.Join(args, " "))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -73,7 +79,7 @@ func (t *tagCommands) CreateTagClear() {
 			logus.Debug("CreateTagClear.consoler running with args=", logus.Args(args))
 			err := t.cfgTags.TagsClear(t.GetChannelID())
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 
@@ -92,7 +98,7 @@ func (t *tagCommands) CreateTagList() {
 			tags, cfgErr := t.cfgTags.TagsList(t.GetChannelID())
 			err := cfgErr
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR msg=" + err.Error()))
+				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 

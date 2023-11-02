@@ -78,7 +78,11 @@ func Regex(value types.RegExp) slogParam {
 
 func Items[T any](value []T, item_name string) slogParam {
 	return func(c *slogGroup) {
-		c.params[item_name] = fmt.Sprintf("%v", value)
+		sliced_string := fmt.Sprintf("%v", value)
+		if len(sliced_string) > 300 {
+			sliced_string = sliced_string[:300] + "...sliced string"
+		}
+		c.params[item_name] = sliced_string
 		c.params[fmt.Sprintf("%s_len", item_name)] = fmt.Sprintf("%d", len(value))
 	}
 }

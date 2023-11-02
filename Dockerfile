@@ -1,4 +1,4 @@
-FROM golang:1.19.3-bullseye as build
+FROM golang:1.21-bullseye as build
 
 RUN apt update
 RUN apt install -y build-essential
@@ -12,16 +12,7 @@ RUN go mod download -x
 
 RUN mkdir data
 COPY main.go ./
-COPY management management
-COPY configurator configurator
-COPY consoler consoler
-COPY discorder discorder
-COPY listener listener
-COPY scrappy scrappy
-COPY settings settings
-COPY utils utils
-COPY viewer viewer
-COPY dtypes dtypes
+COPY app app
 RUN go build -v -o main main.go
 
 FROM debian:11.6-slim as runner

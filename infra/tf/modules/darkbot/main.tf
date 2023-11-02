@@ -1,8 +1,12 @@
 # Create a docker image resource
 # -> docker pull nginx:latest
 resource "docker_image" "darkbot" {
-  name         = "darkwind8/darkbot:v0.3.10"
+  name         = "darkwind8/darkbot:${var.tag_version}"
   keep_locally = true
+}
+
+variable "tag_version" {
+  type = string
 }
 
 variable "configurator_dbname" {

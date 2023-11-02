@@ -5,6 +5,7 @@ import (
 	"darkbot/app/configurator/models"
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/consoler_types"
+	"darkbot/app/consoler/printer"
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
@@ -178,6 +179,8 @@ func newRootCommands(
 	r := &rootCommands{CmdGroup: cmdgroup}
 	r.channels = configurator.NewConfiguratorChannel(r.Configurator)
 	r.CreatePing()
+	r.CreateConnect()
+	r.CreateDisconnect()
 	return r
 }
 
@@ -187,7 +190,7 @@ func (r *rootCommands) CreatePing() {
 		Short: "Check stuff is working",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("ping called with args=", logus.Args(args))
-			cmd.OutOrStdout().Write([]byte("Pong! from consoler"))
+			printer.Println(cmd, "Pong! from consoler")
 		},
 	}
 	r.CurrentCmd.AddCommand(command)
@@ -201,10 +204,10 @@ func (r *rootCommands) CreateConnect() {
 		Run: func(cmd *cobra.Command, args []string) {
 			err := r.channels.Add(r.GetChannelID())
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR channel may be already connected, msg=" + err.Error()))
+				printer.Println(cmd, "ERR channel may be already connected, msg="+err.Error())
 				return
 			}
-			cmd.OutOrStdout().Write([]byte("OK Channel is connected"))
+			printer.Println(cmd, "OK Channel is connected")
 		},
 	}
 	r.CurrentCmd.AddCommand(command)
@@ -217,10 +220,10 @@ func (r *rootCommands) CreateDisconnect() {
 		Run: func(cmd *cobra.Command, args []string) {
 			err := r.channels.Remove(r.GetChannelID())
 			if err != nil {
-				cmd.OutOrStdout().Write([]byte("ERR channel may be already disconnected, msg=" + err.Error()))
+				printer.Println(cmd, "ERR channel may be already disconnected, msg="+err.Error())
 				return
 			}
-			cmd.OutOrStdout().Write([]byte("OK Channel is disconnected"))
+			printer.Println(cmd, "OK Channel is disconnected")
 		},
 	}
 	r.CurrentCmd.AddCommand(command)

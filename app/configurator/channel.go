@@ -36,6 +36,9 @@ func (c ConfiguratorChannel) Add(channelID types.DiscordChannelID) error {
 
 func (c ConfiguratorChannel) Remove(channelID types.DiscordChannelID) error {
 	result := c.db.Where("channel_id = ?", channelID).Delete(&models.Channel{})
+	if result.Error == nil && result.RowsAffected == 0 {
+		return ErrorZeroAffectedRows{}
+	}
 	return result.Error
 }
 
