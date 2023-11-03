@@ -1,4 +1,4 @@
-package views
+package baseview
 
 import (
 	"darkbot/app/scrappy/base"

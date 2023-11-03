@@ -6,6 +6,8 @@ import (
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
+	"darkbot/app/viewer/views/baseview"
+	"darkbot/app/viewer/views/playerview"
 	"strings"
 	"time"
 )
@@ -20,8 +22,8 @@ type ChannelView struct {
 // apis.NewAPI(view.ChannelID, dbpath)
 func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView {
 	view := ChannelView{api: api}
-	view.views = append(view.views, views.NewTemplateBase(api))
-	view.views = append(view.views, views.NewTemplatePlayers(api))
+	view.views = append(view.views, baseview.NewTemplateBase(api))
+	view.views = append(view.views, playerview.NewTemplatePlayers(api))
 	view.ChannelID = channelID
 
 	return view

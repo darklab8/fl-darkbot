@@ -1,4 +1,4 @@
-package views
+package baseview
 
 import (
 	"darkbot/app/scrappy/base"
@@ -6,6 +6,7 @@ import (
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
+	"darkbot/app/viewer/views"
 	_ "embed"
 	"fmt"
 	"sort"
@@ -26,10 +27,10 @@ func init() {
 // Base
 
 type TemplateBase struct {
-	main                    TemplateShared
-	alertHealthLowerThan    TemplateShared
-	alertHealthIsDecreasing TemplateShared
-	alertBaseUnderAttack    TemplateShared
+	main                    views.TemplateShared
+	alertHealthLowerThan    views.TemplateShared
+	alertHealthIsDecreasing views.TemplateShared
+	alertBaseUnderAttack    views.TemplateShared
 	api                     *apis.API
 }
 
@@ -144,7 +145,7 @@ func (b *TemplateBase) Render() error {
 	if healthThreshold, err := b.api.Alerts.BaseHealthLowerThan.Status(b.api.ChannelID); err == nil {
 		for _, base := range input.Bases {
 			if int(base.Health) < healthThreshold {
-				b.alertHealthLowerThan.Content = RenderAlertTemplate(b.alertHealthLowerThan.Header, b.api.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), healthThreshold), b.api)
+				b.alertHealthLowerThan.Content = views.RenderAlertTemplate(b.alertHealthLowerThan.Header, b.api.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), healthThreshold), b.api)
 				break
 			}
 		}
@@ -154,7 +155,7 @@ func (b *TemplateBase) Render() error {
 	if isAlertEnabled, err := b.api.Alerts.BaseHealthIsDecreasing.Status(b.api.ChannelID); err == nil && isAlertEnabled {
 		for _, base := range input.Bases {
 			if base.IsHealthDecreasing {
-				b.alertHealthIsDecreasing.Content = RenderAlertTemplate(b.alertHealthIsDecreasing.Header, b.api.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(base.Health), base.HealthChange), b.api)
+				b.alertHealthIsDecreasing.Content = views.RenderAlertTemplate(b.alertHealthIsDecreasing.Header, b.api.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(base.Health), base.HealthChange), b.api)
 				break
 			}
 		}
@@ -164,7 +165,7 @@ func (b *TemplateBase) Render() error {
 	if isAlertEnabled, _ := b.api.Alerts.BaseIsUnderAttack.Status(b.api.ChannelID); isAlertEnabled {
 		for _, base := range input.Bases {
 			if base.IsUnderAttack {
-				b.alertBaseUnderAttack.Content = RenderAlertTemplate(b.alertBaseUnderAttack.Header, b.api.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %s is dropping faster than %f. Or it was detected at forum attack declaration thread.", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.api)
+				b.alertBaseUnderAttack.Content = views.RenderAlertTemplate(b.alertBaseUnderAttack.Header, b.api.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %s is dropping faster than %f. Or it was detected at forum attack declaration thread.", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.api)
 				break
 			}
 		}

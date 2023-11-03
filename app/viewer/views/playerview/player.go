@@ -1,4 +1,4 @@
-package views
+package playerview
 
 import (
 	"darkbot/app/scrappy/player"
@@ -6,6 +6,7 @@ import (
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
+	"darkbot/app/viewer/views"
 	_ "embed"
 	"fmt"
 	"strings"
@@ -23,16 +24,16 @@ import (
 // Send
 
 type PlayersFriends struct {
-	mainTable TemplateShared
-	alertTmpl TemplateShared
+	mainTable views.TemplateShared
+	alertTmpl views.TemplateShared
 }
 type PlayersEnemies struct {
-	mainTable TemplateShared
-	alertTmpl TemplateShared
+	mainTable views.TemplateShared
+	alertTmpl views.TemplateShared
 }
 type PlayersNeutral struct {
-	mainTable TemplateShared
-	alertTmpl TemplateShared
+	mainTable views.TemplateShared
+	alertTmpl views.TemplateShared
 }
 
 type PlayersTemplates struct {
@@ -137,17 +138,17 @@ func (t *PlayersTemplates) Render() error {
 
 	if alertNeutralCount, err := t.api.Alerts.NeutralsGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(neutralPlayers) >= alertNeutralCount {
-			t.neutral.alertTmpl.Content = RenderAlertTemplate(t.neutral.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount), t.api)
+			t.neutral.alertTmpl.Content = views.RenderAlertTemplate(t.neutral.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount), t.api)
 		}
 	}
 	if alertEnemyCount, err := t.api.Alerts.EnemiesGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(enemyPlayers) >= alertEnemyCount {
-			t.enemies.alertTmpl.Content = RenderAlertTemplate(t.enemies.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount), t.api)
+			t.enemies.alertTmpl.Content = views.RenderAlertTemplate(t.enemies.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount), t.api)
 		}
 	}
 	if alertFriendCount, err := t.api.Alerts.FriendsGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(friendPlayers) >= alertFriendCount {
-			t.friends.alertTmpl.Content = RenderAlertTemplate(t.friends.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount), t.api)
+			t.friends.alertTmpl.Content = views.RenderAlertTemplate(t.friends.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount), t.api)
 		}
 	}
 	return nil
