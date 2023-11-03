@@ -1,4 +1,4 @@
-package templ
+package views
 
 import (
 	"darkbot/app/settings/logus"
@@ -20,6 +20,13 @@ type TemplateShared struct {
 	MessageID types.DiscordMessageID
 	Content   string
 	Header    string
+}
+
+type View interface {
+	DiscoverMessageID(content string, msgID types.DiscordMessageID)
+	Render() error
+	Send()
+	MatchMessageID(messageID types.DiscordMessageID) bool
 }
 
 func CheckTooLongMsgErr(err error, api *apis.API, header string, action MsgAction, MessageID types.DiscordMessageID) {

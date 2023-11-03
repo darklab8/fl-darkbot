@@ -1,4 +1,4 @@
-package templ
+package views
 
 import (
 	"darkbot/app/settings/logus"

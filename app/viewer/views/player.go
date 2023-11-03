@@ -1,4 +1,4 @@
-package templ
+package views
 
 import (
 	"darkbot/app/scrappy/player"
@@ -42,7 +42,7 @@ type PlayersTemplates struct {
 	api     *apis.API
 }
 
-func NewTemplatePlayers(api *apis.API) PlayersTemplates {
+func NewTemplatePlayers(api *apis.API) *PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.api = api
 	templator.friends.mainTable.Header = "#darkbot-players-friends-table"
@@ -51,7 +51,7 @@ func NewTemplatePlayers(api *apis.API) PlayersTemplates {
 	templator.friends.alertTmpl.Header = "#darkbot-players-friends-alert"
 	templator.neutral.alertTmpl.Header = "#darkbot-players-neutral-alert"
 	templator.enemies.alertTmpl.Header = "#darkbot-players-enemies-alert"
-	return templator
+	return &templator
 }
 
 func TagContains(name string, tags []types.Tag) bool {
@@ -63,10 +63,10 @@ func TagContains(name string, tags []types.Tag) bool {
 	return false
 }
 
-func (t *PlayersTemplates) Render() {
+func (t *PlayersTemplates) Render() error {
 	record, err := t.api.Scrappy.GetPlayerStorage().GetLatestRecord()
 	if logus.CheckWarn(err, "unable to get player msgs") {
-		return
+		return err
 	}
 
 	systemTags, _ := t.api.Players.Systems.TagsList(t.api.ChannelID)
@@ -150,6 +150,7 @@ func (t *PlayersTemplates) Render() {
 			t.friends.alertTmpl.Content = RenderAlertTemplate(t.friends.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount), t.api)
 		}
 	}
+	return nil
 }
 
 func (t *PlayersTemplates) Send() {

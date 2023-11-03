@@ -8,7 +8,7 @@ import (
 	"darkbot/app/discorder"
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
-	"darkbot/app/viewer/templ"
+	"darkbot/app/viewer/views"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -29,7 +29,7 @@ var amounceCmd = &cobra.Command{
 		channelIDs, _ := channels.List()
 
 		for _, channeID := range channelIDs {
-			dg.SengMessage(channeID, templ.MsgViewHeader+": "+strings.Join(args, " "))
+			dg.SengMessage(channeID, views.MsgViewHeader+": "+strings.Join(args, " "))
 		}
 
 	},

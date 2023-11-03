@@ -5,24 +5,23 @@ import (
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
-	"darkbot/app/viewer/templ"
+	"darkbot/app/viewer/views"
 	"strings"
 	"time"
 )
 
 type ChannelView struct {
-	BaseView    templ.TemplateBase
-	Msgs        []discorder.DiscordMessage
-	PlayersView templ.PlayersTemplates
-	api         *apis.API
-	ChannelID   types.DiscordChannelID
+	Msgs      []discorder.DiscordMessage
+	api       *apis.API
+	ChannelID types.DiscordChannelID
+	views     []views.View
 }
 
 // apis.NewAPI(view.ChannelID, dbpath)
 func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView {
 	view := ChannelView{api: api}
-	view.BaseView = templ.NewTemplateBase(api)
-	view.PlayersView = templ.NewTemplatePlayers(api)
+	view.views = append(view.views, views.NewTemplateBase(api))
+	view.views = append(view.views, views.NewTemplatePlayers(api))
 	view.ChannelID = channelID
 
 	return view
@@ -38,8 +37,11 @@ func (v *ChannelView) Discover() error {
 	}
 
 	for _, msg := range msgs {
-		v.BaseView.DiscoverMessageID(msg.Content, msg.ID)
-		v.PlayersView.DiscoverMessageID(msg.Content, msg.ID)
+		for _, view := range v.views {
+			view.DiscoverMessageID(msg.Content, msg.ID)
+			view.DiscoverMessageID(msg.Content, msg.ID)
+		}
+
 	}
 
 	v.Msgs = msgs
@@ -49,31 +51,35 @@ func (v *ChannelView) Discover() error {
 
 // Render new messages (ensure preserved Message ID)
 func (v *ChannelView) Render() {
-	v.BaseView.Render()
-	v.PlayersView.Render()
+	for _, view := range v.views {
+		view.Render()
+	}
 }
 
 // Edit if message ID is present.
 // Send if not present.
 func (v ChannelView) Send() {
-	v.BaseView.Send()
-	v.PlayersView.Send()
+	for _, view := range v.views {
+		view.Send()
+	}
 }
 
 func (v ChannelView) DeleteOld() {
 	deleteLimit := 10
 	for _, msg := range v.Msgs {
 
-		if v.BaseView.MatchMessageID(msg.ID) {
-			continue
+		matched_smth := false
+		for _, view := range v.views {
+			if view.MatchMessageID(msg.ID) {
+				matched_smth = true
+			}
 		}
-
-		if v.PlayersView.MatchMessageID(msg.ID) {
+		if matched_smth {
 			continue
 		}
 
 		// forbidding to delete messages that aren't having their own template renderer
-		if strings.Contains(msg.Content, templ.MsgViewHeader) {
+		if strings.Contains(msg.Content, views.MsgViewHeader) {
 			continue
 		}
 

@@ -1,4 +1,4 @@
-package templ
+package views
 
 import (
 	"darkbot/app/scrappy/base"
@@ -33,14 +33,14 @@ type TemplateBase struct {
 	api                     *apis.API
 }
 
-func NewTemplateBase(api *apis.API) TemplateBase {
+func NewTemplateBase(api *apis.API) *TemplateBase {
 	base := TemplateBase{}
 	base.api = api
 	base.main.Header = "#darkbot-base-view"
 	base.alertHealthLowerThan.Header = "#darkbot-base-alert-health-lower-than"
 	base.alertHealthIsDecreasing.Header = "#darkbot-base-health-is-decreasing"
 	base.alertBaseUnderAttack.Header = "#darkbot-base-base-under-attack"
-	return base
+	return &base
 }
 
 type TemplateAugmentedBase struct {
