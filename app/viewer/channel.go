@@ -11,30 +11,21 @@ import (
 )
 
 type ChannelView struct {
-	api         apis.API
 	BaseView    templ.TemplateBase
 	Msgs        []discorder.DiscordMessage
 	PlayersView templ.PlayersTemplates
+	api         *apis.API
 	ChannelID   types.DiscordChannelID
 }
 
-func NewChannelView(dbpath types.Dbpath) ChannelView {
-	view := ChannelView{}
-	view.ChannelID = ""
-	view.api = apis.NewAPI(view.ChannelID, dbpath)
-	view.BaseView = templ.NewTemplateBase(view.ChannelID, dbpath)
-	view.PlayersView = templ.NewTemplatePlayers(view.ChannelID, dbpath)
+// apis.NewAPI(view.ChannelID, dbpath)
+func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView {
+	view := ChannelView{api: api}
+	view.BaseView = templ.NewTemplateBase(api)
+	view.PlayersView = templ.NewTemplatePlayers(api)
+	view.ChannelID = channelID
 
 	return view
-}
-
-// Query all Discord messages
-// Try to grab already sent message by ID, if yes, assign to found objects with message ID.
-func (v *ChannelView) Setup(channelID types.DiscordChannelID) {
-	v.ChannelID = channelID
-	v.api.ChannelID = channelID
-	v.BaseView.Setup(channelID)
-	v.PlayersView.Setup(channelID)
 }
 
 // Query all Discord messages

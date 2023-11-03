@@ -26,7 +26,7 @@ type TemplateAlertInput struct {
 	Msg         string
 }
 
-func RenderAlertTemplate(Header string, ChannelID types.DiscordChannelID, Msg string, api apis.API) string {
+func RenderAlertTemplate(Header string, ChannelID types.DiscordChannelID, Msg string, api *apis.API) string {
 
 	pingMessage, err := api.Alerts.PingMessage.Status(ChannelID)
 	logus.Debug("RenderAlertTemplate.PingMessage.Status", logus.OptError(err), logus.PingMessage(pingMessage))

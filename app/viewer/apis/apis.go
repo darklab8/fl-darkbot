@@ -29,29 +29,51 @@ type API struct {
 	Bases     configurator.ConfiguratorBase
 	Players   Players
 	Alerts    Alerts
+	Configur  *configurator.Configurator
 }
 
-func NewAPI(channelID types.DiscordChannelID, dbpath types.Dbpath) API {
-	dbconnection := configurator.NewConfigurator(dbpath)
-	return API{
+type apiParam func(api *API)
+
+func WithStorage(storage *scrappy.ScrappyStorage) apiParam {
+	return func(api *API) {
+		api.Scrappy = storage
+	}
+}
+
+// Reusing API is important. db connections are memory leaking or some other stuff
+func (api *API) SetChannelID(ChannelID types.DiscordChannelID) *API {
+	api.ChannelID = ChannelID
+	return api
+}
+
+func NewAPI(ChannelID types.DiscordChannelID, dbpath types.Dbpath, opts ...apiParam) *API {
+	configur := configurator.NewConfigurator(dbpath)
+	api := &API{
+		Configur:  configur,
+		ChannelID: ChannelID,
 		Discorder: discorder.NewClient(),
-		ChannelID: channelID,
 		Scrappy:   scrappy.Storage,
-		Bases:     configurator.NewConfiguratorBase(dbconnection),
+		Bases:     configurator.NewConfiguratorBase(configur),
 		Players: Players{
-			Systems: configurator.NewConfiguratorSystem(dbconnection),
-			Regions: configurator.NewConfiguratorRegion(dbconnection),
-			Enemies: configurator.NewConfiguratorPlayerEnemy(dbconnection),
-			Friends: configurator.NewConfiguratorPlayerFriend(dbconnection),
+			Systems: configurator.NewConfiguratorSystem(configur),
+			Regions: configurator.NewConfiguratorRegion(configur),
+			Enemies: configurator.NewConfiguratorPlayerEnemy(configur),
+			Friends: configurator.NewConfiguratorPlayerFriend(configur),
 		},
 		Alerts: Alerts{
-			NeutralsGreaterThan:    configurator.NewCfgAlertNeutralPlayersGreaterThan(dbconnection),
-			EnemiesGreaterThan:     configurator.NewCfgAlertEnemyPlayersGreaterThan(dbconnection),
-			FriendsGreaterThan:     configurator.NewCfgAlertFriendPlayersGreaterThan(dbconnection),
-			BaseHealthLowerThan:    configurator.NewCfgAlertBaseHealthLowerThan(dbconnection),
-			BaseHealthIsDecreasing: configurator.NewCfgAlertBaseHealthIsDecreasing(dbconnection),
-			BaseIsUnderAttack:      configurator.NewCfgAlertBaseIsUnderAttack(dbconnection),
-			PingMessage:            configurator.NewCfgAlertPingMessage(dbconnection),
+			NeutralsGreaterThan:    configurator.NewCfgAlertNeutralPlayersGreaterThan(configur),
+			EnemiesGreaterThan:     configurator.NewCfgAlertEnemyPlayersGreaterThan(configur),
+			FriendsGreaterThan:     configurator.NewCfgAlertFriendPlayersGreaterThan(configur),
+			BaseHealthLowerThan:    configurator.NewCfgAlertBaseHealthLowerThan(configur),
+			BaseHealthIsDecreasing: configurator.NewCfgAlertBaseHealthIsDecreasing(configur),
+			BaseIsUnderAttack:      configurator.NewCfgAlertBaseIsUnderAttack(configur),
+			PingMessage:            configurator.NewCfgAlertPingMessage(configur),
 		},
 	}
+
+	for _, opt := range opts {
+		opt(api)
+	}
+
+	return api
 }

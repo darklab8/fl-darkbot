@@ -23,51 +23,35 @@ import (
 // Send
 
 type PlayersFriends struct {
-	MainTable TemplateShared
-	AlertTmpl TemplateShared
+	mainTable TemplateShared
+	alertTmpl TemplateShared
 }
 type PlayersEnemies struct {
-	MainTable TemplateShared
-	AlertTmpl TemplateShared
+	mainTable TemplateShared
+	alertTmpl TemplateShared
 }
 type PlayersNeutral struct {
-	MainTable TemplateShared
-	AlertTmpl TemplateShared
+	mainTable TemplateShared
+	alertTmpl TemplateShared
 }
 
 type PlayersTemplates struct {
 	friends PlayersFriends
 	neutral PlayersNeutral
 	enemies PlayersEnemies
-	API     apis.API
+	api     *apis.API
 }
 
-func NewTemplatePlayers(channelID types.DiscordChannelID, dbpath types.Dbpath) PlayersTemplates {
+func NewTemplatePlayers(api *apis.API) PlayersTemplates {
 	templator := PlayersTemplates{}
-	templator.API = apis.NewAPI(channelID, dbpath)
-	templator.friends.MainTable.Header = "#darkbot-players-friends-table"
-	templator.neutral.MainTable.Header = "#darkbot-players-neutral-table"
-	templator.enemies.MainTable.Header = "#darkbot-players-enemies-table"
-	templator.friends.AlertTmpl.Header = "#darkbot-players-friends-alert"
-	templator.neutral.AlertTmpl.Header = "#darkbot-players-neutral-alert"
-	templator.enemies.AlertTmpl.Header = "#darkbot-players-enemies-alert"
+	templator.api = api
+	templator.friends.mainTable.Header = "#darkbot-players-friends-table"
+	templator.neutral.mainTable.Header = "#darkbot-players-neutral-table"
+	templator.enemies.mainTable.Header = "#darkbot-players-enemies-table"
+	templator.friends.alertTmpl.Header = "#darkbot-players-friends-alert"
+	templator.neutral.alertTmpl.Header = "#darkbot-players-neutral-alert"
+	templator.enemies.alertTmpl.Header = "#darkbot-players-enemies-alert"
 	return templator
-}
-
-func (b *PlayersTemplates) Setup(channelID types.DiscordChannelID) {
-	b.API.ChannelID = channelID
-	b.neutral.MainTable.MessageID = ""
-	b.enemies.MainTable.MessageID = ""
-	b.friends.MainTable.MessageID = ""
-	b.neutral.MainTable.Content = ""
-	b.enemies.MainTable.Content = ""
-	b.friends.MainTable.Content = ""
-	b.neutral.AlertTmpl.MessageID = ""
-	b.enemies.AlertTmpl.MessageID = ""
-	b.friends.AlertTmpl.MessageID = ""
-	b.neutral.AlertTmpl.Content = ""
-	b.enemies.AlertTmpl.Content = ""
-	b.friends.AlertTmpl.Content = ""
 }
 
 func TagContains(name string, tags []types.Tag) bool {
@@ -80,15 +64,15 @@ func TagContains(name string, tags []types.Tag) bool {
 }
 
 func (t *PlayersTemplates) Render() {
-	record, err := t.API.Scrappy.GetPlayerStorage().GetLatestRecord()
+	record, err := t.api.Scrappy.GetPlayerStorage().GetLatestRecord()
 	if logus.CheckWarn(err, "unable to get player msgs") {
 		return
 	}
 
-	systemTags, _ := t.API.Players.Systems.TagsList(t.API.ChannelID)
-	regionTags, _ := t.API.Players.Regions.TagsList(t.API.ChannelID)
-	friendTags, _ := t.API.Players.Friends.TagsList(t.API.ChannelID)
-	enemyTags, _ := t.API.Players.Enemies.TagsList(t.API.ChannelID)
+	systemTags, _ := t.api.Players.Systems.TagsList(t.api.ChannelID)
+	regionTags, _ := t.api.Players.Regions.TagsList(t.api.ChannelID)
+	friendTags, _ := t.api.Players.Friends.TagsList(t.api.ChannelID)
+	enemyTags, _ := t.api.Players.Enemies.TagsList(t.api.ChannelID)
 	logus.Debug(
 		"PlayerTemplatesRender next",
 		logus.Items(systemTags, "systemTags"),
@@ -123,8 +107,8 @@ func (t *PlayersTemplates) Render() {
 	logus.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
 
 	if len(systemTags) > 0 || len(regionTags) > 0 {
-		t.neutral.MainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
-			Header:      t.neutral.MainTable.Header,
+		t.neutral.mainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
+			Header:      t.neutral.mainTable.Header,
 			LastUpdated: time.Now().String(),
 			Players:     neutralPlayers,
 			TableName:   "**Neutral players in tracked systems and regions**",
@@ -132,8 +116,8 @@ func (t *PlayersTemplates) Render() {
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
-		t.enemies.MainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
-			Header:      t.enemies.MainTable.Header,
+		t.enemies.mainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
+			Header:      t.enemies.mainTable.Header,
 			LastUpdated: time.Now().String(),
 			Players:     enemyPlayers,
 			TableName:   "**Enemy players in tracked systems and regions**",
@@ -141,8 +125,8 @@ func (t *PlayersTemplates) Render() {
 	}
 
 	if len(friendTags) > 0 {
-		t.friends.MainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
-			Header:      t.friends.MainTable.Header,
+		t.friends.mainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
+			Header:      t.friends.mainTable.Header,
 			LastUpdated: time.Now().String(),
 			Players:     friendPlayers,
 			TableName:   "**Friend players in all systems and regions**",
@@ -151,53 +135,53 @@ func (t *PlayersTemplates) Render() {
 
 	// Alerts
 
-	if alertNeutralCount, err := t.API.Alerts.NeutralsGreaterThan.Status(t.API.ChannelID); err == nil {
+	if alertNeutralCount, err := t.api.Alerts.NeutralsGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(neutralPlayers) >= alertNeutralCount {
-			t.neutral.AlertTmpl.Content = RenderAlertTemplate(t.neutral.AlertTmpl.Header, t.API.ChannelID, fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount), t.API)
+			t.neutral.alertTmpl.Content = RenderAlertTemplate(t.neutral.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount), t.api)
 		}
 	}
-	if alertEnemyCount, err := t.API.Alerts.EnemiesGreaterThan.Status(t.API.ChannelID); err == nil {
+	if alertEnemyCount, err := t.api.Alerts.EnemiesGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(enemyPlayers) >= alertEnemyCount {
-			t.enemies.AlertTmpl.Content = RenderAlertTemplate(t.enemies.AlertTmpl.Header, t.API.ChannelID, fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount), t.API)
+			t.enemies.alertTmpl.Content = RenderAlertTemplate(t.enemies.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount), t.api)
 		}
 	}
-	if alertFriendCount, err := t.API.Alerts.FriendsGreaterThan.Status(t.API.ChannelID); err == nil {
+	if alertFriendCount, err := t.api.Alerts.FriendsGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(friendPlayers) >= alertFriendCount {
-			t.friends.AlertTmpl.Content = RenderAlertTemplate(t.friends.AlertTmpl.Header, t.API.ChannelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount), t.API)
+			t.friends.alertTmpl.Content = RenderAlertTemplate(t.friends.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount), t.api)
 		}
 	}
 }
 
 func (t *PlayersTemplates) Send() {
-	t.friends.MainTable.Send(t.API)
-	t.neutral.MainTable.Send(t.API)
-	t.enemies.MainTable.Send(t.API)
+	t.friends.mainTable.Send(t.api)
+	t.neutral.mainTable.Send(t.api)
+	t.enemies.mainTable.Send(t.api)
 
-	t.friends.AlertTmpl.Send(t.API)
-	t.neutral.AlertTmpl.Send(t.API)
-	t.enemies.AlertTmpl.Send(t.API)
+	t.friends.alertTmpl.Send(t.api)
+	t.neutral.alertTmpl.Send(t.api)
+	t.enemies.alertTmpl.Send(t.api)
 
 }
 
 func (t *PlayersTemplates) MatchMessageID(messageID types.DiscordMessageID) bool {
 
-	if messageID == t.friends.MainTable.MessageID {
+	if messageID == t.friends.mainTable.MessageID {
 		return true
 	}
-	if messageID == t.neutral.MainTable.MessageID {
+	if messageID == t.neutral.mainTable.MessageID {
 		return true
 	}
-	if messageID == t.enemies.MainTable.MessageID {
+	if messageID == t.enemies.mainTable.MessageID {
 		return true
 	}
 
-	if messageID == t.friends.AlertTmpl.MessageID {
+	if messageID == t.friends.alertTmpl.MessageID {
 		return true
 	}
-	if messageID == t.neutral.AlertTmpl.MessageID {
+	if messageID == t.neutral.alertTmpl.MessageID {
 		return true
 	}
-	if messageID == t.enemies.AlertTmpl.MessageID {
+	if messageID == t.enemies.alertTmpl.MessageID {
 		return true
 	}
 
@@ -205,24 +189,24 @@ func (t *PlayersTemplates) MatchMessageID(messageID types.DiscordMessageID) bool
 }
 
 func (t *PlayersTemplates) DiscoverMessageID(content string, msgID types.DiscordMessageID) {
-	if strings.Contains(content, t.friends.MainTable.Header) {
-		t.friends.MainTable.MessageID = msgID
+	if strings.Contains(content, t.friends.mainTable.Header) {
+		t.friends.mainTable.MessageID = msgID
 	}
-	if strings.Contains(content, t.neutral.MainTable.Header) {
-		t.neutral.MainTable.MessageID = msgID
+	if strings.Contains(content, t.neutral.mainTable.Header) {
+		t.neutral.mainTable.MessageID = msgID
 	}
-	if strings.Contains(content, t.enemies.MainTable.Header) {
-		t.enemies.MainTable.MessageID = msgID
+	if strings.Contains(content, t.enemies.mainTable.Header) {
+		t.enemies.mainTable.MessageID = msgID
 	}
 
-	if strings.Contains(content, t.friends.AlertTmpl.Header) {
-		t.friends.AlertTmpl.MessageID = msgID
+	if strings.Contains(content, t.friends.alertTmpl.Header) {
+		t.friends.alertTmpl.MessageID = msgID
 	}
-	if strings.Contains(content, t.neutral.AlertTmpl.Header) {
-		t.neutral.AlertTmpl.MessageID = msgID
+	if strings.Contains(content, t.neutral.alertTmpl.Header) {
+		t.neutral.alertTmpl.MessageID = msgID
 	}
-	if strings.Contains(content, t.enemies.AlertTmpl.Header) {
-		t.enemies.AlertTmpl.MessageID = msgID
+	if strings.Contains(content, t.enemies.alertTmpl.Header) {
+		t.enemies.alertTmpl.MessageID = msgID
 	}
 }
 

@@ -8,12 +8,12 @@ import (
 	"os"
 )
 
-func FixtureConfigurator(dbpath types.Dbpath) Configurator {
+func FixtureConfigurator(dbpath types.Dbpath) *Configurator {
 	cfg := NewConfigurator(dbpath)
 	return cfg
 }
 
-func FixtureMigrator(callback func(dbpath types.Dbpath)) Configurator {
+func FixtureMigrator(callback func(dbpath types.Dbpath)) *Configurator {
 	dbname := utils.TokenHex(8)
 	dbpath := types.Dbpath(settings.NewDBPath(dbname))
 	// setup
@@ -39,6 +39,5 @@ func FixtureChannel(dbpath types.Dbpath) (types.DiscordChannelID, ConfiguratorCh
 	configurator_ := FixtureConfigurator(dbpath)
 	cfg_channel := NewConfiguratorChannel(configurator_)
 	cfg_channel.Add(channelID)
-
 	return channelID, cfg_channel
 }

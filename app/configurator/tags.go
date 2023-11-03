@@ -24,10 +24,10 @@ type taggable interface {
 }
 
 type ConfiguratorTags[T taggable] struct {
-	Configurator
+	*Configurator
 }
 
-func NewConfiguratorTags[T taggable](configurator Configurator) ConfiguratorTags[T] {
+func NewConfiguratorTags[T taggable](configurator *Configurator) ConfiguratorTags[T] {
 	t := ConfiguratorTags[T]{Configurator: configurator}
 	return t
 }

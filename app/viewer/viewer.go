@@ -5,6 +5,7 @@ import (
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
+	"darkbot/app/viewer/apis"
 	"time"
 )
 
@@ -16,19 +17,18 @@ type ViewerDelays struct {
 type Viewer struct {
 	channels configurator.ConfiguratorChannel
 	delays   ViewerDelays
-	dbpath   types.Dbpath
-	channel  ChannelView
+	api      *apis.API
 }
 
 func NewViewer(dbpath types.Dbpath) Viewer {
+	api := apis.NewAPI("", dbpath)
 	return Viewer{
-		dbpath:   dbpath,
-		channels: configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath)),
+		api:      api,
+		channels: configurator.NewConfiguratorChannel(api.Configur),
 		delays: ViewerDelays{
 			betweenChannels: 1,
 			betweenLoops:    settings.LoopDelay,
 		},
-		channel: NewChannelView(dbpath),
 	}
 }
 
@@ -41,14 +41,15 @@ func (v Viewer) Update() {
 
 	// For each channel
 	for _, channelID := range channelIDs {
-		v.channel.Setup(channelID)
-		err := v.channel.Discover()
+		v.api.SetChannelID(channelID)
+		channel := NewChannelView(v.api, channelID)
+		err := channel.Discover()
 		if logus.CheckWarn(err, "unable to grab Discord msgs", logus.ChannelID(channelID)) {
 			continue
 		}
-		v.channel.Render()
-		v.channel.Send()
-		v.channel.DeleteOld()
+		channel.Render()
+		channel.Send()
+		channel.DeleteOld()
 		time.Sleep(time.Duration(v.delays.betweenChannels) * time.Second)
 	}
 	time.Sleep(time.Duration(v.delays.betweenLoops) * time.Second)

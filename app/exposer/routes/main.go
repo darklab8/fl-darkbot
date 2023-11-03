@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"darkbot/app/api/web"
+	"darkbot/app/exposer/web"
 	"net/http"
 )
 

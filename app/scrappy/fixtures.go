@@ -17,7 +17,3 @@ func FixtureMockedStorage() *ScrappyStorage {
 		baseattack.FixtureBaseAttackAPIMock(),
 	)
 }
-
-func FixtureSetBaseStorageAPI(base_api base.IbaseAPI) {
-	Storage.baseStorage.FixtureSetAPI(base_api)
-}

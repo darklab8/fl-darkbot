@@ -4,47 +4,54 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package consoler
 
 import (
+	"darkbot/app/configurator"
 	"darkbot/app/consoler/commands"
+	"darkbot/app/consoler/consoler_types"
 	"darkbot/app/settings"
 	"darkbot/app/settings/types"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 type Consoler struct {
-	cmd        string
 	buffStdout Writer
 	buffStderr Writer
-	channelID  types.DiscordChannelID
 	dbpath     types.Dbpath
+	rootCmd    *cobra.Command
+	params     *consoler_types.ChannelParams
 }
 
 func NewConsoler(
-	cmd string,
-	channelID types.DiscordChannelID,
 	dbpath types.Dbpath,
 ) *Consoler {
 	c := &Consoler{}
-	c.cmd = cmd
 	c.buffStdout = NewWriter()
 	c.buffStderr = NewWriter()
-	c.channelID = channelID
 	c.dbpath = dbpath
+	c.params = consoler_types.NewChannelParams("", dbpath)
+	configur := configurator.NewConfigurator(dbpath)
+
+	c.rootCmd = commands.CreateConsoler(c.params, configur)
+	c.rootCmd.SetOut(c.buffStdout)
+	c.rootCmd.SetErr(c.buffStderr)
+
 	return c
 }
 
-func (c *Consoler) Execute() *Consoler {
+func (c *Consoler) Execute(
+	cmd string,
+	channelID types.DiscordChannelID,
+) *Consoler {
 	// only commands starting from prefix are allowed
-	if !strings.HasPrefix(c.cmd, settings.Config.ConsolerPrefix) {
+	if !strings.HasPrefix(cmd, settings.Config.ConsolerPrefix) {
 		return c
 	}
 
-	rootCmd := commands.CreateConsoler(c.channelID, c.dbpath)
-	rootCmd.SetArgs(strings.Split(c.cmd, " "))
+	c.params.SetChannelID(channelID)
+	c.rootCmd.SetArgs(strings.Split(cmd, " "))
+	c.rootCmd.Execute()
 
-	rootCmd.SetOut(c.buffStdout)
-	rootCmd.SetErr(c.buffStderr)
-
-	rootCmd.Execute()
 	return c
 }
 

@@ -92,13 +92,19 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	return true
 }
 
+var console *consoler.Consoler
+
+func init() {
+	console = consoler.NewConsoler(settings.Dbpath)
+}
+
 func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if !allowedMessage(s, m) {
 		return
 	}
 	channelID := types.DiscordChannelID(m.ChannelID)
-	rendered := consoler.NewConsoler(m.Content, channelID, settings.Dbpath).Execute().String()
+	rendered := console.Execute(m.Content, channelID).String()
 
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)

@@ -7,12 +7,12 @@ import (
 	"darkbot/app/settings/utils"
 )
 
-func NewConfiguratorChannel(con Configurator) ConfiguratorChannel {
+func NewConfiguratorChannel(con *Configurator) ConfiguratorChannel {
 	return ConfiguratorChannel{Configurator: con}
 }
 
 type ConfiguratorChannel struct {
-	Configurator
+	*Configurator
 }
 
 func (c ConfiguratorChannel) Add(channelID types.DiscordChannelID) error {

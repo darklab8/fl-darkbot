@@ -1,11 +1,11 @@
-package api
+package exposer
 
 import (
-	"darkbot/app/api/routes"
+	"darkbot/app/exposer/routes"
 	_ "embed"
 	"net/http"
 )
 
-func newApi() {
+func NewExposer() {
 	http.ListenAndServe(":8080", routes.Server.GetMux())
 }

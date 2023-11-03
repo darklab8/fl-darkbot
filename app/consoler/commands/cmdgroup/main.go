@@ -10,8 +10,8 @@ import (
 type CmdGroup struct {
 	ParentCmd    *cobra.Command
 	CurrentCmd   *cobra.Command
-	Configurator configurator.Configurator
-	consoler_types.ChannelParams
+	Configurator *configurator.Configurator
+	*consoler_types.ChannelParams
 }
 
 func (c CmdGroup) GetChild(
@@ -37,14 +37,15 @@ func (c *CmdGroup) setProps(
 type Command string
 type ShortDesc string
 
-func New(
+func NewCmdGroup(
 	rootCmdPrefix *cobra.Command,
-	channelParams consoler_types.ChannelParams,
+	channelParams *consoler_types.ChannelParams,
+	configur *configurator.Configurator,
 	command Command, short_desc ShortDesc,
 ) CmdGroup {
 	result := CmdGroup{
 		ParentCmd:     rootCmdPrefix,
-		Configurator:  configurator.NewConfigurator(channelParams.GetDbpath()),
+		Configurator:  configur,
 		ChannelParams: channelParams,
 	}
 	result.setProps(command, short_desc)

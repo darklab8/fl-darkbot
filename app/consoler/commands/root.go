@@ -8,7 +8,6 @@ import (
 	"darkbot/app/consoler/printer"
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 
 	"github.com/spf13/cobra"
 )
@@ -32,15 +31,15 @@ func createEntrance() *cobra.Command {
 }
 
 func CreateConsoler(
-	channelID types.DiscordChannelID,
-	dbpath types.Dbpath,
+	channelInfo *consoler_types.ChannelParams,
+	configur *configurator.Configurator,
 ) *cobra.Command {
 	consolerCmd := createEntrance()
-	channelInfo := consoler_types.NewChannelParams(channelID, dbpath)
 
-	rootGroup := cmdgroup.New(
+	rootGroup := cmdgroup.NewCmdGroup(
 		consolerCmd,
 		channelInfo,
+		configur,
 		cmdgroup.Command(settings.Config.ConsolerPrefix),
 		cmdgroup.ShortDesc("Welcome to darkbot!"),
 	)

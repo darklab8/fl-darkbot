@@ -22,7 +22,7 @@ type TemplateShared struct {
 	Header    string
 }
 
-func CheckTooLongMsgErr(err error, api apis.API, header string, action MsgAction, MessageID types.DiscordMessageID) {
+func CheckTooLongMsgErr(err error, api *apis.API, header string, action MsgAction, MessageID types.DiscordMessageID) {
 	if err == nil {
 		return
 	}
@@ -43,7 +43,7 @@ func CheckTooLongMsgErr(err error, api apis.API, header string, action MsgAction
 
 }
 
-func (v *TemplateShared) Send(api apis.API) {
+func (v *TemplateShared) Send(api *apis.API) {
 	if v.Content == "" && v.MessageID != "" {
 		api.Discorder.DeleteMessage(api.ChannelID, v.MessageID)
 	}

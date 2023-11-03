@@ -15,23 +15,27 @@ import (
 )
 
 type Configurator struct {
-	db *gorm.DB
+	db     *gorm.DB
+	dbpath types.Dbpath
 }
 
 func (cg Configurator) GetClient() *gorm.DB {
 	return cg.db
 }
+func (cg Configurator) GetDbpath() types.Dbpath {
+	return cg.dbpath
+}
 
-func NewConfigurator(dbpath types.Dbpath) Configurator {
+func NewConfigurator(dbpath types.Dbpath) *Configurator {
 	db, err := gorm.Open(
 		sqlite.Open(string(dbpath)+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{},
 	)
 	logus.CheckFatal(err, "failed to connect database at dbpath=", logus.Dbpath(settings.Dbpath))
 
-	return Configurator{db: db}
+	return &Configurator{db: db, dbpath: dbpath}
 }
 
-func (cg Configurator) AutoMigrateSchema() Configurator {
+func (cg *Configurator) AutoMigrateSchema() *Configurator {
 	err := cg.db.AutoMigrate(
 		&models.Channel{},
 		&models.TagBase{},

@@ -27,26 +27,26 @@ type AlertStringType interface {
 }
 
 type IConfiguratorAlertThreshold[T AlertThresholdType] struct {
-	Configurator
+	*Configurator
 }
 
 type IConfiguratorAlertBool[T AlertBoolType] struct {
-	Configurator
+	*Configurator
 }
 
 type IConfiguratorAlertString[T AlertStringType] struct {
-	Configurator
+	*Configurator
 }
 
-func NewConfiguratorAlertThreshold[T AlertThresholdType](configurator Configurator) IConfiguratorAlertThreshold[T] {
+func NewConfiguratorAlertThreshold[T AlertThresholdType](configurator *Configurator) IConfiguratorAlertThreshold[T] {
 	t := IConfiguratorAlertThreshold[T]{Configurator: configurator}
 	return t
 }
-func NewConfiguratorAlertBool[T AlertBoolType](configurator Configurator) IConfiguratorAlertBool[T] {
+func NewConfiguratorAlertBool[T AlertBoolType](configurator *Configurator) IConfiguratorAlertBool[T] {
 	t := IConfiguratorAlertBool[T]{Configurator: configurator}
 	return t
 }
-func NewConfiguratorAlertString[T AlertStringType](configurator Configurator) IConfiguratorAlertString[T] {
+func NewConfiguratorAlertString[T AlertStringType](configurator *Configurator) IConfiguratorAlertString[T] {
 	t := IConfiguratorAlertString[T]{Configurator: configurator}
 	return t
 }

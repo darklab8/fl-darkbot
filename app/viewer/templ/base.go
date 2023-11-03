@@ -27,19 +27,19 @@ func init() {
 
 type TemplateBase struct {
 	main                    TemplateShared
-	AlertHealthLowerThan    TemplateShared
-	AlertHealthIsDecreasing TemplateShared
-	AlertBaseUnderAttack    TemplateShared
-	API                     apis.API
+	alertHealthLowerThan    TemplateShared
+	alertHealthIsDecreasing TemplateShared
+	alertBaseUnderAttack    TemplateShared
+	api                     *apis.API
 }
 
-func NewTemplateBase(channelID types.DiscordChannelID, dbpath types.Dbpath) TemplateBase {
+func NewTemplateBase(api *apis.API) TemplateBase {
 	base := TemplateBase{}
-	base.API = apis.NewAPI(channelID, dbpath)
+	base.api = api
 	base.main.Header = "#darkbot-base-view"
-	base.AlertHealthLowerThan.Header = "#darkbot-base-alert-health-lower-than"
-	base.AlertHealthIsDecreasing.Header = "#darkbot-base-health-is-decreasing"
-	base.AlertBaseUnderAttack.Header = "#darkbot-base-base-under-attack"
+	base.alertHealthLowerThan.Header = "#darkbot-base-alert-health-lower-than"
+	base.alertHealthIsDecreasing.Header = "#darkbot-base-health-is-decreasing"
+	base.alertBaseUnderAttack.Header = "#darkbot-base-base-under-attack"
 	return base
 }
 
@@ -83,21 +83,9 @@ func MatchBases(bases []base.Base, tags []types.Tag) []base.Base {
 	return result
 }
 
-func (b *TemplateBase) Setup(channelID types.DiscordChannelID) {
-	b.API.ChannelID = channelID
-	b.main.MessageID = ""
-	b.main.Content = ""
-	b.AlertHealthLowerThan.MessageID = ""
-	b.AlertHealthLowerThan.Content = ""
-	b.AlertHealthIsDecreasing.MessageID = ""
-	b.AlertHealthIsDecreasing.Content = ""
-	b.AlertBaseUnderAttack.MessageID = ""
-	b.AlertBaseUnderAttack.Content = ""
-}
-
 const HealthRateDecreasingThreshold = -0.01
 
-func (b *TemplateBase) Render() {
+func (b *TemplateBase) Render() error {
 	input := TemplateRendererBaseInput{
 		Header:               b.main.Header,
 		LastUpdated:          time.Now().String(),
@@ -105,22 +93,23 @@ func (b *TemplateBase) Render() {
 		UnderAttackPhrase:    "\n@underAttack;",
 	}
 
-	record, err := b.API.Scrappy.GetBaseStorage().GetLatestRecord()
+	record, err := b.api.Scrappy.GetBaseStorage().GetLatestRecord()
 	if logus.CheckWarn(err, "unable to render TemplateBase") {
-		return
+		return err
 	}
 	sort.Slice(record.List, func(i, j int) bool {
 		return record.List[i].Name < record.List[j].Name
 	})
 
-	tags, _ := b.API.Bases.TagsList(b.API.ChannelID)
+	tags, _ := b.api.Bases.TagsList(b.api.ChannelID)
 
 	matchedBases := MatchBases(record.List, tags)
-	healthDeritives, healthDerivativeErr := CalculateDerivates(tags, b.API)
+	healthDeritives, healthDerivativeErr := CalculateDerivates(tags, b.api)
 	DerivativesInitializing := healthDerivativeErr != nil
 
 	for _, base := range matchedBases {
-		healthDeritiveNumber, _ := healthDeritives[base.Name]
+		healthDeritiveNumber := healthDeritives[base.Name]
+
 		healthDeritive := strconv.FormatFloat(healthDeritiveNumber, 'f', 4, 64)
 		var HealthDecreasing, UnderAttack bool
 
@@ -128,7 +117,7 @@ func (b *TemplateBase) Render() {
 			healthDeritive = "initializing"
 		} else {
 			HealthDecreasing = healthDeritiveNumber < 0
-			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(string(b.API.Scrappy.GetBaseAttackStorage().GetData()), base.Name)
+			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(string(b.api.Scrappy.GetBaseAttackStorage().GetData()), base.Name)
 		}
 
 		input.Bases = append(input.Bases, TemplateAugmentedBase{
@@ -148,45 +137,47 @@ func (b *TemplateBase) Render() {
 	// Alerts
 	if DerivativesInitializing {
 		// Don't update alerts until bases are properly initalized. To avoid extra pings to players
-		return
+		return nil
 	}
 
-	b.AlertHealthLowerThan.Content = ""
-	if healthThreshold, err := b.API.Alerts.BaseHealthLowerThan.Status(b.API.ChannelID); err == nil {
+	b.alertHealthLowerThan.Content = ""
+	if healthThreshold, err := b.api.Alerts.BaseHealthLowerThan.Status(b.api.ChannelID); err == nil {
 		for _, base := range input.Bases {
 			if int(base.Health) < healthThreshold {
-				b.AlertHealthLowerThan.Content = RenderAlertTemplate(b.AlertHealthLowerThan.Header, b.API.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), healthThreshold), b.API)
+				b.alertHealthLowerThan.Content = RenderAlertTemplate(b.alertHealthLowerThan.Header, b.api.ChannelID, fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), healthThreshold), b.api)
 				break
 			}
 		}
 	}
 
-	b.AlertHealthIsDecreasing.Content = ""
-	if isAlertEnabled, err := b.API.Alerts.BaseHealthIsDecreasing.Status(b.API.ChannelID); err == nil && isAlertEnabled {
+	b.alertHealthIsDecreasing.Content = ""
+	if isAlertEnabled, err := b.api.Alerts.BaseHealthIsDecreasing.Status(b.api.ChannelID); err == nil && isAlertEnabled {
 		for _, base := range input.Bases {
 			if base.IsHealthDecreasing {
-				b.AlertHealthIsDecreasing.Content = RenderAlertTemplate(b.AlertHealthIsDecreasing.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(base.Health), base.HealthChange), b.API)
+				b.alertHealthIsDecreasing.Content = RenderAlertTemplate(b.alertHealthIsDecreasing.Header, b.api.ChannelID, fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(base.Health), base.HealthChange), b.api)
 				break
 			}
 		}
 	}
 
-	b.AlertBaseUnderAttack.Content = ""
-	if isAlertEnabled, _ := b.API.Alerts.BaseIsUnderAttack.Status(b.API.ChannelID); isAlertEnabled {
+	b.alertBaseUnderAttack.Content = ""
+	if isAlertEnabled, _ := b.api.Alerts.BaseIsUnderAttack.Status(b.api.ChannelID); isAlertEnabled {
 		for _, base := range input.Bases {
 			if base.IsUnderAttack {
-				b.AlertBaseUnderAttack.Content = RenderAlertTemplate(b.AlertBaseUnderAttack.Header, b.API.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %s is dropping faster than %f. Or it was detected at forum attack declaration thread.", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.API)
+				b.alertBaseUnderAttack.Content = RenderAlertTemplate(b.alertBaseUnderAttack.Header, b.api.ChannelID, fmt.Sprintf("Base %s health %d is probably under attack because health change %s is dropping faster than %f. Or it was detected at forum attack declaration thread.", base.Name, int(base.Health), base.HealthChange, HealthRateDecreasingThreshold), b.api)
 				break
 			}
 		}
 	}
+
+	return nil
 }
 
 func (t *TemplateBase) Send() {
-	t.main.Send(t.API)
-	t.AlertHealthLowerThan.Send(t.API)
-	t.AlertHealthIsDecreasing.Send(t.API)
-	t.AlertBaseUnderAttack.Send(t.API)
+	t.main.Send(t.api)
+	t.alertHealthLowerThan.Send(t.api)
+	t.alertHealthIsDecreasing.Send(t.api)
+	t.alertBaseUnderAttack.Send(t.api)
 }
 
 func (t *TemplateBase) MatchMessageID(messageID types.DiscordMessageID) bool {
@@ -194,13 +185,13 @@ func (t *TemplateBase) MatchMessageID(messageID types.DiscordMessageID) bool {
 	if messageID == t.main.MessageID {
 		return true
 	}
-	if messageID == t.AlertHealthLowerThan.MessageID {
+	if messageID == t.alertHealthLowerThan.MessageID {
 		return true
 	}
-	if messageID == t.AlertHealthIsDecreasing.MessageID {
+	if messageID == t.alertHealthIsDecreasing.MessageID {
 		return true
 	}
-	if messageID == t.AlertBaseUnderAttack.MessageID {
+	if messageID == t.alertBaseUnderAttack.MessageID {
 		return true
 	}
 	return false
@@ -211,16 +202,16 @@ func (t *TemplateBase) DiscoverMessageID(content string, msgID types.DiscordMess
 		t.main.MessageID = msgID
 		t.main.Content = content
 	}
-	if strings.Contains(content, t.AlertHealthLowerThan.Header) {
-		t.AlertHealthLowerThan.MessageID = msgID
-		t.AlertHealthLowerThan.Content = content
+	if strings.Contains(content, t.alertHealthLowerThan.Header) {
+		t.alertHealthLowerThan.MessageID = msgID
+		t.alertHealthLowerThan.Content = content
 	}
-	if strings.Contains(content, t.AlertHealthIsDecreasing.Header) {
-		t.AlertHealthIsDecreasing.MessageID = msgID
-		t.AlertHealthIsDecreasing.Content = content
+	if strings.Contains(content, t.alertHealthIsDecreasing.Header) {
+		t.alertHealthIsDecreasing.MessageID = msgID
+		t.alertHealthIsDecreasing.Content = content
 	}
-	if strings.Contains(content, t.AlertBaseUnderAttack.Header) {
-		t.AlertBaseUnderAttack.MessageID = msgID
-		t.AlertBaseUnderAttack.Content = content
+	if strings.Contains(content, t.alertBaseUnderAttack.Header) {
+		t.alertBaseUnderAttack.MessageID = msgID
+		t.alertBaseUnderAttack.Content = content
 	}
 }

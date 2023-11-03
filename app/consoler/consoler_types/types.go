@@ -7,12 +7,16 @@ type ChannelParams struct {
 	dbpath    types.Dbpath
 }
 
+func (c *ChannelParams) SetChannelID(channelID types.DiscordChannelID) {
+	c.channelID = channelID
+}
+
 func NewChannelParams(
 	channelID types.DiscordChannelID,
 	dbpath types.Dbpath,
 
-) ChannelParams {
-	return ChannelParams{channelID: channelID, dbpath: dbpath}
+) *ChannelParams {
+	return &ChannelParams{channelID: channelID, dbpath: dbpath}
 }
 
 func (c ChannelParams) GetChannelID() types.DiscordChannelID { return c.channelID }
