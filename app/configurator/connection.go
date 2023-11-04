@@ -45,6 +45,7 @@ func (cg *Configurator) AutoMigrateSchema() *Configurator {
 		&models.TagRegion{},
 		&models.TagForumPostTrack{},
 		&models.TagForumPostIgnore{},
+		&models.TagPlayerEvent{},
 		&models.AlertNeutralPlayersEqualOrGreater{},
 		&models.AlertEnemiesEqualOrGreater{},
 		&models.AlertFriendsEqualOrGreater{},

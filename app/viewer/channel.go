@@ -7,6 +7,7 @@ import (
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
 	"darkbot/app/viewer/views/baseview"
+	"darkbot/app/viewer/views/eventview"
 	"darkbot/app/viewer/views/playerview"
 	"strings"
 	"time"
@@ -24,6 +25,7 @@ func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView
 	view := ChannelView{api: api}
 	view.views = append(view.views, baseview.NewTemplateBase(api))
 	view.views = append(view.views, playerview.NewTemplatePlayers(api))
+	view.views = append(view.views, eventview.NewEventRenderer(api))
 	view.ChannelID = channelID
 
 	return view
@@ -40,7 +42,6 @@ func (v *ChannelView) Discover() error {
 
 	for _, msg := range msgs {
 		for _, view := range v.views {
-			view.DiscoverMessageID(msg.Content, msg.ID)
 			view.DiscoverMessageID(msg.Content, msg.ID)
 		}
 

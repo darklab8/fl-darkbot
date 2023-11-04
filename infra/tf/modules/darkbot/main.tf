@@ -48,4 +48,6 @@ resource "docker_container" "darkbot" {
     read_only      = false
     host_path      = "/var/lib/darklab/darkbot"
   }
+
+  memory = 1000 # MBs
 }

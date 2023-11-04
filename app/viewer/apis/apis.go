@@ -12,6 +12,7 @@ type Players struct {
 	Regions configurator.ConfiguratorRegion
 	Enemies configurator.ConfiguratorPlayerEnemy
 	Friends configurator.ConfiguratorPlayerFriend
+	Events  configurator.ConfiguratorPlayerEvent
 }
 type Alerts struct {
 	NeutralsGreaterThan    configurator.CfgAlertNeutralPlayersGreaterThan
@@ -59,6 +60,7 @@ func NewAPI(ChannelID types.DiscordChannelID, dbpath types.Dbpath, opts ...apiPa
 			Regions: configurator.NewConfiguratorRegion(configur),
 			Enemies: configurator.NewConfiguratorPlayerEnemy(configur),
 			Friends: configurator.NewConfiguratorPlayerFriend(configur),
+			Events:  configurator.NewConfiguratorPlayerEvent(configur),
 		},
 		Alerts: Alerts{
 			NeutralsGreaterThan:    configurator.NewCfgAlertNeutralPlayersGreaterThan(configur),

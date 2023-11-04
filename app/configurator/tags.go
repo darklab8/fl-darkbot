@@ -19,7 +19,8 @@ type taggable interface {
 		models.TagSystem |
 		models.TagRegion |
 		models.TagPlayerFriend |
-		models.TagPlayerEnemy
+		models.TagPlayerEnemy |
+		models.TagPlayerEvent
 	GetTag() types.Tag
 }
 
@@ -52,6 +53,10 @@ type ConfiguratorPlayerEnemy = ConfiguratorTags[models.TagPlayerEnemy]
 
 var NewConfiguratorPlayerEnemy = NewConfiguratorTags[models.TagPlayerEnemy]
 
+type ConfiguratorPlayerEvent = ConfiguratorTags[models.TagPlayerEvent]
+
+var NewConfiguratorPlayerEvent = NewConfiguratorTags[models.TagPlayerEvent]
+
 func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...types.Tag) error {
 	objs := []T{}
 	for _, tag := range tags {
@@ -80,11 +85,18 @@ func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...t
 
 func (c ConfiguratorTags[T]) TagsRemove(channelID types.DiscordChannelID, tags ...types.Tag) error {
 	errors := NewErrorAggregator()
+	TotalRowsAffected := 0
 	for _, tag := range tags {
 		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&T{})
 		logus.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
 		errors.Append(result.Error)
+		TotalRowsAffected += int(result.RowsAffected)
 	}
+
+	if TotalRowsAffected == 0 {
+		return ErrorZeroAffectedRows{}
+	}
+
 	return errors.TryToGetError()
 }
 

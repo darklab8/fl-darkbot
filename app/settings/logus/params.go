@@ -173,3 +173,9 @@ func GormResult(result *gorm.DB) slogParam {
 		c.params["result.error_type"] = fmt.Sprintf("%T", result.Error)
 	}
 }
+
+func DiscordMessageID(value types.DiscordMessageID) slogParam {
+	return func(c *slogGroup) {
+		c.params["discord_msg_id"] = string(value)
+	}
+}

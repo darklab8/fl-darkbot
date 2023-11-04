@@ -26,16 +26,12 @@ func NewConsoler(
 	dbpath types.Dbpath,
 ) *Consoler {
 	c := &Consoler{}
-	c.buffStdout = NewWriter()
-	c.buffStderr = NewWriter()
+
 	c.dbpath = dbpath
 	c.params = consoler_types.NewChannelParams("", dbpath)
 	configur := configurator.NewConfigurator(dbpath)
 
 	c.rootCmd = commands.CreateConsoler(c.params, configur)
-	c.rootCmd.SetOut(c.buffStdout)
-	c.rootCmd.SetErr(c.buffStderr)
-
 	return c
 }
 
@@ -47,6 +43,11 @@ func (c *Consoler) Execute(
 	if !strings.HasPrefix(cmd, settings.Config.ConsolerPrefix) {
 		return c
 	}
+
+	c.buffStdout = NewWriter()
+	c.buffStderr = NewWriter()
+	c.rootCmd.SetOut(c.buffStdout)
+	c.rootCmd.SetErr(c.buffStderr)
 
 	c.params.SetChannelID(channelID)
 	c.rootCmd.SetArgs(strings.Split(cmd, " "))

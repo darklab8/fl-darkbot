@@ -15,11 +15,15 @@ type ScrappyStorage struct {
 	baseAttackStorage *baseattack.BaseAttackStorage
 }
 
-func NewScrapyStorage(base_api base.IbaseAPI, player_api player.IPlayerAPI, base_attack baseattack.IbaseAttackAPI) *ScrappyStorage {
+func NewScrapyStorage(base_api base.IbaseAPI, player_api player.IPlayerAPI, base_attack baseattack.IbaseAttackAPI, opts ...storageParam) *ScrappyStorage {
 	s := &ScrappyStorage{}
 	s.baseStorage = base.NewBaseStorage(base_api)
 	s.playerStorage = player.NewPlayerStorage(player_api)
 	s.baseAttackStorage = baseattack.NewBaseAttackStorage(base_attack)
+
+	for _, opt := range opts {
+		opt(s)
+	}
 	return s
 }
 

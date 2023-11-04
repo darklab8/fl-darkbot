@@ -61,14 +61,20 @@ func (t *tagCommands) CreateTagRemove() {
 
 			err := t.cfgTags.TagsRemove(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
 			if err != nil {
-				printer.Println(cmd, "ERR msg="+err.Error())
+				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
+					printer.Println(cmd, "ERR removed nothing, because inserted value did not match anything present in the list")
+				} else {
+					printer.Println(cmd, "ERR ="+err.Error())
+				}
 				return
 			}
 
-			printer.Println(cmd, "OK tags are removed"+strings.Join(args, " "))
+			printer.Println(cmd, "OK tags are removed: "+strings.Join(args, " "))
+			logus.Debug("executed Create Tag Remove with args", logus.Args(args))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
+
 }
 
 func (t *tagCommands) CreateTagClear() {

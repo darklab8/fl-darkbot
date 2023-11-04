@@ -23,8 +23,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(dbpath)).TagsAdd(channelID, []types.Tag{"player4"}...)
 
 		players := player.NewPlayerStorage(player.FixturePlayerAPIMock())
-
-		storage := scrappy.FixtureNewStorageWithPlayers(players)
+		storage := scrappy.FixtureMockedStorage(scrappy.WithPlayerStorage(players))
 		api := apis.NewAPI(channelID, dbpath, apis.WithStorage(storage))
 		record := records.NewStampedObjects[player.Player]()
 		record.Add(player.Player{Name: "player1", System: "system1", Region: "region1"})

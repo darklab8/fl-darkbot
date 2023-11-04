@@ -55,18 +55,9 @@ func NewTemplatePlayers(api *apis.API) *PlayersTemplates {
 	return &templator
 }
 
-func TagContains(name string, tags []types.Tag) bool {
-	for _, tag := range tags {
-		if strings.Contains(name, string(tag)) {
-			return true
-		}
-	}
-	return false
-}
-
 func (t *PlayersTemplates) Render() error {
 	record, err := t.api.Scrappy.GetPlayerStorage().GetLatestRecord()
-	if logus.CheckWarn(err, "unable to get player msgs") {
+	if logus.CheckWarn(err, "unable to get players") {
 		return err
 	}
 
@@ -86,16 +77,16 @@ func (t *PlayersTemplates) Render() error {
 	friendPlayers := []player.Player{}
 
 	for _, player := range record.List {
-		if TagContains(player.Name, friendTags) {
+		if views.TagContains(player.Name, friendTags) {
 			friendPlayers = append(friendPlayers, player)
 			continue
 		}
 
-		if !TagContains(player.System, systemTags) && !TagContains(player.Region, regionTags) {
+		if !views.TagContains(player.System, systemTags) && !views.TagContains(player.Region, regionTags) {
 			continue
 		}
 
-		if TagContains(player.Name, enemyTags) {
+		if views.TagContains(player.Name, enemyTags) {
 			enemyPlayers = append(enemyPlayers, player)
 			continue
 		}
@@ -162,7 +153,6 @@ func (t *PlayersTemplates) Send() {
 	t.friends.alertTmpl.Send(t.api)
 	t.neutral.alertTmpl.Send(t.api)
 	t.enemies.alertTmpl.Send(t.api)
-
 }
 
 func (t *PlayersTemplates) MatchMessageID(messageID types.DiscordMessageID) bool {

@@ -25,6 +25,10 @@ type TagPlayerEnemy struct {
 	TagTemplate
 }
 
+type TagPlayerEvent struct {
+	TagTemplate
+}
+
 type TagSystem struct {
 	TagTemplate
 }

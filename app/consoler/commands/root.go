@@ -95,6 +95,15 @@ func CreateConsoler(
 		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(channelInfo.GetDbpath())),
 	)
 
+	NewTagCommands(
+		playerGroup.GetChild(
+			playerGroup.CurrentCmd,
+			cmdgroup.Command("event"),
+			cmdgroup.ShortDesc("Player event commands"),
+		),
+		configurator.NewConfiguratorPlayerEvent(configurator.NewConfigurator(channelInfo.GetDbpath())),
+	)
+
 	alertGroup := root.GetChild(
 		root.CurrentCmd,
 		cmdgroup.Command("alert"),
