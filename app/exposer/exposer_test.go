@@ -18,7 +18,7 @@ func FixtureTestWebServer() {
 		is_webserver_active = true
 		go NewExposer()
 		for i := 0; i < 100; i++ {
-			body := testQuery("/ping")
+			body, _ := testQuery("/ping")
 			if body == "pong!" {
 				break
 			}
@@ -28,19 +28,18 @@ func FixtureTestWebServer() {
 	}
 }
 
-func testQuery(url string) string {
+func testQuery(url string) (string, error) {
 	resp, err := http.Get("http://localhost:8080" + url)
 	logus.CheckFatal(err, "query failed")
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
-	logus.CheckFatal(err, "readAll failed")
-
-	return string(body)
+	return string(body), err
 }
 
 func TestHomePage(t *testing.T) {
 	FixtureTestWebServer()
-	body := testQuery("/")
+	body, err := testQuery("/")
+	logus.CheckFatal(err, "readAll failed")
 
 	logus.Debug(body)
 
@@ -51,7 +50,8 @@ func TestHomePage(t *testing.T) {
 
 func TestPlayers(t *testing.T) {
 	FixtureTestWebServer()
-	body := testQuery("/players")
+	body, err := testQuery("/players")
+	logus.CheckFatal(err, "readAll failed")
 
 	logus.Debug(body)
 
