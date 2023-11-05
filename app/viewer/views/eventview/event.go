@@ -9,33 +9,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 )
 
-type EventRenderer struct {
-	main views.TemplateShared
-	api  *apis.API
+type EventView struct {
+	main views.ViewTable
+
+	*views.SharedViewTableSplitter
 }
 
-func NewEventRenderer(api *apis.API) *EventRenderer {
-	base := EventRenderer{}
-	base.api = api
-	base.main.Header = "#darkbot-event-view"
+func NewEventRenderer(api *apis.API) *EventView {
+	base := EventView{}
+	base.main.ViewID = "#darkbot-event-view"
+
+	base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, &base, &base.main)
+
 	return &base
-}
-
-func (t *EventRenderer) DiscoverMessageID(content string, msgID types.DiscordMessageID) {
-	if strings.Contains(content, t.main.Header) {
-		t.main.MessageID = msgID
-	}
-}
-
-func (t *EventRenderer) MatchMessageID(messageID types.DiscordMessageID) bool {
-	return messageID == t.main.MessageID
-}
-
-func (t *EventRenderer) Send() {
-	t.main.Send(t.api)
 }
 
 type PlayerTemplate struct {
@@ -44,29 +32,34 @@ type PlayerTemplate struct {
 	System string
 }
 
-func (t *EventRenderer) Render() error {
-	record, err := t.api.Scrappy.GetPlayerStorage().GetLatestRecord()
+func (t *EventView) GenerateRecords() error {
+	player_record, err := t.GetAPI().Scrappy.GetPlayerStorage().GetLatestRecord()
 	if logus.CheckWarn(err, "unable to get players") {
 		return err
 	}
 
-	logus.Debug("rendered events", logus.DiscordMessageID(t.main.MessageID))
+	// logus.Debug("rendered events", logus.DiscordMessageID(t.main.MessageID)) // TODO delete as u finished refactor
 
-	eventTags, err := t.api.Players.Events.TagsList(t.api.ChannelID)
-	logus.CheckWarn(err, "failed to acquire player event list", logus.ChannelID(t.api.ChannelID))
+	eventTags, err := t.GetAPI().Players.Events.TagsList(t.GetAPI().ChannelID)
+	logus.CheckWarn(err, "failed to acquire player event list", logus.ChannelID(t.GetAPI().ChannelID))
 
 	if len(eventTags) > 0 {
-		var sb strings.Builder
+		var beginning strings.Builder
+		var end strings.Builder
 
-		sb.WriteString(fmt.Sprintf("**%s** %s\n", t.main.Header, time.Now().String()))
-		sb.WriteString("**Event table of players**\n")
-		sb.WriteString("```json\n")
+		// Looks like identical :thinking: // TODO delete as u finished refactor
+		// sb.WriteString(fmt.Sprintf("**%s** %s\n", t.main.ViewID, time.Now().String()))
+
+		beginning.WriteString("**Event table of players**\n")
+		beginning.WriteString("```json\n")
+		t.main.ViewBeginning = types.ViewBeginning(beginning.String())
 
 		for _, eventTag := range eventTags {
-			sb.WriteString(fmt.Sprintf(`"%s": `, eventTag))
+			var record strings.Builder
+			record.WriteString(fmt.Sprintf(`"%s": `, eventTag))
 
 			matchedPlayers := []PlayerTemplate{}
-			for _, player := range record.List {
+			for _, player := range player_record.List {
 				if views.TagContains(player.Name, []types.Tag{eventTag}) {
 					matchedPlayers = append(matchedPlayers, PlayerTemplate{Name: player.Name, Time: player.Time, System: player.System})
 					continue
@@ -74,13 +67,14 @@ func (t *EventRenderer) Render() error {
 			}
 			result, err := json.Marshal(matchedPlayers)
 			logus.CheckError(err, "failed to marshal event matched players")
-			sb.WriteString(fmt.Sprintf("%s", string(result)))
+			record.WriteString(fmt.Sprintf("%s", string(result)))
 
-			sb.WriteString("\n")
+			record.WriteString("\n")
+			t.main.AppendRecord(types.ViewRecord(record.String()))
 		}
 
-		sb.WriteString("```\n")
-		t.main.Content = sb.String()
+		end.WriteString("```\n")
+		t.main.ViewEnd = types.ViewEnd(end.String())
 
 	}
 

@@ -8,7 +8,6 @@ import (
 	_ "embed"
 	"fmt"
 	"text/template"
-	"time"
 )
 
 //go:embed alert_template.md
@@ -20,13 +19,11 @@ func init() {
 }
 
 type TemplateAlertInput struct {
-	Header      string
-	LastUpdated string
 	PingMessage types.PingMessage
 	Msg         string
 }
 
-func RenderAlertTemplate(Header string, ChannelID types.DiscordChannelID, Msg string, api *apis.API) string {
+func RenderAlertTemplate(ChannelID types.DiscordChannelID, Msg string, api *apis.API) types.ViewRecord {
 
 	pingMessage, err := api.Alerts.PingMessage.Status(ChannelID)
 	logus.Debug("RenderAlertTemplate.PingMessage.Status", logus.OptError(err), logus.PingMessage(pingMessage))
@@ -39,10 +36,8 @@ func RenderAlertTemplate(Header string, ChannelID types.DiscordChannelID, Msg st
 	}
 
 	input := TemplateAlertInput{
-		Header:      Header,
-		LastUpdated: time.Now().String(),
 		PingMessage: pingMessage,
 		Msg:         Msg,
 	}
-	return utils.TmpRender(alertTemplate, input)
+	return types.ViewRecord(utils.TmpRender(alertTemplate, input))
 }

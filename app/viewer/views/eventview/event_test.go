@@ -31,9 +31,10 @@ func TestPlayerEvent(t *testing.T) {
 
 		playerView := NewEventRenderer(api)
 		playerView.Render()
-		logus.Debug(playerView.main.Content)
+		// logus.Debug(len(playerView.main.ViewRecords))
 		logus.Debug("test TestPlayerEvent is finished")
 
-		assert.NotEmpty(t, playerView.main.Content)
+		assert.Equal(t, 2, len(playerView.main.ViewRecords))
+		assert.Equal(t, 1, len(playerView.main.Msgs))
 	})
 }

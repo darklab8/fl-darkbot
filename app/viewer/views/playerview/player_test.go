@@ -34,18 +34,18 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 		playerView := NewTemplatePlayers(api)
 		playerView.Render()
-		logus.Debug(playerView.friends.mainTable.Content)
-		logus.Debug(playerView.enemies.mainTable.Content)
-		logus.Debug(playerView.neutral.mainTable.Content)
+		logus.Debug(playerView.friends.mainTable.Msgs[0].Render())
+		logus.Debug(playerView.enemies.mainTable.Msgs[0].Render())
+		logus.Debug(playerView.neutral.mainTable.Msgs[0].Render())
 		logus.Debug("test TestPlayerViewer is finished")
 
-		assert.NotEmpty(t, playerView.friends.mainTable.Content)
-		assert.NotEmpty(t, playerView.enemies.mainTable.Content)
-		assert.NotEmpty(t, playerView.neutral.mainTable.Content)
+		assert.NotZero(t, playerView.friends.mainTable.ViewRecords)
+		assert.NotZero(t, playerView.enemies.mainTable.ViewRecords)
+		assert.NotZero(t, playerView.neutral.mainTable.ViewRecords)
 
-		assert.Empty(t, playerView.friends.alertTmpl.Content)
-		assert.Empty(t, playerView.enemies.alertTmpl.Content)
-		assert.Empty(t, playerView.neutral.alertTmpl.Content)
+		assert.Zero(t, playerView.friends.alertTmpl.ViewRecords)
+		assert.Zero(t, playerView.enemies.alertTmpl.ViewRecords)
+		assert.Zero(t, playerView.neutral.alertTmpl.ViewRecords)
 
 		enemyAlerts := configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(dbpath))
 		_, err := enemyAlerts.Status(channelID)
@@ -59,9 +59,9 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		playerView = NewTemplatePlayers(api)
 		playerView.Render()
 
-		assert.NotEmpty(t, playerView.enemies.alertTmpl.Content)
-		assert.Empty(t, playerView.friends.alertTmpl.Content)
-		assert.Empty(t, playerView.neutral.alertTmpl.Content)
+		assert.NotZero(t, playerView.enemies.alertTmpl.ViewRecords)
+		assert.Zero(t, playerView.friends.alertTmpl.ViewRecords)
+		assert.Zero(t, playerView.neutral.alertTmpl.ViewRecords)
 
 	})
 }
@@ -79,9 +79,11 @@ func TestPlayerViewerRealData(t *testing.T) {
 		playerView := NewTemplatePlayers(apis.NewAPI(channelID, dbpath, apis.WithStorage(storage)))
 		playerView.Render()
 
-		logus.Debug(playerView.friends.mainTable.Content)
-		logus.Debug(playerView.enemies.mainTable.Content)
-		logus.Debug(playerView.neutral.mainTable.Content)
+		assert.NotZero(t, playerView.friends.mainTable.ViewRecords)
+		assert.Zero(t, playerView.enemies.mainTable.ViewRecords)
+		assert.Zero(t, playerView.neutral.mainTable.ViewRecords)
+
+		logus.Debug(playerView.friends.mainTable.Msgs[0].Render())
 
 		logus.Debug("test TestPlayerViewer is finished")
 	})

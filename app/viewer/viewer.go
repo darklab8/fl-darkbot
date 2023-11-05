@@ -43,11 +43,11 @@ func (v Viewer) Update() {
 	for _, channelID := range channelIDs {
 		v.api.SetChannelID(channelID)
 		channel := NewChannelView(v.api, channelID)
+		channel.Render()
 		err := channel.Discover()
 		if logus.CheckWarn(err, "unable to grab Discord msgs", logus.ChannelID(channelID)) {
 			continue
 		}
-		channel.Render()
 		channel.Send()
 		channel.DeleteOld()
 		time.Sleep(time.Duration(v.delays.betweenChannels) * time.Second)

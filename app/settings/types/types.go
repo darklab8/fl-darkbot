@@ -19,3 +19,10 @@ type DiscordOwnerID string
 type PingMessage string
 
 type Tag string
+
+type ViewID string
+type ViewEnumeratedID string
+
+type ViewBeginning string
+type ViewRecord string
+type ViewEnd string

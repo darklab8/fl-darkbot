@@ -9,9 +9,7 @@ import (
 	"darkbot/app/viewer/views"
 	_ "embed"
 	"fmt"
-	"strings"
 	"text/template"
-	"time"
 )
 
 // Discovery players-all, players-friends, players-enemies messages
@@ -24,16 +22,16 @@ import (
 // Send
 
 type PlayersFriends struct {
-	mainTable views.TemplateShared
-	alertTmpl views.TemplateShared
+	mainTable views.ViewTable
+	alertTmpl views.ViewTable
 }
 type PlayersEnemies struct {
-	mainTable views.TemplateShared
-	alertTmpl views.TemplateShared
+	mainTable views.ViewTable
+	alertTmpl views.ViewTable
 }
 type PlayersNeutral struct {
-	mainTable views.TemplateShared
-	alertTmpl views.TemplateShared
+	mainTable views.ViewTable
+	alertTmpl views.ViewTable
 }
 
 type PlayersTemplates struct {
@@ -41,21 +39,33 @@ type PlayersTemplates struct {
 	neutral PlayersNeutral
 	enemies PlayersEnemies
 	api     *apis.API
+	*views.SharedViewTableSplitter
 }
 
 func NewTemplatePlayers(api *apis.API) *PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.api = api
-	templator.friends.mainTable.Header = "#darkbot-players-friends-table"
-	templator.neutral.mainTable.Header = "#darkbot-players-neutral-table"
-	templator.enemies.mainTable.Header = "#darkbot-players-enemies-table"
-	templator.friends.alertTmpl.Header = "#darkbot-players-friends-alert"
-	templator.neutral.alertTmpl.Header = "#darkbot-players-neutral-alert"
-	templator.enemies.alertTmpl.Header = "#darkbot-players-enemies-alert"
+	templator.friends.mainTable.ViewID = "#darkbot-players-friends-table"
+	templator.neutral.mainTable.ViewID = "#darkbot-players-neutral-table"
+	templator.enemies.mainTable.ViewID = "#darkbot-players-enemies-table"
+	templator.friends.alertTmpl.ViewID = "#darkbot-players-friends-alert"
+	templator.neutral.alertTmpl.ViewID = "#darkbot-players-neutral-alert"
+	templator.enemies.alertTmpl.ViewID = "#darkbot-players-enemies-alert"
+
+	templator.SharedViewTableSplitter = views.NewSharedViewSplitter(
+		api,
+		&templator,
+		&templator.friends.mainTable,
+		&templator.neutral.mainTable,
+		&templator.enemies.mainTable,
+		&templator.friends.alertTmpl,
+		&templator.neutral.alertTmpl,
+		&templator.enemies.alertTmpl,
+	)
 	return &templator
 }
 
-func (t *PlayersTemplates) Render() error {
+func (t *PlayersTemplates) GenerateRecords() error {
 	record, err := t.api.Scrappy.GetPlayerStorage().GetLatestRecord()
 	if logus.CheckWarn(err, "unable to get players") {
 		return err
@@ -99,107 +109,63 @@ func (t *PlayersTemplates) Render() error {
 	logus.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
 
 	if len(systemTags) > 0 || len(regionTags) > 0 {
-		t.neutral.mainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
-			Header:      t.neutral.mainTable.Header,
-			LastUpdated: time.Now().String(),
-			Players:     neutralPlayers,
-			TableName:   "**Neutral players in tracked systems and regions**",
-		})
+		t.neutral.mainTable.ViewBeginning = "**Neutral players in tracked systems and regions**\n```json"
+		t.neutral.mainTable.ViewEnd = "```\n"
+
+		for _, playerVars := range neutralPlayers {
+			t.neutral.mainTable.AppendRecord(types.ViewRecord(utils.TmpRender(playerTemplate, playerVars)))
+		}
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
-		t.enemies.mainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
-			Header:      t.enemies.mainTable.Header,
-			LastUpdated: time.Now().String(),
-			Players:     enemyPlayers,
-			TableName:   "**Enemy players in tracked systems and regions**",
-		})
+		t.enemies.mainTable.ViewBeginning = "**Enemy players in tracked systems and regions**\n```diff"
+		t.enemies.mainTable.ViewEnd = "```\n"
+
+		for _, playerVars := range enemyPlayers {
+			t.enemies.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("-%s", utils.TmpRender(playerTemplate, playerVars))))
+		}
 	}
 
 	if len(friendTags) > 0 {
-		t.friends.mainTable.Content = utils.TmpRender(playerTemplate, TemplateRendrerPlayerInput{
-			Header:      t.friends.mainTable.Header,
-			LastUpdated: time.Now().String(),
-			Players:     friendPlayers,
-			TableName:   "**Friend players in all systems and regions**",
-		})
+		t.friends.mainTable.ViewBeginning = "**Friend players in all systems and regions**\n```diff"
+		t.friends.mainTable.ViewEnd = "```\n"
+
+		for _, playerVars := range friendPlayers {
+			t.friends.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("+%s", utils.TmpRender(playerTemplate, playerVars))))
+		}
 	}
 
 	// Alerts
 
 	if alertNeutralCount, err := t.api.Alerts.NeutralsGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(neutralPlayers) >= alertNeutralCount {
-			t.neutral.alertTmpl.Content = views.RenderAlertTemplate(t.neutral.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount), t.api)
+
+			t.neutral.alertTmpl.AppendRecord(views.RenderAlertTemplate(
+				t.api.ChannelID,
+				fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount),
+				t.api,
+			))
 		}
 	}
 	if alertEnemyCount, err := t.api.Alerts.EnemiesGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(enemyPlayers) >= alertEnemyCount {
-			t.enemies.alertTmpl.Content = views.RenderAlertTemplate(t.enemies.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount), t.api)
+			t.enemies.alertTmpl.AppendRecord(views.RenderAlertTemplate(
+				t.api.ChannelID,
+				fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount),
+				t.api,
+			))
 		}
 	}
 	if alertFriendCount, err := t.api.Alerts.FriendsGreaterThan.Status(t.api.ChannelID); err == nil {
 		if len(friendPlayers) >= alertFriendCount {
-			t.friends.alertTmpl.Content = views.RenderAlertTemplate(t.friends.alertTmpl.Header, t.api.ChannelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount), t.api)
+			t.friends.alertTmpl.AppendRecord(views.RenderAlertTemplate(
+				t.api.ChannelID,
+				fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount),
+				t.api,
+			))
 		}
 	}
 	return nil
-}
-
-func (t *PlayersTemplates) Send() {
-	t.friends.mainTable.Send(t.api)
-	t.neutral.mainTable.Send(t.api)
-	t.enemies.mainTable.Send(t.api)
-
-	t.friends.alertTmpl.Send(t.api)
-	t.neutral.alertTmpl.Send(t.api)
-	t.enemies.alertTmpl.Send(t.api)
-}
-
-func (t *PlayersTemplates) MatchMessageID(messageID types.DiscordMessageID) bool {
-
-	if messageID == t.friends.mainTable.MessageID {
-		return true
-	}
-	if messageID == t.neutral.mainTable.MessageID {
-		return true
-	}
-	if messageID == t.enemies.mainTable.MessageID {
-		return true
-	}
-
-	if messageID == t.friends.alertTmpl.MessageID {
-		return true
-	}
-	if messageID == t.neutral.alertTmpl.MessageID {
-		return true
-	}
-	if messageID == t.enemies.alertTmpl.MessageID {
-		return true
-	}
-
-	return false
-}
-
-func (t *PlayersTemplates) DiscoverMessageID(content string, msgID types.DiscordMessageID) {
-	if strings.Contains(content, t.friends.mainTable.Header) {
-		t.friends.mainTable.MessageID = msgID
-	}
-	if strings.Contains(content, t.neutral.mainTable.Header) {
-		t.neutral.mainTable.MessageID = msgID
-	}
-	if strings.Contains(content, t.enemies.mainTable.Header) {
-		t.enemies.mainTable.MessageID = msgID
-	}
-
-	if strings.Contains(content, t.friends.alertTmpl.Header) {
-		t.friends.alertTmpl.MessageID = msgID
-	}
-	if strings.Contains(content, t.neutral.alertTmpl.Header) {
-		t.neutral.alertTmpl.MessageID = msgID
-	}
-	if strings.Contains(content, t.enemies.alertTmpl.Header) {
-		t.enemies.alertTmpl.MessageID = msgID
-	}
 }
 
 //go:embed player_template.md

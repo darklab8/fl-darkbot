@@ -36,12 +36,12 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		render := NewTemplateBase(api)
 		render.Render()
-		logus.Debug("render.main.Content" + render.main.Content)
+		logus.Debug(fmt.Sprintf("render.main.Content=%v", render.main.ViewRecords))
 
-		assert.NotEmpty(t, render.main.Content)
-		assert.Empty(t, render.alertHealthLowerThan.Content)
-		assert.Empty(t, render.alertHealthIsDecreasing.Content)
-		assert.Empty(t, render.alertBaseUnderAttack.Content)
+		assert.NotZero(t, render.main.ViewRecords)
+		assert.Zero(t, render.alertHealthLowerThan.ViewRecords)
+		assert.Zero(t, render.alertHealthIsDecreasing.ViewRecords)
+		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
 
 		// alerts
 		baseAlertDecreasing := configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(dbpath))
@@ -60,10 +60,10 @@ func TestBaseViewerMocked(t *testing.T) {
 		render = NewTemplateBase(api)
 		render.Render()
 
-		assert.NotEmpty(t, render.main.Content)
-		assert.NotEmpty(t, render.alertHealthIsDecreasing.Content)
-		assert.Empty(t, render.alertHealthLowerThan.Content)
-		assert.Empty(t, render.alertBaseUnderAttack.Content)
+		assert.NotZero(t, render.main.ViewRecords)
+		assert.NotZero(t, render.alertHealthIsDecreasing.ViewRecords)
+		assert.Zero(t, render.alertHealthLowerThan.ViewRecords)
+		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
 
 		baseAlertBelowThreshold := configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(dbpath))
 		_, err := baseAlertBelowThreshold.Status(channelID)
@@ -73,19 +73,19 @@ func TestBaseViewerMocked(t *testing.T) {
 		render = NewTemplateBase(api)
 		render.Render()
 
-		assert.NotEmpty(t, render.main.Content)
-		assert.NotEmpty(t, render.alertHealthIsDecreasing.Content)
-		assert.Empty(t, render.alertHealthLowerThan.Content)
-		assert.Empty(t, render.alertBaseUnderAttack.Content)
+		assert.NotZero(t, render.main.ViewRecords)
+		assert.NotZero(t, render.alertHealthIsDecreasing.ViewRecords)
+		assert.Zero(t, render.alertHealthLowerThan.ViewRecords)
+		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
 
 		baseAlertBelowThreshold.Set(channelID, 60)
 		render = NewTemplateBase(api)
 		render.Render()
 
-		assert.NotEmpty(t, render.main.Content)
-		assert.NotEmpty(t, render.alertHealthIsDecreasing.Content)
-		assert.NotEmpty(t, render.alertHealthLowerThan.Content)
-		assert.Empty(t, render.alertBaseUnderAttack.Content)
+		assert.NotZero(t, render.main.ViewRecords)
+		assert.NotZero(t, render.alertHealthIsDecreasing.ViewRecords)
+		assert.NotZero(t, render.alertHealthLowerThan.ViewRecords)
+		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
 
 		record = records.NewStampedObjects[base.Base]()
 		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
@@ -94,14 +94,14 @@ func TestBaseViewerMocked(t *testing.T) {
 		render = NewTemplateBase(api)
 		render.Render()
 
-		assert.Empty(t, render.alertBaseUnderAttack.Content)
+		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
 
 		baseUnderAttackalert := configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(dbpath))
 		baseUnderAttackalert.Enable(channelID)
 		render = NewTemplateBase(api)
 		render.Render()
 
-		assert.NotEmpty(t, render.alertBaseUnderAttack.Content)
+		assert.NotZero(t, render.alertBaseUnderAttack.ViewRecords)
 	})
 }
 
@@ -127,7 +127,7 @@ func TestBaseViewerRealData(t *testing.T) {
 
 		base := NewTemplateBase(api)
 		base.Render()
-		logus.Debug("base.main.Content=" + base.main.Content)
+		logus.Debug(fmt.Sprintf("base.main.Content=%v", base.main.ViewRecords))
 	})
 }
 
@@ -181,7 +181,6 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 }
 
 func TestDetectAttackOnLPBase(t *testing.T) {
-
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
@@ -209,6 +208,6 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		render := NewTemplateBase(api)
 		render.Render()
 
-		assert.NotEmpty(t, render.alertBaseUnderAttack.Content)
+		assert.NotZero(t, render.alertBaseUnderAttack.ViewRecords)
 	})
 }
