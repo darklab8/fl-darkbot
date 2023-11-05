@@ -1,7 +1,7 @@
 version: "3"
 
 env:
-  tag_version: v0.3.11-a.3
+  tag_version: v1.0.0
 
 tasks:
   build-version:
@@ -56,6 +56,28 @@ tasks:
   shell:staging:
     cmds:
       - ssh -i ~/.ssh/id_rsa.darklab root@5.161.80.45
+
+  shell:production:
+    cmds:
+      - ssh -i ~/.ssh/id_rsa.darklab root@5.161.54.150
+
+  copy_prod_to_stag:
+    cmds:
+      - scp -i ~/.ssh/id_rsa.darklab root@5.161.179.34:/var/lib/darklab/darkbot/prod.sqlite3 root@5.161.80.45:/var/lib/darklab/darkbot
+      - scp -i ~/.ssh/id_rsa.darklab root@5.161.179.34:/var/lib/darklab/darkbot/prod.sqlite3-shm root@5.161.80.45:/var/lib/darklab/darkbot
+      - scp -i ~/.ssh/id_rsa.darklab root@5.161.179.34:/var/lib/darklab/darkbot/prod.sqlite3-wal root@5.161.80.45:/var/lib/darklab/darkbot
+
+  copy_prod_to_local:
+    cmds:
+      - scp -i ~/.ssh/id_rsa.darklab root@5.161.179.34:/var/lib/darklab/darkbot/prod.sqlite3 ./data
+      - scp -i ~/.ssh/id_rsa.darklab root@5.161.179.34:/var/lib/darklab/darkbot/prod.sqlite3-shm ./data
+      - scp -i ~/.ssh/id_rsa.darklab root@5.161.179.34:/var/lib/darklab/darkbot/prod.sqlite3-wal ./data
+
+  copy_local_to_prod:
+    cmds:
+      - scp -i ~/.ssh/id_rsa.darklab ./data/prod.sqlite3 root@5.161.54.150:/var/lib/darklab/darkbot/
+      - scp -i ~/.ssh/id_rsa.darklab ./data/prod.sqlite3-shm root@5.161.54.150:/var/lib/darklab/darkbot/
+      - scp -i ~/.ssh/id_rsa.darklab ./data/prod.sqlite3-wal root@5.161.54.150:/var/lib/darklab/darkbot/
 
   mkdocs:dev:
     cmds:

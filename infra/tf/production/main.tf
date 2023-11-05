@@ -1,32 +1,31 @@
-terraform {
-  required_providers {
-    hcloud = {
-      source  = "hetznercloud/hcloud"
-      version = "~> 1.35.2"
-    }
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 2.7.0"
-    }
-  }
-}
-
-variable "production_hcloud_token" {
-  type      = string
-  sensitive = true
-}
-
-provider "hcloud" {
-  token = var.production_hcloud_token
-}
-
 module "stack" {
-  source       = "../modules/darkbot"
-  environment  = "prod"
-  server_power = "cpx41"
-  backups      = true
+  source       = "../modules/hetzner_server"
+  environment  = "production"
+  server_power = "cpx21"
+  backups      = false
 }
 
 output "cluster_ip" {
   value = module.stack.cluster_ip
+}
+
+data "aws_ssm_parameter" "darkbot" {
+  name = "/terraform/hetzner/darkbot/production"
+}
+
+locals {
+  secrets = nonsensitive(jsondecode(data.aws_ssm_parameter.darkbot.value))
+}
+
+provider "docker" {
+  host     = "ssh://root@${module.stack.cluster_ip}:22"
+  ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-i", "~/.ssh/id_rsa.darklab"]
+}
+
+module "darkbot" {
+  source              = "../modules/darkbot"
+  configurator_dbname = "production"
+  consoler_prefix     = "."
+  secrets             = local.secrets
+  tag_version         = "v1.0.0"
 }

@@ -18,7 +18,8 @@ variable "consoler_prefix" {
 }
 
 variable "debug" {
-  type = bool
+  type    = bool
+  default = false
 }
 
 variable "secrets" {
@@ -50,4 +51,10 @@ resource "docker_container" "darkbot" {
   }
 
   memory = 1000 # MBs
+
+  lifecycle {
+    ignore_changes = [
+      memory_swap,
+    ]
+  }
 }
