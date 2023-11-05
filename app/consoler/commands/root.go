@@ -51,7 +51,8 @@ func CreateConsoler(
 			cmdgroup.Command("base"),
 			cmdgroup.ShortDesc("Base commands"),
 		),
-		configurator.NewConfiguratorBase(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewConfiguratorBase(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	playerGroup := root.GetChild(
@@ -65,7 +66,8 @@ func CreateConsoler(
 			cmdgroup.Command("system"),
 			cmdgroup.ShortDesc("System commands"),
 		),
-		configurator.NewConfiguratorSystem(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewConfiguratorSystem(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewTagCommands(
@@ -74,7 +76,8 @@ func CreateConsoler(
 			cmdgroup.Command("region"),
 			cmdgroup.ShortDesc("Region commands"),
 		),
-		configurator.NewConfiguratorRegion(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewConfiguratorRegion(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewTagCommands(
@@ -83,7 +86,8 @@ func CreateConsoler(
 			cmdgroup.Command("friend"),
 			cmdgroup.ShortDesc("Player friend commands"),
 		),
-		configurator.NewConfiguratorPlayerFriend(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewConfiguratorPlayerFriend(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewTagCommands(
@@ -92,7 +96,8 @@ func CreateConsoler(
 			cmdgroup.Command("enemy"),
 			cmdgroup.ShortDesc("Player enemy commands"),
 		),
-		configurator.NewConfiguratorPlayerEnemy(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewConfiguratorPlayerEnemy(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewTagCommands(
@@ -101,7 +106,8 @@ func CreateConsoler(
 			cmdgroup.Command("event"),
 			cmdgroup.ShortDesc("Player event commands"),
 		),
-		configurator.NewConfiguratorPlayerEvent(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewConfiguratorPlayerEvent(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	alertGroup := root.GetChild(
@@ -116,7 +122,8 @@ func CreateConsoler(
 			cmdgroup.Command("base_health_is_decreasing"),
 			cmdgroup.ShortDesc("Turn on to receive alert if base health is decreasing"),
 		),
-		configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewCfgAlertBaseHealthIsDecreasing(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewAlertBoolCommands[models.AlertBaseIfUnderAttack](
@@ -125,7 +132,8 @@ func CreateConsoler(
 			cmdgroup.Command("base_is_under_attack"),
 			cmdgroup.ShortDesc("Turn on if base health is rapidly decreasing or attack declaration was declared"),
 		),
-		configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewCfgAlertBaseIsUnderAttack(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewAlertThresholdCommands[models.AlertBaseHealthLowerThan](
@@ -134,7 +142,8 @@ func CreateConsoler(
 			cmdgroup.Command("base_health_is_lower_than"),
 			cmdgroup.ShortDesc("Set threshold of base health, below which you will receive alert"),
 		),
-		configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewCfgAlertBaseHealthLowerThan(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewAlertThresholdCommands[models.AlertNeutralPlayersEqualOrGreater](
@@ -143,7 +152,8 @@ func CreateConsoler(
 			cmdgroup.Command("player_neutral_count_above"),
 			cmdgroup.ShortDesc("Set threshold, if above amount of neutral players will be preesent, you will receive alert"),
 		),
-		configurator.NewCfgAlertNeutralPlayersGreaterThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewCfgAlertNeutralPlayersGreaterThan(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewAlertThresholdCommands[models.AlertEnemiesEqualOrGreater](
@@ -152,7 +162,8 @@ func CreateConsoler(
 			cmdgroup.Command("player_enemy_count_above"),
 			cmdgroup.ShortDesc("Set threshold, if above amount of enemy players will be preesent, you will receive alert"),
 		),
-		configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewCfgAlertEnemyPlayersGreaterThan(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewAlertThresholdCommands[models.AlertFriendsEqualOrGreater](
@@ -161,7 +172,8 @@ func CreateConsoler(
 			cmdgroup.Command("player_friend_count_above"),
 			cmdgroup.ShortDesc("Set threshold, if above amount of friendly players will be preesent, you will receive alert"),
 		),
-		configurator.NewCfgAlertFriendPlayersGreaterThan(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewCfgAlertFriendPlayersGreaterThan(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	NewAlertSetStringCommand[models.AlertPingMessage](
@@ -170,7 +182,8 @@ func CreateConsoler(
 			cmdgroup.Command("ping_message"),
 			cmdgroup.ShortDesc("By default `<@DiscordServer.Owner.ID>`. You can change it to something else like `@here` or `@role`"),
 		),
-		configurator.NewCfgAlertPingMessage(configurator.NewConfigurator(channelInfo.GetDbpath())),
+		configurator.NewCfgAlertPingMessage(configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	return consolerCmd

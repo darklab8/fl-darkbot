@@ -12,14 +12,16 @@ import (
 
 type alertThresholdCommands[T configurator.AlertThresholdType] struct {
 	*cmdgroup.CmdGroup
-	cfgTags configurator.IConfiguratorAlertThreshold[T]
+	cfgTags  configurator.IConfiguratorAlertThreshold[T]
+	channels configurator.ConfiguratorChannel
 }
 
 func NewAlertThresholdCommands[T configurator.AlertThresholdType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertThreshold[T],
+	channels configurator.ConfiguratorChannel,
 ) *alertThresholdCommands[T] {
-	t := &alertThresholdCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags}
+	t := &alertThresholdCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
 	t.CreateSetAlertCmd()
 	t.CreateUnsetCmd()
 	t.CreateStatusCmd()
@@ -33,6 +35,10 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateSetAlertCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			printer.Println(cmd, "Attempting to parse input into integer number")
 			rawInteger := args[0]
 			integer, err := strconv.Atoi(rawInteger)
@@ -60,6 +66,10 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 		Short: "Unsert alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
@@ -81,6 +91,10 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			integer, err := t.cfgTags.Status(t.GetChannelID())
 			if err != nil {
 				errMsg := err.Error()
@@ -102,14 +116,16 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 
 type AlertBoolCommands[T configurator.AlertBoolType] struct {
 	*cmdgroup.CmdGroup
-	cfgTags configurator.IConfiguratorAlertBool[T]
+	cfgTags  configurator.IConfiguratorAlertBool[T]
+	channels configurator.ConfiguratorChannel
 }
 
 func NewAlertBoolCommands[T configurator.AlertBoolType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertBool[T],
+	channels configurator.ConfiguratorChannel,
 ) *AlertBoolCommands[T] {
-	t := &AlertBoolCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags}
+	t := &AlertBoolCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
 	t.CreateEnableCmd()
 	t.CreateDisableCmd()
 	t.CreateStatusCmd()
@@ -122,6 +138,10 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 		Short: "Enable alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateEnableCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			err := t.cfgTags.Enable(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
@@ -145,6 +165,10 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 		Short: "Disable alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateDisableCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			err := t.cfgTags.Disable(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
@@ -166,6 +190,10 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			_, err := t.cfgTags.Status(t.GetChannelID())
 			if err != nil {
 				errMsg := err.Error()
@@ -189,14 +217,16 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 
 type AlertSetStringCommand[T configurator.AlertStringType] struct {
 	*cmdgroup.CmdGroup
-	cfgTags configurator.IConfiguratorAlertString[T]
+	cfgTags  configurator.IConfiguratorAlertString[T]
+	channels configurator.ConfiguratorChannel
 }
 
 func NewAlertSetStringCommand[T configurator.AlertStringType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertString[T],
+	channels configurator.ConfiguratorChannel,
 ) *AlertSetStringCommand[T] {
-	t := &AlertSetStringCommand[T]{CmdGroup: cmdGroup, cfgTags: cfgTags}
+	t := &AlertSetStringCommand[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
 	t.CreateSetCmd()
 	t.CreateUnsetCmd()
 	t.CreateStatusCmd()
@@ -210,6 +240,10 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd() {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateSetAlertCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			str := args[0]
 			err := t.cfgTags.Set(t.GetChannelID(), str)
 			if err != nil {
@@ -230,6 +264,10 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 		Short: "Unsert / Clear ",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			err := t.cfgTags.Unset(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
@@ -251,6 +289,10 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 		Short: "Status",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			str, err := t.cfgTags.Status(t.GetChannelID())
 			if err != nil {
 				errMsg := err.Error()

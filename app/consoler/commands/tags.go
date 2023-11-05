@@ -14,11 +14,12 @@ import (
 
 type tagCommands struct {
 	*cmdgroup.CmdGroup
-	cfgTags configurator.IConfiguratorTags
+	cfgTags  configurator.IConfiguratorTags
+	channels configurator.ConfiguratorChannel
 }
 
-func NewTagCommands(cmd *cmdgroup.CmdGroup, cfgTags configurator.IConfiguratorTags) *tagCommands {
-	t := &tagCommands{CmdGroup: cmd, cfgTags: cfgTags}
+func NewTagCommands(cmd *cmdgroup.CmdGroup, cfgTags configurator.IConfiguratorTags, channels configurator.ConfiguratorChannel) *tagCommands {
+	t := &tagCommands{CmdGroup: cmd, cfgTags: cfgTags, channels: channels}
 	t.CreateTagAdd()
 	t.CreateTagRemove()
 	t.CreateTagClear()
@@ -33,6 +34,10 @@ func (t *tagCommands) CreateTagAdd() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateTagAdd.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			err := t.cfgTags.TagsAdd(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
 			if err != nil {
 				printer.Println(cmd, "ERR msg="+err.Error())
@@ -53,6 +58,9 @@ func (t *tagCommands) CreateTagRemove() {
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateTagRemove.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
 
 			if len(args) == 0 {
 				printer.Println(cmd, "No tags found to remove. Expected at least one")
@@ -83,6 +91,10 @@ func (t *tagCommands) CreateTagClear() {
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateTagClear.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			err := t.cfgTags.TagsClear(t.GetChannelID())
 			if err != nil {
 				if _, ok := err.(configurator.ErrorZeroAffectedRows); ok {
@@ -105,6 +117,10 @@ func (t *tagCommands) CreateTagList() {
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
 			logus.Debug("CreateTagList.consoler running with args=", logus.Args(args))
+			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
+				return
+			}
+
 			tags, cfgErr := t.cfgTags.TagsList(t.GetChannelID())
 			err := cfgErr
 			if err != nil {

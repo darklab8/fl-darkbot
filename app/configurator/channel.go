@@ -49,3 +49,10 @@ func (c ConfiguratorChannel) List() ([]types.DiscordChannelID, error) {
 	return utils.CompL(objs,
 		func(x models.Channel) types.DiscordChannelID { return x.ChannelID }), result.Error
 }
+
+func (c ConfiguratorChannel) IsEnabled(channelID types.DiscordChannelID) (bool, error) {
+	objs := []models.Channel{}
+	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
+
+	return result.RowsAffected != 0, result.Error
+}
