@@ -29,7 +29,7 @@ func (t ViewTable) GeneratedHeader() ViewHeader {
 	return ViewHeader(fmt.Sprintf("**%s** %s\n", t.ViewID, time.Now().String()))
 }
 
-const DiscordMsgLimit = 2000 - 50
+const DiscordMsgLimit = 2000 - 150
 
 func (t ViewTable) GeneratedViews(returned_view func()) {
 	returned_view()

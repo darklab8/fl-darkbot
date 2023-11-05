@@ -1,7 +1,7 @@
 version: "3"
 
 env:
-  tag_version: v1.0.1-f2e1404
+  tag_version: v1.0.1-5dc7b49
 
 tasks:
   build-version:
