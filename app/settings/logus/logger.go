@@ -59,6 +59,17 @@ func Fatal(msg string, opts ...slogParam) {
 	panic(msg)
 }
 
+func CheckDebug(err error, msg string, opts ...slogParam) bool {
+	if err == nil {
+		return false
+	}
+	args := append([]any{}, newSlogGroup(opts...))
+	args = append(args, "error")
+	args = append(args, fmt.Sprintf("%v", err))
+	Slogger.Debug(msg, args...)
+	return true
+}
+
 func CheckWarn(err error, msg string, opts ...slogParam) bool {
 	if err == nil {
 		return false

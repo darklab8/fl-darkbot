@@ -39,7 +39,7 @@ func (t *EventView) GenerateRecords() error {
 	}
 
 	eventTags, err := t.GetAPI().Players.Events.TagsList(t.GetAPI().ChannelID)
-	logus.CheckWarn(err, "failed to acquire player event list", logus.ChannelID(t.GetAPI().ChannelID))
+	logus.CheckDebug(err, "failed to acquire player event list", logus.ChannelID(t.GetAPI().ChannelID))
 
 	if len(eventTags) > 0 {
 		var beginning strings.Builder
