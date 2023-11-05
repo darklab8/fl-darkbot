@@ -38,17 +38,12 @@ func (t *EventView) GenerateRecords() error {
 		return err
 	}
 
-	// logus.Debug("rendered events", logus.DiscordMessageID(t.main.MessageID)) // TODO delete as u finished refactor
-
 	eventTags, err := t.GetAPI().Players.Events.TagsList(t.GetAPI().ChannelID)
 	logus.CheckWarn(err, "failed to acquire player event list", logus.ChannelID(t.GetAPI().ChannelID))
 
 	if len(eventTags) > 0 {
 		var beginning strings.Builder
 		var end strings.Builder
-
-		// Looks like identical :thinking: // TODO delete as u finished refactor
-		// sb.WriteString(fmt.Sprintf("**%s** %s\n", t.main.ViewID, time.Now().String()))
 
 		beginning.WriteString("**Event table of players**\n")
 		beginning.WriteString("```json\n")
@@ -67,7 +62,7 @@ func (t *EventView) GenerateRecords() error {
 			}
 			result, err := json.Marshal(matchedPlayers)
 			logus.CheckError(err, "failed to marshal event matched players")
-			record.WriteString(fmt.Sprintf("%s", string(result)))
+			record.WriteString(string(result))
 
 			record.WriteString("\n")
 			t.main.AppendRecord(types.ViewRecord(record.String()))
