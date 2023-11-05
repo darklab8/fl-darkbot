@@ -40,7 +40,7 @@ func (m Msg) Len() int {
 
 func (v *Msg) Render() string {
 	var content strings.Builder
-	content.WriteString(string(v.ViewEnumeratedID) + "\n")
+	content.WriteString(string(v.ViewEnumeratedID) + fmt.Sprintf(" (last updated: %s)", time.Now().String()) + "\n")
 	content.WriteString(string(v.ViewBeginning))
 	for _, record := range v.Records {
 		content.WriteString(string(*record))

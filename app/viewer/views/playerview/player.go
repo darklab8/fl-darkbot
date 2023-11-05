@@ -175,10 +175,3 @@ var playerTemplate *template.Template
 func init() {
 	playerTemplate = utils.TmpInit(playerMarkup)
 }
-
-type TemplateRendrerPlayerInput struct {
-	Header      string
-	LastUpdated string
-	Players     []player.Player
-	TableName   string
-}
