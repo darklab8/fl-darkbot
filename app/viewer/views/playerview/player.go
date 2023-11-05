@@ -109,7 +109,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	logus.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
 
 	if len(systemTags) > 0 || len(regionTags) > 0 {
-		t.neutral.mainTable.ViewBeginning = "**Neutral players in tracked systems and regions**\n```json"
+		t.neutral.mainTable.ViewBeginning = "**Neutral players in tracked systems and regions**\n```json\n"
 		t.neutral.mainTable.ViewEnd = "```\n"
 
 		for _, playerVars := range neutralPlayers {
@@ -118,7 +118,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
-		t.enemies.mainTable.ViewBeginning = "**Enemy players in tracked systems and regions**\n```diff"
+		t.enemies.mainTable.ViewBeginning = "**Enemy players in tracked systems and regions**\n```diff\n"
 		t.enemies.mainTable.ViewEnd = "```\n"
 
 		for _, playerVars := range enemyPlayers {
@@ -127,7 +127,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	}
 
 	if len(friendTags) > 0 {
-		t.friends.mainTable.ViewBeginning = "**Friend players in all systems and regions**\n```diff"
+		t.friends.mainTable.ViewBeginning = "**Friend players in all systems and regions**\n```diff\n"
 		t.friends.mainTable.ViewEnd = "```\n"
 
 		for _, playerVars := range friendPlayers {
