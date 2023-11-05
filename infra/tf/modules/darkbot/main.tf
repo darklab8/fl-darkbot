@@ -38,7 +38,8 @@ resource "docker_container" "darkbot" {
     "DISCORDER_BOT_TOKEN=${var.secrets["DISCORDER_BOT_TOKEN"]}",
     "CONFIGURATOR_DBNAME=${var.configurator_dbname}",
     "CONSOLER_PREFIX=${var.consoler_prefix}",
-    "LOOP_DELAY=60",
+    "SCRAPPY_LOOP_DELAY=60",
+    "VIEWER_LOOP_DELAY=10",
     "DEVENV_MOCK_API=false",
     "DARKBOT_LOG_LEVEL=${var.debug ? "DEBUG" : "WARN"}"
   ]

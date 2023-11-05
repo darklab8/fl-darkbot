@@ -9,6 +9,7 @@ type RegExp string
 type APIurl string
 
 type ScrappyLoopDelay int
+type ViewerLoopDelay int
 
 type DiscordChannelID string
 

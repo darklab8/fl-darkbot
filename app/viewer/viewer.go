@@ -11,7 +11,7 @@ import (
 
 type ViewerDelays struct {
 	betweenChannels int
-	betweenLoops    types.ScrappyLoopDelay
+	betweenLoops    types.ViewerLoopDelay
 }
 
 type Viewer struct {
@@ -27,7 +27,7 @@ func NewViewer(dbpath types.Dbpath) Viewer {
 		channels: configurator.NewConfiguratorChannel(api.Configur),
 		delays: ViewerDelays{
 			betweenChannels: 1,
-			betweenLoops:    settings.LoopDelay,
+			betweenLoops:    settings.ViewerLoopDelay,
 		},
 	}
 }

@@ -28,11 +28,13 @@ type ConfigScheme struct {
 	ConsolerPrefix   string `env:"CONSOLER_PREFIX" envDefault:";"`
 	ProfilingEnabled string `env:"PROFILING" envDefault:"false"`
 
-	LoopDelay     string `env:"LOOP_DELAY" envDefault:"10"`
-	DevEnvMockApi string `env:"DEVENV_MOCK_API" envDefault:"true"`
+	ScrappyLoopDelay string `env:"SCRAPPY_LOOP_DELAY" envDefault:"10"`
+	ViewerLoopDelay  string `env:"VIEWER_LOOP_DELAY" envDefault:"10"`
+	DevEnvMockApi    string `env:"DEVENV_MOCK_API" envDefault:"true"`
 }
 
-var LoopDelay types.ScrappyLoopDelay
+var ScrappyLoopDelay types.ScrappyLoopDelay
+var ViewerLoopDelay types.ViewerLoopDelay
 var Config ConfigScheme
 
 var Dbpath types.Dbpath
@@ -60,10 +62,15 @@ func load() {
 
 	Dbpath = NewDBPath(Config.ConfiguratorDbname)
 
-	loop_delay, err := strconv.Atoi(Config.LoopDelay)
-	logus.CheckFatal(err, "failed to parse LoopDelay")
-	LoopDelay = types.ScrappyLoopDelay(loop_delay)
-	logus.Info("settings.LoopDelay=", logus.ScrappyLoopDelay(LoopDelay))
+	scrappy_loop_delay, err := strconv.Atoi(Config.ScrappyLoopDelay)
+	logus.CheckFatal(err, "failed to parse ScrappyLoopDelay")
+	ScrappyLoopDelay = types.ScrappyLoopDelay(scrappy_loop_delay)
+
+	viewer_loop_delay, err := strconv.Atoi(Config.ViewerLoopDelay)
+	logus.CheckFatal(err, "failed to parse ViewerLoopDelay")
+	ViewerLoopDelay = types.ViewerLoopDelay(viewer_loop_delay)
+
+	logus.Info("settings.ScrappyLoopDelay=", logus.ScrappyLoopDelay(ScrappyLoopDelay))
 }
 
 func init() {
