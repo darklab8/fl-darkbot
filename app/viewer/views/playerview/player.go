@@ -108,6 +108,12 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	logus.Debug("enemyPlayers=", logus.Items(enemyPlayers, "enemyPlayers"))
 	logus.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
 
+	protectAgainstResend := func(player *[]player.Player, view *views.ViewTable) {
+		if len(*player) == 0 {
+			view.AppendRecord(types.ViewRecord(" "))
+		}
+	}
+
 	if len(systemTags) > 0 || len(regionTags) > 0 {
 		t.neutral.mainTable.ViewBeginning = "**Neutral players in tracked systems and regions**\n```json\n"
 		t.neutral.mainTable.ViewEnd = "```\n"
@@ -115,10 +121,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 			t.neutral.mainTable.AppendRecord(types.ViewRecord(utils.TmpRender(playerTemplate, playerVars)))
 		}
 
-		if len(neutralPlayers) == 0 {
-			// Anti resending
-			t.neutral.mainTable.AppendRecord(types.ViewRecord(" "))
-		}
+		protectAgainstResend(&neutralPlayers, &t.neutral.mainTable)
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
@@ -129,10 +132,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 			t.enemies.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("-%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
 
-		if len(enemyPlayers) == 0 {
-			// Anti resending
-			t.enemies.mainTable.AppendRecord(types.ViewRecord(" "))
-		}
+		protectAgainstResend(&enemyPlayers, &t.enemies.mainTable)
 	}
 
 	if len(friendTags) > 0 {
@@ -143,10 +143,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 			t.friends.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("+%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
 
-		if len(friendPlayers) == 0 {
-			// Anti resending
-			t.friends.mainTable.AppendRecord(types.ViewRecord(" "))
-		}
+		protectAgainstResend(&friendPlayers, &t.friends.mainTable)
 	}
 
 	// Alerts
