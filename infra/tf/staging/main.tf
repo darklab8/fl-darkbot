@@ -27,7 +27,7 @@ module "darkbot" {
   configurator_dbname = "staging"
   consoler_prefix     = ","
   secrets             = local.secrets
-  tag_version         = "v1.0.1-069b420"
+  tag_version         = "v1.0.2-rc.1"
   debug               = true
 }
 

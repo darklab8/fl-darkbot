@@ -115,8 +115,10 @@ func (t *PlayersTemplates) GenerateRecords() error {
 			t.neutral.mainTable.AppendRecord(types.ViewRecord(utils.TmpRender(playerTemplate, playerVars)))
 		}
 
-		// Anti resending
-		t.neutral.mainTable.AppendRecord(types.ViewRecord(""))
+		if len(neutralPlayers) == 0 {
+			// Anti resending
+			t.neutral.mainTable.AppendRecord(types.ViewRecord(" "))
+		}
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
@@ -127,8 +129,10 @@ func (t *PlayersTemplates) GenerateRecords() error {
 			t.enemies.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("-%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
 
-		// Anti resending
-		t.enemies.mainTable.AppendRecord(types.ViewRecord(""))
+		if len(enemyPlayers) == 0 {
+			// Anti resending
+			t.enemies.mainTable.AppendRecord(types.ViewRecord(" "))
+		}
 	}
 
 	if len(friendTags) > 0 {
@@ -139,8 +143,10 @@ func (t *PlayersTemplates) GenerateRecords() error {
 			t.friends.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("+%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
 
-		// Anti resending
-		t.friends.mainTable.AppendRecord(types.ViewRecord(""))
+		if len(friendPlayers) == 0 {
+			// Anti resending
+			t.friends.mainTable.AppendRecord(types.ViewRecord(" "))
+		}
 	}
 
 	// Alerts
