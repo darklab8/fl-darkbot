@@ -111,10 +111,12 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	if len(systemTags) > 0 || len(regionTags) > 0 {
 		t.neutral.mainTable.ViewBeginning = "**Neutral players in tracked systems and regions**\n```json\n"
 		t.neutral.mainTable.ViewEnd = "```\n"
-
 		for _, playerVars := range neutralPlayers {
 			t.neutral.mainTable.AppendRecord(types.ViewRecord(utils.TmpRender(playerTemplate, playerVars)))
 		}
+
+		// Anti resending
+		t.neutral.mainTable.AppendRecord(types.ViewRecord(""))
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
@@ -124,6 +126,9 @@ func (t *PlayersTemplates) GenerateRecords() error {
 		for _, playerVars := range enemyPlayers {
 			t.enemies.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("-%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
+
+		// Anti resending
+		t.enemies.mainTable.AppendRecord(types.ViewRecord(""))
 	}
 
 	if len(friendTags) > 0 {
@@ -133,6 +138,9 @@ func (t *PlayersTemplates) GenerateRecords() error {
 		for _, playerVars := range friendPlayers {
 			t.friends.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("+%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
+
+		// Anti resending
+		t.friends.mainTable.AppendRecord(types.ViewRecord(""))
 	}
 
 	// Alerts
