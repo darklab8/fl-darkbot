@@ -1,0 +1,1444 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!-- start: portal -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Discovery Gaming Community</title>
+<link rel="alternate" type="application/rss+xml" title="Latest Announcements (RSS 2.0)" href="https://discoverygc.com/forums/syndication.php?portal=1" />
+<link rel="alternate" type="application/atom+xml" title="Latest Announcements (Atom 1.0)" href="https://discoverygc.com/forums/syndication.php?portal=1&type=atom1.0" />
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="https://discoverygc.com/forums/syndication.php" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="https://discoverygc.com/forums/syndication.php?type=atom1.0" />
+<link href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,200italic,400italic,600italic' rel='stylesheet' type='text/css'>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/jquery.js?ver=1806"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/jquery.plugins.min.js?ver=1806"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/general.js?ver=1810"></script>
+<script type="text/javascript" src="images/revolution/jquery-ui.js"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/discoverygc.js"></script>
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/global.css?t=1699983241" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/css3.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/revolution.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/tabs.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/thread_status.css?t=1532880502" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/star_ratings.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/progressbar2.css?t=1522753518" />
+
+<link href="https://fonts.googleapis.com/css?family=Cinzel|Montserrat|Overpass|Oswald|Merienda+One|Orbitron|Open+Sans" rel="stylesheet">
+<script type="text/javascript">
+<!--
+	lang.unknown_error = "An unknown error has occurred.";
+
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";;
+
+        var templates = {
+                modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+                modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+        };
+
+	var cookieDomain = ".discoverygc.com";
+	var cookiePath = "/forums/";
+	var cookiePrefix = "";
+	var cookieSecureFlag = "1";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "a26367e501cae97601f34a3e7d6b9c04";
+	var rootpath = "https://discoverygc.com/forums";
+	var imagepath = "https://discoverygc.com/forums/images/revolution";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "https://discoverygc.com/forums/images/revolution/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+// -->
+// By Alex., for the fldialogue MyBB Code
+$(function () {
+    var playNote = function (files) {
+        if (this.fileIndex + 1 >= files.length) {
+            this.removeEventListener('ended', playNote);
+            this.fileIndex = 0;
+            this.src = "https://discoverygc.com/fldialogue/" + files[0] + ".wav";
+        } else {
+            this.src = "https://discoverygc.com/fldialogue/" + files[++this.fileIndex] + ".wav";
+            this.play();
+        }
+    };
+
+    Array.from(document.getElementsByClassName('fldialogueplayer')).forEach(function (player) {
+        var files = player.dataset.audioseq.split(',');
+        player.fileIndex = 0;
+        player.src = "https://discoverygc.com/fldialogue/" + files[0] + ".wav";
+        if (files.length <= 8) { // no sequence of audio files go on more than 8 files
+            player.addEventListener('ended', playNote.bind(player, files));
+        }
+    });
+});
+</script>
+<!-- end: headerinclude -->
+</head>
+<body id="forums">
+<!-- start: header -->
+<a name="top" id="top"></a>
+<div class="menu">
+<ul>
+<li id="nav-portal"><a href="https://discoverygc.com/forums/portal.php"><i style="font-size: 12px;" class="fa fa-home fa-fw"></i> Home</a></li>
+<li id="nav-forumsshutupwiththatimage"> <a href="https://discoverygc.com/forums/index.php"><i style="font-size: 12px;" class="fa fa-comments fa-fw"></i> Index</a></li>
+<li id="nav-search"> <a href="https://discoverygc.com/forums/search.php"><i style="font-size: 12px;" class="fa fa-search fa-fw"></i>  Search</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=126999" style="color: #00FF00;"><i style="font-size: 12px;" class="fa fa-rocket fa-fw"></i>Download</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=2334"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>Server Rules</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=8584"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>House Roleplay Laws</a></li>
+<li><a href='javascript:;' id="playerslink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Player Utilities</a></li>
+<li><a href='javascript:;' id="playerhelplink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Player Help</a></li>
+<li><a href='javascript:;' id="extraslink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Forum Utilities</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=151935" style="color: #00FF00;"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>Returning Player?</a></li>
+<li><a href='javascript:;' id="togglesidebar"><i style="font-size: 14px;" class="fa fa-flask fa-fw"></i>Toggle Sidebar</a></li>
+      <ul>
+            </div> 
+  <div id="playerslink_popup" class="popup_menu" style="display: none;">
+<!--	  <div class="popup_item_container">
+        <a href="https://ref.discoverygc.com/" class="popup_item">Information Reference</a>
+      </div>-->
+	  <div class="popup_item_container">
+        <a href="https://space.discoverygc.com/navmap/" class="popup_item">Interactive Nav-Map</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=150826" class="popup_item">Tutorials</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/wiki/" class="popup_item">Wiki (mostly outdated)</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/techcompat/techcompat_table.php" class="popup_item">Technology Chart</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="http://lh.discoverygc.com/software/transponder" class="popup_item">Rep hack list</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/ids.php" class="popup_item">ID reference</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/restarts.php" class="popup_item">Restart reference</a>
+      </div>
+<!--	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/eventinterface.php" class="popup_item">Server Events</a>
+     </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/serverinterface.php" class="popup_item">Server Stats</a>
+      </div>-->
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=players_online" class="popup_item">Players Online</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=players" class="popup_item">Player Activity</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=faction_summary" class="popup_item">Faction Activity</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/bases.php" class="popup_item">Player Base Status</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discord.gg/FdSkbZ8" class="popup_item">Discord Help Channel</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="http://lh.discoverygc.com/software/index" class="popup_item">Mactan Network</a>
+     </div>
+  </div>
+	<div id="playerhelplink_popup" class="popup_menu" style="display: none;">
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=127003" class="popup_item">Missing Powerplant</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=81037" class="popup_item">Stuck in Connecticut</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=91864" class="popup_item">Account Banned</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=97064" class="popup_item">Lost Ship/Account</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=147083" class="popup_item">POB Restoration</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=42531" class="popup_item">Disconnected</a>
+      </div>
+  </div>
+  <div id="extraslink_popup" class="popup_menu" style="display: none;">
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/memberlist.php" class="popup_item">Member List</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/stats.php" class="popup_item">Forum Stats</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showteam.php" class="popup_item">Show Team</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/search.php?action=getnew" class="popup_item">View New Posts</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/search.php?action=getdaily" class="popup_item">View Today's Posts</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/calendar.php" class="popup_item">Calendar</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/misc.php?action=help" class="popup_item">Help</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/archive/index.php" class="popup_item">Archive Mode</a>
+      </div>	 
+</div>
+<br />
+<br />
+<br />
+<br />
+</div>
+
+<div id="container">
+		<div id="header">
+		<div id="content">
+			<div class="wrapper"> 
+<div class="navMenu2" style="padding-bottom:  10px;"><!-- start: header_welcomeblock_guest -->
+<font color="#a4a1a1"><i class="fa fa-info-circle fa-fw"></i> Hi there Guest,</font> &nbsp;
+<div class="float_right"><font color="#a4a1a1"> Existing user?</font> 
+
+<a href="https://discoverygc.com/forums/member.php?action=login" onclick="$('#quick_login').modal({ opacity: 0.2, fadeDuration: 250, keepelement: true }); return false;" class="login"><font color="white">  &nbsp; Sign in</font></a> &nbsp;  
+
+  <a href="https://discoverygc.com/forums/member.php?action=register" class="fstat"><font color="white"> <i class="fa fa-check-square fa-fw"></i>&nbsp;Create account</font></a></div>
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="https://discoverygc.com/forums/member.php">
+<!-- live DGC hack to fix MyBB 1.8.16 bug -->
+<input name="my_post_key" type="hidden" value="a26367e501cae97601f34a3e7d6b9c04" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table style="padding: 20px;" width="100%" cellspacing="0" cellpadding="5" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%" style="text-shadow: 1px 1px 0px #000;"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2" style="text-shadow: 1px 1px 0px #000;"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="https://discoverygc.com/forums/member.php?action=lostpw" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me" style="text-shadow: 1px 1px 0px #000;">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest --></div>
+              <font color="white">  </font>
+				
+				
+
+
+				
+
+				<!-- BAM --><!-- start: bam_announcement_container -->
+<style>
+	.bam_announcement.yellow {
+		/*background: #FFF6BF;*/
+		border: 1px solid #FFD324;
+		box-shadow: #FFD324 0px 0px 5px inset, #FFD324 0px 0px 2px;
+	}
+	.bam_announcement.yellow:before, .bam_announcement.yellow:after {
+		/*content: "\26a0";*/ color: #FFD324; font-size: 36px; line-height: 26px; display: block;
+	}
+	.bam_announcement.yellow:before {
+		float: left;
+	}
+	.bam_announcement.yellow:after {
+		float: right;
+	}
+	.bam_announcement.yellow a {
+		color: #ffffff;
+	}
+
+	.bam_announcement.green {
+		/*background: #D6ECA6;*/
+		border: 1px solid #8DC93E;
+		box-shadow: #8DC93E 0px 0px 5px inset, #8DC93E 0px 0px 2px;
+		font-size: 1.25em;
+	}
+
+	.bam_announcement.blue {
+		/*background: #ADCBE7;*/
+		border: 1px solid #0F5C8E;
+		box-shadow: #0462DD 0px 0px 5px inset, #0462DD 0px 0px 2px;
+		font-size: 1.25em;
+	}
+	.bam_announcement.blue:before, .bam_announcement.blue:after {
+		/*content: "*";*/ color: #0F5C8E; font-size: 36px; line-height: 26px; display: block;
+	}
+	.bam_announcement.blue:before {
+		float: left;
+	}
+	.bam_announcement.blue:after {
+		float: right;
+	}
+
+
+	.bam_announcement.red {
+		/*background: #FBE3E4;*/
+		border: 1px solid #A5161A;
+		box-shadow: #FFD324 0px 0px 5px inset;
+	}
+
+	.bam_announcement {
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px; 
+		text-align: center;
+		font-size: 1.5em;
+		margin: 10px auto;
+		padding: 8px 12px;
+		/*background: #EBEBEB;*/
+		background: #111111;
+		color: #000000;
+		border: 1px solid #ADADAD;
+	}
+
+	.bam_date {
+		color: #636161;
+		font-size: 0.78em;
+		margin-left: 6px;
+	}	
+
+	/* Insert Custom CSS Here */
+
+.bam_announcement
+{
+color: #ccc !important;
+}
+
+.bam_announcement.red
+{
+background: #EA1922 !important;
+}
+</style>
+<div class="bam_announcements"></div>
+<!-- end: bam_announcement_container --><!-- /BAM -->  
+              	 <!-- start: nav -->
+<div class="navigation">
+&nbsp; <i style="font-size: 14px;" class="fa fa-home fa-fw"></i> <!-- start: nav_bit -->
+<a href="https://discoverygc.com/forums/index.php">Discovery Gaming Community</a>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+<i style="font-size: 14px;" class="fa fa-chevron-circle-right fa-fw"></i>
+<!-- end: nav_sep_active --><!-- start: nav_bit_active -->
+<span class="active">Portal</span>
+<!-- end: nav_bit_active -->
+</div>
+<!-- end: nav --><br />
+                                   
+<script type="text/javascript">
+// <!--
+    if(use_xmlhttprequest == "1")
+    {
+        $("#extraslink").popupMenu();
+		$("#playerslink").popupMenu();
+		$("#playerhelplink").popupMenu();
+    }
+// -->
+</script>
+<div id="side">
+	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Server Time (24h)</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<div style="text-align: center; color: #FFF;/* align-self: initial; */margin: auto auto;padding-top: 5px;"><iframe src="https://free.timeanddate.com/clock/i4m040z3/n1440/fn2/fcfff/tct/pct/ftb/th1/ts1/ta1" frameborder="0" width="83" height="20" allowTransparency="true"></iframe>
+
+
+
+</div>
+</td>
+</tr>
+</table>
+<br />
+
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Players Online</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<a href="api_interface.php?action=players_online"><div style="text-align: center; color: #FFF;/* align-self: initial; */margin: auto auto;padding-top: 5px;" id="playercount"></div></a>
+</td>
+</tr>
+</table>
+  
+  <br />
+<!--
+<table border="0" cellspacing="0" cellpadding="5" class="tborder" style="display: none;">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Events</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1" id="events">
+If you can see this you have JavaScript disabled
+</td>
+</tr>
+</table>
+  
+  <br />-->
+
+ <!--- 
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Twitter feed</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/discolancer" data-widget-id="642044018902331393">Tweets by @discolancer</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</td>
+</tr>
+</table>
+
+  <br />  
+
+	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Donations Needed</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<embed allowscriptaccess="never" src="https://pitchinbox.com/widget/widget.swf?id=6505579471" type="application/x-shockwave-flash" width="100%" wmode="transparent">
+</div>
+</td>
+</tr>
+</table>
+
+  
+  <br />  
+-->
+ <!--- 	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Active Events - <a href="https://discoverygc.com/forums/eventinterface.php"><font color="green">Scoreboard</font></a></strong></div> 
+</td>
+</tr>
+<tr>
+
+	<td class="trow1">	
+	<-would-be-?php include 'srvint_cache/event_status.php'; ?->
+	</td>
+	</tr>
+</table>
+
+  <br />  
+ -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Active Events - <font color="green">Scoreboard</font></strong></div> 
+</td>
+</tr>
+<tr>
+
+	<td class="trow1">	
+	
+	</td>
+	</tr>
+</table>
+
+  <br />
+<!---<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Next Game Patch</strong></div> 
+</td></tr>
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Initial 100%</div>
+<span style="width: 100%"></span></div></td></tr>
+
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Middle 40.0%</div>
+<span style="width: 40.0%"></span></div></td></tr>
+
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Final 10%</div>
+<span style="width: 10%"></span></div></td></tr>
+
+</table>
+
+  <br/>-->
+
+  <script type="text/javascript">
+	jQuery(function(){
+		jQuery(".latestthreads").load("//discoverygc.com/forums/portal.php .latestthreads_portal");
+		$.get('players_online.php').done(function (ret) {
+                        var d = new Date(ret.AsOf + "Z");
+			$('#playercount').empty().append($('<span>').text(ret.PlayerCount).css('font-weight', 'bold').css('font-size', '20px'), $('<br>'), $('<span>').text('as of ' + d.toLocaleString(undefined, {timeZone: 'UTC'}) + ' UTC'));
+		});
+
+		$.get('events.php').done(function (ret) {
+			var allEvents = {};
+			ret.events.forEach(function (event) {
+				var sectionName = event[0],
+					kvs = event[1],
+					kvDict = {};
+				if (sectionName == "config") {
+					return;
+				}
+				kvs.forEach(function (kv) {
+					var key = kv[0],
+						value = kv[1];
+					if (["allowedid", "targetid", "system", "targetnpc"].indexOf(key) == -1) {
+						kvDict[key] = value;
+					} else {
+						if (key in kvDict) {
+							kvDict[key].push(value);
+						} else {
+							kvDict[key] = [value];
+						}
+					}
+				});
+				kvDict.type = sectionName;
+				allEvents[kvDict.id] = kvDict;
+			});
+			ret.events_status.forEach(function (event) {
+				var sectionName = event[0],
+					kvs = event[1],
+					kvDict = {};
+				kvs.forEach(function (kv) {
+					var key = kv[0],
+						value = kv[1];
+					kvDict[key] = value;
+				});
+				allEvents[kvDict.id].currentCount = Number.parseInt(kvDict.currentcount);
+			});
+
+			$('#events').empty();
+			$.each(allEvents, function (eventId, event) {
+				$('#events').append($('<span>').append(
+					$('<a>').attr('href', 'events_ui.php?id=' + eventId).text(event.name),
+					$('<span>').text(' - ' + event.currentCount + ' / ' + event.objectivemax),
+					$('<br>')
+				));
+			});
+			//$('#events').parent().parent().parent().show();
+		});
+	});
+	</script>
+  
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Latest activity</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+				<div class="latestthreads float_left"></div>
+		</td>
+</tr>
+</table>
+  
+  <br />
+  
+  
+  
+  
+  
+  
+</div>
+<div id="forum">
+<!-- end: header -->
+
+<table width="100%" cellspacing="0" cellpadding="5" border="0" align="center">
+<tr><td valign="top" width="250">
+<!-- start: portal_welcome -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Welcome, Guest</strong></td>
+</tr>
+<tr>
+<td class="trow1">
+<!-- start: portal_welcome_guesttext -->
+<span class="smalltext">You have to <a href="https://discoverygc.com/forums/member.php?action=register">register</a> before you can post on our site.</span><br />
+<br />
+<form method="post" action="https://discoverygc.com/forums/member.php"><input type="hidden" name="action" value="do_login" /><input type="hidden" name="url" value="/forums/portal.php" />
+Username<br />&nbsp;&nbsp;<input type="text" class="textbox" name="username" value="" /><br /><br />
+Password<br />&nbsp;&nbsp;<input type="password" class="textbox" name="password" value="" /><br /><br />
+<label title="If ticked, your login details will be remembered on this computer, otherwise, you will be logged out as soon as you close your browser."><input type="checkbox" class="checkbox" name="remember" value="yes" /> Remember me</label><br /><br />
+<br /><input type="submit" class="button" name="loginsubmit" value="Login!" /><input name="my_post_key" type="hidden" value="a26367e501cae97601f34a3e7d6b9c04" /></form>
+<!-- end: portal_welcome_guesttext -->
+</td>
+</tr>
+</table><br />
+<!-- end: portal_welcome -->
+
+<!-- start: portal_stats -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Forum Statistics</strong></td>
+</tr>
+<tr>
+<td class="trow1">
+<span class="smalltext">
+<strong>&raquo; </strong>Members: 29,773<br />
+<strong>&raquo; </strong>Latest member: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55892">EggofSpace</a><br />
+<strong>&raquo; </strong>Forum threads: 158,581<br />
+<strong>&raquo; </strong>Forum posts: 2,072,838
+<br /><br /><a href="https://discoverygc.com/forums/stats.php">Full Statistics</a>
+</span>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_stats -->
+<!-- start: portal_whosonline -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Online Users</strong></td>
+</tr>
+<tr>
+<td class="trow1">
+<span class="smalltext">
+There are currently <b>564</b> online users.<br /><strong>&raquo;</strong> <b>38</b> Member(s) | <b>523</b> Guest(s)<br />Applebot,  Discord,  Google,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55744">0xCosmin</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=20034"><span style="color: #ffcc00;"><strong>Aingar</strong></span></a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=43897">Akhetaten</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44825">Blake Wayne Van Leer</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=49863">Deterrence's Conclave</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=39839"><span style="color: #ff6600;"><strong>DiscoveryGC Moderators</strong></span></a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=35253">Domino.Harvy</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55892">EggofSpace</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=17618">Fhoxi</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=53178">GreySeiker</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=38110">Jarne_BE</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55646">Jean Paul Richter</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=13656"><span style="color: #ff6600;"><strong>Karst</strong></span></a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=21591">LunaticOnTheGrass</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=52149">MeisterHaku</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10918">NOVA-5</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=52991">Proselyte</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=5431">Reno</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=29680">Stoner_Steve</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=18071">Straws</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10527"><span style="color: #6699FF;">The Lane Hackers</span></a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=2774">Treewyrm</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=39908">Venemon</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44704">Weis</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=5053">Wilder</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55016">_WOLF_</a>
+</span>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_whosonline -->
+<!-- start: portal_latestthreads -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Latest Threads</strong></td>
+</tr>
+<!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=81037&action=lastpost">Admin Notice: Can't get o...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=20034">Aingar</a><br /> <span title="11-20-2023, 01:58 PM">2 minutes ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200489&action=lastpost">75,000,000 Bounty | Techn...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=50553">The First Armada</a><br /> <span title="11-20-2023, 01:57 PM">3 minutes ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=193161&action=lastpost">1st| Armada Bounty Board ...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=50553">The First Armada</a><br /> <span title="11-20-2023, 01:50 PM">10 minutes ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200421&action=lastpost">New website is live</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=20826">Jayenbee</a><br /> <span title="11-20-2023, 01:46 PM">15 minutes ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=190680&action=lastpost">Deterrence [DTR] - Messag...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55478">ElGatito</a><br /> <span title="11-20-2023, 01:40 PM">21 minutes ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200164&action=lastpost">RM/RP/MND vs Corsairs vs ...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10286">Barrier</a><br /> <span title="11-20-2023, 01:22 PM">39 minutes ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200552&action=lastpost">[S] SOLD</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=31223">Epo</a><br /> <span title="11-20-2023, 12:44 PM">1 hour ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200608&action=lastpost">To: OS&amp;C|, Barbados AO</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=42777">Lord Helmchen</a><br /> <span title="11-20-2023, 12:44 PM">1 hour ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200545&action=lastpost">The Flame From The Void</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=18426">Charos</a><br /> <span title="11-20-2023, 12:27 PM">1 hour ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200541&action=lastpost">Insurgent/Zoner/Technocra...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=25932">Semir Gerkhan</a><br /> <span title="11-20-2023, 12:03 PM">1 hour ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200371&action=lastpost">MacRory meets the Med For...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=9606">Doc Holliday</a><br /> <span title="11-20-2023, 12:02 PM">1 hour ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=190515&action=lastpost">In search of distress</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10445">RedEclipse</a><br /> <span title="11-20-2023, 10:49 AM">3 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=153731&action=lastpost">Yuma - Enlisting and Empl...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55889">Charl.Thomas</a><br /> <span title="11-20-2023, 09:40 AM">4 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200175&action=lastpost">To: NNroute.../(BDM-Direk...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=54754">Civil Servant</a><br /> <span title="11-20-2023, 09:35 AM">4 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=199467&action=lastpost">To: Leon from Starfliers ...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44084">TheKusari</a><br /> <span title="11-20-2023, 09:28 AM">4 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200607&action=lastpost">To: Kishiro || From: '\S/...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44084">TheKusari</a><br /> <span title="11-20-2023, 09:17 AM">4 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200023&action=lastpost">To: A/)- || From: '\S/'</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44084">TheKusari</a><br /> <span title="11-20-2023, 08:54 AM">5 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=193158&action=lastpost">1st| Logs and Communicati...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=54287">VANGUARD</a><br /> <span title="11-20-2023, 08:04 AM">5 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=200571&action=lastpost">Consultation: Revised ser...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55675">Earl Campbell</a><br /> <span title="11-20-2023, 05:47 AM">8 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=197009&action=lastpost">500k Bounty: Protect Libe...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=50553">The First Armada</a><br /> <span title="11-20-2023, 04:10 AM">9 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread -->
+</table>
+<br />
+<!-- end: portal_latestthreads -->
+</td>
+<td>&nbsp;</td>
+<td valign="top">
+<!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=200571">Consultation: Revised server rules</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=3001">jammi</a>  - 11-18-2023, 11:46 PM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=13">News and Announcements</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=200571">Replies</a> (28)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				Hi all. Staff have collectively been looking at the server rules with an eye to simplifying them - the current set have broadly been considered unfit for purpose for a while. The rules being confusing and intimidating is one of the most common bits of new player feedback we receive. <br />
+<br />
+We've now produced a revised ruleset that has been considerably streamlined, and that we hope will make for an easier acclimatisation for new community members. We're putting this ruleset out for community consultation, to get as wide a range of feedback as possible. <br />
+<br />
+This is probably the largest proposed revision in years, so we want to make sure we get it right. Please feel free to provide commentary and suggestions in this thread, but keep things constructive and on-topic. <br />
+<br />
+SINGLE POST TO REPLACE <a href="https://discoverygc.com/forums/showthread.php?tid=2334" target="_blank" rel="noopener" class="mycode_url">EXISTING RULES</a>.<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Server rules';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Server rules';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Server rules</a></div><div class="spoiler_body" style="display: none;"><div style="margin-left: 40px; margin-right: 40px;"><hr class="mycode_hr" /></div>
+<div style="text-align: center;" class="mycode_align"><span style="font-family: agency fb;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size"><span style="color: #00FF00;" class="mycode_color">Community Rules</span></span></span></div>
+<div style="margin-left: 40px; margin-right: 40px;"><hr class="mycode_hr" /></div>
+<ol type="1" class="mycode_list"><li><span style="font-weight: bold;" class="mycode_b"><span style="font-size: large;" class="mycode_size"><div class="anchor" id="anchor-1"></div>General Conduct: </span> </span><br />
+<br />
+1.0 <span style="color: #828282;" class="mycode_color">- Don't be a dick. It's a game, try to keep it fun for everyone playing it. Behavior that falls within the technical letter of the rules but not the spirit won't be tolerated.</span><br />
+<br />
+1.1 <span style="color: #828282;" class="mycode_color">- Discovery is an English-language roleplaying server. Communication in-game and in the roleplaying areas of the forums must be in-character and appropriate for Discovery Freelancer's setting.</span><br />
+<br />
+1.2 <span style="color: #828282;" class="mycode_color">- Cheating or exploiting game mechanics is not allowed. This can include 'multiboxing' (logging in with multiple characters at the same time), disconnecting during player encounters (<a href="http://discoverygc.com/forums/showthread.php?tid=42531" target="_blank" rel="noopener" class="mycode_url">post here if you disconnect by accident</a>), abusing bugs, etc.</span><br />
+<br />
+<hr class="mycode_hr" />
+<br />
+</li>
+<li><span style="font-size: large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><div class="anchor" id="anchor-2"></div>ID and Combat Rules:</span></span><br />
+<br />
+2.0 <span style="color: #828282;" class="mycode_color">- Every ship must have one ID equipped, and play in a way that represents the role of that ID. Your ID explains what you can do and where. Some IDs have a 'Zone of Influence' (ZOI) where extra actions are permitted. All IDs have a ZOI in systems containing an NPC station of the same affiliation.</span> <br />
+<br />
+2.1 <span style="color: #828282;" class="mycode_color">- You must provide sufficient roleplay before attacking another player, and give them enough time to react. This means at least two messages and 10 seconds delay before attacking.</span><br />
+<br />
+2.2 <span style="color: #828282;" class="mycode_color">- If you are killed or dock during a hostile player encounter, you must not re-enter the system or attack anyone involved in the encounter for 1 hour. <a href='#anchor-Trade'>Trade Ships</a> docking during a hostile player encounter are not considered to have been "killed".</span><br />
+<br />
+2.3<span style="color: #828282;" class="mycode_color">- All IDs can:<ul class="mycode_list"><li>Attack Alien IDs.<br />
+</li>
+<li>Attack any ship to defend <a href='#anchor-Allies'>Allies</a>, except while flying Cruisers, Battlecruisers, or Battleships.<br />
+<br />
+<span style="font-weight: bold;" class="mycode_b">Within their ZOI:</span><br />
+</li>
+<li>Attack any ship to defend <a href='#anchor-Allies'>Allies</a>.<br />
+<br />
+<span style="font-weight: bold;" class="mycode_b">Within <a href='#anchor-Uncharted'>Uncharted Systems</a>:</span><br />
+</li>
+<li>Act as if the system were in their Zone of Influence.<br />
+</li>
+<li>Demand Cerulite Crystals, Chirodebris, Cryo-Organisms, and Organic Capacitors from non-<a href='#anchor-Allies'>Allies</a>.</li>
+</ul>
+</span><br />
+2.4 <span style="color: #828282;" class="mycode_color">- Terms used in IDs:</span><br />
+<div class="anchor" id="anchor-Trade"></div><div class="anchor" id="anchor-piracy"></div><div class="anchor" id="anchor-Allies"></div><ul class="mycode_list"><li>"Allies" <span style="color: #828282;" class="mycode_color">- Ships of the same non-Generic affiliation or ID, Ships defined as your ID's allies on the in-game faction rep sheet, or Ships you are currently flying in group with.</span><br />
+</li>
+<li>"Combat Ship" <span style="color: #828282;" class="mycode_color">- Fighters, Bombers, Bustards, Capital Ships; Freighters or Transports if being used in an offensive combat role.</span><br />
+</li>
+<li>"Contract" <span style="color: #828282;" class="mycode_color">- An agreement for a service, such as combat or escort, in exchange for some form of payment.</span><br />
+</li>
+<li>"Alien Materials" <span style="color: #828282;" class="mycode_color">- Artifacts, Low-Grade Artifacts, Xeno Relics, Nomad Power Cells, Nomad Remains, Azurite Gas, Cerulite Crystals, Chirodebris, Cryo-Organisms, and Organic Capacitors.</span><br />
+</li>
+<li>"Piracy" <span style="color: #828282;" class="mycode_color">- a reasonable demand issued to a ship which can be attacked if it fails to comply. Piracy can include requests for credits and cargo or a roleplay requirement, such as following a instruction or answering a question.</span><br />
+</li>
+<li>"Trade Ship" <span style="color: #828282;" class="mycode_color">- Freighters and transports except as described under Combat Ships.</span></li>
+</ul>
+<hr class="mycode_hr" />
+<br />
+</li>
+<li><span style="font-size: large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><div class="anchor" id="anchor-3"></div>Player Owned Base Rules:</span></span><br />
+<br />
+<div class="anchor" id="anchor-POB"></div>3.0 <span style="color: #828282;" class="mycode_color">- General rules:<ul class="mycode_list"><li>Base construction guides can be <a href="https://discoverygc.com/forums/showthread.php?tid=80349" target="_blank" rel="noopener" class="mycode_url">found here</a>.<br />
+</li>
+<li>Base construction must be in accord with the roleplay of the builder's ID. Siege Declarations must be in accord with the roleplay of the attacker's ID.<br />
+</li>
+<li>Bases may only be attacked after a valid <a href="http://discoverygc.com/forums/showthread.php?tid=110046" target="_blank" rel="noopener" class="mycode_url">Siege Declaration is posted</a>. <br />
+</li>
+<li>Siege Declarations last for two weeks. Once a Siege Declaration expires, the base may not be subject to another Siege Declaration for four weeks.<br />
+</li>
+<li>POBs built in <a href='#anchor-House'>House Space</a> are subject to House laws and fees.<br />
+</li>
+<li>POB location and affiliation are permanent and alterations will be considered on a <a href="https://discoverygc.com/forums/showthread.php?tid=178857" target="_blank" rel="noopener" class="mycode_url">case-by-case basis</a>.</li>
+</ul>
+</span><br />
+3.1 <span style="color: #828282;" class="mycode_color">- You may only attack a Core 1 base (or higher) if your ID has a ZOI covering it. You may only attack a Core 2 base (or higher) with additional roleplay documented on the forum. </span><br />
+<br />
+3.2 <span style="color: #828282;" class="mycode_color">- <a href="http://discoverygc.com/forums/forumdisplay.php?fid=167" target="_blank" rel="noopener" class="mycode_url">You can apply</a> for your base to be upgraded to Core 4 after 2 months at Core 3 and demonstrating productive base roleplay. Once approved the base will receive the blueprints required to upgrade the base. </span><br />
+<br />
+3.3 <span style="color: #828282;" class="mycode_color">- <a href="http://discoverygc.com/forums/forumdisplay.php?fid=167" target="_blank" rel="noopener" class="mycode_url">Official Factions can apply</a> for their base to be upgraded to Core 5 after 3 months at Core 4 and demonstrating productive base roleplay. Once approved the base will receive the blueprints required to upgrade the base.<ul class="mycode_list"><li>With the upgrade to Core 5, wear and tear damage on the base will be disabled.<br />
+</li>
+<li>Only one Core 5 base per Official Faction is permitted. If this status is lost, the Core 5 upgrade will be downgraded to Core 4.</li>
+</ul>
+</span><br />
+<br />
+<hr class="mycode_hr" />
+<br />
+</li>
+<li><span style="font-size: large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><div class="anchor" id="anchor-4"></div>Ship and System Classifications:</span></span><br />
+<br />
+4.0 <span style="color: #828282;" class="mycode_color">- Ship categories are defined as:<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Ship categories';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Ship categories';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Ship categories</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Fighters:</span></span> Light Fighters, Heavy Fighters, Very Heavy Fighters, Super Heavy Fighters and Bombers</span><br />
+</li>
+<li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Freighters:</span></span> Trader ships with cargo holds smaller than 650 units</span><br />
+</li>
+<li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Transports:</span></span> Trader ships with cargo holds larger than 650 units, including Liners and Frigates</span><br />
+</li>
+<li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Gunboats:</span></span> Gunboats and Gunships.</span><br />
+</li>
+<li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Cruisers:</span></span> Destroyers and Cruisers</span><br />
+</li>
+<li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Battlecruisers:</span></span> Battlecruisers</span><br />
+</li>
+<li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Battleships:</span></span> Battleships, Dreadnoughts, Juggernauts and Carriers</span><br />
+</li>
+<li><span style="color: #828282;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Capital Ships:</span></span> Gunboats, all Cruisers, Battlecruiser, and all Battleships</span></li>
+</ul></div></div></span><br />
+4.1 <span style="color: #828282;" class="mycode_color">- For ZOI rules, systems are classified as:</span><br />
+<div class="anchor" id="anchor-House"></div><div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;House Space';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;House Space';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />House Space</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Liberty</span></span></span></span><br />
+House Space: <span style="color: lightblue;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">New York*, Alaska, California, Colorado, Pennsylvania, Texas.</span></span><br />
+<br />
+</li>
+<li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Bretonia</span></span></span></span><br />
+House Space:  <span style="color: lightblue;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">New London*, Cambridge, Leeds, Manchester, Newcastle</span></span><br />
+<br />
+</li>
+<li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Rheinland</span></span></span></span><br />
+House Space:  <span style="color: lightblue;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">New Berlin*, Frankfurt, Hamburg, Stuttgart, Thuringia.</span></span><br />
+<br />
+</li>
+<li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Kusari</span></span></span></span><br />
+House Space: <span style="color: lightblue;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">New Tokyo*, Hokkaido, Honshu, Kyushu, Shikoku.</span></span><br />
+<br />
+</li>
+<li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Gallia</span></span></span></span><br />
+House Space: <span style="color: lightblue;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Ile-de-France*, Burgundy, Champagne, Languedoc, Orleanais, Picardy.</span></span><br />
+<br />
+<sub>*House Capital</sub></li>
+</ul></div></div><div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Independent Worlds';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Independent Worlds';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Independent Worlds</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Independent Worlds</span></span></span></span><br />
+<span style="color: grey;" class="mycode_color">Bering, Chugoku, Cologne, Copernicus, Cortez, Coronado, Dublin, Galileo, Hudson, Inverness, Kansas, Kepler, Magellan, Ontario, Provence, Tohoku, Unknown, Vespucci, Zurich.</span></li>
+</ul></div></div>
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Taus';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Taus';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Taus</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Taus</span></span></span></span><br />
+<span style="color: #F9F9F9;" class="mycode_color">Taus</span>: <span style="color: grey;" class="mycode_color">Baffin, Edinburgh, Orkney, Roussillon, Tau-23, Tau-29, Tau-31, Tau-37, Tau-44, Tau-61.</span></li>
+</ul></div></div><div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Omegas';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Omegas';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Omegas</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Omegas</span></span></span></span><br />
+<span style="color: #F9F9F9;" class="mycode_color">Omegas</span>: <span style="color: grey;" class="mycode_color">Omega-3, Omega-5, Omega-7, Omega-11, Omega-41, Omega-48, Omega-52, Omega-55, Dresden</span></li>
+</ul></div></div><div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Sigmas';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Sigmas';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Sigmas</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Sigmas</span></span></span></span><br />
+<span style="color: #F9F9F9;" class="mycode_color">Sigmas</span>: <span style="color: grey;" class="mycode_color">Sigma-13, Sigma-15, Sigma-17, Sigma-19, Sigma-59.</span></li>
+</ul></div></div><div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Omicrons';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Omicrons';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Omicrons</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Omicrons</span></span></span></span><br />
+<span style="color: #F9F9F9;" class="mycode_color">Omicrons</span>: <span style="color: grey;" class="mycode_color">Omicron Alpha, Omicron Beta, Omicron Gamma, Omicron Delta, Omicron Theta, Omicron Iota, Omicron Kappa, Omicron Minor, Omicron Major, Omicron Mu, Omicron Pi, Omicron Zeta.</span></li>
+</ul></div></div><div class="anchor" id="anchor-Uncharted"></div><div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Uncharted Space';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Uncharted Space';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Uncharted Space</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li><span style="text-decoration: underline;" class="mycode_u"><span style="font-size: medium;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #F9F9F9;" class="mycode_color">Uncharted Space</span></span></span></span><br />
+<span style="color: #ab00ff;" class="mycode_color">Earhart, Uncharted I, Uncharted II, Uncharted III, Uncharted IV, Uncharted V, Uncharted VI, Uncharted VII, Uncharted VIII, Uncharted IX, Uncharted X</span></li>
+</ul></div></div>
+<br />
+4.2 <span style="color: #828282;" class="mycode_color">- House Military, Police, and Intelligence factions may only enforce roleplay consequences upon players, factions, and POBs found breaking House Laws within House Space.</span><br />
+<br />
+<hr class="mycode_hr" />
+<br />
+</li>
+<li><span style="font-size: large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><div class="anchor" id="anchor-4"></div>Useful Links:</span></span><br />
+<ul class="mycode_list"><li><a href="https://discoverygc.com/forums/forumdisplay.php?fid=44" target="_blank" rel="noopener" class="mycode_url">To file a report for a rule violation, see here.</a><br />
+</li>
+<li><a href="https://discoverygc.com/forums/forumdisplay.php?fid=43" target="_blank" rel="noopener" class="mycode_url">To check sanctions imposed for rule violations, see here.</a><br />
+</li>
+<li><a href="https://discoverygc.com/forums/showthread.php?tid=140171" target="_blank" rel="noopener" class="mycode_url">To ask for clarification of any particular rule, see here.</a><br />
+</li>
+<li><a href="http://example" target="_blank" rel="noopener" class="mycode_url">For rules about issuing or claiming bounties, see here.</a><br />
+</li>
+<li><a href="http://example" target="_blank" rel="noopener" class="mycode_url">For the rights and responsibilities of Official Factions, see here.</a><br />
+</li>
+<li><a href="http://example" target="_blank" rel="noopener" class="mycode_url">For ban appeals, see here.</a></li>
+</ul>
+</li>
+</ol>
+<br />
+<hr class="mycode_hr" />
+<span style="color: #00ff00;" class="mycode_color">Depending on the rule(s) violated or circumstances of the violation, examples of sanctions may range from a warning, a fine, loss of equipment, probationary periods, and/or bans of varying duration.</span><br />
+<hr class="mycode_hr" /></div></div>SEPARATE THREAD TO BE PINNED <a href="https://discoverygc.com/forums/forumdisplay.php?fid=63" target="_blank" rel="noopener" class="mycode_url">HERE</a>.<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Bounty hunting rules';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Bounty hunting rules';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Bounty hunting rules</a></div><div class="spoiler_body" style="display: none;">
+<ol type="1" class="mycode_list"><li><span style="font-weight: bold;" class="mycode_b"><span style="font-size: large;" class="mycode_size"><div class="anchor" id="anchor-1"></div>Bounty Hunting Rules: </span> </span><br />
+<br />
+1.0 <span style="color: #828282;" class="mycode_color">- Bounty board operators may only issue blanket bounties against targets they are hostile with. Characters claiming bounties must be neutral to the board operator and hostile to the faction or individual that is bountied.</span><br />
+<br />
+1.1 <span style="color: #828282;" class="mycode_color">- Players must submit their bounty claims within 7 days. Board owners must pay outstanding claims within 14 days of submission.</span><br />
+<br />
+1.2 <span style="color: #828282;" class="mycode_color">- All bounties must specify which characters, tags, or IDs may claim the bounty. Bounty Hunters Guild ID may claim on bounty boards operated by Police, Military, and Corporate factions without registration unless stated otherwise.</span><br />
+<br />
+1.3 <span style="color: #828282;" class="mycode_color">- IDs that can attack any ship in pursuit of a contract may be hired in-game by players with non-generic IDs to engage in combat. Parties involved in combat must be made aware of such hiring. </span><br />
+<br />
+1.4 <span style="color: #828282;" class="mycode_color">- Server staff retain the right to close bounty boards at their discretion, if it appears that the board is having a detrimental impact on server gameplay.</span></li>
+</ol></div></div>SEPARATE THREAD TO BE PINNED <a href="https://discoverygc.com/forums/forumdisplay.php?fid=46" target="_blank" rel="noopener" class="mycode_url">HERE</a>.<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Official faction rights and responsibilities';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Official faction rights and responsibilities';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Official faction rights and responsibilities</a></div><div class="spoiler_body" style="display: none;"><div style="text-align: justify;" class="mycode_align"><div style="text-align: center;" class="mycode_align"><span style="color: #00FF00;" class="mycode_color"><span style="font-family: agency fb;" class="mycode_font"><span style="font-size: 14pt;" class="mycode_size">Official Factions Rights &amp; Responsibilities</span></span></span></div>
+<ul class="mycode_list"><li>An official faction requires at least 3 active players and 3 days of activity per quarter. Factions that do not meet these requirements are considered suspended.<br />
+</li>
+<li>If a suspended faction fails to meet the requirements in the subsequent quarter, it loses its official status. If the requirements are met, the faction will be considered on probation for the subsequent two quarters, during which failure will also result in the loss of its official status.<br />
+</li>
+<li>AFKing on ships with tracked official tags is not allowed. The activity contribution by such ships may be zeroed and the faction may lose officialdom for repeated violations.<br />
+</li>
+<li>Official factions are required to have an open feedback thread on the forums and are expected to respond to sincere feedback from the community.</li>
+</ul>
+All rules and regulations concerning faction creation procedure and home system claiming are listed in <a href="http://discoverygc.com/forums/showthread.php?tid=1746" target="_blank" rel="noopener" class="mycode_url">Faction Creation Rules</a> thread. Server Administrators also reserve the right to limit recruiting for certain official player factions for a certain period of time to keep server factions balanced.<br />
+<br />
+<div style="margin-left: 40px; margin-right: 40px;"><span style="color: #00FF00;" class="mycode_color">Faction Right 1.</span> Official player factions have authority over players of the same NPC affiliation, as long as RP justification is provided. This authority applies in forums and in-game, and applies to player faction diplomacy, and strategic and tactical direction, however, exercise of that authority, on the forums and in game, is restricted to official faction members with the rank of the official faction leader and second in command(s) of the faction. The authority may be exercised through the use of in-game in-RP orders, which, if not obeyed, can result in in-game in-RP consequences (arrest, court martial, and even "lethal" force in extreme circumstances). Official player factions cannot, under any cicrumstances, require another player to follow non-canon RP if that player doesn't want to. <span style="font-weight: bold;" class="mycode_b">In case of IDs with multiple official factions</span>, this right can only be used if the faction leader of each make a unified decision to exercise it.<br />
+<br />
+<span style="color: #00FF00;" class="mycode_color">Faction Right 2.</span> Once a faction achieves official status, they will receive their downpayment back. <br />
+<br />
+<span style="color: #00FF00;" class="mycode_color">Faction Right 3.</span> Official player factions who have planned an event (with at least 24 hours notice on forum, <a href="http://discoverygc.com/forums/forumdisplay.php?fid=28" target="_blank" rel="noopener" class="mycode_url">here</a>) can restrict participation of others in that event as they see fit as long as it does not severely limit any other factions' activities in their own ZoI beyond any sense and/or provide utterly unfair protection to the faction from otherwise logical roleplay consequences.<br />
+<br />
+<span style="color: #00FF00;" class="mycode_color">Faction Right 4.</span> Official player factions have the right to bounty or attack any player who is using their technology without the faction ID or permission from the official faction, regardless of their diplomacy toward the faction of the ship in question. <span style="font-weight: bold;" class="mycode_b">In case of IDs with multiple official factions</span>, gaining permission from one of the official factions would suffice, and once a technology is granted by one official faction, the other official factions should treat it as approved technology as well. In this case, factions are advised to keep a public record of their approved technologies for the purpose of better coordination with other official groups of their ID.<br />
+<br />
+<span style="color: #00FF00;" class="mycode_color">Faction Right 5.</span> Official player factions may request that the reputation of a player's ship be changed to hostile with respect to their NPC faction. These requests must be posted within the <a href="http://discoverygc.com/forums/forumdisplay.php?fid=44" target="_blank" rel="noopener" class="mycode_url">Violation Reports</a> subforum, and include link(s) to valid forum roleplay, as well as actual interaction between the character and the official faction. <span style="font-weight: bold;" class="mycode_b">In case of IDs with multiple official factions</span>, this right can only be used if it has support of every official faction of the ID, but in case of disagreement between the factions involved, they can post an appeal to the Server Administrators to review the situation and come to a decision.<br />
+Groups that have been subject to the use of FR5 by another faction, may treat this faction as hostile targets, except for transports, within their Zone of Influence.</div> <br />
+The <span style="color: #00ff00;" class="mycode_color">House Governments</span> of Bretonia, Gallia, Kusari, Liberty, and Rheinland, will be made up of the faction leaders of every Official Police, Military, Intelligence, and Corporate faction with an ID classification belonging to that house. All of these leaders will have equal votes in their respective governments, and their proceedings will be supervised by staff in DiscoveryGC Official Discord government channels.</div></div></div>SEPARATE THREAD TO BE PINNED <a href="https://discoverygc.com/forums/forumdisplay.php?fid=186" target="_blank" rel="noopener" class="mycode_url">HERE</a>.<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Ban appeals';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Ban appeals';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Ban appeals</a></div><div class="spoiler_body" style="display: none;"><div style="text-align: center;" class="mycode_align"><span style="font-family: agency fb;" class="mycode_font"><span style="font-size: 14pt;" class="mycode_size"><span style="color: #00FF00;" class="mycode_color">Ban Appeal Guidelines</span></span></span></div>
+<ul class="mycode_list"><li>Appeals can first be submitted 6 months after ban date.<br />
+</li>
+<li>Appeal must be posted in the <a href="http://discoverygc.com/forums/forumdisplay.php?fid=186" target="_blank" rel="noopener" class="mycode_url">Player Requests</a> subforum using the form below.  <br />
+</li>
+<li>Appeal must contain a clear understanding of why the ban was handed down in the first place.<br />
+</li>
+<li>Appeal must contain an explanation for the behavior that lead to the ban.<br />
+</li>
+<li>Appeal must contain why that behavior will no longer happen again<br />
+</li>
+<li>If an appeal fails, 6 months must pass before another appeal can be initiated, unless stated otherwise.<br />
+<br />
+</li>
+<li>If an appeal passes, the member is assigned the Probation Usergroup for 6 months, during which their forum and server behavior is evaluated. This includes Alt accounts used for RP.<br />
+If during this period the player has broken forum or server rules, their participation as a community member is re-evaluated and may result in a warning and reset of the probation timer, or, the reinstatement of the ban depending on the context and severity of their transgression. <br />
+</li>
+</ul>
+<br />
+------------------------------------------------<br />
+<ul class="mycode_list"><li><span style="color: #FFFFFF;" class="mycode_color">Forum Name of Banned Individual:</span> &lt;forum name&gt;<br />
+</li>
+<li><span style="color: #FFFFFF;" class="mycode_color">Link to profile:</span> &lt;link&gt;<br />
+</li>
+<li><span style="color: #FFFFFF;" class="mycode_color">Date of original ban:</span> &lt;Month, DD, YYYY&gt;<br />
+</li>
+<li><span style="color: #FFFFFF;" class="mycode_color">Context of behavior leading up to ban:</span><br />
+&lt;paragraph&gt;<br />
+</li>
+<li><span style="color: #FFFFFF;" class="mycode_color">Why is this behavior wrong?</span><br />
+&lt;paragraph&gt;<br />
+</li>
+<li><span style="color: #FFFFFF;" class="mycode_color">Why will this behavior never happen again?</span><br />
+&lt;paragraph&gt;<br />
+</li>
+<li><span style="color: #FFFFFF;" class="mycode_color">If form is not completed properly you forfeit your appeal and have to wait six months.</span><br />
+I understand<br />
+</li>
+</ul>
+<br />
+------------------------------------------------<br />
+<br />
+<div class="codeblock"><div class="title">Code:</div><div class="body" dir="ltr"><code>[list][*] [color=#FFFFFF]Forum Name of Banned Individual:[/color] &lt;forum name&gt;<br />
+[*] [color=#FFFFFF]Link to profile:[/color] &lt;link&gt;<br />
+[*] [color=#FFFFFF]Date of original ban:[/color] &lt;Month, DD, YYYY&gt;<br />
+[*] [color=#FFFFFF]Context of behavior leading up to ban:[/color]<br />
+&lt;paragraph&gt;<br />
+[*] [color=#FFFFFF]Why is this behavior wrong?[/color]<br />
+&lt;paragraph&gt;<br />
+[*] [color=#FFFFFF]Why will this behavior never happen again?[/color]<br />
+&lt;paragraph&gt;<br />
+[*] [color=#FFFFFF]If form is not completed properly you forfeit your appeal and have to wait six months.[/color]<br />
+I understand<br />
+[/list]</code></div></div></div></div>
+<br />
+<br />
+<span style="font-weight: bold;" class="mycode_b">Changelog based on feedback:<ul class="mycode_list"><li>Changed 'Can attack Alien ships' to 'Can attack Alien IDs'. <br />
+</li>
+<li>Corrected various commodity names on Alien Materials list.<br />
+</li>
+<li>Added Uncharted materials to Alien Materials list.<br />
+</li>
+<li>Added gunboats to ship classifications.<br />
+</li>
+</ul>
+</span>
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=200571"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement --><!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=200569">Recruiting: Economy and Story devs</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=3001">jammi</a>  - 11-18-2023, 11:13 PM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=13">News and Announcements</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=200569">Replies</a> (1)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				<span style="color: #FFBF00;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Hi all. I'm looking for developer recruits in Story and Economy - if this sounds like something you might be interested in, read on! To explain what these roles are for and what you'll be doing: <br />
+<ul class="mycode_list"><li>Story - you will help shape the mod's lore by creating and discussing plot proposals, soliciting feedback from players, preparing the infocards needed to actualise plot developments, organising community contributors / infocard review projects, and working closely with event and systems devs to ensure the story is a playable experience the community can actively interact with. <br />
+<br />
+</li>
+<li>Economy - you will primarily be responsible for assigning commodity buy, sell and resell points to expand the existing trade system (commodity prices are calculated automatically). You will be involved in coordinating with story and systems devs to ensure that changes are well reflected in the game economy. You will be assist with balancing the dynamic player economy, which incorporates mining, POB construction / modules / recipes, refining, and manufacturing.</li>
+</ul>
+We're taking a slightly different approach than normal, in that there's a practical element to applications. <a href="https://discoverygc.com/forums/showthread.php?tid=185724" target="_blank" rel="noopener" class="mycode_url">Fill out the developer application form as normal</a>. <br />
+<br />
+Additionally:<br />
+<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Story devs';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Story devs';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Story devs</a></div><div class="spoiler_body" style="display: none;">
+<span style="color: #FFBF00;" class="mycode_color">Please submit the following alongside the normal staff application template. <br />
+<br />
+1. Can you describe a Discovery plot arc / storyline (current or past) that you feel didn't meet its potential? Why do you feel it failed? What would you have done differently? <br />
+<br />
+2. Are there any plot arcs / storylines that you feel were not satisfactorily addressed by Discovery? This could be a vanilla element that Discovery hasn't addressed, or a mod storyline that has been left in limbo. How would you provide a payoff to this arc? <br />
+<br />
+3. If you had full creative freedom to choose Discovery's next plot arc, what would it be? What materials or changes would be needed to implement this story? <br />
+<br />
+4. Please write an example infocard and in-game news article for your new story arc. You may want to refer to the <a href="https://docs.google.com/spreadsheets/u/2/d/e/2PACX-1vQ23-LPLTIcL6j7Q2y-eq9qHdThQd5XEdBSJyCR5WVc3-t3DYmXFbPxnMvkUULpo6bWINgVC87ASduJ/pubhtml" target="_blank" rel="noopener" class="mycode_url">style guide prompts for the ongoing infocard review project.</a></span></div></div>
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Economy devs';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Economy devs';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Economy devs</a></div><div class="spoiler_body" style="display: none;">
+<span style="color: #FFBF00;" class="mycode_color">Please submit the following alongside the normal staff application template. <br />
+<br />
+1. How important do you think the regular commodity economy is versus the mining / High Risk Commodity (refined) economy? Why? <br />
+<br />
+2. If you had complete discretion to add or delete one commodity, which would it be? Why? What would the intended impact be? <br />
+<br />
+<a href="https://drive.google.com/file/d/1mVOcYyBWrWqrbQ8ZGOW0pYrLQUShxEc6/view?usp=drive_link" target="_blank" rel="noopener" class="mycode_url">Download a copy of econ_bases.ini</a>. This file is how commodities are assigned to bases by economy devs, using three simple flags: produces = (sells at base value), resells = (sells with price set by distance from closest producer), consumes = (buys at a price set by distance from closest producer). <a href="https://notepad-plus-plus.org/downloads/" target="_blank" rel="noopener" class="mycode_url">Notepad++</a> is recommended for working on ini files. <br />
+<br />
+3. Implement some changes to this file that you think would improve the economy and gameplay experience (does not need to be extensive). <br />
+<br />
+4. Provide a changelog for the alterations you've made. <br />
+<br />
+5. Explain why you made those changes, and what the intended impact is. </span></div></div></span><br />
+What we're primarily looking for are people who are ready and willing to put pen to paper and push out infocards and econ tweaks. Contributing ideas is all well and good, but we need to be able to keep up the tempo on delivering actual results for the community.<br />
+<br />
+If you're interested, please consider putting in an application for either (or both!). If you would like to discuss things first, feel free to reach out to me on Discord (generalretreat) and I'll be happy run through any questions you may have. </span>
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=200569"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement --><!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=200477">New PoB Guide</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44084">TheKusari</a>  - 11-15-2023, 11:39 AM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=13">News and Announcements</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=200477">Replies</a> (22)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				<div style="margin-left: 40px; margin-right: 40px;"><div style="text-align: justify;" class="mycode_align"><span style="color: #80BFFF;" class="mycode_color">Hello there, everyone!<br />
+<br />
+I have spent the last few days overhauling the Player-Owned Base Guide to be much easier to read.<br />
+In addition to this, I have included some details relating to the content added in with Patch 5.0.<br />
+<br />
+Hope you all appreciate the new look for the guide.<br />
+<br />
+<a href="https://discoverygc.com/forums/showthread.php?tid=80349" target="_blank" rel="noopener" class="mycode_url">Player-Owned Base Guide</a></span></div></div>
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=200477"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement --><!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=200449">Discovery is now on Nexus Mods!</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=3001">jammi</a>  - 11-13-2023, 10:55 PM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=13">News and Announcements</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=200449">Replies</a> (6)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				<div style="text-align: center;" class="mycode_align"><img style="max-width: 700px; height: auto" src="https://i.imgur.com/JgRPGoP.gif" /></div>
+<br />
+<span style="color: #FFBF00;" class="mycode_color"><span style="font-weight: bold;" class="mycode_b">Good news everyone! Discovery now has a Nexus Mods page! We're going to be using this as a part of our mod promotion campaign and featuring media and articles there. We're also updating our ModDB page, although this is a little slower going. <br />
+<br />
+The Nexus Mods page also features a brand new mod installer. This installer has been compiled to launch with 5.0's files, meaning you'll no longer need to patch in several years of updates after your download. <br />
+<br />
+<a href="https://www.nexusmods.com/freelancer/mods/13?tab=description" target="_blank" rel="noopener" class="mycode_url">https://www.nexusmods.com/freelancer/mod...escription</a><br />
+<br />
+<span style="text-decoration: underline;" class="mycode_u">We need your help too:</span><br />
+<br />
+Mods on Nexus gain visibility through downloads, endorsements and votes for mod of the month. If you could download our snazzy new installer and then endorse, vote and leave a comment, it'll make a world of difference. If we can get onto the Nexus front page it'll give us a massive visibility bump.<br />
+<br />
+We're still soliciting pictures through the Promotions Thread on the forum (<a href="https://discoverygc.com/forums/showthread.php?tid=199273" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/forums/showthrea...tid=199273</a>), and what we primarily need are pictures of live gameplay footage. We ideally would like a mix of awesome looking combat shots, and non-combat group activities like trade convoys. We're paying bounties for submissions we use!<br />
+<br />
+We're going to be accelerating work on the new community Wiki (<a href="https://discoverygc.com/wiki2/Main_Page" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/wiki2/Main_Page</a>). This already has some generated pages, but we're going to need community help with filling out guides to help new players with getting started and potentially design work to help make the site look and feel more appealing.<br />
+<br />
+Please share links to the Nexus page to anyone you think might be interested in Freelancer or arcade space sims in general. If you're still in touch with any old vets, maybe also see if they'd like to come take a look at what's changed. Installing the game and mod has never been easier, especially with the new website (<a href="https://discoverygc.com/" target="_blank" rel="noopener" class="mycode_url">https://discoverygc.com/</a>).</span></span>
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=200449"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement -->
+<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (217):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="portal.php?page=2" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="portal.php?page=3" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="portal.php?page=4" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="portal.php?page=5" class="pagination_page">5</a>
+<!-- end: multipage_page --><!-- start: multipage_end -->
+&hellip;  <a href="portal.php?page=217" class="pagination_last">217</a>
+<!-- end: multipage_end --><!-- start: multipage_nextpage -->
+<a href="portal.php?page=2" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+</td>
+</tr>
+</table>
+</div>
+<!-- start: footer -->
+<!-- The following piece of code allows MyBB to run scheduled tasks. DO NOT REMOVE --><!-- End task image code -->
+<br />
+<br />
+
+
+<div id="footer">
+	<div class="upper">
+		<div class="float_right" style="margin-right: 4%;"> 
+          <span id="copyright smalltext">Powered By <a href="http://www.mybb.com" target="_blank">MyBB</a>, &copy; 2002-2023 <a href="http://www.mybb.com" target="_blank">MyBB Group</a>.</span><span id="copyright"> Theme © 2014 iAndrew & DiscoveryGC</span></div>
+      
+			<div class="float_left" style="margin-top:-15px; margin-left: 1%;"> 
+               <ul class="footermenu bottom_links" style="text-shadow: 1px 1px 0px #0d0d0d;">
+<li><a href="#top" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-chevron-circle-up fa-fw"></i></a></li>
+<!-- start: footer_contactus -->
+<li><a href="mailto:info@discoverygc.com" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-envelope-square fa-fw"></i> Contact Us</a></li>
+<!-- end: footer_contactus --> <!-- start: footer_themeselect -->
+<div class="theme">
+<form method="POST" action="/forums/portal.php" id="theme_select">
+	
+	<input type="hidden" name="my_post_key" value="a26367e501cae97601f34a3e7d6b9c04" />
+	<!-- start: footer_themeselector -->
+<select name="theme" onchange="MyBB.changeTheme();" style="margin-top: 7px;">
+<optgroup label="Quick Theme Select">
+<!-- start: usercp_themeselector_option -->
+<option value="23">Carbon</option>
+<!-- end: usercp_themeselector_option --><!-- start: usercp_themeselector_option -->
+<option value="25">test</option>
+<!-- end: usercp_themeselector_option --><!-- start: usercp_themeselector_option -->
+<option value="19">Blue Revolution</option>
+<!-- end: usercp_themeselector_option -->
+</optgroup>
+</select>
+<!-- end: footer_themeselector -->
+	<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+</div>
+<!-- end: footer_themeselect --> 
+<li><a href="https://discoverygc.com/forums/archive/index.php" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-bars fa-fw"></i>&nbsp;Lite mode</a></li>
+			</ul>
+        </div></div>
+
+
+	
+	<!--<script type="text/javascript" src="https://discoverygc.com/forums/jspenguin/jspenguin.js"></script>
+	<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/snowstorm.js"></script> -->
+<!-- end: footer -->
+</body>
+</html>
+<!-- end: portal -->

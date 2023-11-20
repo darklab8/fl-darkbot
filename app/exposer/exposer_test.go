@@ -30,7 +30,7 @@ func FixtureTestWebServer() {
 
 func testQuery(url string) (string, error) {
 	resp, err := http.Get("http://localhost:8080" + url)
-	logus.CheckFatal(err, "query failed")
+	logus.CheckError(err, "query failed")
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	return string(body), err
