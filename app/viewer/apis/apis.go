@@ -29,7 +29,6 @@ func (api *API) SetChannelID(ChannelID types.DiscordChannelID) *API {
 }
 
 func NewAPI(ChannelID types.DiscordChannelID, dbpath types.Dbpath, opts ...apiParam) *API {
-
 	api := &API{
 		ChannelID:     ChannelID,
 		Discorder:     discorder.NewClient(),

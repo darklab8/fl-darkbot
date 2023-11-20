@@ -30,7 +30,7 @@ var runCmd = &cobra.Command{
 
 		// migrate db
 		configurator.NewConfigurator(settings.Dbpath).AutoMigrateSchema()
-		forumenacer := forumer.NewForumer()
+		forumenacer := forumer.NewForumer(settings.Dbpath)
 
 		if settings.Config.DevEnvMockApi == "true" {
 			scrappy.Storage = scrappy.FixtureMockedStorage()
