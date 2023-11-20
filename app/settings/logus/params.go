@@ -183,8 +183,14 @@ func DiscordMessageID(value types.DiscordMessageID) slogParam {
 
 func Thread(value *forum_types.LatestThread) slogParam {
 	return func(c *slogGroup) {
-		c.params["thread_name"] = string(value.ThreadName)
+		c.params["thread_name"] = string(value.ThreadShortName)
 		c.params["thread_link"] = string(value.ThreadLink)
 		c.params["thread_id"] = string(value.ThreadID)
+	}
+}
+
+func DiscordMessage(value string) slogParam {
+	return func(c *slogGroup) {
+		c.params["discord_message"] = value
 	}
 }

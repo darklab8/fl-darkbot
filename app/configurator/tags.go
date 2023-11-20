@@ -20,7 +20,9 @@ type taggable interface {
 		models.TagRegion |
 		models.TagPlayerFriend |
 		models.TagPlayerEnemy |
-		models.TagPlayerEvent
+		models.TagPlayerEvent |
+		models.TagForumPostTrack |
+		models.TagForumPostIgnore
 	GetTag() types.Tag
 }
 
@@ -56,6 +58,14 @@ var NewConfiguratorPlayerEnemy = NewConfiguratorTags[models.TagPlayerEnemy]
 type ConfiguratorPlayerEvent = ConfiguratorTags[models.TagPlayerEvent]
 
 var NewConfiguratorPlayerEvent = NewConfiguratorTags[models.TagPlayerEvent]
+
+type ConfiguratorForumWatch = ConfiguratorTags[models.TagForumPostTrack]
+
+var NewConfiguratorForumWatch = NewConfiguratorTags[models.TagForumPostTrack]
+
+type ConfiguratorForumIgnore = ConfiguratorTags[models.TagForumPostIgnore]
+
+var NewConfiguratorForumIgnore = NewConfiguratorTags[models.TagForumPostIgnore]
 
 func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...types.Tag) error {
 	objs := []T{}

@@ -17,10 +17,10 @@ func (u PostAuthorLink) GetUrl() Url { return Url(u) }
 type PostAuthorName string
 
 type LatestThread struct {
-	ThreadLink     ThreadLink
-	ThreadName     ThreadShortName
-	ThreadID       ThreadID
-	LastUpdated    ForumTimestamp
-	PostAuthorLink PostAuthorLink
-	PostAuthorName PostAuthorName
+	ThreadLink      ThreadLink
+	ThreadShortName ThreadShortName
+	ThreadID        ThreadID
+	LastUpdated     ForumTimestamp
+	PostAuthorLink  PostAuthorLink
+	PostAuthorName  PostAuthorName
 }

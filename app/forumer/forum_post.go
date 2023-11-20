@@ -77,5 +77,6 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 		PostID:            post_id,
 		PostContent:       forum_types.PostContent(post_content),
 		PostPermamentLink: forum_types.PostPermamentLink(query.ResponseFullUrl),
+		ThreadFullName:    forum_types.ThreadFullName(thread_name),
 	}, nil
 }

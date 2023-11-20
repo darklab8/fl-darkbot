@@ -117,3 +117,39 @@ func (d Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOw
 
 	return guild_owner_id, nil
 }
+
+type deduplicator struct {
+	repeatCheckers []func(msgs []DiscordMessage) bool
+}
+
+func NewDeduplicator(checkers ...func(msgs []DiscordMessage) bool) *deduplicator {
+	d := &deduplicator{
+		repeatCheckers: checkers,
+	}
+	return d
+}
+
+func (d *deduplicator) isDuplicated(msgs []DiscordMessage) bool {
+	for _, checker := range d.repeatCheckers {
+		if checker(msgs) {
+			return true
+		}
+	}
+	return false
+}
+
+func (dg Discorder) SendDeduplicatedMsg(deduplicator *deduplicator, msg string, channel types.DiscordChannelID) {
+	logus.Info("sent_message= " + msg)
+	msgs, err := dg.GetLatestMessages(channel)
+
+	if logus.CheckError(err, "failed to get discord latest msgs") {
+		return
+	}
+
+	if deduplicator.isDuplicated(msgs) {
+		logus.Debug("not sending duplicated", logus.ChannelID(channel), logus.DiscordMessage(msg))
+		return
+	}
+
+	dg.SengMessage(channel, msg)
+}

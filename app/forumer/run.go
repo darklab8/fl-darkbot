@@ -7,6 +7,7 @@ import (
 	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
+	"strings"
 	"time"
 )
 
@@ -92,6 +93,42 @@ func (v *Forumer) update() {
 
 		v.GetPost(thread, func(new_post *forum_types.Post) {
 			// Insert code to push post to channels
+			for _, channel := range channelIDs {
+				watch_tags, err := v.Forum.Watch.TagsList(channel)
+				if logus.CheckDebug(err, "failed to get watch tags") {
+					continue
+				}
+
+				ignore_tags, err := v.Forum.Watch.TagsList(channel)
+				logus.CheckDebug(err, "failed to get ignore tags")
+
+				do_we_show_this_post := false
+				for _, watch_tag := range watch_tags {
+					if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) {
+						do_we_show_this_post = true
+						break
+					}
+				}
+
+				for _, ignore_tag := range ignore_tags {
+					if strings.Contains(string(new_post.ThreadFullName), string(ignore_tag)) {
+						do_we_show_this_post = false
+						break
+					}
+				}
+
+				if !do_we_show_this_post {
+					continue
+				}
+
+				// Check against deduplication
+				v.Discorder.SendDeduplicatedMsg(
+					discorder.NewDeduplicator(),
+					new_post.Render(),
+					channel,
+				)
+			}
+
 		})
 	}
 

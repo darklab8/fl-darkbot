@@ -14,11 +14,11 @@ import (
 
 func FixtureLatestThread() *forum_types.LatestThread {
 	return &forum_types.LatestThread{
-		ThreadLink:     "https://discoverygc.com/forums/showthread.php?tid=200175&action=lastpost",
-		ThreadName:     "To: NNroute.../(BDM-Direk...",
-		LastUpdated:    "11-20-2023, 09:35 AM",
-		PostAuthorLink: "https://discoverygc.com/forums/member.php?action=profile&uid=54754",
-		PostAuthorName: "Civil Servant",
+		ThreadLink:      "https://discoverygc.com/forums/showthread.php?tid=200175&action=lastpost",
+		ThreadShortName: "To: NNroute.../(BDM-Direk...",
+		LastUpdated:     "11-20-2023, 09:35 AM",
+		PostAuthorLink:  "https://discoverygc.com/forums/member.php?action=profile&uid=54754",
+		PostAuthorName:  "Civil Servant",
 	}
 }
 

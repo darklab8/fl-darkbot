@@ -19,10 +19,15 @@ type Alerts struct {
 	PingMessage            CfgAlertPingMessage
 }
 
+type Forum struct {
+	Watch  ConfiguratorForumWatch
+	Ignore ConfiguratorForumIgnore
+}
 type Configurators struct {
 	Bases    ConfiguratorBase
 	Players  Players
 	Alerts   Alerts
+	Forum    Forum
 	Configur *Configurator
 	Channels ConfiguratorChannel
 }
@@ -50,6 +55,10 @@ func NewConfigugurators(dbpath types.Dbpath) *Configurators {
 			BaseHealthIsDecreasing: NewCfgAlertBaseHealthIsDecreasing(configur),
 			BaseIsUnderAttack:      NewCfgAlertBaseIsUnderAttack(configur),
 			PingMessage:            NewCfgAlertPingMessage(configur),
+		},
+		Forum: Forum{
+			Watch:  NewConfiguratorForumWatch(configur),
+			Ignore: NewConfiguratorForumIgnore(configur),
 		},
 	}
 }

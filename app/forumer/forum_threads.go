@@ -74,12 +74,12 @@ func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]*forum_t
 		params, _ := url.ParseQuery(myUrl.RawQuery)
 
 		latest_thread := &forum_types.LatestThread{
-			ThreadLink:     forum_types.ThreadLink(thread_link),
-			ThreadName:     forum_types.ThreadShortName(thread_name),
-			LastUpdated:    forum_types.ForumTimestamp(forum_timestamp),
-			PostAuthorLink: forum_types.PostAuthorLink(author_link),
-			PostAuthorName: forum_types.PostAuthorName(author_name),
-			ThreadID:       forum_types.ThreadID(params["tid"][0]),
+			ThreadLink:      forum_types.ThreadLink(thread_link),
+			ThreadShortName: forum_types.ThreadShortName(thread_name),
+			LastUpdated:     forum_types.ForumTimestamp(forum_timestamp),
+			PostAuthorLink:  forum_types.PostAuthorLink(author_link),
+			PostAuthorName:  forum_types.PostAuthorName(author_name),
+			ThreadID:        forum_types.ThreadID(params["tid"][0]),
 		}
 		records = append(records, latest_thread)
 
