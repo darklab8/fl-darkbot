@@ -1,6 +1,7 @@
 package forumer
 
 import (
+	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"fmt"
 	"net/url"
@@ -9,25 +10,14 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
-type Post struct {
-	*LatestThread
-	PostID            PostID
-	PostContent       PostContent
-	PostPermamentLink PostPermamentLink
-}
-
 type PostRequester struct {
-	requester func(MethodType, Url) (*QueryResult, error)
+	requester func(MethodType, forum_types.Url) (*QueryResult, error)
 }
-
-type PostID string
-type PostContent string
-type PostPermamentLink Url
 
 type detailedPostParam func(p *PostRequester)
 
 func WithMockedRequester(
-	requester func(MethodType, Url) (*QueryResult, error),
+	requester func(MethodType, forum_types.Url) (*QueryResult, error),
 ) detailedPostParam {
 	return func(p *PostRequester) {
 		p.requester = requester
@@ -44,7 +34,7 @@ func NewDetailedPostRequester(opts ...detailedPostParam) *PostRequester {
 	return res
 }
 
-func (p *PostRequester) GetDetailedPost(thread *LatestThread) (*Post, error) {
+func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*forum_types.Post, error) {
 	query, err := p.requester(GET, thread.ThreadLink.GetUrl())
 	if logus.CheckError(err, "failed to query ThreadLink.GetUrl()="+string(thread.ThreadLink)) {
 		return nil, err
@@ -52,7 +42,7 @@ func (p *PostRequester) GetDetailedPost(thread *LatestThread) (*Post, error) {
 
 	doc := soup.HTMLParse(query.GetContent())
 	params, _ := url.ParseQuery(query.ResponseRawQuery)
-	post_id := PostID(params["pid"][0])
+	post_id := forum_types.PostID(params["pid"][0])
 
 	forum := doc.Find("div", "id", "forum")
 	if logus.CheckError(forum.Error, "failed to get forum object") {
@@ -82,10 +72,10 @@ func (p *PostRequester) GetDetailedPost(thread *LatestThread) (*Post, error) {
 		post_content = strings.ReplaceAll(post_content, "\n\n", "\n")
 	}
 
-	return &Post{
+	return &forum_types.Post{
 		LatestThread:      thread,
 		PostID:            post_id,
-		PostContent:       PostContent(post_content),
-		PostPermamentLink: PostPermamentLink(query.ResponseFullUrl),
+		PostContent:       forum_types.PostContent(post_content),
+		PostPermamentLink: forum_types.PostPermamentLink(query.ResponseFullUrl),
 	}, nil
 }

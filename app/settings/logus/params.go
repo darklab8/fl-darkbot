@@ -1,6 +1,7 @@
 package logus
 
 import (
+	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/types"
 	"fmt"
 	"log/slog"
@@ -177,5 +178,13 @@ func GormResult(result *gorm.DB) slogParam {
 func DiscordMessageID(value types.DiscordMessageID) slogParam {
 	return func(c *slogGroup) {
 		c.params["discord_msg_id"] = string(value)
+	}
+}
+
+func Thread(value *forum_types.LatestThread) slogParam {
+	return func(c *slogGroup) {
+		c.params["thread_name"] = string(value.ThreadName)
+		c.params["thread_link"] = string(value.ThreadLink)
+		c.params["thread_id"] = string(value.ThreadID)
 	}
 }

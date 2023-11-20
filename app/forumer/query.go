@@ -1,6 +1,7 @@
 package forumer
 
 import (
+	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"io"
 	"net/http"
@@ -24,7 +25,7 @@ func (q *QueryResult) GetContent() string {
 	return q.content
 }
 
-func NewQuery(method_type MethodType, url Url) (*QueryResult, error) {
+func NewQuery(method_type MethodType, url forum_types.Url) (*QueryResult, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest(string(method_type), string(url), nil)
 	if logus.CheckWarn(err, "Failed to create request") {

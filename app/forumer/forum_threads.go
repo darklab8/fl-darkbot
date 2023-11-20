@@ -1,6 +1,7 @@
 package forumer
 
 import (
+	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"fmt"
 	"net/url"
@@ -8,46 +9,21 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
-type Url string
-
-type ThreadLink Url
-
-func (u ThreadLink) GetUrl() Url { return Url(u) }
-
-type ThreadShortName string
-type ThreadID string
-type ForumTimestamp string
-
-type PostAuthorLink Url
-
-func (u PostAuthorLink) GetUrl() Url { return Url(u) }
-
-type PostAuthorName string
-
-type LatestThread struct {
-	ThreadLink     ThreadLink
-	ThreadName     ThreadShortName
-	ThreadID       ThreadID
-	LastUpdated    ForumTimestamp
-	PostAuthorLink PostAuthorLink
-	PostAuthorName PostAuthorName
-}
-
 type ThreadsRequester struct {
-	requester func(MethodType, Url) (*QueryResult, error)
+	requester func(MethodType, forum_types.Url) (*QueryResult, error)
 }
 
 type threadPageParam func(thread_page *ThreadsRequester)
 
 func WithMockedPageRequester(
-	requester func(MethodType, Url) (*QueryResult, error),
+	requester func(MethodType, forum_types.Url) (*QueryResult, error),
 ) threadPageParam {
 	return func(thread_page *ThreadsRequester) {
 		thread_page.requester = requester
 	}
 }
 
-const ThreadPageURL Url = "https://discoverygc.com/forums/portal.php"
+const ThreadPageURL forum_types.Url = "https://discoverygc.com/forums/portal.php"
 
 func NewLatestThreads(opts ...threadPageParam) *ThreadsRequester {
 	thread_page := &ThreadsRequester{
@@ -60,8 +36,8 @@ func NewLatestThreads(opts ...threadPageParam) *ThreadsRequester {
 	return thread_page
 }
 
-func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]LatestThread, error) {
-	records := []LatestThread{}
+func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]*forum_types.LatestThread, error) {
+	records := []*forum_types.LatestThread{}
 
 	query, err := p.requester(GET, ThreadPageURL)
 	if logus.CheckError(err, "Failed to make query") {
@@ -97,13 +73,13 @@ func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]LatestTh
 		myUrl, _ := url.Parse(thread_link)
 		params, _ := url.ParseQuery(myUrl.RawQuery)
 
-		latest_thread := LatestThread{
-			ThreadLink:     ThreadLink(thread_link),
-			ThreadName:     ThreadShortName(thread_name),
-			LastUpdated:    ForumTimestamp(forum_timestamp),
-			PostAuthorLink: PostAuthorLink(author_link),
-			PostAuthorName: PostAuthorName(author_name),
-			ThreadID:       ThreadID(params["tid"][0]),
+		latest_thread := &forum_types.LatestThread{
+			ThreadLink:     forum_types.ThreadLink(thread_link),
+			ThreadName:     forum_types.ThreadShortName(thread_name),
+			LastUpdated:    forum_types.ForumTimestamp(forum_timestamp),
+			PostAuthorLink: forum_types.PostAuthorLink(author_link),
+			PostAuthorName: forum_types.PostAuthorName(author_name),
+			ThreadID:       forum_types.ThreadID(params["tid"][0]),
 		}
 		records = append(records, latest_thread)
 

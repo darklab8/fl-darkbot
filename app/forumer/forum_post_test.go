@@ -1,6 +1,7 @@
 package forumer
 
 import (
+	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/utils"
 	"fmt"
@@ -11,8 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func FixtureLatestThread() *LatestThread {
-	return &LatestThread{
+func FixtureLatestThread() *forum_types.LatestThread {
+	return &forum_types.LatestThread{
 		ThreadLink:     "https://discoverygc.com/forums/showthread.php?tid=200175&action=lastpost",
 		ThreadName:     "To: NNroute.../(BDM-Direk...",
 		LastUpdated:    "11-20-2023, 09:35 AM",
@@ -31,7 +32,7 @@ func TestGetDetailedPost(t *testing.T) {
 		os.WriteFile(detailed_post_content_filepath, []byte(query.GetContent()), 0644)
 	}
 	detailed_post_content, _ := os.ReadFile(detailed_post_content_filepath)
-	mocked_requester := func(mt MethodType, u Url) (*QueryResult, error) {
+	mocked_requester := func(mt MethodType, u forum_types.Url) (*QueryResult, error) {
 		return &QueryResult{
 			content:          string(detailed_post_content),
 			ResponseRawQuery: `tid=200175&pid=2315295`,

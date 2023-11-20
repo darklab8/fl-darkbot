@@ -1,6 +1,7 @@
 package forumer
 
 import (
+	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/utils"
 	"os"
@@ -18,7 +19,7 @@ func TestGetPosts(t *testing.T) {
 		os.WriteFile(thread_post_content_filepath, []byte(query.GetContent()), 0644)
 	}
 	thread_post_content, _ := os.ReadFile(thread_post_content_filepath)
-	mocked_requester := func(mt MethodType, u Url) (*QueryResult, error) {
+	mocked_requester := func(mt MethodType, u forum_types.Url) (*QueryResult, error) {
 		return &QueryResult{
 			content:          string(thread_post_content),
 			ResponseRawQuery: ``,
