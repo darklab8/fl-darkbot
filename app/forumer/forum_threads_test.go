@@ -26,7 +26,7 @@ func TestGetPosts(t *testing.T) {
 		}, nil
 	}
 
-	thread_page, err := GetLatestThreads(WithMockedPageRequester(mocked_requester))
+	threads, err := NewLatestThreads(WithMockedPageRequester(mocked_requester)).GetLatestThreads()
 	assert.Nil(t, err, "expected nil as error")
-	assert.Greater(t, len(thread_page.Threads), 0)
+	assert.Greater(t, len(threads), 0)
 }

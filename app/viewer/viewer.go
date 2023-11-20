@@ -1,7 +1,6 @@
 package viewer
 
 import (
-	"darkbot/app/configurator"
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
@@ -15,16 +14,14 @@ type ViewerDelays struct {
 }
 
 type Viewer struct {
-	channels configurator.ConfiguratorChannel
-	delays   ViewerDelays
-	api      *apis.API
+	delays ViewerDelays
+	api    *apis.API
 }
 
 func NewViewer(dbpath types.Dbpath) Viewer {
 	api := apis.NewAPI("", dbpath)
 	return Viewer{
-		api:      api,
-		channels: configurator.NewConfiguratorChannel(api.Configur),
+		api: api,
 		delays: ViewerDelays{
 			betweenChannels: 1,
 			betweenLoops:    settings.ViewerLoopDelay,
@@ -36,7 +33,7 @@ func (v Viewer) Update() {
 	logus.Info("Viewer.Update")
 
 	// Query all channels
-	channelIDs, _ := v.channels.List()
+	channelIDs, _ := v.api.Channels.List()
 	logus.Info("Viewer.Update.channelIDs=", logus.ChannelIDs(channelIDs))
 
 	// For each channel

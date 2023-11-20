@@ -33,32 +33,37 @@ type LatestThread struct {
 	PostAuthorName PostAuthorName
 }
 
-type ThreadsPage struct {
-	Threads   []LatestThread
+type ThreadsRequester struct {
 	requester func(MethodType, Url) (*QueryResult, error)
 }
 
-type threadPageParam func(thread_page *ThreadsPage)
+type threadPageParam func(thread_page *ThreadsRequester)
 
 func WithMockedPageRequester(
 	requester func(MethodType, Url) (*QueryResult, error),
 ) threadPageParam {
-	return func(thread_page *ThreadsPage) {
+	return func(thread_page *ThreadsRequester) {
 		thread_page.requester = requester
 	}
 }
 
 const ThreadPageURL Url = "https://discoverygc.com/forums/portal.php"
 
-func GetLatestThreads(opts ...threadPageParam) (*ThreadsPage, error) {
-	thread_page := &ThreadsPage{
+func NewLatestThreads(opts ...threadPageParam) *ThreadsRequester {
+	thread_page := &ThreadsRequester{
 		requester: NewQuery,
 	}
+
 	for _, opt := range opts {
 		opt(thread_page)
 	}
+	return thread_page
+}
 
-	query, err := thread_page.requester(GET, ThreadPageURL)
+func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]LatestThread, error) {
+	records := []LatestThread{}
+
+	query, err := p.requester(GET, ThreadPageURL)
 	if logus.CheckError(err, "Failed to make query") {
 		return nil, err
 	}
@@ -100,9 +105,9 @@ func GetLatestThreads(opts ...threadPageParam) (*ThreadsPage, error) {
 			PostAuthorName: PostAuthorName(author_name),
 			ThreadID:       ThreadID(params["tid"][0]),
 		}
-		thread_page.Threads = append(thread_page.Threads, latest_thread)
+		records = append(records, latest_thread)
 
 		logus.Debug(fmt.Sprintf("latest_thread=%v", latest_thread))
 	}
-	return thread_page, nil
+	return records, nil
 }

@@ -9,35 +9,43 @@ import (
 	"github.com/anaskhan96/soup"
 )
 
-type DetailedPost struct {
+type Post struct {
 	*LatestThread
 	PostID            PostID
 	PostContent       PostContent
 	PostPermamentLink PostPermamentLink
+}
 
+type PostRequester struct {
 	requester func(MethodType, Url) (*QueryResult, error)
 }
+
 type PostID string
 type PostContent string
 type PostPermamentLink Url
 
-type detailedPostParam func(detailedPost *DetailedPost)
+type detailedPostParam func(p *PostRequester)
 
 func WithMockedRequester(
 	requester func(MethodType, Url) (*QueryResult, error),
 ) detailedPostParam {
-	return func(detailedPost *DetailedPost) {
-		detailedPost.requester = requester
+	return func(p *PostRequester) {
+		p.requester = requester
 	}
 }
 
-func NewDetailedPost(thread *LatestThread, opts ...detailedPostParam) (*DetailedPost, error) {
-	detailed_post := &DetailedPost{requester: NewQuery}
-	for _, opt := range opts {
-		opt(detailed_post)
+func NewDetailedPostRequester(opts ...detailedPostParam) *PostRequester {
+	res := &PostRequester{
+		requester: NewQuery,
 	}
+	for _, opt := range opts {
+		opt(res)
+	}
+	return res
+}
 
-	query, err := detailed_post.requester(GET, thread.ThreadLink.GetUrl())
+func (p *PostRequester) GetDetailedPost(thread *LatestThread) (*Post, error) {
+	query, err := p.requester(GET, thread.ThreadLink.GetUrl())
 	if logus.CheckError(err, "failed to query ThreadLink.GetUrl()="+string(thread.ThreadLink)) {
 		return nil, err
 	}
@@ -74,10 +82,10 @@ func NewDetailedPost(thread *LatestThread, opts ...detailedPostParam) (*Detailed
 		post_content = strings.ReplaceAll(post_content, "\n\n", "\n")
 	}
 
-	detailed_post.LatestThread = thread
-	detailed_post.PostID = post_id
-	detailed_post.PostContent = PostContent(post_content)
-	detailed_post.PostPermamentLink = PostPermamentLink(query.ResponseFullUrl)
-
-	return detailed_post, nil
+	return &Post{
+		LatestThread:      thread,
+		PostID:            post_id,
+		PostContent:       PostContent(post_content),
+		PostPermamentLink: PostPermamentLink(query.ResponseFullUrl),
+	}, nil
 }

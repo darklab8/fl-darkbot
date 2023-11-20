@@ -24,6 +24,7 @@ type Configurators struct {
 	Players  Players
 	Alerts   Alerts
 	Configur *Configurator
+	Channels ConfiguratorChannel
 }
 
 func NewConfigugurators(dbpath types.Dbpath) *Configurators {
@@ -32,6 +33,7 @@ func NewConfigugurators(dbpath types.Dbpath) *Configurators {
 
 	return &Configurators{
 		Configur: configur,
+		Channels: NewConfiguratorChannel(configur),
 		Bases:    NewConfiguratorBase(configur),
 		Players: Players{
 			Systems: NewConfiguratorSystem(configur),

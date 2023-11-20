@@ -38,7 +38,7 @@ func TestGetDetailedPost(t *testing.T) {
 			ResponseFullUrl:  `https://discoverygc.com/forums/showthread.php?tid=200175&pid=2315295#pid2315295`,
 		}, nil
 	}
-	detailed_post, err := NewDetailedPost(thread, WithMockedRequester(mocked_requester))
+	detailed_post, err := NewDetailedPostRequester(WithMockedRequester(mocked_requester)).GetDetailedPost(thread)
 	_ = detailed_post
 	fmt.Println("err=", err)
 	assert.Nil(t, err, "expected error to be nil")
