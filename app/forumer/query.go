@@ -1,4 +1,4 @@
-package forum
+package forumer
 
 import (
 	"darkbot/app/settings/logus"

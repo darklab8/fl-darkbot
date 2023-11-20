@@ -5,6 +5,7 @@ package management
 
 import (
 	"darkbot/app/configurator"
+	"darkbot/app/forumer"
 	"darkbot/app/listener"
 	"darkbot/app/scrappy"
 	"darkbot/app/settings"
@@ -29,6 +30,7 @@ var runCmd = &cobra.Command{
 
 		// migrate db
 		configurator.NewConfigurator(settings.Dbpath).AutoMigrateSchema()
+		forumenacer := forumer.NewForumer()
 
 		if settings.Config.DevEnvMockApi == "true" {
 			scrappy.Storage = scrappy.FixtureMockedStorage()
@@ -39,6 +41,7 @@ var runCmd = &cobra.Command{
 		go scrappy.Run()
 		go listener.Run()
 		go viewer.Run()
+		go forumenacer.Run()
 
 		// profiler
 		if settings.Config.ProfilingEnabled == settings.EnvTrue {
