@@ -28,7 +28,6 @@ func newMockedThreadsQuery() MockedThreadsQuery {
 
 func FixtureDevEnv() bool {
 	return os.Getenv("DEV_ENV") == "true"
-
 }
 
 func TestForumerSending(t *testing.T) {
@@ -40,6 +39,7 @@ func TestForumerSending(t *testing.T) {
 		cg.TagsAdd(dev_env_channel, []types.Tag{""}...)
 
 		cg_channel := configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath))
+
 		if FixtureDevEnv() {
 			cg_channel.Add(dev_env_channel)
 		}

@@ -61,6 +61,23 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 	if logus.CheckError(post.Error, "failed to get post object") {
 		return nil, post.Error
 	}
+
+	post_author_avatar := post.Find("div", "class", "author_avatar")
+	post_author_avatar_a := post_author_avatar.Find("img")
+	author_avatar_url := post_author_avatar_a.Attrs()["src"]
+
+	// If u wish getting author from here
+	// post_author := post.Find("td", "class", "postcat")
+	// if logus.CheckError(post_author.Error, "failed to get post author") {
+	// 	return nil, post_author.Error
+	// }
+	// post_author_a := post_author.Find("a")
+	// if logus.CheckError(post_author_a.Error, "failed to get post_author_a") {
+	// 	return nil, post_author_a.Error
+	// }
+	// post_author_name := post_author_a.Text()
+	// post_author_link := post_author_a.Attrs()["href"]
+
 	post_body := post.Find("div", "class", "post_body")
 	if logus.CheckError(post_body.Error, "failed to get post_body object") {
 		return nil, post_body.Error
@@ -73,10 +90,11 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 	}
 
 	return &forum_types.Post{
-		LatestThread:      thread,
-		PostID:            post_id,
-		PostContent:       forum_types.PostContent(post_content),
-		PostPermamentLink: forum_types.PostPermamentLink(query.ResponseFullUrl),
-		ThreadFullName:    forum_types.ThreadFullName(thread_name),
+		LatestThread:         thread,
+		PostID:               post_id,
+		PostContent:          forum_types.PostContent(post_content),
+		PostPermamentLink:    forum_types.PostPermamentLink(query.ResponseFullUrl),
+		ThreadFullName:       forum_types.ThreadFullName(thread_name),
+		PostAuthorAvatarLink: forum_types.Url(author_avatar_url),
 	}, nil
 }

@@ -23,7 +23,7 @@ func FixtureMockedThreadsRequester() func(mt MethodType, u forum_types.Url) (*Qu
 		return &QueryResult{
 			content:          string(thread_post_content),
 			ResponseRawQuery: ``,
-			ResponseFullUrl:  `https://discoverygc.com/forums/portal.php`,
+			ResponseFullUrl:  string(ThreadPageURL),
 		}, nil
 	}
 	return mocked_requester

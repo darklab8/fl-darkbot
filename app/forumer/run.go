@@ -152,12 +152,10 @@ func (v *Forumer) update() {
 
 						// embed.Timestamp = string()
 						var content strings.Builder
-						content.WriteString(fmt.Sprintf("%s, you've got mail!\n", pingMessage))
-						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-							Name:   "Topic started by",
-							Value:  fmt.Sprintf("[%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink),
-							Inline: true,
-						})
+						content.WriteString(
+							fmt.Sprintf("%s, received email from %s\n",
+								pingMessage,
+								fmt.Sprintf("[%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink)))
 						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 							Name:   "Matched tags",
 							Value:  strings.Join(matched_tags, ", "),
@@ -170,6 +168,8 @@ func (v *Forumer) update() {
 						})
 						content.WriteString(fmt.Sprintf("```%s```\n", new_post.PostContent[:600]))
 						embed.Description = content.String()
+
+						embed.Thumbnail = &discordgo.MessageEmbedThumbnail{URL: string(new_post.PostAuthorAvatarLink)}
 
 						purple_color := 10181046
 						embed.Color = purple_color
