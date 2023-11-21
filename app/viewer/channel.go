@@ -86,6 +86,11 @@ func (v ChannelView) DeleteOld() {
 			continue
 		}
 
+		// embeding msgs contain forumer emails
+		if len(msg.Embeds) > 0 {
+			continue
+		}
+
 		if deleteLimit <= 0 {
 			break
 		}

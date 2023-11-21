@@ -166,7 +166,12 @@ func (v *Forumer) update() {
 							Value:  string(new_post.LastUpdated),
 							Inline: true,
 						})
-						content.WriteString(fmt.Sprintf("```%s```\n", new_post.PostContent[:600]))
+
+						var post_content string = string(new_post.PostContent)
+						if len(post_content) >= 600 {
+							post_content = post_content[:600]
+						}
+						content.WriteString(fmt.Sprintf("```%s```\n", post_content))
 						embed.Description = content.String()
 
 						embed.Thumbnail = &discordgo.MessageEmbedThumbnail{URL: string(new_post.PostAuthorAvatarLink)}
