@@ -20,8 +20,8 @@ type Discorder struct {
 	dg *discordgo.Session
 }
 
-func NewClient() Discorder {
-	d := Discorder{}
+func NewClient() *Discorder {
+	d := &Discorder{}
 	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
 	logus.CheckFatal(err, "failed to init discord")
 	dg.Identify.Intents = discordgo.IntentsGuildMessages

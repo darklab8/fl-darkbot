@@ -8,7 +8,7 @@ import (
 )
 
 type API struct {
-	Discorder discorder.Discorder
+	Discorder *discorder.Discorder
 	ChannelID types.DiscordChannelID
 	Scrappy   *scrappy.ScrappyStorage
 	*configurator.Configurators

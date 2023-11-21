@@ -18,7 +18,7 @@ type iThreadsRequester interface {
 	GetLatestThreads(opts ...threadPageParam) ([]*forum_types.LatestThread, error)
 }
 type Forumer struct {
-	Discorder discorder.Discorder
+	Discorder *discorder.Discorder
 	*configurator.Configurators
 	threads_requester iThreadsRequester
 	post_requester    *PostRequester
@@ -126,6 +126,8 @@ func (v *Forumer) update() {
 					continue
 				}
 
+				pingMessage := configurator.GetPingingMessage(channel, v.Configurators, v.Discorder)
+
 				duplication_checker := discorder.NewDeduplicator(func(msgs []discorder.DiscordMessage) bool {
 					for _, msg := range msgs {
 						content := msg.Content
@@ -142,7 +144,11 @@ func (v *Forumer) update() {
 				})
 				v.Discorder.SendDeduplicatedMsg(
 					duplication_checker, channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
-						dg_msg := &discordgo.MessageSend{Embed: &discordgo.MessageEmbed{}}
+
+						dg_msg := &discordgo.MessageSend{
+							Content: string(pingMessage),
+							Embed:   &discordgo.MessageEmbed{},
+						}
 						dg_msg.Embed.Title = `✉️  You've got mail`
 						dg_msg.Embed.Timestamp = string(new_post.LastUpdated)
 

@@ -1,12 +1,11 @@
 package views
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/configurator"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	_ "embed"
-	"fmt"
 	"text/template"
 )
 
@@ -24,17 +23,10 @@ type TemplateAlertInput struct {
 }
 
 func RenderAlertTemplate(ChannelID types.DiscordChannelID, Msg string, api *apis.API) types.ViewRecord {
+	// pingMessage, err := api.Alerts.PingMessage.Status(ChannelID)
+	// ownerID, err := api.Discorder.GetOwnerID(ChannelID)
 
-	pingMessage, err := api.Alerts.PingMessage.Status(ChannelID)
-	logus.Debug("RenderAlertTemplate.PingMessage.Status", logus.OptError(err), logus.PingMessage(pingMessage))
-	if err != nil {
-		ownerID, err := api.Discorder.GetOwnerID(ChannelID)
-		if logus.CheckWarn(err, "unable to acquire Discorder Channel Owner", logus.ChannelID(ChannelID)) {
-			ownerID = "TestOwnerID"
-		}
-		pingMessage = types.PingMessage(fmt.Sprintf("<@%s>", ownerID))
-	}
-
+	pingMessage := configurator.GetPingingMessage(ChannelID, api.Configurators, api.Discorder)
 	input := TemplateAlertInput{
 		PingMessage: pingMessage,
 		Msg:         Msg,
