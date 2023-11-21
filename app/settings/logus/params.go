@@ -194,3 +194,12 @@ func DiscordMessage(value string) slogParam {
 		c.params["discord_message"] = value
 	}
 }
+
+func Post(value *forum_types.Post) slogParam {
+	return func(c *slogGroup) {
+		c.params["post_id"] = string(value.PostID)
+		c.params["post_author_name"] = string(value.PostAuthorName)
+		c.params["post_thread_id"] = string(value.ThreadID)
+		c.params["post_thread_full_name"] = string(value.ThreadFullName)
+	}
+}

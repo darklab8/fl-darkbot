@@ -134,13 +134,16 @@ func (v *Forumer) update() {
 						content := msg.Content
 						for _, embed := range msg.Embeds {
 							content += embed.Description
+							content += embed.Title
+							content += embed.URL
 						}
 
-						if strings.Contains(content, string(new_post.PostID)) &&
-							strings.Contains(content, string(new_post.ThreadID)) {
+						if strings.Contains(content, string(new_post.PostPermamentLink)) {
+							logus.Debug("Post already exists!", logus.Post(new_post))
 							return true
 						}
 					}
+					logus.Debug("Post does not exist like that", logus.Post(new_post))
 					return false
 				})
 				v.Discorder.SendDeduplicatedMsg(
