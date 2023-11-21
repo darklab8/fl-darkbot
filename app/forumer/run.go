@@ -72,9 +72,9 @@ func (v *Forumer) GetPost(thread *forum_types.LatestThread, new_post_callback fu
 		logus.Debug("cache is not found. requesting new post for thread", logus.Thread(thread))
 		post, err = v.post_requester.GetDetailedPost(thread)
 		logus.CheckError(err, "failed get detailed post for thread=", logus.Thread(thread))
+		new_post_callback(post)
 		v.cache[thread_key] = post
 		v.cache_keys = append(v.cache_keys, thread_key)
-		new_post_callback(post)
 	}
 
 	if len(v.cache_keys) > 100 {
@@ -119,8 +119,8 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 	return true, matched_tags
 }
 
-func CreateDeDuplicator(new_post *forum_types.Post) *discorder.Deduplicator {
-	return discorder.NewDeduplicator(func(msgs []*discorder.DiscordMessage) bool {
+func CreateDeDuplicator(new_post *forum_types.Post, msgs []*discorder.DiscordMessage) *discorder.Deduplicator {
+	return discorder.NewDeduplicator(func() bool {
 		for _, msg := range msgs {
 			content := msg.Content
 			for _, embed := range msg.Embeds {
@@ -139,7 +139,7 @@ func CreateDeDuplicator(new_post *forum_types.Post) *discorder.Deduplicator {
 	})
 }
 
-func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_types.Post) {
+func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_types.Post, msgs []*discorder.DiscordMessage) {
 
 	pingMessage := configurator.GetPingingMessage(channel, v.Configurators, v.Discorder)
 	is_match, matched_tags := v.isPostMatchTags(channel, new_post)
@@ -148,7 +148,7 @@ func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_typ
 	}
 
 	v.Discorder.SendDeduplicatedMsg(
-		CreateDeDuplicator(new_post), channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
+		CreateDeDuplicator(new_post, msgs), channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
 			embed := &discordgo.MessageEmbed{}
 			embed.Title = string(new_post.ThreadFullName)
 			embed.URL = string(new_post.PostPermamentLink)
@@ -198,7 +198,11 @@ func (v *Forumer) update() {
 	for _, thread := range threads {
 		v.GetPost(thread, func(new_post *forum_types.Post) {
 			for _, channel := range channelIDs {
-				v.TrySendMsg(channel, new_post)
+				msgs, err := v.Discorder.GetLatestMessages(channel)
+				if logus.CheckError(err, "failed to get discord latest msgs") {
+					continue
+				}
+				v.TrySendMsg(channel, new_post, msgs)
 			}
 		})
 	}
