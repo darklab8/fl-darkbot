@@ -27,5 +27,5 @@ module "darkbot" {
   configurator_dbname = "production"
   consoler_prefix     = "."
   secrets             = local.secrets
-  tag_version         = "v1.1.0"
+  tag_version         = "v1.1.1"
 }
