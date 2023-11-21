@@ -96,7 +96,7 @@ func (d Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOw
 	return guild_owner_id, nil
 }
 
-type deduplicator struct {
+type Deduplicator struct {
 	dupCheckers []func(msgs []*DiscordMessage) bool
 }
 
@@ -105,14 +105,14 @@ type DuplicatedError struct {
 
 func (d DuplicatedError) Error() string { return "This msg is duplicated" }
 
-func NewDeduplicator(isDuplicaters ...func(msgs []*DiscordMessage) bool) *deduplicator {
-	d := &deduplicator{
+func NewDeduplicator(isDuplicaters ...func(msgs []*DiscordMessage) bool) *Deduplicator {
+	d := &Deduplicator{
 		dupCheckers: isDuplicaters,
 	}
 	return d
 }
 
-func (d *deduplicator) isDuplicated(msgs []*DiscordMessage) bool {
+func (d *Deduplicator) isDuplicated(msgs []*DiscordMessage) bool {
 	for _, isDup := range d.dupCheckers {
 		if isDup(msgs) {
 			return true
@@ -122,7 +122,7 @@ func (d *deduplicator) isDuplicated(msgs []*DiscordMessage) bool {
 }
 
 func (d Discorder) SendDeduplicatedMsg(
-	deduplicator *deduplicator,
+	deduplicator *Deduplicator,
 	channel types.DiscordChannelID,
 	send_callback func(channel types.DiscordChannelID, dg *discordgo.Session) error,
 ) error {

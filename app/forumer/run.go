@@ -87,8 +87,107 @@ func (v *Forumer) GetPost(thread *forum_types.LatestThread, new_post_callback fu
 	return post
 }
 
-func (v *Forumer) update() {
+func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *forum_types.Post) (bool, []string) {
+	var matched_tags []string
 
+	watch_tags, err := v.Forum.Watch.TagsList(channel)
+	if logus.CheckDebug(err, "failed to get watch tags") {
+		return false, matched_tags
+	}
+
+	ignore_tags, err := v.Forum.Ignore.TagsList(channel)
+	logus.CheckDebug(err, "failed to get ignore tags")
+
+	do_we_show_this_post := false
+	for _, watch_tag := range watch_tags {
+		if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) {
+			do_we_show_this_post = true
+			matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
+		}
+	}
+
+	for _, ignore_tag := range ignore_tags {
+		if strings.Contains(string(new_post.ThreadFullName), string(ignore_tag)) {
+			do_we_show_this_post = false
+			break
+		}
+	}
+
+	if !do_we_show_this_post {
+		return false, matched_tags
+	}
+	return true, matched_tags
+}
+
+func CreateDeDuplicator(new_post *forum_types.Post) *discorder.Deduplicator {
+	return discorder.NewDeduplicator(func(msgs []*discorder.DiscordMessage) bool {
+		for _, msg := range msgs {
+			content := msg.Content
+			for _, embed := range msg.Embeds {
+				content += embed.Description
+				content += embed.Title
+				content += embed.URL
+			}
+
+			if strings.Contains(content, string(new_post.PostPermamentLink)) {
+				logus.Debug("Post already exists!", logus.Post(new_post))
+				return true
+			}
+		}
+		logus.Debug("Post does not exist like that", logus.Post(new_post))
+		return false
+	})
+}
+
+func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_types.Post) {
+
+	pingMessage := configurator.GetPingingMessage(channel, v.Configurators, v.Discorder)
+	is_match, matched_tags := v.isPostMatchTags(channel, new_post)
+	if !is_match {
+		return
+	}
+
+	v.Discorder.SendDeduplicatedMsg(
+		CreateDeDuplicator(new_post), channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
+			embed := &discordgo.MessageEmbed{}
+			embed.Title = string(new_post.ThreadFullName)
+			embed.URL = string(new_post.PostPermamentLink)
+
+			// embed.Timestamp = string()
+			var content strings.Builder
+			content.WriteString(
+				fmt.Sprintf("%s, received email from %s\n",
+					pingMessage,
+					fmt.Sprintf("[%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink)))
+			embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+				Name:   "Matched tags",
+				Value:  strings.Join(matched_tags, ", "),
+				Inline: true,
+			})
+			embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+				Name:   "Timestamp",
+				Value:  string(new_post.LastUpdated),
+				Inline: true,
+			})
+
+			var post_content string = string(new_post.PostContent)
+			if len(post_content) >= 600 {
+				post_content = post_content[:600]
+			}
+			content.WriteString(fmt.Sprintf("```%s```\n", post_content))
+			embed.Description = content.String()
+
+			embed.Thumbnail = &discordgo.MessageEmbedThumbnail{URL: string(new_post.PostAuthorAvatarLink)}
+
+			purple_color := 10181046
+			embed.Color = purple_color
+			_, err := dg.ChannelMessageSendEmbed(string(channel), embed)
+			logus.CheckError(err, "failed sending msg")
+			return nil
+		})
+}
+
+func (v *Forumer) update() {
 	channelIDs, _ := v.Channels.List()
 
 	threads, err := v.threads_requester.GetLatestThreads()
@@ -99,93 +198,7 @@ func (v *Forumer) update() {
 	for _, thread := range threads {
 		v.GetPost(thread, func(new_post *forum_types.Post) {
 			for _, channel := range channelIDs {
-				watch_tags, err := v.Forum.Watch.TagsList(channel)
-				if logus.CheckDebug(err, "failed to get watch tags") {
-					continue
-				}
-
-				ignore_tags, err := v.Forum.Ignore.TagsList(channel)
-				logus.CheckDebug(err, "failed to get ignore tags")
-
-				do_we_show_this_post := false
-				var matched_tags []string
-				for _, watch_tag := range watch_tags {
-					if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) {
-						do_we_show_this_post = true
-						matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
-					}
-				}
-
-				for _, ignore_tag := range ignore_tags {
-					if strings.Contains(string(new_post.ThreadFullName), string(ignore_tag)) {
-						do_we_show_this_post = false
-						break
-					}
-				}
-
-				if !do_we_show_this_post {
-					continue
-				}
-
-				pingMessage := configurator.GetPingingMessage(channel, v.Configurators, v.Discorder)
-
-				duplication_checker := discorder.NewDeduplicator(func(msgs []*discorder.DiscordMessage) bool {
-					for _, msg := range msgs {
-						content := msg.Content
-						for _, embed := range msg.Embeds {
-							content += embed.Description
-							content += embed.Title
-							content += embed.URL
-						}
-
-						if strings.Contains(content, string(new_post.PostPermamentLink)) {
-							logus.Debug("Post already exists!", logus.Post(new_post))
-							return true
-						}
-					}
-					logus.Debug("Post does not exist like that", logus.Post(new_post))
-					return false
-				})
-				v.Discorder.SendDeduplicatedMsg(
-					duplication_checker, channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
-
-						embed := &discordgo.MessageEmbed{}
-						embed.Title = string(new_post.ThreadFullName)
-						embed.URL = string(new_post.PostPermamentLink)
-
-						// embed.Timestamp = string()
-						var content strings.Builder
-						content.WriteString(
-							fmt.Sprintf("%s, received email from %s\n",
-								pingMessage,
-								fmt.Sprintf("[%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink)))
-						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-							Name:   "Matched tags",
-							Value:  strings.Join(matched_tags, ", "),
-							Inline: true,
-						})
-						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-							Name:   "Timestamp",
-							Value:  string(new_post.LastUpdated),
-							Inline: true,
-						})
-
-						var post_content string = string(new_post.PostContent)
-						if len(post_content) >= 600 {
-							post_content = post_content[:600]
-						}
-						content.WriteString(fmt.Sprintf("```%s```\n", post_content))
-						embed.Description = content.String()
-
-						embed.Thumbnail = &discordgo.MessageEmbedThumbnail{URL: string(new_post.PostAuthorAvatarLink)}
-
-						purple_color := 10181046
-						embed.Color = purple_color
-						msg, err := dg.ChannelMessageSendEmbed(string(channel), embed)
-						logus.CheckError(err, "failed sending msg")
-						_ = msg
-						return nil
-					})
+				v.TrySendMsg(channel, new_post)
 			}
 		})
 	}
@@ -193,7 +206,8 @@ func (v *Forumer) update() {
 
 func (v *Forumer) Run() {
 	for {
+		logus.Debug("trying new forumer cycle")
 		v.update()
-		time.Sleep(time.Minute)
+		time.Sleep(time.Second * 10)
 	}
 }
