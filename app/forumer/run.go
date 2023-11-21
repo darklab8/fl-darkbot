@@ -113,7 +113,8 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 
 	do_we_show_this_post := false
 	for _, watch_tag := range watch_tags {
-		if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) {
+		if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) ||
+			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(watch_tag))) {
 			do_we_show_this_post = true
 			matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
 		}
