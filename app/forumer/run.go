@@ -7,8 +7,10 @@ import (
 	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
+	"darkbot/app/settings/utils"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -26,6 +28,7 @@ type Forumer struct {
 	cache map[ThreadCacheKey]*forum_types.Post
 	// Keeping track as list, to realize which ones are old ones to delete
 	cache_keys []ThreadCacheKey
+	cache_mu   sync.Mutex
 }
 
 type ThreadCacheKey string
@@ -73,6 +76,9 @@ func (v *Forumer) GetPost(thread *forum_types.LatestThread, new_post_callback fu
 		post, err = v.post_requester.GetDetailedPost(thread)
 		logus.CheckError(err, "failed get detailed post for thread=", logus.Thread(thread))
 		new_post_callback(post)
+
+		v.cache_mu.Lock()
+		defer v.cache_mu.Unlock()
 		v.cache[thread_key] = post
 		v.cache_keys = append(v.cache_keys, thread_key)
 	}
@@ -208,10 +214,48 @@ func (v *Forumer) update() {
 	}
 }
 
+func (v *Forumer) RetryMsgs() {
+	v.cache_mu.Lock()
+	var copied_keys []ThreadCacheKey
+	copied_keys = append(copied_keys, v.cache_keys...)
+	utils.ReverseSlice(copied_keys)
+	v.cache_mu.Unlock()
+
+	for _, cache_key := range copied_keys {
+		v.cache_mu.Lock()
+		old_post, ok := v.cache[cache_key]
+		v.cache_mu.Unlock()
+
+		if !ok {
+			continue
+		}
+
+		channelIDs, _ := v.Channels.List()
+		for _, channel := range channelIDs {
+			msgs, err := v.Discorder.GetLatestMessages(channel)
+			if logus.CheckError(err, "failed to get discord latest msgs") {
+				continue
+			}
+			v.TrySendMsg(channel, old_post, msgs)
+		}
+
+		time.Sleep(time.Second * 5)
+	}
+}
+
 func (v *Forumer) Run() {
+	delay := time.Second * 10
+	go func() {
+		for {
+			logus.Debug("retrying to send msgs")
+			v.RetryMsgs()
+			time.Sleep(delay)
+		}
+	}()
+
 	for {
 		logus.Debug("trying new forumer cycle")
 		v.update()
-		time.Sleep(time.Second * 10)
+		time.Sleep(delay)
 	}
 }
