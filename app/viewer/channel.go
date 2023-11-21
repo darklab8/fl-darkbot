@@ -34,7 +34,7 @@ func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
 func (v *ChannelView) Discover() error {
-	logus.Info("viewer.Init.channelID=", logus.ChannelID(v.ChannelID))
+	logus.Debug("viewer.Init.channelID=", logus.ChannelID(v.ChannelID))
 	msgs, err := v.api.Discorder.GetLatestMessages(v.ChannelID)
 	if logus.CheckWarn(err, "unable to grab latst msg", logus.ChannelID(v.ChannelID)) {
 		return err

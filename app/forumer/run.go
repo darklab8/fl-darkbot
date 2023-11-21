@@ -70,26 +70,33 @@ func (v *Forumer) GetPost(thread *forum_types.LatestThread, new_post_callback fu
 	var err error
 	thread_key := NewThreadCacheKey(thread)
 
-	post, ok := v.cache[thread_key]
+	var (
+		post *forum_types.Post
+		ok   bool
+	)
+	v.WithCacheLock(func() {
+		post, ok = v.cache[thread_key]
+	})
 	if !ok {
 		logus.Debug("cache is not found. requesting new post for thread", logus.Thread(thread))
 		post, err = v.post_requester.GetDetailedPost(thread)
 		logus.CheckError(err, "failed get detailed post for thread=", logus.Thread(thread))
 		new_post_callback(post)
 
-		v.cache_mu.Lock()
-		defer v.cache_mu.Unlock()
-		v.cache[thread_key] = post
-		v.cache_keys = append(v.cache_keys, thread_key)
+		v.WithCacheLock(func() {
+			v.cache[thread_key] = post
+			v.cache_keys = append(v.cache_keys, thread_key)
+		})
 	}
 
-	if len(v.cache_keys) > 100 {
-		key_to_delete := v.cache_keys[0]
-		logus.Debug("deleting old cached key_to_delete=" + string(key_to_delete))
-		v.cache_keys = append(v.cache_keys[1:])
-		delete(v.cache, key_to_delete)
-	}
-
+	v.WithCacheLock(func() {
+		if len(v.cache_keys) > 50 {
+			key_to_delete := v.cache_keys[0]
+			logus.Debug("deleting old cached key_to_delete=" + string(key_to_delete))
+			v.cache_keys = append(v.cache_keys[1:])
+			delete(v.cache, key_to_delete)
+		}
+	})
 	return post
 }
 
@@ -214,37 +221,50 @@ func (v *Forumer) update() {
 	}
 }
 
-func (v *Forumer) RetryMsgs() {
+func (v *Forumer) WithCacheLock(callback func()) {
 	v.cache_mu.Lock()
+	defer v.cache_mu.Unlock()
+
+	callback()
+}
+
+func (v *Forumer) RetryMsgs() {
+
 	var copied_keys []ThreadCacheKey
-	copied_keys = append(copied_keys, v.cache_keys...)
-	utils.ReverseSlice(copied_keys)
-	v.cache_mu.Unlock()
+	v.WithCacheLock(func() {
+		copied_keys = append(copied_keys, v.cache_keys...)
+		utils.ReverseSlice(copied_keys)
+	})
 
-	for _, cache_key := range copied_keys {
-		v.cache_mu.Lock()
-		old_post, ok := v.cache[cache_key]
-		v.cache_mu.Unlock()
-
-		if !ok {
+	channelIDs, _ := v.Channels.List()
+	for _, channel := range channelIDs {
+		msgs, err := v.Discorder.GetLatestMessages(channel)
+		if logus.CheckError(err, "failed to get discord latest msgs") {
 			continue
 		}
 
-		channelIDs, _ := v.Channels.List()
-		for _, channel := range channelIDs {
-			msgs, err := v.Discorder.GetLatestMessages(channel)
-			if logus.CheckError(err, "failed to get discord latest msgs") {
+		for _, cache_key := range copied_keys {
+			var (
+				old_post *forum_types.Post
+				ok       bool
+			)
+			v.WithCacheLock(func() {
+				old_post, ok = v.cache[cache_key]
+			})
+
+			if !ok {
 				continue
 			}
 			v.TrySendMsg(channel, old_post, msgs)
 		}
 
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 3)
 	}
+
 }
 
 func (v *Forumer) Run() {
-	delay := time.Second * 10
+	delay := time.Second * 60
 	go func() {
 		for {
 			logus.Debug("retrying to send msgs")

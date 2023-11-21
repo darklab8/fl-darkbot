@@ -37,7 +37,7 @@ func (b *Records[T]) GetLatestRecord() (T, error) {
 		var obj T
 		return obj, utils.ErrorNotFound{}
 	}
-	logus.Info("records.GetLatestRecord", logus.Records(b.records))
+	logus.Debug("records.GetLatestRecord", logus.Records(b.records))
 
 	return b.records[len(b.records)-1], nil
 }
