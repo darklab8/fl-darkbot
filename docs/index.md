@@ -9,29 +9,6 @@
 User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track.
 Darkbot repeatedly updates information to discord channel
 
-# Features
-
-- Adding player bases for tracking in discord channel
-
-# Project status
-
-- in active development until at least all planned features are added from the list "Comin soon" and "For later"
-- May have some issues which will be resolved as soon as possible
-- May went through database wipes during deployments of new releases. Announcement about new releases will be made into Discord channel where it joined and here.
-# Future plans: Comming Soon
-
-- Adding players for tracking based on tag in nickname or star systems / regions to track
-- Adding configurable alert triggers to base and player tracking
-
-# Future plans: For later
-
-- Adding forum post for tracking
-
-# Future plans: For more later
-
-- Adding resource tracking at player bases
-- Adding some useful help scripts to calculate analytics
-
 # How to get started
 
 - invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
@@ -46,11 +23,31 @@ Darkbot repeatedly updates information to discord channel
 
 - remove tag by `. base remove Research Station` or by `. base clear`
 
+# Features
+
+- Adding player bases for tracking in discord channel
+- Adding players for tracking based on tag in nickname or star systems / regions to track
+- Adding configurable alert triggers to base, player of forum tracking
+- Adding forum post for tracking
+
+# Project status
+
+- Finished its core development of features
+    - Still processes minor feature requests to implement
+- May have some issues which will be resolved as soon as possible
+- Announcement about new releases will be made into Discord channel where it joined and here.
+
+# Possible future plans
+
+- Adding resource tracking at player bases (blocked)
+  - Requires API access, which is lacked for implementation
+- Adding some useful help scripts to calculate analytics
+
 # Acknowledgements
 
 - Freelancer Discovery API provided by [Alex](https://github.com/dsyalex) as a way to deliver info from Flhook to the bot
-- Pobbot originally made by dr.lameos sparkled this project
-
+- [Pobbot](https://github.com/dr-lameos/Pobbot) originally made by dr.lameos sparkled this project
+- Forum tracking is inspired by Biqqles project [forumlancer](https://github.com/biqqles/forumlancer)
 
 # Contacts
 
