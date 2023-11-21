@@ -108,10 +108,11 @@ func (v *Forumer) update() {
 				logus.CheckDebug(err, "failed to get ignore tags")
 
 				do_we_show_this_post := false
+				var matched_tags []string
 				for _, watch_tag := range watch_tags {
 					if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) {
 						do_we_show_this_post = true
-						break
+						matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
 					}
 				}
 
@@ -146,16 +147,20 @@ func (v *Forumer) update() {
 					duplication_checker, channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
 
 						embed := &discordgo.MessageEmbed{}
-						embed.Title = `✉️  You've got mail`
+						embed.Title = string(new_post.ThreadFullName)
+						embed.URL = string(new_post.PostPermamentLink)
 
 						// embed.Timestamp = string()
 						var content strings.Builder
-						content.WriteString(fmt.Sprintf("%s\n", pingMessage))
-						content.WriteString(fmt.Sprintf("New post in [%s](<%s>)\n", new_post.ThreadFullName, new_post.PostPermamentLink))
-
+						content.WriteString(fmt.Sprintf("%s, you've got mail!\n", pingMessage))
 						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 							Name:   "Topic started by",
 							Value:  fmt.Sprintf("[%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink),
+							Inline: true,
+						})
+						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+							Name:   "Matched tags",
+							Value:  strings.Join(matched_tags, ", "),
 							Inline: true,
 						})
 						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
