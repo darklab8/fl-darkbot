@@ -27,8 +27,8 @@ module "darkbot" {
   configurator_dbname = "staging"
   consoler_prefix     = ","
   secrets             = local.secrets
-  tag_version         = "v1.0.2"
-  debug               = true
+  tag_version         = "v1.1"
+  debug               = false
 }
 
 # # Create a docker image resource
