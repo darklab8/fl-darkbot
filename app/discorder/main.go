@@ -51,6 +51,7 @@ type DiscordMessage struct {
 	ID        types.DiscordMessageID
 	Content   string
 	Timestamp time.Time
+	Embeds    []*discordgo.MessageEmbed
 }
 
 func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]DiscordMessage, error) {
@@ -67,6 +68,7 @@ func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]Discor
 			ID:        types.DiscordMessageID(msg.ID),
 			Content:   msg.Content,
 			Timestamp: msg.Timestamp,
+			Embeds:    msg.Embeds,
 		})
 	}
 
@@ -119,37 +121,47 @@ func (d Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOw
 }
 
 type deduplicator struct {
-	repeatCheckers []func(msgs []DiscordMessage) bool
+	dupCheckers []func(msgs []DiscordMessage) bool
 }
 
-func NewDeduplicator(checkers ...func(msgs []DiscordMessage) bool) *deduplicator {
+type DuplicatedError struct {
+}
+
+func (d DuplicatedError) Error() string { return "This msg is duplicated" }
+
+func NewDeduplicator(isDuplicaters ...func(msgs []DiscordMessage) bool) *deduplicator {
 	d := &deduplicator{
-		repeatCheckers: checkers,
+		dupCheckers: isDuplicaters,
 	}
 	return d
 }
 
 func (d *deduplicator) isDuplicated(msgs []DiscordMessage) bool {
-	for _, checker := range d.repeatCheckers {
-		if checker(msgs) {
+	for _, isDup := range d.dupCheckers {
+		if isDup(msgs) {
 			return true
 		}
 	}
 	return false
 }
 
-func (dg Discorder) SendDeduplicatedMsg(deduplicator *deduplicator, msg string, channel types.DiscordChannelID) {
-	logus.Info("sent_message= " + msg)
-	msgs, err := dg.GetLatestMessages(channel)
+func (d Discorder) SendDeduplicatedMsg(
+	deduplicator *deduplicator,
+	channel types.DiscordChannelID,
+	send_callback func(channel types.DiscordChannelID, dg *discordgo.Session) error,
+) error {
+	msgs, err := d.GetLatestMessages(channel)
 
 	if logus.CheckError(err, "failed to get discord latest msgs") {
-		return
+		return err
 	}
 
 	if deduplicator.isDuplicated(msgs) {
-		logus.Debug("not sending duplicated", logus.ChannelID(channel), logus.DiscordMessage(msg))
-		return
+		logus.Debug("not sending duplicated", logus.ChannelID(channel))
+		return DuplicatedError{}
 	}
 
-	dg.SengMessage(channel, msg)
+	err = send_callback(channel, d.dg)
+	logus.CheckWarn(err, "failed sending message in discorder", logus.ChannelID(channel))
+	return err
 }

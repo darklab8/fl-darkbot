@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetPosts(t *testing.T) {
+func FixtureMockedThreadsRequester() func(mt MethodType, u forum_types.Url) (*QueryResult, error) {
 	thread_post_content_filepath := filepath.Join(utils.GetCurrrentFolder(), "test_data", "latest_threads.html")
 	if _, err := os.Stat(thread_post_content_filepath); err != nil {
 		query, err := NewQuery("GET", ThreadPageURL)
@@ -26,8 +26,11 @@ func TestGetPosts(t *testing.T) {
 			ResponseFullUrl:  `https://discoverygc.com/forums/portal.php`,
 		}, nil
 	}
-
-	threads, err := NewLatestThreads(WithMockedPageRequester(mocked_requester)).GetLatestThreads()
+	return mocked_requester
+}
+func TestGetPosts(t *testing.T) {
+	mocked_threads_requester := FixtureMockedThreadsRequester()
+	threads, err := NewLatestThreads(WithMockedPageRequester(mocked_threads_requester)).GetLatestThreads()
 	assert.Nil(t, err, "expected nil as error")
 	assert.Greater(t, len(threads), 0)
 }

@@ -22,9 +22,7 @@ func FixtureLatestThread() *forum_types.LatestThread {
 	}
 }
 
-func TestGetDetailedPost(t *testing.T) {
-	thread := FixtureLatestThread()
-
+func FixtureDetailedRequester() func(mt MethodType, u forum_types.Url) (*QueryResult, error) {
 	detailed_post_content_filepath := filepath.Join(utils.GetCurrrentFolder(), "test_data", "detailed_post_content.html")
 	if _, err := os.Stat(detailed_post_content_filepath); err != nil {
 		query, err := NewQuery("GET", "https://discoverygc.com/forums/showthread.php?tid=200175&action=lastpost")
@@ -39,6 +37,13 @@ func TestGetDetailedPost(t *testing.T) {
 			ResponseFullUrl:  `https://discoverygc.com/forums/showthread.php?tid=200175&pid=2315295#pid2315295`,
 		}, nil
 	}
+	return mocked_requester
+}
+
+func TestGetDetailedPost(t *testing.T) {
+	thread := FixtureLatestThread()
+
+	mocked_requester := FixtureDetailedRequester()
 	detailed_post, err := NewDetailedPostRequester(WithMockedRequester(mocked_requester)).GetDetailedPost(thread)
 	_ = detailed_post
 	fmt.Println("err=", err)

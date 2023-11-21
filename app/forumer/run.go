@@ -7,14 +7,20 @@ import (
 	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
+	"fmt"
 	"strings"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
 )
 
+type iThreadsRequester interface {
+	GetLatestThreads(opts ...threadPageParam) ([]*forum_types.LatestThread, error)
+}
 type Forumer struct {
 	Discorder discorder.Discorder
 	*configurator.Configurators
-	threads_requester *ThreadsRequester
+	threads_requester iThreadsRequester
 	post_requester    *PostRequester
 
 	cache map[ThreadCacheKey]*forum_types.Post
@@ -33,11 +39,11 @@ func NewThreadCacheKey(thread *forum_types.LatestThread) ThreadCacheKey {
 type forumerParam func(forum *Forumer)
 
 func WithThreadsRequester(
-	threads_page_requester *ThreadsRequester) forumerParam {
+	threads_page_requester iThreadsRequester) forumerParam {
 	return func(forum *Forumer) { forum.threads_requester = threads_page_requester }
 }
-func WithDetailedPostRequest(threads_page_requester *ThreadsRequester) forumerParam {
-	return func(forum *Forumer) { forum.threads_requester = threads_page_requester }
+func WithDetailedPostRequest(post_requester *PostRequester) forumerParam {
+	return func(forum *Forumer) { forum.post_requester = post_requester }
 }
 
 func NewForumer(dbpath types.Dbpath, opts ...forumerParam) *Forumer {
@@ -47,6 +53,7 @@ func NewForumer(dbpath types.Dbpath, opts ...forumerParam) *Forumer {
 		Configurators:     configurator.NewConfigugurators(dbpath),
 		threads_requester: NewLatestThreads(),
 		post_requester:    NewDetailedPostRequester(),
+		cache:             make(map[ThreadCacheKey]*forum_types.Post),
 	}
 
 	for _, opt := range opts {
@@ -90,9 +97,7 @@ func (v *Forumer) update() {
 	}
 
 	for _, thread := range threads {
-
 		v.GetPost(thread, func(new_post *forum_types.Post) {
-			// Insert code to push post to channels
 			for _, channel := range channelIDs {
 				watch_tags, err := v.Forum.Watch.TagsList(channel)
 				if logus.CheckDebug(err, "failed to get watch tags") {
@@ -121,18 +126,36 @@ func (v *Forumer) update() {
 					continue
 				}
 
-				// Check against deduplication
-				v.Discorder.SendDeduplicatedMsg(
-					discorder.NewDeduplicator(),
-					new_post.Render(),
-					channel,
-				)
-			}
+				duplication_checker := discorder.NewDeduplicator(func(msgs []discorder.DiscordMessage) bool {
+					for _, msg := range msgs {
+						content := msg.Content
+						for _, embed := range msg.Embeds {
+							content += embed.Description
+						}
 
+						if strings.Contains(content, string(new_post.PostID)) &&
+							strings.Contains(content, string(new_post.ThreadID)) {
+							return true
+						}
+					}
+					return false
+				})
+				v.Discorder.SendDeduplicatedMsg(
+					duplication_checker, channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
+						dg_msg := &discordgo.MessageSend{Embed: &discordgo.MessageEmbed{}}
+						dg_msg.Embed.Title = `✉️  You've got mail`
+						dg_msg.Embed.Timestamp = string(new_post.LastUpdated)
+
+						var content strings.Builder
+						content.WriteString(fmt.Sprintf("New post in [%s](<%s>)\n", new_post.ThreadFullName, new_post.PostPermamentLink))
+						content.WriteString(fmt.Sprintf("Topic started by [%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink))
+						content.WriteString(fmt.Sprintf("```%s```", new_post.PostContent[:600]))
+						dg_msg.Embed.Description = content.String()
+						return nil
+					})
+			}
 		})
 	}
-
-	_ = channelIDs
 }
 
 func (v *Forumer) Run() {

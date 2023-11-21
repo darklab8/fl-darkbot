@@ -12,8 +12,3 @@ type Post struct {
 	PostPermamentLink PostPermamentLink
 	ThreadFullName    ThreadFullName
 }
-
-func (p Post) Render() string {
-	// TODO Write your code
-	return ""
-}
