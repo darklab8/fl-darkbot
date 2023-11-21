@@ -29,6 +29,14 @@ func TestForumerSending(t *testing.T) {
 
 	mocked_post_requester := FixtureDetailedRequester()
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
+		dev_env_channel := types.DiscordChannelID("1079189823098724433")
+		cg := configurator.NewConfiguratorForumWatch(configurator.NewConfigurator(dbpath))
+		cg.TagsAdd(dev_env_channel, []types.Tag{""}...)
+
+		// for dev env
+		// cg_channel := configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath))
+		// cg_channel.Add(dev_env_channel)
+
 		forum := NewForumer(
 			dbpath,
 			WithThreadsRequester(newMockedThreadsQuery()),

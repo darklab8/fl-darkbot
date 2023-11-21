@@ -54,47 +54,23 @@ type DiscordMessage struct {
 	Embeds    []*discordgo.MessageEmbed
 }
 
-func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]DiscordMessage, error) {
+func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*DiscordMessage, error) {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(string(channelID), messagesLimitToGrab, "", "", "")
 	if logus.CheckWarn(err, "Unable to get messages from channelId=", logus.ChannelID(channelID)) {
-		return []DiscordMessage{}, err
+		return []*DiscordMessage{}, err
 	}
 
-	result := []DiscordMessage{}
+	result := []*DiscordMessage{}
 
 	for _, msg := range messages {
-		result = append(result, DiscordMessage{
+		result = append(result, &DiscordMessage{
 			ID:        types.DiscordMessageID(msg.ID),
 			Content:   msg.Content,
 			Timestamp: msg.Timestamp,
 			Embeds:    msg.Embeds,
 		})
 	}
-
-	// Just to be sure to have it deleted
-	for index, _ := range messages {
-		for index2, _ := range messages[index].Attachments {
-			messages[index].Attachments[index2] = nil
-		}
-		for index2, _ := range messages[index].Embeds {
-			messages[index].Embeds[index2] = nil
-		}
-		for index2, _ := range messages[index].MentionChannels {
-			messages[index].MentionChannels[index2] = nil
-		}
-		for index2, _ := range messages[index].Mentions {
-			messages[index].Mentions[index2] = nil
-		}
-		for index2, _ := range messages[index].Reactions {
-			messages[index].Reactions[index2] = nil
-		}
-		for index2, _ := range messages[index].StickerItems {
-			messages[index].StickerItems[index2] = nil
-		}
-		messages[index] = nil
-	}
-	messages = nil
 
 	return result, nil
 }
@@ -121,7 +97,7 @@ func (d Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOw
 }
 
 type deduplicator struct {
-	dupCheckers []func(msgs []DiscordMessage) bool
+	dupCheckers []func(msgs []*DiscordMessage) bool
 }
 
 type DuplicatedError struct {
@@ -129,14 +105,14 @@ type DuplicatedError struct {
 
 func (d DuplicatedError) Error() string { return "This msg is duplicated" }
 
-func NewDeduplicator(isDuplicaters ...func(msgs []DiscordMessage) bool) *deduplicator {
+func NewDeduplicator(isDuplicaters ...func(msgs []*DiscordMessage) bool) *deduplicator {
 	d := &deduplicator{
 		dupCheckers: isDuplicaters,
 	}
 	return d
 }
 
-func (d *deduplicator) isDuplicated(msgs []DiscordMessage) bool {
+func (d *deduplicator) isDuplicated(msgs []*DiscordMessage) bool {
 	for _, isDup := range d.dupCheckers {
 		if isDup(msgs) {
 			return true

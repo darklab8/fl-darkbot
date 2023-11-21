@@ -14,7 +14,7 @@ import (
 )
 
 type ChannelView struct {
-	Msgs      []discorder.DiscordMessage
+	Msgs      []*discorder.DiscordMessage
 	api       *apis.API
 	ChannelID types.DiscordChannelID
 	views     []views.View

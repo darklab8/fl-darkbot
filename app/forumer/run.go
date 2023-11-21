@@ -104,7 +104,7 @@ func (v *Forumer) update() {
 					continue
 				}
 
-				ignore_tags, err := v.Forum.Watch.TagsList(channel)
+				ignore_tags, err := v.Forum.Ignore.TagsList(channel)
 				logus.CheckDebug(err, "failed to get ignore tags")
 
 				do_we_show_this_post := false
@@ -128,7 +128,7 @@ func (v *Forumer) update() {
 
 				pingMessage := configurator.GetPingingMessage(channel, v.Configurators, v.Discorder)
 
-				duplication_checker := discorder.NewDeduplicator(func(msgs []discorder.DiscordMessage) bool {
+				duplication_checker := discorder.NewDeduplicator(func(msgs []*discorder.DiscordMessage) bool {
 					for _, msg := range msgs {
 						content := msg.Content
 						for _, embed := range msg.Embeds {
@@ -145,18 +145,32 @@ func (v *Forumer) update() {
 				v.Discorder.SendDeduplicatedMsg(
 					duplication_checker, channel, func(channel types.DiscordChannelID, dg *discordgo.Session) error {
 
-						dg_msg := &discordgo.MessageSend{
-							Content: string(pingMessage),
-							Embed:   &discordgo.MessageEmbed{},
-						}
-						dg_msg.Embed.Title = `✉️  You've got mail`
-						dg_msg.Embed.Timestamp = string(new_post.LastUpdated)
+						embed := &discordgo.MessageEmbed{}
+						embed.Title = `✉️  You've got mail`
 
+						// embed.Timestamp = string()
 						var content strings.Builder
+						content.WriteString(fmt.Sprintf("%s\n", pingMessage))
 						content.WriteString(fmt.Sprintf("New post in [%s](<%s>)\n", new_post.ThreadFullName, new_post.PostPermamentLink))
-						content.WriteString(fmt.Sprintf("Topic started by [%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink))
-						content.WriteString(fmt.Sprintf("```%s```", new_post.PostContent[:600]))
-						dg_msg.Embed.Description = content.String()
+
+						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+							Name:   "Topic started by",
+							Value:  fmt.Sprintf("[%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink),
+							Inline: true,
+						})
+						embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+							Name:   "Timestamp",
+							Value:  string(new_post.LastUpdated),
+							Inline: true,
+						})
+						content.WriteString(fmt.Sprintf("```%s```\n", new_post.PostContent[:600]))
+						embed.Description = content.String()
+
+						purple_color := 10181046
+						embed.Color = purple_color
+						msg, err := dg.ChannelMessageSendEmbed(string(channel), embed)
+						logus.CheckError(err, "failed sending msg")
+						_ = msg
 						return nil
 					})
 			}
