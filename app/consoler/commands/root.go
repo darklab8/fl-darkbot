@@ -55,6 +55,30 @@ func CreateConsoler(
 		configurator.NewConfiguratorChannel(configur),
 	)
 
+	forumGroup := root.GetChild(
+		root.CurrentCmd,
+		cmdgroup.Command("forum"),
+		cmdgroup.ShortDesc("forum commands"),
+	)
+	NewTagCommands(
+		forumGroup.GetChild(
+			forumGroup.CurrentCmd,
+			cmdgroup.Command("watch"),
+			cmdgroup.ShortDesc("Watch commands"),
+		),
+		configurator.NewConfiguratorForumWatch(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+	NewTagCommands(
+		forumGroup.GetChild(
+			forumGroup.CurrentCmd,
+			cmdgroup.Command("ignore"),
+			cmdgroup.ShortDesc("Watch commands"),
+		),
+		configurator.NewConfiguratorForumIgnore(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+
 	playerGroup := root.GetChild(
 		root.CurrentCmd,
 		cmdgroup.Command("player"),
