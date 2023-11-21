@@ -170,8 +170,7 @@ func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_typ
 			// embed.Timestamp = string()
 			var content strings.Builder
 			content.WriteString(
-				fmt.Sprintf("%s, received email from %s\n",
-					pingMessage,
+				fmt.Sprintf("received email from %s\n",
 					fmt.Sprintf("[%s](<%s>)", new_post.PostAuthorName, new_post.PostAuthorLink)))
 			embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
 				Name:   "Matched tags",
@@ -195,7 +194,7 @@ func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_typ
 
 			purple_color := 10181046
 			embed.Color = purple_color
-			_, err := dg.ChannelMessageSendEmbed(string(channel), embed)
+			_, err := dg.ChannelMessageSendComplex(string(channel), &discordgo.MessageSend{Embeds: []*discordgo.MessageEmbed{embed}, Content: string(pingMessage)})
 			logus.CheckError(err, "failed sending msg")
 			return nil
 		})
