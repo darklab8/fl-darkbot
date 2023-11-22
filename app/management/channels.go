@@ -5,35 +5,41 @@ package management
 
 import (
 	"darkbot/app/configurator"
-	"darkbot/app/discorder"
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
-	"darkbot/app/viewer/views"
-	"strings"
+	"darkbot/app/settings/types"
+	"fmt"
 
 	"github.com/spf13/cobra"
 )
 
-// migrateCmd represents the migrate command
-var amounceCmd = &cobra.Command{
-	Use:   "anounce",
-	Short: "Anounce something",
+var channelDeleteCMD = &cobra.Command{
+	Use:   "channel_delete",
+	Short: "Delete channelID",
 	Run: func(cmd *cobra.Command, args []string) {
-		logus.Info("Anounce is called with args=", logus.Args(args))
-		dg := discorder.NewClient()
-
+		logus.Info("Cmd is called with args=", logus.Args(args))
 		channels := configurator.NewConfiguratorChannel(configurator.NewConfigurator(settings.Dbpath))
-		channelIDs, _ := channels.List()
 
-		for _, channeID := range channelIDs {
-			dg.SengMessage(channeID, views.MsgViewHeader+": "+strings.Join(args, " "))
+		for _, channeID := range args {
+			channels.Remove(types.DiscordChannelID(channeID))
 		}
+	},
+}
+var channelListCMD = &cobra.Command{
+	Use:   "channel_list",
+	Short: "List channelIDs",
+	Run: func(cmd *cobra.Command, args []string) {
+		logus.Info("Cmd is called with args=", logus.Args(args))
+		channels := configurator.NewConfiguratorChannel(configurator.NewConfigurator(settings.Dbpath))
 
+		channelIDs, _ := channels.List()
+		fmt.Println("channelIDs=", channelIDs)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(amounceCmd)
+	rootCmd.AddCommand(channelDeleteCMD)
+	rootCmd.AddCommand(channelListCMD)
 
 	// Here you will define your flags and configuration settings.
 
