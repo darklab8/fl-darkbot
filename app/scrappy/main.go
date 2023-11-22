@@ -44,17 +44,15 @@ func (s *ScrappyStorage) GetBaseAttackStorage() *baseattack.BaseAttackStorage {
 	return s.baseAttackStorage
 }
 
-var Storage *ScrappyStorage
-
-func init() {
-	logus.Info("initialized scrappy")
-	Storage = NewScrapyStorage(base.NewBaseApi(), player.NewPlayerAPI(), baseattack.NewBaseAttackAPI())
+func NewScrappyWithApis() *ScrappyStorage {
+	return NewScrapyStorage(base.NewBaseApi(), player.NewPlayerAPI(), baseattack.NewBaseAttackAPI())
 }
 
-func Run() {
+func (s *ScrappyStorage) Run() {
+	logus.Info("initialized scrappy")
 	logus.Info("starting scrappy infinity update loop")
 	for {
-		Storage.Update()
+		s.Update()
 		time.Sleep(time.Duration(settings.ScrappyLoopDelay) * time.Second)
 	}
 	logus.Info("gracefully shutdown scrappy infinity loop")

@@ -28,11 +28,11 @@ func (api *API) SetChannelID(ChannelID types.DiscordChannelID) *API {
 	return api
 }
 
-func NewAPI(ChannelID types.DiscordChannelID, dbpath types.Dbpath, opts ...apiParam) *API {
+func NewAPI(ChannelID types.DiscordChannelID, dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage, opts ...apiParam) *API {
 	api := &API{
 		ChannelID:     ChannelID,
 		Discorder:     discorder.NewClient(),
-		Scrappy:       scrappy.Storage,
+		Scrappy:       scrappy_storage,
 		Configurators: configurator.NewConfigugurators(dbpath),
 	}
 

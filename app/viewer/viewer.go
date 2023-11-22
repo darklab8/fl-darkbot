@@ -1,6 +1,7 @@
 package viewer
 
 import (
+	"darkbot/app/scrappy"
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
@@ -18,14 +19,22 @@ type Viewer struct {
 	api    *apis.API
 }
 
-func NewViewer(dbpath types.Dbpath) Viewer {
-	api := apis.NewAPI("", dbpath)
-	return Viewer{
+func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Viewer {
+	api := apis.NewAPI("", dbpath, scrappy_storage)
+	return &Viewer{
 		api: api,
 		delays: ViewerDelays{
 			betweenChannels: 1,
 			betweenLoops:    settings.ViewerLoopDelay,
 		},
+	}
+}
+
+func (v *Viewer) Run() {
+	logus.Info("Viewer is now running.")
+
+	for {
+		v.Update()
 	}
 }
 

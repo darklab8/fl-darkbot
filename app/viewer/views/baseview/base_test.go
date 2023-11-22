@@ -32,7 +32,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
 		scrapper.GetBaseStorage().Add(record)
 
-		api := apis.NewAPI(channelID, dbpath, apis.WithStorage(scrapper))
+		api := apis.NewAPI(channelID, dbpath, scrapper)
 
 		render := NewTemplateBase(api)
 		render.Render()
@@ -117,7 +117,7 @@ func TestBaseViewerRealData(t *testing.T) {
 			player.FixturePlayerAPIMock(),
 			baseattack.FixtureBaseAttackAPIMock(),
 		)
-		api := apis.NewAPI(channelID, dbpath, apis.WithStorage(scrapper))
+		api := apis.NewAPI(channelID, dbpath, scrapper)
 		scrapper.Update()
 		scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
 		scrapper.Update()
@@ -144,7 +144,7 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 		scrapper.Update()
 		logus.Debug("2.3")
 
-		api := apis.NewAPI(channelID, dbpath, apis.WithStorage(scrapper))
+		api := apis.NewAPI(channelID, dbpath, scrapper)
 
 		scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
 		scrapper.Update()
@@ -189,7 +189,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 
 		scrapper := scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), player.FixturePlayerAPIMock(), baseattack.NewMock("data_lp.json"))
 		scrapper.Update()
-		api := apis.NewAPI(channelID, dbpath, apis.WithStorage(scrapper))
+		api := apis.NewAPI(channelID, dbpath, scrapper)
 
 		assert.True(t, strings.Contains(string(scrapper.GetBaseAttackStorage().GetData()), "LP-7743"))
 

@@ -21,7 +21,7 @@ func TestPlayerEvent(t *testing.T) {
 
 		players := player.NewPlayerStorage(player.FixturePlayerAPIMock())
 		storage := scrappy.FixtureMockedStorage(scrappy.WithPlayerStorage(players))
-		api := apis.NewAPI(channelID, dbpath, apis.WithStorage(storage))
+		api := apis.NewAPI(channelID, dbpath, storage)
 		record := records.NewStampedObjects[player.Player]()
 		record.Add(player.Player{Name: "player1", System: "system1", Region: "region1"})
 		record.Add(player.Player{Name: "player2", System: "system2", Region: "region2"})

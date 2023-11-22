@@ -24,7 +24,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 		players := player.NewPlayerStorage(player.FixturePlayerAPIMock())
 		storage := scrappy.FixtureMockedStorage(scrappy.WithPlayerStorage(players))
-		api := apis.NewAPI(channelID, dbpath, apis.WithStorage(storage))
+		api := apis.NewAPI(channelID, dbpath, storage)
 		record := records.NewStampedObjects[player.Player]()
 		record.Add(player.Player{Name: "player1", System: "system1", Region: "region1"})
 		record.Add(player.Player{Name: "player2", System: "system2", Region: "region2"})
@@ -76,7 +76,7 @@ func TestPlayerViewerRealData(t *testing.T) {
 		configur := configurator.NewConfigurator(dbpath)
 		configurator.NewConfiguratorPlayerFriend(configur).TagsAdd(channelID, []types.Tag{"RM"}...)
 
-		playerView := NewTemplatePlayers(apis.NewAPI(channelID, dbpath, apis.WithStorage(storage)))
+		playerView := NewTemplatePlayers(apis.NewAPI(channelID, dbpath, storage))
 		playerView.Render()
 
 		assert.NotZero(t, playerView.friends.mainTable.ViewRecords)

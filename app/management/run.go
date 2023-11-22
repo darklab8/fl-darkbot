@@ -32,15 +32,17 @@ var runCmd = &cobra.Command{
 		configurator.NewConfigurator(settings.Dbpath).AutoMigrateSchema()
 		forumenacer := forumer.NewForumer(settings.Dbpath)
 
+		var scrappy_storage *scrappy.ScrappyStorage
 		if settings.Config.DevEnvMockApi == "true" {
-			scrappy.Storage = scrappy.FixtureMockedStorage()
-			scrappy.Storage.Update()
+			scrappy_storage = scrappy.FixtureMockedStorage()
+		} else {
+			scrappy_storage = scrappy.NewScrappyWithApis()
 		}
 
-		scrappy.Storage.Update()
-		go scrappy.Run()
+		scrappy_storage.Update()
+		go scrappy_storage.Run()
 		go listener.Run()
-		go viewer.Run()
+		go viewer.NewViewer(settings.Dbpath, scrappy_storage).Run()
 		go forumenacer.Run()
 
 		// profiler

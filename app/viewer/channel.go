@@ -20,7 +20,6 @@ type ChannelView struct {
 	views     []views.View
 }
 
-// apis.NewAPI(view.ChannelID, dbpath)
 func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView {
 	view := ChannelView{api: api}
 	view.views = append(view.views, baseview.NewTemplateBase(api))
