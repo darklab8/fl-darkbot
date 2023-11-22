@@ -89,6 +89,18 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 		post_content = strings.ReplaceAll(post_content, "\n\n", "\n")
 	}
 
+	navigation := doc.Find("div", "class", "navigation")
+	navigation_childs := navigation.Children()
+
+	subforums := []forum_types.Subforum{}
+	for _, may_be_subforum := range navigation_childs {
+		if may_be_subforum.NodeValue != "a" {
+			continue
+		}
+
+		subforums = append(subforums, forum_types.Subforum(may_be_subforum.Text()))
+	}
+
 	return &forum_types.Post{
 		LatestThread:         thread,
 		PostID:               post_id,
@@ -96,5 +108,6 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 		PostPermamentLink:    forum_types.PostPermamentLink(query.ResponseFullUrl),
 		ThreadFullName:       forum_types.ThreadFullName(thread_name),
 		PostAuthorAvatarLink: forum_types.Url(author_avatar_url),
+		Subforums:            subforums[1:], // first subforum is always root
 	}, nil
 }

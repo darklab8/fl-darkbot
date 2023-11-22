@@ -4,6 +4,7 @@ type PostID string
 type PostContent string
 type PostPermamentLink Url
 type ThreadFullName string
+type Subforum string
 type Post struct {
 	*LatestThread
 	PostID               PostID
@@ -11,4 +12,5 @@ type Post struct {
 	PostPermamentLink    PostPermamentLink
 	ThreadFullName       ThreadFullName
 	PostAuthorAvatarLink Url
+	Subforums            []Subforum
 }

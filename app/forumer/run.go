@@ -101,18 +101,22 @@ func (v *Forumer) GetPost(thread *forum_types.LatestThread, new_post_callback fu
 }
 
 func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *forum_types.Post) (bool, []string) {
+	do_we_show_this_post := false
 	var matched_tags []string
 
-	watch_tags, err := v.Forum.Watch.TagsList(channel)
-	if logus.CheckDebug(err, "failed to get watch tags") {
-		return false, matched_tags
-	}
+	thread_watch_tags, err := v.Forum.Thread.Watch.TagsList(channel)
+	logus.CheckDebug(err, "failed to get watch tags")
 
-	ignore_tags, err := v.Forum.Ignore.TagsList(channel)
+	thread_ignore_tags, err := v.Forum.Thread.Ignore.TagsList(channel)
 	logus.CheckDebug(err, "failed to get ignore tags")
 
-	do_we_show_this_post := false
-	for _, watch_tag := range watch_tags {
+	subforum_watch_tags, err := v.Forum.Subforum.Watch.TagsList(channel)
+	logus.CheckDebug(err, "failed to get watch tags")
+
+	subforum_ignore_tags, err := v.Forum.Subforum.Ignore.TagsList(channel)
+	logus.CheckDebug(err, "failed to get ignore tags")
+
+	for _, watch_tag := range thread_watch_tags {
 		if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) ||
 			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(watch_tag))) {
 			do_we_show_this_post = true
@@ -120,17 +124,34 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 		}
 	}
 
-	for _, ignore_tag := range ignore_tags {
+	for _, watch_tag := range subforum_watch_tags {
+		for _, subforum := range new_post.Subforums {
+			if strings.Contains(string(subforum), string(watch_tag)) ||
+				strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(watch_tag))) {
+				do_we_show_this_post = true
+				matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
+			}
+		}
+
+	}
+
+	for _, ignore_tag := range thread_ignore_tags {
 		if strings.Contains(string(new_post.ThreadFullName), string(ignore_tag)) {
 			do_we_show_this_post = false
 			break
 		}
 	}
 
-	if !do_we_show_this_post {
-		return false, matched_tags
+	for _, ignore_tag := range subforum_ignore_tags {
+		for _, subforum := range new_post.Subforums {
+			if strings.Contains(string(subforum), string(ignore_tag)) {
+				do_we_show_this_post = false
+				break
+			}
+		}
 	}
-	return true, matched_tags
+
+	return do_we_show_this_post, matched_tags
 }
 
 func CreateDeDuplicator(new_post *forum_types.Post, msgs []*discorder.DiscordMessage) *discorder.Deduplicator {
@@ -181,6 +202,13 @@ func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_typ
 				Name:   "Timestamp",
 				Value:  string(new_post.LastUpdated),
 				Inline: true,
+			})
+
+			subforums := utils.CompL(new_post.Subforums, func(x forum_types.Subforum) string { return string(x) })
+			embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+				Name:   "Subforums",
+				Value:  strings.Join(subforums, " / "),
+				Inline: false,
 			})
 
 			var post_content string = string(new_post.PostContent)

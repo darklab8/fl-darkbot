@@ -52,5 +52,28 @@ func TestForumerSending(t *testing.T) {
 
 		forum.update()
 	})
+}
 
+func TestSubForumSending(t *testing.T) {
+
+	mocked_post_requester := FixtureDetailedRequester()
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
+		dev_env_channel := types.DiscordChannelID("1079189823098724433")
+		cg := configurator.NewConfiguratorSubForumWatch(configurator.NewConfigurator(dbpath))
+		cg.TagsAdd(dev_env_channel, []types.Tag{"Communication Channel"}...)
+
+		cg_channel := configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath))
+
+		if FixtureDevEnv() {
+			cg_channel.Add(dev_env_channel)
+		}
+
+		forum := NewForumer(
+			dbpath,
+			WithThreadsRequester(newMockedThreadsQuery()),
+			WithDetailedPostRequest(NewDetailedPostRequester(WithMockedRequester(mocked_post_requester))),
+		)
+
+		forum.update()
+	})
 }

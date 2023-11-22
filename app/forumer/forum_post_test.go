@@ -48,4 +48,5 @@ func TestGetDetailedPost(t *testing.T) {
 	_ = detailed_post
 	fmt.Println("err=", err)
 	assert.Nil(t, err, "expected error to be nil")
+	assert.Greater(t, len(detailed_post.Subforums), 0)
 }

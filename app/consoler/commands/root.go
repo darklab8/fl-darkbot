@@ -60,9 +60,14 @@ func CreateConsoler(
 		cmdgroup.Command("forum"),
 		cmdgroup.ShortDesc("forum commands"),
 	)
+	forumThreadGroup := forumGroup.GetChild(
+		forumGroup.CurrentCmd,
+		cmdgroup.Command("thread"),
+		cmdgroup.ShortDesc("track by thread name"),
+	)
 	NewTagCommands(
-		forumGroup.GetChild(
-			forumGroup.CurrentCmd,
+		forumThreadGroup.GetChild(
+			forumThreadGroup.CurrentCmd,
 			cmdgroup.Command("watch"),
 			cmdgroup.ShortDesc("Watch commands"),
 		),
@@ -70,12 +75,36 @@ func CreateConsoler(
 		configurator.NewConfiguratorChannel(configur),
 	)
 	NewTagCommands(
-		forumGroup.GetChild(
-			forumGroup.CurrentCmd,
+		forumThreadGroup.GetChild(
+			forumThreadGroup.CurrentCmd,
 			cmdgroup.Command("ignore"),
+			cmdgroup.ShortDesc("Ignore commands"),
+		),
+		configurator.NewConfiguratorForumWatch(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+
+	forumSubforumGroup := forumGroup.GetChild(
+		forumGroup.CurrentCmd,
+		cmdgroup.Command("subforum"),
+		cmdgroup.ShortDesc("track by subforum name"),
+	)
+	NewTagCommands(
+		forumSubforumGroup.GetChild(
+			forumSubforumGroup.CurrentCmd,
+			cmdgroup.Command("watch"),
 			cmdgroup.ShortDesc("Watch commands"),
 		),
-		configurator.NewConfiguratorForumIgnore(configur),
+		configurator.NewConfiguratorSubForumWatch(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+	NewTagCommands(
+		forumSubforumGroup.GetChild(
+			forumSubforumGroup.CurrentCmd,
+			cmdgroup.Command("ignore"),
+			cmdgroup.ShortDesc("Ignore commands"),
+		),
+		configurator.NewConfiguratorSubForumIgnore(configur),
 		configurator.NewConfiguratorChannel(configur),
 	)
 
