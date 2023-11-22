@@ -62,9 +62,42 @@ var channelListCMD = &cobra.Command{
 	},
 }
 
+var channelInfoCMD = &cobra.Command{
+	Use:   "channel_info",
+	Short: "channel info",
+	Run: func(cmd *cobra.Command, args []string) {
+		logus.Info("Cmd is called with args=", logus.Args(args))
+
+		dis := discorder.NewClient().GetDiscordSession()
+
+		channel_id := args[0]
+		channel, err := dis.Channel(channel_id)
+
+		if logus.CheckError(err, "failed to get channel", logus.ChannelID(types.DiscordChannelID(channel_id))) {
+			return
+		}
+
+		fmt.Println("channel=", channel)
+		fmt.Println("channel.OwnerID=", channel.OwnerID)
+
+		fmt.Println("channel.GuildID=", channel.GuildID)
+
+		guild, err := dis.Guild(channel.GuildID)
+
+		if logus.CheckError(err, "failed to get guild="+channel.GuildID, logus.ChannelID(types.DiscordChannelID(channel_id))) {
+			return
+		}
+
+		fmt.Println("guild=", guild)
+		fmt.Println("guild.Name=", guild.Name)
+		fmt.Println("guild.OwnerID=", guild.OwnerID)
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(channelDeleteCMD)
 	rootCmd.AddCommand(channelListCMD)
+	rootCmd.AddCommand(channelInfoCMD)
 
 	// Here you will define your flags and configuration settings.
 

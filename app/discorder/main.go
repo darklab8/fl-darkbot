@@ -20,6 +20,10 @@ type Discorder struct {
 	dg *discordgo.Session
 }
 
+func (d *Discorder) GetDiscordSession() *discordgo.Session {
+	return d.dg
+}
+
 func NewClient() *Discorder {
 	d := &Discorder{}
 	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
@@ -30,19 +34,19 @@ func NewClient() *Discorder {
 	return d
 }
 
-func (d Discorder) SengMessage(channelID types.DiscordChannelID, content string) error {
+func (d *Discorder) SengMessage(channelID types.DiscordChannelID, content string) error {
 	_, err := d.dg.ChannelMessageSend(string(channelID), content)
 	logus.CheckWarn(err, "failed sending message in discorder", logus.ChannelID(channelID))
 	return err
 }
 
-func (d Discorder) EditMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID, content string) error {
+func (d *Discorder) EditMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID, content string) error {
 	_, err := d.dg.ChannelMessageEdit(string(channelID), string(messageID), content)
 	logus.CheckWarn(err, "failed editing message in discorder", logus.ChannelID(channelID))
 	return err
 }
 
-func (d Discorder) DeleteMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID) {
+func (d *Discorder) DeleteMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID) {
 	err := d.dg.ChannelMessageDelete(string(channelID), string(messageID))
 	logus.CheckWarn(err, "failed deleting message in discorder", logus.ChannelID(channelID))
 }
@@ -54,7 +58,7 @@ type DiscordMessage struct {
 	Embeds    []*discordgo.MessageEmbed
 }
 
-func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*DiscordMessage, error) {
+func (d *Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*DiscordMessage, error) {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(string(channelID), messagesLimitToGrab, "", "", "")
 	if logus.CheckWarn(err, "Unable to get messages from channelId=", logus.ChannelID(channelID)) {
@@ -75,7 +79,7 @@ func (d Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*Disco
 	return result, nil
 }
 
-func (d Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOwnerID, error) {
+func (d *Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOwnerID, error) {
 	channel, err := d.dg.Channel(string(channelID))
 	if logus.CheckError(err, "discord is not connected") {
 		return types.DiscordOwnerID(""), err
@@ -121,7 +125,7 @@ func (d *Deduplicator) isDuplicated() bool {
 	return false
 }
 
-func (d Discorder) SendDeduplicatedMsg(
+func (d *Discorder) SendDeduplicatedMsg(
 	deduplicator *Deduplicator,
 	channel types.DiscordChannelID,
 	send_callback func(channel types.DiscordChannelID, dg *discordgo.Session) error,
