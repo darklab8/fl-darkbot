@@ -46,7 +46,7 @@ var channelListCMD = &cobra.Command{
 		var error_reason []error
 
 		for _, channel := range channelIDs {
-			_, err := dg.GetLatestMessages("838802002582175756")
+			_, err := dg.GetLatestMessages(channel)
 
 			if err == nil {
 				accessable_channels = append(accessable_channels, channel)
