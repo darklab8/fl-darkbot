@@ -4,8 +4,8 @@ type DebugDisableParallelism bool
 
 type WorkerID int
 
-type JobID int
+type TaskID int
 
-type JobStatusCode int
+type TaskStatusCode int
 
 type Seconds int

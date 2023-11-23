@@ -11,36 +11,36 @@ import (
 )
 
 func TestWorkerPersistent(t *testing.T) {
-	jobPool := NewJobPoolPersistent[*JobTest](
-		WithAllowFailedJobs[*JobTest](),
-		WithDisableParallelism[*JobTest](false),
+	taskPool := NewTaskPoolPersistent[*TaskTest](
+		WithAllowFailedTasks[*TaskTest](),
+		WithDisableParallelism[*TaskTest](false),
 	)
 
-	jobs := []*JobTest{}
-	for job_id := 1; job_id <= 3; job_id++ {
-		jobs = append(jobs, NewJobTest(worker_types.JobID(2)))
+	tasks := []*TaskTest{}
+	for task_id := 1; task_id <= 3; task_id++ {
+		tasks = append(tasks, NewTaskTest(worker_types.TaskID(2)))
 	}
 
-	for _, job := range jobs {
-		jobPool.DelayJob(job)
+	for _, task := range tasks {
+		taskPool.DelayTask(task)
 	}
 
 	// U can test that it works even without awaitings
 	// Awaiting is during prod usage necessary if u are going to timeout tasks though
-	for range jobs {
-		jobPool.AwaitSomeJob()
+	for range tasks {
+		taskPool.AwaitSomeTask()
 	}
 
 	done_count := 0
 	failed_count := 0
-	for job_number, job := range jobs {
-		logus.Debug(fmt.Sprintf("job.Done=%t", job.done), worker_logus.JobNumber(worker_types.JobID(job_number)), JobResult(job.result))
-		if job.done {
+	for task_number, task := range tasks {
+		logus.Debug(fmt.Sprintf("task.Done=%t", task.done), worker_logus.TaskID(worker_types.TaskID(task_number)), TaskResult(task.result))
+		if task.done {
 			done_count += 1
 		} else {
 			failed_count += 1
 		}
 	}
-	assert.GreaterOrEqual(t, done_count, 3, "expected finding done jobs")
-	assert.LessOrEqual(t, failed_count, 3, "expected finding failed jobs because of time sleep greater than timeout")
+	assert.GreaterOrEqual(t, done_count, 3, "expected finding done tasks")
+	assert.LessOrEqual(t, failed_count, 3, "expected finding failed tasks because of time sleep greater than timeout")
 }

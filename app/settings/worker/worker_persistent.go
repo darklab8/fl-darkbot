@@ -7,46 +7,46 @@ import (
 	"time"
 )
 
-type JobPoolPeristent[jobd IJob] struct {
-	*JobPool[jobd]
+type TaskPoolPeristent[taskT ITask] struct {
+	*TaskPool[taskT]
 
-	jobs_channel   chan jobd
-	result_channel chan worker_types.JobStatusCode
+	task_channel   chan taskT
+	result_channel chan worker_types.TaskStatusCode
 }
 
-func NewJobPoolPersistent[jobd IJob](opts ...JobPoolOption[jobd]) *JobPoolPeristent[jobd] {
-	j := &JobPoolPeristent[jobd]{JobPool: NewJobPool[jobd](opts...)}
+func NewTaskPoolPersistent[taskT ITask](opts ...TaskPoolOption[taskT]) *TaskPoolPeristent[taskT] {
+	j := &TaskPoolPeristent[taskT]{TaskPool: NewTaskPool[taskT](opts...)}
 
-	j.jobs_channel = make(chan jobd)
-	j.result_channel = make(chan worker_types.JobStatusCode)
+	j.task_channel = make(chan taskT)
+	j.result_channel = make(chan worker_types.TaskStatusCode)
 
-	// This starts up N workers, initially blocked because there are no jobs yet.
+	// This starts up N workers, initially blocked because there are no tasks yet.
 	for worker_id := 1; worker_id <= j.numWorkers; worker_id++ {
 		go j.launchWorker(
 			worker_types.WorkerID(worker_id),
-			j.jobs_channel,
+			j.task_channel,
 			j.result_channel,
 		)
 	}
 	return j
 }
 
-func (j *JobPoolPeristent[jobd]) DelayJob(job jobd) {
-	j.jobs_channel <- job
+func (j *TaskPoolPeristent[taskT]) DelayTask(task taskT) {
+	j.task_channel <- task
 }
 
-func (j *JobPoolPeristent[jobd]) AwaitSomeJob() {
+func (j *TaskPoolPeristent[taskT]) AwaitSomeTask() {
 	select {
 	case status_code := <-j.result_channel:
-		logus.Debug("finished some job succesfully", worker_logus.StatusCode(status_code))
-	case <-time.After(time.Duration(j.jobTimeout) * time.Second):
+		logus.Debug("finished some task succesfully", worker_logus.StatusCode(status_code))
+	case <-time.After(time.Duration(j.taskTimeout) * time.Second):
 		// non zero exit by timeout
-		logus.Error("finished jobs with", worker_logus.StatusCode(CodeTimeout)) // TODO add worker_logus.JobNumber(worker_types.JobID(job_number)
+		logus.Error("finished tasks with", worker_logus.StatusCode(CodeTimeout)) // TODO add worker_logus.TaskNumber(worker_types.TaskID(task_number)
 	}
 }
 
-func (j *JobPoolPeristent[jobd]) AwaitTimeouts() {
+func (j *TaskPoolPeristent[taskT]) AwaitTimeouts() {
 	for {
-		j.AwaitSomeJob()
+		j.AwaitSomeTask()
 	}
 }
