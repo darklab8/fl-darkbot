@@ -14,7 +14,7 @@ var (
 	Slogger *slog.Logger
 )
 
-func Debug(msg string, opts ...slogParam) {
+func Debug(msg string, opts ...SlogParam) {
 	args := append([]any{}, newSlogGroup(opts...))
 	if LOG_SHOW_FILE_LOCATIONS {
 		args = append(args, logGroupFiles())
@@ -22,7 +22,7 @@ func Debug(msg string, opts ...slogParam) {
 	Slogger.Debug(msg, args...)
 }
 
-func Info(msg string, opts ...slogParam) {
+func Info(msg string, opts ...SlogParam) {
 	args := append([]any{}, newSlogGroup(opts...))
 	if LOG_SHOW_FILE_LOCATIONS {
 		args = append(args, logGroupFiles())
@@ -31,7 +31,7 @@ func Info(msg string, opts ...slogParam) {
 }
 
 // Just potentially bad behavior to be aware of
-func Warn(msg string, opts ...slogParam) {
+func Warn(msg string, opts ...SlogParam) {
 	args := append([]any{}, newSlogGroup(opts...))
 	if LOG_SHOW_FILE_LOCATIONS {
 		args = append(args, logGroupFiles())
@@ -40,7 +40,7 @@ func Warn(msg string, opts ...slogParam) {
 }
 
 // It is bad but program can recover from it
-func Error(msg string, opts ...slogParam) {
+func Error(msg string, opts ...SlogParam) {
 	args := append([]any{}, newSlogGroup(opts...))
 	if LOG_SHOW_FILE_LOCATIONS {
 		args = append(args, logGroupFiles())
@@ -49,7 +49,7 @@ func Error(msg string, opts ...slogParam) {
 }
 
 // Program is not allowed to run further with fatal
-func Fatal(msg string, opts ...slogParam) {
+func Fatal(msg string, opts ...SlogParam) {
 
 	args := append([]any{}, newSlogGroup(opts...))
 	if LOG_SHOW_FILE_LOCATIONS {
@@ -59,7 +59,7 @@ func Fatal(msg string, opts ...slogParam) {
 	panic(msg)
 }
 
-func CheckDebug(err error, msg string, opts ...slogParam) bool {
+func CheckDebug(err error, msg string, opts ...SlogParam) bool {
 	if err == nil {
 		return false
 	}
@@ -70,7 +70,7 @@ func CheckDebug(err error, msg string, opts ...slogParam) bool {
 	return true
 }
 
-func CheckWarn(err error, msg string, opts ...slogParam) bool {
+func CheckWarn(err error, msg string, opts ...SlogParam) bool {
 	if err == nil {
 		return false
 	}
@@ -81,7 +81,7 @@ func CheckWarn(err error, msg string, opts ...slogParam) bool {
 	return true
 }
 
-func CheckError(err error, msg string, opts ...slogParam) bool {
+func CheckError(err error, msg string, opts ...SlogParam) bool {
 	if err == nil {
 		return false
 	}
@@ -93,7 +93,7 @@ func CheckError(err error, msg string, opts ...slogParam) bool {
 }
 
 // It has shorter error output in comparison to CheckPanic
-func CheckFatal(err error, msg string, opts ...slogParam) {
+func CheckFatal(err error, msg string, opts ...SlogParam) {
 	if err == nil {
 		return
 	}
@@ -104,7 +104,7 @@ func CheckFatal(err error, msg string, opts ...slogParam) {
 	os.Exit(1)
 }
 
-func CheckPanic(err error, msg string, opts ...slogParam) {
+func CheckPanic(err error, msg string, opts ...SlogParam) {
 	if err == nil {
 		return
 	}
@@ -115,7 +115,7 @@ func CheckPanic(err error, msg string, opts ...slogParam) {
 	panic(msg)
 }
 
-func Debugf(msg string, varname string, value any, opts ...slogParam) {
+func Debugf(msg string, varname string, value any, opts ...SlogParam) {
 	args := append([]any{}, newSlogGroup(opts...))
 	if LOG_SHOW_FILE_LOCATIONS {
 		args = append(args, logGroupFiles())
@@ -125,7 +125,7 @@ func Debugf(msg string, varname string, value any, opts ...slogParam) {
 	Slogger.Debug(msg, args...)
 }
 
-func Infof(msg string, varname string, value any, opts ...slogParam) {
+func Infof(msg string, varname string, value any, opts ...SlogParam) {
 	args := append([]any{}, newSlogGroup(opts...))
 	if LOG_SHOW_FILE_LOCATIONS {
 		args = append(args, logGroupFiles())

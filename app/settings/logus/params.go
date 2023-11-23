@@ -16,13 +16,13 @@ func logGroupFiles() slog.Attr {
 	)
 }
 
-type slogGroup struct {
-	params map[string]string
+type SlogGroup struct {
+	Params map[string]string
 }
 
-func (s slogGroup) Render() slog.Attr {
+func (s SlogGroup) Render() slog.Attr {
 	anies := []any{}
-	for key, value := range s.params {
+	for key, value := range s.Params {
 		anies = append(anies, key)
 		anies = append(anies, value)
 	}
@@ -30,10 +30,10 @@ func (s slogGroup) Render() slog.Attr {
 	return slog.Group("extras", anies...)
 }
 
-type slogParam func(r *slogGroup)
+type SlogParam func(r *SlogGroup)
 
-func newSlogGroup(opts ...slogParam) slog.Attr {
-	client := &slogGroup{params: make(map[string]string)}
+func newSlogGroup(opts ...SlogParam) slog.Attr {
+	client := &SlogGroup{Params: make(map[string]string)}
 	for _, opt := range opts {
 		opt(client)
 	}
@@ -41,165 +41,165 @@ func newSlogGroup(opts ...slogParam) slog.Attr {
 	return (*client).Render()
 }
 
-func TestParam(value int) slogParam {
-	return func(c *slogGroup) {
-		c.params["test_param"] = fmt.Sprintf("%d", value)
+func TestParam(value int) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["test_param"] = fmt.Sprintf("%d", value)
 	}
 }
 
-func Expected(value any) slogParam {
-	return func(c *slogGroup) {
-		c.params["expected"] = fmt.Sprintf("%v", value)
+func Expected(value any) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["expected"] = fmt.Sprintf("%v", value)
 	}
 }
-func Actual(value any) slogParam {
-	return func(c *slogGroup) {
-		c.params["actual"] = fmt.Sprintf("%v", value)
-	}
-}
-
-func OptError(err error) slogParam {
-	return func(c *slogGroup) {
-		c.params["error_msg"] = fmt.Sprintf("%v", err)
-		c.params["error_type"] = fmt.Sprintf("%T", err)
+func Actual(value any) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["actual"] = fmt.Sprintf("%v", value)
 	}
 }
 
-func FilePath(value string) slogParam {
-	return func(c *slogGroup) {
-		c.params["filepath"] = fmt.Sprintf("%v", value)
+func OptError(err error) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["error_msg"] = fmt.Sprintf("%v", err)
+		c.Params["error_type"] = fmt.Sprintf("%T", err)
 	}
 }
 
-func Regex(value types.RegExp) slogParam {
-	return func(c *slogGroup) {
-		c.params["regexp"] = fmt.Sprintf("%v", value)
+func FilePath(value string) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["filepath"] = fmt.Sprintf("%v", value)
 	}
 }
 
-func Items[T any](value []T, item_name string) slogParam {
-	return func(c *slogGroup) {
+func Regex(value types.RegExp) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["regexp"] = fmt.Sprintf("%v", value)
+	}
+}
+
+func Items[T any](value []T, item_name string) SlogParam {
+	return func(c *SlogGroup) {
 		sliced_string := fmt.Sprintf("%v", value)
 		if len(sliced_string) > 300 {
 			sliced_string = sliced_string[:300] + "...sliced string"
 		}
-		c.params[item_name] = sliced_string
-		c.params[fmt.Sprintf("%s_len", item_name)] = fmt.Sprintf("%d", len(value))
+		c.Params[item_name] = sliced_string
+		c.Params[fmt.Sprintf("%s_len", item_name)] = fmt.Sprintf("%d", len(value))
 	}
 }
 
-func Records[T any](value []T) slogParam {
+func Records[T any](value []T) SlogParam {
 	return Items[T](value, "records")
 }
 
-func Args(value []string) slogParam {
+func Args(value []string) SlogParam {
 	return Items[string](value, "args")
 }
 
-func Tags(value []types.Tag) slogParam {
+func Tags(value []types.Tag) SlogParam {
 	return Items[types.Tag](value, "tags")
 }
 
-func APIUrl(value types.APIurl) slogParam {
-	return func(c *slogGroup) {
-		c.params["api_url"] = string(value)
-		c.params["records_len"] = fmt.Sprintf("%d", len(value))
+func APIUrl(value types.APIurl) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["api_url"] = string(value)
+		c.Params["records_len"] = fmt.Sprintf("%d", len(value))
 	}
 }
 
-func ScrappyLoopDelay(value types.ScrappyLoopDelay) slogParam {
-	return func(c *slogGroup) {
-		c.params["loop_delay"] = fmt.Sprintf("%d", value)
+func ScrappyLoopDelay(value types.ScrappyLoopDelay) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["loop_delay"] = fmt.Sprintf("%d", value)
 	}
 }
 
-func ChannelID(value types.DiscordChannelID) slogParam {
-	return func(c *slogGroup) {
-		c.params["channel_id"] = string(value)
+func ChannelID(value types.DiscordChannelID) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["channel_id"] = string(value)
 	}
 }
 
-func ChannelIDs(value []types.DiscordChannelID) slogParam {
-	return func(c *slogGroup) {
-		c.params["channel_ids"] = fmt.Sprintf("%v", value)
+func ChannelIDs(value []types.DiscordChannelID) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["channel_ids"] = fmt.Sprintf("%v", value)
 	}
 }
 
-func MessageID(value types.DiscordMessageID) slogParam {
-	return func(c *slogGroup) {
-		c.params["message_id"] = string(value)
+func MessageID(value types.DiscordMessageID) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["message_id"] = string(value)
 	}
 }
 
-func OwnerID(value types.DiscordOwnerID) slogParam {
-	return func(c *slogGroup) {
-		c.params["owner_id"] = string(value)
+func OwnerID(value types.DiscordOwnerID) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["owner_id"] = string(value)
 	}
 }
 
-func Body(value []byte) slogParam {
-	return func(c *slogGroup) {
-		c.params["body"] = string(value)
+func Body(value []byte) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["body"] = string(value)
 	}
 }
 
-func PingMessage(value types.PingMessage) slogParam {
-	return func(c *slogGroup) {
-		c.params["ping_message"] = string(value)
+func PingMessage(value types.PingMessage) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["ping_message"] = string(value)
 	}
 }
 
-func ErrorMsg(value string) slogParam {
-	return func(c *slogGroup) {
-		c.params["error_message"] = string(value)
+func ErrorMsg(value string) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["error_message"] = string(value)
 	}
 }
 
-func Dbpath(value types.Dbpath) slogParam {
-	return func(c *slogGroup) {
-		c.params["db_path"] = string(value)
+func Dbpath(value types.Dbpath) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["db_path"] = string(value)
 	}
 }
 
-func Tag(value types.Tag) slogParam {
-	return func(c *slogGroup) {
-		c.params["tag"] = string(value)
+func Tag(value types.Tag) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["tag"] = string(value)
 	}
 }
 
-func GormResult(result *gorm.DB) slogParam {
-	return func(c *slogGroup) {
-		c.params["result.rows_affected"] = fmt.Sprintf("%d", result.RowsAffected)
-		c.params["result.error_msg"] = fmt.Sprintf("%v", result.Error)
-		c.params["result.error_type"] = fmt.Sprintf("%T", result.Error)
+func GormResult(result *gorm.DB) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["result.rows_affected"] = fmt.Sprintf("%d", result.RowsAffected)
+		c.Params["result.error_msg"] = fmt.Sprintf("%v", result.Error)
+		c.Params["result.error_type"] = fmt.Sprintf("%T", result.Error)
 	}
 }
 
-func DiscordMessageID(value types.DiscordMessageID) slogParam {
-	return func(c *slogGroup) {
-		c.params["discord_msg_id"] = string(value)
+func DiscordMessageID(value types.DiscordMessageID) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["discord_msg_id"] = string(value)
 	}
 }
 
-func Thread(value *forum_types.LatestThread) slogParam {
-	return func(c *slogGroup) {
-		c.params["thread_name"] = string(value.ThreadShortName)
-		c.params["thread_link"] = string(value.ThreadLink)
-		c.params["thread_id"] = string(value.ThreadID)
+func Thread(value *forum_types.LatestThread) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["thread_name"] = string(value.ThreadShortName)
+		c.Params["thread_link"] = string(value.ThreadLink)
+		c.Params["thread_id"] = string(value.ThreadID)
 	}
 }
 
-func DiscordMessage(value string) slogParam {
-	return func(c *slogGroup) {
-		c.params["discord_message"] = value
+func DiscordMessage(value string) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["discord_message"] = value
 	}
 }
 
-func Post(value *forum_types.Post) slogParam {
-	return func(c *slogGroup) {
-		c.params["post_id"] = string(value.PostID)
-		c.params["post_author_name"] = string(value.PostAuthorName)
-		c.params["post_thread_id"] = string(value.ThreadID)
-		c.params["post_thread_full_name"] = string(value.ThreadFullName)
+func Post(value *forum_types.Post) SlogParam {
+	return func(c *SlogGroup) {
+		c.Params["post_id"] = string(value.PostID)
+		c.Params["post_author_name"] = string(value.PostAuthorName)
+		c.Params["post_thread_id"] = string(value.ThreadID)
+		c.Params["post_thread_full_name"] = string(value.ThreadFullName)
 	}
 }
