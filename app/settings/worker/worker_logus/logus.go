@@ -3,7 +3,7 @@ package worker_logus
 import (
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/utils"
-	"darkbot/app/viewer/worker/worker_types"
+	"darkbot/app/settings/worker/worker_types"
 	"fmt"
 	"strconv"
 	"strings"

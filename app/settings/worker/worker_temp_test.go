@@ -2,8 +2,8 @@ package worker
 
 import (
 	"darkbot/app/settings/logus"
-	"darkbot/app/viewer/worker/worker_logus"
-	"darkbot/app/viewer/worker/worker_types"
+	"darkbot/app/settings/worker/worker_logus"
+	"darkbot/app/settings/worker/worker_types"
 	"fmt"
 	"strconv"
 	"testing"
