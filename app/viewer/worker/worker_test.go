@@ -6,9 +6,28 @@ import (
 	"darkbot/app/viewer/worker/worker_types"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
+
+// ======================
+// Test Example
+
+type JobTest struct {
+	Job
+	// any desired arbitary data
+	result int
+}
+
+func (data *JobTest) runJob(worker_id worker_types.WorkerID) worker_types.JobStatusCode {
+	// logus.Debug("", "worker", worker_id, "started  job", data.id)
+	time.Sleep(time.Second * time.Duration(data.id))
+	// logus.Debug("", "worker", worker_id, "finished job", data.id)
+	data.result = data.id * 1
+	data.done = true
+	return CodeSuccess
+}
 
 func TestWorker(t *testing.T) {
 	jobPool := NewJobPool[*JobTest](

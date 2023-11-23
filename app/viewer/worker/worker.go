@@ -7,30 +7,9 @@ import (
 	"time"
 )
 
-// ======================
-// Test Example
-
-type JobTest struct {
-	Job
-	// any desired arbitary data
-	result int
-}
-
-func (data *JobTest) runJob(worker_id worker_types.WorkerID) worker_types.JobStatusCode {
-	// logus.Debug("", "worker", worker_id, "started  job", data.id)
-	time.Sleep(time.Second * time.Duration(data.id))
-	// logus.Debug("", "worker", worker_id, "finished job", data.id)
-	data.result = data.id * 1
-	data.done = true
-	return CodeSuccess
-}
-
-func (data *JobTest) isDone() bool { return data.done }
-
 // ====================
 
 type IJob interface {
-	*JobTest
 	runJob(worker_id worker_types.WorkerID) worker_types.JobStatusCode
 	isDone() bool
 }
@@ -40,7 +19,7 @@ type Job struct {
 	done bool
 }
 
-// func (data *Job) isDone() bool { return data.done }
+func (data *Job) isDone() bool { return data.done }
 
 const (
 	CodeSuccess worker_types.JobStatusCode = 0
