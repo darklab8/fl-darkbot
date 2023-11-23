@@ -15,8 +15,12 @@ type IJob interface {
 }
 
 type Job struct {
-	id   int
+	id   worker_types.JobID
 	done bool
+}
+
+func NewJob(id worker_types.JobID) *Job {
+	return &Job{id: id}
 }
 
 func (data *Job) isDone() bool { return data.done }
@@ -27,7 +31,7 @@ const (
 )
 
 type JobPool[jobd IJob] struct {
-	JobTimeout int // seconds
+	jobTimeout worker_types.Seconds
 	numWorkers int
 
 	allow_failed_jobs bool
@@ -41,13 +45,25 @@ func WithAllowFailedJobs[T IJob](value bool) JobPoolOption[T] {
 	}
 }
 
+func WithWorkersAmount[T IJob](value int) JobPoolOption[T] {
+	return func(c *JobPool[T]) { c.numWorkers = value }
+}
+
+func WithJobTimeout[T IJob](value worker_types.Seconds) JobPoolOption[T] {
+	return func(c *JobPool[T]) { c.jobTimeout = value }
+}
+
 func NewJobPool[T IJob](opts ...JobPoolOption[T]) JobPool[T] {
-	client := &JobPool[T]{}
-	for _, opt := range opts {
-		opt(client)
+	j := &JobPool[T]{
+		numWorkers: 3,
+		jobTimeout: 30,
 	}
 
-	return *client
+	for _, opt := range opts {
+		opt(j)
+	}
+
+	return *j
 }
 
 func (j JobPool[jobd]) launchWorker(worker_id worker_types.WorkerID, jobs <-chan jobd, results chan<- worker_types.JobStatusCode) {
@@ -69,11 +85,7 @@ func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
 	status_codes := []worker_types.JobStatusCode{}
 
 	// This starts up N workers, initially blocked because there are no jobs yet.
-	numWorker := 3
-	if j.numWorkers != 0 {
-		numWorker = j.numWorkers
-	}
-	for worker_id := 1; worker_id <= numWorker; worker_id++ {
+	for worker_id := 1; worker_id <= j.numWorkers; worker_id++ {
 		go j.launchWorker(worker_types.WorkerID(worker_id), jobs_channel, result_channel)
 	}
 
@@ -84,12 +96,6 @@ func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
 	// then close that channel to indicate that is all the work we have.
 	close(jobs_channel)
 
-	// added timeout
-	jobTimeout := 3
-	if j.JobTimeout != 0 {
-		jobTimeout = j.JobTimeout
-	}
-
 	// Finally we collect all the results of the work.
 	// This also ensures that the worker goroutines have finished.
 	// An alternative way to wait for multiple goroutines is to use a WaitGroup.
@@ -97,10 +103,10 @@ func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
 		select {
 		case res := <-result_channel:
 			status_codes = append(status_codes, res)
-		case <-time.After(time.Duration(jobTimeout) * time.Second):
+		case <-time.After(time.Duration(j.jobTimeout) * time.Second):
 			// non zero exit by timeout
 			status_codes = append(status_codes, CodeTimeout)
-			logus.Error("timeout for", worker_logus.JobNumber(job_number))
+			logus.Error("timeout for", worker_logus.JobNumber(worker_types.JobID(job_number)))
 		}
 
 	}
@@ -123,9 +129,10 @@ func RunJobPool[J IJob](debug worker_types.DebugDisableParallelism, jobPool JobP
 	}
 
 	for job_number, job := range jobs {
+		job_id := worker_types.JobID(job_number)
 		if !job.isDone() && !jobPool.allow_failed_jobs {
-			logus.Error("job failed", worker_logus.JobNumber(job_number))
+			logus.Error("job failed", worker_logus.JobNumber(job_id))
 		}
-		logus.Debug("job succeed", worker_logus.JobNumber(job_number))
+		logus.Debug("job succeed", worker_logus.JobNumber(job_id))
 	}
 }

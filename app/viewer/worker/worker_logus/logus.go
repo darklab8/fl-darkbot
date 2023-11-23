@@ -15,9 +15,9 @@ func WorkerID(value worker_types.WorkerID) logus.SlogParam {
 	}
 }
 
-func JobNumber(value int) logus.SlogParam {
+func JobNumber(value worker_types.JobID) logus.SlogParam {
 	return func(c *logus.SlogGroup) {
-		c.Params["job_number"] = strconv.Itoa(value)
+		c.Params["job_number"] = strconv.Itoa(int(value))
 	}
 }
 
@@ -26,11 +26,5 @@ func StatusCodes(status_codes []worker_types.JobStatusCode) logus.SlogParam {
 	return func(c *logus.SlogGroup) {
 
 		c.Params["status_codes"] = strings.Join(str_status_codes, ",")
-	}
-}
-
-func JobResult(value int) logus.SlogParam {
-	return func(c *logus.SlogGroup) {
-		c.Params["job_result"] = strconv.Itoa(value)
 	}
 }

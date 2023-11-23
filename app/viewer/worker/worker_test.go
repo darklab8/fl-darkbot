@@ -5,6 +5,7 @@ import (
 	"darkbot/app/viewer/worker/worker_logus"
 	"darkbot/app/viewer/worker/worker_types"
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 
@@ -15,18 +16,29 @@ import (
 // Test Example
 
 type JobTest struct {
-	Job
+	*Job
+
 	// any desired arbitary data
-	result int
+	result worker_types.JobID
+}
+
+func NewJobTest(id worker_types.JobID) *JobTest {
+	return &JobTest{Job: NewJob(id)}
 }
 
 func (data *JobTest) runJob(worker_id worker_types.WorkerID) worker_types.JobStatusCode {
-	// logus.Debug("", "worker", worker_id, "started  job", data.id)
+	logus.Debug("", worker_logus.WorkerID(worker_id), worker_logus.JobNumber(data.id))
 	time.Sleep(time.Second * time.Duration(data.id))
-	// logus.Debug("", "worker", worker_id, "finished job", data.id)
+	logus.Debug("", worker_logus.WorkerID(worker_id), worker_logus.JobNumber(data.id))
 	data.result = data.id * 1
 	data.done = true
 	return CodeSuccess
+}
+
+func JobResult(value worker_types.JobID) logus.SlogParam {
+	return func(c *logus.SlogGroup) {
+		c.Params["job_result"] = strconv.Itoa(int(value))
+	}
 }
 
 func TestWorker(t *testing.T) {
@@ -36,7 +48,7 @@ func TestWorker(t *testing.T) {
 
 	jobs := []*JobTest{}
 	for job_id := 1; job_id <= 3; job_id++ {
-		jobs = append(jobs, &JobTest{Job: Job{id: job_id}})
+		jobs = append(jobs, &JobTest{Job: NewJob(worker_types.JobID(job_id))})
 	}
 
 	RunJobPool(worker_types.DebugDisableParallelism(false), jobPool, jobs)
@@ -44,7 +56,7 @@ func TestWorker(t *testing.T) {
 	done_count := 0
 	failed_count := 0
 	for job_number, job := range jobs {
-		logus.Debug(fmt.Sprintf("job.Done=%t", job.done), worker_logus.JobNumber(job_number), worker_logus.JobResult(job.result))
+		logus.Debug(fmt.Sprintf("job.Done=%t", job.done), worker_logus.JobNumber(worker_types.JobID(job_number)), JobResult(job.result))
 		if job.done {
 			done_count += 1
 		} else {
