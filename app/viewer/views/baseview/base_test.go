@@ -32,9 +32,9 @@ func TestBaseViewerMocked(t *testing.T) {
 		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
 		scrapper.GetBaseStorage().Add(record)
 
-		api := apis.NewAPI(channelID, dbpath, scrapper)
+		api := apis.NewAPI(dbpath, scrapper)
 
-		render := NewTemplateBase(api)
+		render := NewTemplateBase(api, channelID)
 		render.Render()
 		logus.Debug(fmt.Sprintf("render.main.Content=%v", render.main.ViewRecords))
 
@@ -57,7 +57,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		isEnabled, _ = baseAlertDecreasing.Status(channelID)
 		assert.True(t, isEnabled)
 
-		render = NewTemplateBase(api)
+		render = NewTemplateBase(api, channelID)
 		render.Render()
 
 		assert.NotZero(t, render.main.ViewRecords)
@@ -70,7 +70,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.Error(t, err)
 
 		baseAlertBelowThreshold.Set(channelID, 40)
-		render = NewTemplateBase(api)
+		render = NewTemplateBase(api, channelID)
 		render.Render()
 
 		assert.NotZero(t, render.main.ViewRecords)
@@ -79,7 +79,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
 
 		baseAlertBelowThreshold.Set(channelID, 60)
-		render = NewTemplateBase(api)
+		render = NewTemplateBase(api, channelID)
 		render.Render()
 
 		assert.NotZero(t, render.main.ViewRecords)
@@ -91,14 +91,14 @@ func TestBaseViewerMocked(t *testing.T) {
 		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
 		scrapper.GetBaseStorage().Add(record)
 		cg.TagsAdd(channelID, []types.Tag{"Bank"}...)
-		render = NewTemplateBase(api)
+		render = NewTemplateBase(api, channelID)
 		render.Render()
 
 		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
 
 		baseUnderAttackalert := configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(dbpath))
 		baseUnderAttackalert.Enable(channelID)
-		render = NewTemplateBase(api)
+		render = NewTemplateBase(api, channelID)
 		render.Render()
 
 		assert.NotZero(t, render.alertBaseUnderAttack.ViewRecords)
@@ -117,7 +117,7 @@ func TestBaseViewerRealData(t *testing.T) {
 			player.FixturePlayerAPIMock(),
 			baseattack.FixtureBaseAttackAPIMock(),
 		)
-		api := apis.NewAPI(channelID, dbpath, scrapper)
+		api := apis.NewAPI(dbpath, scrapper)
 		scrapper.Update()
 		scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
 		scrapper.Update()
@@ -125,7 +125,7 @@ func TestBaseViewerRealData(t *testing.T) {
 			values[1].Timestamp = values[0].Timestamp.Add(time.Minute * 15)
 		})
 
-		base := NewTemplateBase(api)
+		base := NewTemplateBase(api, channelID)
 		base.Render()
 		logus.Debug(fmt.Sprintf("base.main.Content=%v", base.main.ViewRecords))
 	})
@@ -134,8 +134,6 @@ func TestBaseViewerRealData(t *testing.T) {
 func TestGetDerivativeBaseHealth(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		logus.Debug("1")
-		channelID, _ := configurator.FixtureChannel(dbpath)
-
 		tags := []types.Tag{""}
 		logus.Debug("2")
 		scrapper := scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.FixturePlayerAPIMock(), baseattack.FixtureBaseAttackAPIMock())
@@ -144,7 +142,7 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 		scrapper.Update()
 		logus.Debug("2.3")
 
-		api := apis.NewAPI(channelID, dbpath, scrapper)
+		api := apis.NewAPI(dbpath, scrapper)
 
 		scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
 		scrapper.Update()
@@ -189,7 +187,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 
 		scrapper := scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), player.FixturePlayerAPIMock(), baseattack.NewMock("data_lp.json"))
 		scrapper.Update()
-		api := apis.NewAPI(channelID, dbpath, scrapper)
+		api := apis.NewAPI(dbpath, scrapper)
 
 		assert.True(t, strings.Contains(string(scrapper.GetBaseAttackStorage().GetData()), "LP-7743"))
 
@@ -205,7 +203,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		baseUnderAttackalert := configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(dbpath))
 		baseUnderAttackalert.Enable(channelID)
 
-		render := NewTemplateBase(api)
+		render := NewTemplateBase(api, channelID)
 		render.Render()
 
 		assert.NotZero(t, render.alertBaseUnderAttack.ViewRecords)

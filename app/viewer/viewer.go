@@ -20,7 +20,7 @@ type Viewer struct {
 }
 
 func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Viewer {
-	api := apis.NewAPI("", dbpath, scrappy_storage)
+	api := apis.NewAPI(dbpath, scrappy_storage)
 	return &Viewer{
 		api: api,
 		delays: ViewerDelays{
@@ -47,7 +47,6 @@ func (v Viewer) Update() {
 
 	// For each channel
 	for _, channelID := range channelIDs {
-		v.api.SetChannelID(channelID)
 		channel := NewChannelView(v.api, channelID)
 		channel.Render()
 		err := channel.Discover()

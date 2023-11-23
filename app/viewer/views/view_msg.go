@@ -19,11 +19,13 @@ type Msg struct {
 	MessageID        types.DiscordMessageID
 	Records          []*types.ViewRecord
 	ViewEnumeratedID types.ViewEnumeratedID
+	channelID        types.DiscordChannelID
 }
 
-func NewMsg(msgShared MsgShared, number int) *Msg {
+func NewMsg(msgShared MsgShared, number int, channelID types.DiscordChannelID) *Msg {
 	m := &Msg{MsgShared: msgShared}
 	m.ViewEnumeratedID = types.ViewEnumeratedID(fmt.Sprintf("%s-%d", m.ViewID, number))
+	m.channelID = channelID
 	return m
 }
 
@@ -51,7 +53,7 @@ func (v *Msg) Render() string {
 
 func (v *Msg) Send(api *apis.API) {
 	if len(v.Records) == 0 && v.MessageID != "" {
-		api.Discorder.DeleteMessage(api.ChannelID, v.MessageID)
+		api.Discorder.DeleteMessage(v.channelID, v.MessageID)
 	}
 
 	if len(v.Records) == 0 {
@@ -62,18 +64,18 @@ func (v *Msg) Send(api *apis.API) {
 
 	var err error
 	if v.MessageID == "" {
-		err = api.Discorder.SengMessage(api.ChannelID, content)
-		logus.CheckWarn(err, "unable to send msg", logus.ChannelID(api.ChannelID))
-		CheckTooLongMsgErr(err, api, v.ViewEnumeratedID, ActSend, "")
+		err = api.Discorder.SengMessage(v.channelID, content)
+		logus.CheckWarn(err, "unable to send msg", logus.ChannelID(v.channelID))
+		CheckTooLongMsgErr(err, api, v.channelID, v.ViewEnumeratedID, ActSend, "")
 
 	} else {
-		err = api.Discorder.EditMessage(api.ChannelID, v.MessageID, content)
-		logus.CheckWarn(err, "unable to edit msg", logus.ChannelID(api.ChannelID))
-		CheckTooLongMsgErr(err, api, v.ViewEnumeratedID, ActEdit, v.MessageID)
+		err = api.Discorder.EditMessage(v.channelID, v.MessageID, content)
+		logus.CheckWarn(err, "unable to edit msg", logus.ChannelID(v.channelID))
+		CheckTooLongMsgErr(err, api, v.channelID, v.ViewEnumeratedID, ActEdit, v.MessageID)
 	}
 }
 
-func CheckTooLongMsgErr(err error, api *apis.API, header types.ViewEnumeratedID, action MsgAction, MessageID types.DiscordMessageID) {
+func CheckTooLongMsgErr(err error, api *apis.API, channeID types.DiscordChannelID, header types.ViewEnumeratedID, action MsgAction, MessageID types.DiscordMessageID) {
 	if err == nil {
 		return
 	}
@@ -87,9 +89,9 @@ func CheckTooLongMsgErr(err error, api *apis.API, header types.ViewEnumeratedID,
 
 	switch action {
 	case ActSend:
-		api.Discorder.SengMessage(api.ChannelID, msg)
+		api.Discorder.SengMessage(channeID, msg)
 	case ActEdit:
-		api.Discorder.EditMessage(api.ChannelID, MessageID, msg)
+		api.Discorder.EditMessage(channeID, MessageID, msg)
 	}
 
 }

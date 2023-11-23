@@ -15,13 +15,15 @@ type EventView struct {
 	main views.ViewTable
 
 	*views.SharedViewTableSplitter
+	channelID types.DiscordChannelID
 }
 
-func NewEventRenderer(api *apis.API) *EventView {
+func NewEventRenderer(api *apis.API, channelID types.DiscordChannelID) *EventView {
 	base := EventView{}
 	base.main.ViewID = "#darkbot-event-view"
+	base.channelID = channelID
 
-	base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, &base, &base.main)
+	base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, channelID, &base, &base.main)
 
 	return &base
 }
@@ -38,8 +40,8 @@ func (t *EventView) GenerateRecords() error {
 		return err
 	}
 
-	eventTags, err := t.GetAPI().Players.Events.TagsList(t.GetAPI().ChannelID)
-	logus.CheckDebug(err, "failed to acquire player event list", logus.ChannelID(t.GetAPI().ChannelID))
+	eventTags, err := t.GetAPI().Players.Events.TagsList(t.channelID)
+	logus.CheckDebug(err, "failed to acquire player event list", logus.ChannelID(t.channelID))
 
 	if len(eventTags) > 0 {
 		var beginning strings.Builder

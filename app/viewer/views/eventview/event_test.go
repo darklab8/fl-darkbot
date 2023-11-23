@@ -21,7 +21,7 @@ func TestPlayerEvent(t *testing.T) {
 
 		players := player.NewPlayerStorage(player.FixturePlayerAPIMock())
 		storage := scrappy.FixtureMockedStorage(scrappy.WithPlayerStorage(players))
-		api := apis.NewAPI(channelID, dbpath, storage)
+		api := apis.NewAPI(dbpath, storage)
 		record := records.NewStampedObjects[player.Player]()
 		record.Add(player.Player{Name: "player1", System: "system1", Region: "region1"})
 		record.Add(player.Player{Name: "player2", System: "system2", Region: "region2"})
@@ -29,7 +29,7 @@ func TestPlayerEvent(t *testing.T) {
 		record.Add(player.Player{Name: "player4", System: "system4", Region: "region4"})
 		players.Add(record)
 
-		playerView := NewEventRenderer(api)
+		playerView := NewEventRenderer(api, channelID)
 		playerView.Render()
 		// logus.Debug(len(playerView.main.ViewRecords))
 		logus.Debug("test TestPlayerEvent is finished")

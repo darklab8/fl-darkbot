@@ -40,11 +40,13 @@ type PlayersTemplates struct {
 	enemies PlayersEnemies
 	api     *apis.API
 	*views.SharedViewTableSplitter
+	channelID types.DiscordChannelID
 }
 
-func NewTemplatePlayers(api *apis.API) *PlayersTemplates {
+func NewTemplatePlayers(api *apis.API, channelID types.DiscordChannelID) *PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.api = api
+	templator.channelID = channelID
 	templator.friends.mainTable.ViewID = "#darkbot-players-friends-table"
 	templator.neutral.mainTable.ViewID = "#darkbot-players-neutral-table"
 	templator.enemies.mainTable.ViewID = "#darkbot-players-enemies-table"
@@ -54,6 +56,7 @@ func NewTemplatePlayers(api *apis.API) *PlayersTemplates {
 
 	templator.SharedViewTableSplitter = views.NewSharedViewSplitter(
 		api,
+		channelID,
 		&templator,
 		&templator.friends.mainTable,
 		&templator.neutral.mainTable,
@@ -71,10 +74,10 @@ func (t *PlayersTemplates) GenerateRecords() error {
 		return err
 	}
 
-	systemTags, _ := t.api.Players.Systems.TagsList(t.api.ChannelID)
-	regionTags, _ := t.api.Players.Regions.TagsList(t.api.ChannelID)
-	friendTags, _ := t.api.Players.Friends.TagsList(t.api.ChannelID)
-	enemyTags, _ := t.api.Players.Enemies.TagsList(t.api.ChannelID)
+	systemTags, _ := t.api.Players.Systems.TagsList(t.channelID)
+	regionTags, _ := t.api.Players.Regions.TagsList(t.channelID)
+	friendTags, _ := t.api.Players.Friends.TagsList(t.channelID)
+	enemyTags, _ := t.api.Players.Enemies.TagsList(t.channelID)
 	logus.Debug(
 		"PlayerTemplatesRender next",
 		logus.Items(systemTags, "systemTags"),
@@ -148,29 +151,29 @@ func (t *PlayersTemplates) GenerateRecords() error {
 
 	// Alerts
 
-	if alertNeutralCount, err := t.api.Alerts.NeutralsGreaterThan.Status(t.api.ChannelID); err == nil {
+	if alertNeutralCount, err := t.api.Alerts.NeutralsGreaterThan.Status(t.channelID); err == nil {
 		if len(neutralPlayers) >= alertNeutralCount {
 
 			t.neutral.alertTmpl.AppendRecord(views.RenderAlertTemplate(
-				t.api.ChannelID,
+				t.channelID,
 				fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount),
 				t.api,
 			))
 		}
 	}
-	if alertEnemyCount, err := t.api.Alerts.EnemiesGreaterThan.Status(t.api.ChannelID); err == nil {
+	if alertEnemyCount, err := t.api.Alerts.EnemiesGreaterThan.Status(t.channelID); err == nil {
 		if len(enemyPlayers) >= alertEnemyCount {
 			t.enemies.alertTmpl.AppendRecord(views.RenderAlertTemplate(
-				t.api.ChannelID,
+				t.channelID,
 				fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount),
 				t.api,
 			))
 		}
 	}
-	if alertFriendCount, err := t.api.Alerts.FriendsGreaterThan.Status(t.api.ChannelID); err == nil {
+	if alertFriendCount, err := t.api.Alerts.FriendsGreaterThan.Status(t.channelID); err == nil {
 		if len(friendPlayers) >= alertFriendCount {
 			t.friends.alertTmpl.AppendRecord(views.RenderAlertTemplate(
-				t.api.ChannelID,
+				t.channelID,
 				fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount),
 				t.api,
 			))

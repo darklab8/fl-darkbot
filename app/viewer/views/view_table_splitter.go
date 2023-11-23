@@ -11,13 +11,20 @@ import (
 type SharedViewTableSplitter struct {
 	views         []*ViewTable
 	api           *apis.API
+	channelID     types.DiscordChannelID
 	original_view OriginalRenderer
 }
 
-func NewSharedViewSplitter(api *apis.API, original_view OriginalRenderer, sh_templates ...*ViewTable) *SharedViewTableSplitter {
+func NewSharedViewSplitter(
+	api *apis.API,
+	channelID types.DiscordChannelID,
+	original_view OriginalRenderer,
+	sh_templates ...*ViewTable,
+) *SharedViewTableSplitter {
 	s := &SharedViewTableSplitter{
 		api:           api,
 		original_view: original_view,
+		channelID:     channelID,
 	}
 
 	s.views = append(s.views, sh_templates...)
@@ -35,13 +42,13 @@ func (t *SharedViewTableSplitter) Render() error {
 
 	for _, view := range t.views {
 		msg_count := 0
-		msg := NewMsg(view.MsgShared, msg_count)
+		msg := NewMsg(view.MsgShared, msg_count, t.channelID)
 
 		for _, record := range view.ViewRecords {
 			if len(*record)+msg.Len() > DiscordMsgLimit {
 				view.Msgs = append(view.Msgs, msg)
 				msg_count += 1
-				msg = NewMsg(view.MsgShared, msg_count)
+				msg = NewMsg(view.MsgShared, msg_count, t.channelID)
 			}
 
 			msg.Records = append(msg.Records, record)

@@ -22,9 +22,9 @@ type ChannelView struct {
 
 func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView {
 	view := ChannelView{api: api}
-	view.views = append(view.views, baseview.NewTemplateBase(api))
-	view.views = append(view.views, playerview.NewTemplatePlayers(api))
-	view.views = append(view.views, eventview.NewEventRenderer(api))
+	view.views = append(view.views, baseview.NewTemplateBase(api, channelID))
+	view.views = append(view.views, playerview.NewTemplatePlayers(api, channelID))
+	view.views = append(view.views, eventview.NewEventRenderer(api, channelID))
 	view.ChannelID = channelID
 
 	return view

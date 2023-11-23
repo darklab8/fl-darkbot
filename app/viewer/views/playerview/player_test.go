@@ -24,7 +24,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 		players := player.NewPlayerStorage(player.FixturePlayerAPIMock())
 		storage := scrappy.FixtureMockedStorage(scrappy.WithPlayerStorage(players))
-		api := apis.NewAPI(channelID, dbpath, storage)
+		api := apis.NewAPI(dbpath, storage)
 		record := records.NewStampedObjects[player.Player]()
 		record.Add(player.Player{Name: "player1", System: "system1", Region: "region1"})
 		record.Add(player.Player{Name: "player2", System: "system2", Region: "region2"})
@@ -32,7 +32,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		record.Add(player.Player{Name: "player4", System: "system4", Region: "region4"})
 		players.Add(record)
 
-		playerView := NewTemplatePlayers(api)
+		playerView := NewTemplatePlayers(api, channelID)
 		playerView.Render()
 		logus.Debug(playerView.friends.mainTable.Msgs[0].Render())
 		logus.Debug(playerView.enemies.mainTable.Msgs[0].Render())
@@ -56,7 +56,7 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		assert.Equal(t, 1, integer)
 		assert.Nil(t, err)
 
-		playerView = NewTemplatePlayers(api)
+		playerView = NewTemplatePlayers(api, channelID)
 		playerView.Render()
 
 		assert.NotZero(t, playerView.enemies.alertTmpl.ViewRecords)
@@ -76,7 +76,7 @@ func TestPlayerViewerRealData(t *testing.T) {
 		configur := configurator.NewConfigurator(dbpath)
 		configurator.NewConfiguratorPlayerFriend(configur).TagsAdd(channelID, []types.Tag{"RM"}...)
 
-		playerView := NewTemplatePlayers(apis.NewAPI(channelID, dbpath, storage))
+		playerView := NewTemplatePlayers(apis.NewAPI(dbpath, storage), channelID)
 		playerView.Render()
 
 		assert.NotZero(t, playerView.friends.mainTable.ViewRecords)

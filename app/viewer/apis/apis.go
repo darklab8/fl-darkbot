@@ -9,7 +9,6 @@ import (
 
 type API struct {
 	Discorder *discorder.Discorder
-	ChannelID types.DiscordChannelID
 	Scrappy   *scrappy.ScrappyStorage
 	*configurator.Configurators
 }
@@ -22,15 +21,8 @@ func WithStorage(storage *scrappy.ScrappyStorage) apiParam {
 	}
 }
 
-// Reusing API is important. db connections are memory leaking or some other stuff
-func (api *API) SetChannelID(ChannelID types.DiscordChannelID) *API {
-	api.ChannelID = ChannelID
-	return api
-}
-
-func NewAPI(ChannelID types.DiscordChannelID, dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage, opts ...apiParam) *API {
+func NewAPI(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage, opts ...apiParam) *API {
 	api := &API{
-		ChannelID:     ChannelID,
 		Discorder:     discorder.NewClient(),
 		Scrappy:       scrappy_storage,
 		Configurators: configurator.NewConfigugurators(dbpath),
