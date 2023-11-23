@@ -1,7 +1,8 @@
-package worker
+package worker_tests
 
 import (
 	"darkbot/app/settings/logus"
+	"darkbot/app/settings/worker"
 	"darkbot/app/settings/worker/worker_logus"
 	"darkbot/app/settings/worker/worker_types"
 	"fmt"
@@ -16,23 +17,23 @@ import (
 // Test Example
 
 type TaskTest struct {
-	*Task
+	*worker.Task
 
 	// any desired arbitary data
 	result worker_types.TaskID
 }
 
 func NewTaskTest(id worker_types.TaskID) *TaskTest {
-	return &TaskTest{Task: NewTask(id)}
+	return &TaskTest{Task: worker.NewTask(id)}
 }
 
-func (data *TaskTest) runTask(worker_id worker_types.WorkerID) worker_types.TaskStatusCode {
-	logus.Debug("task test started", worker_logus.WorkerID(worker_id), worker_logus.TaskID(data.id))
-	time.Sleep(time.Second * time.Duration(data.id))
-	data.result = data.id * 1
-	data.done = true
-	logus.Debug("task test finished", worker_logus.WorkerID(worker_id), worker_logus.TaskID(data.id))
-	return CodeSuccess
+func (data *TaskTest) RunTask(worker_id worker_types.WorkerID) worker_types.TaskStatusCode {
+	logus.Debug("task test started", worker_logus.WorkerID(worker_id), worker_logus.TaskID(data.GetID()))
+	time.Sleep(time.Second * time.Duration(data.GetID()))
+	data.result = data.GetID() * 1
+	data.SetAsDone()
+	logus.Debug("task test finished", worker_logus.WorkerID(worker_id), worker_logus.TaskID(data.GetID()))
+	return worker.CodeSuccess
 }
 
 func TaskResult(value worker_types.TaskID) logus.SlogParam {
@@ -42,9 +43,9 @@ func TaskResult(value worker_types.TaskID) logus.SlogParam {
 }
 
 func TestWorkerTemp(t *testing.T) {
-	taskPool := NewTaskPool[*TaskTest](
-		WithAllowFailedTasks[*TaskTest](),
-		WithDisableParallelism[*TaskTest](false),
+	taskPool := worker.NewTaskPool[*TaskTest](
+		worker.WithAllowFailedTasks[*TaskTest](),
+		worker.WithDisableParallelism[*TaskTest](false),
 	)
 
 	tasks := []*TaskTest{}
@@ -57,8 +58,8 @@ func TestWorkerTemp(t *testing.T) {
 	done_count := 0
 	failed_count := 0
 	for task_number, task := range tasks {
-		logus.Debug(fmt.Sprintf("task.Done=%t", task.done), worker_logus.TaskID(worker_types.TaskID(task_number)), TaskResult(task.result))
-		if task.done {
+		logus.Debug(fmt.Sprintf("task.Done=%t", task.IsDone()), worker_logus.TaskID(worker_types.TaskID(task_number)), TaskResult(task.result))
+		if task.IsDone() {
 			done_count += 1
 		} else {
 			failed_count += 1

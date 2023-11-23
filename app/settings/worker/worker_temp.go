@@ -10,8 +10,8 @@ import (
 // ====================
 
 type ITask interface {
-	runTask(worker_id worker_types.WorkerID) worker_types.TaskStatusCode
-	isDone() bool
+	RunTask(worker_id worker_types.WorkerID) worker_types.TaskStatusCode
+	IsDone() bool
 }
 
 type Task struct {
@@ -19,11 +19,13 @@ type Task struct {
 	done bool
 }
 
+func (t *Task) GetID() worker_types.TaskID { return t.id }
+func (t *Task) IsDone() bool               { return t.done }
+func (t *Task) SetAsDone()                 { t.done = true }
+
 func NewTask(id worker_types.TaskID) *Task {
 	return &Task{id: id}
 }
-
-func (data *Task) isDone() bool { return data.done }
 
 const (
 	CodeSuccess worker_types.TaskStatusCode = 0
@@ -74,7 +76,7 @@ func NewTaskPool[T ITask](opts ...TaskPoolOption[T]) *TaskPool[T] {
 func (j *TaskPool[taskT]) launchWorker(worker_id worker_types.WorkerID, tasks <-chan taskT, results chan<- worker_types.TaskStatusCode) {
 	logus.Debug("worker started", worker_logus.WorkerID(worker_id))
 	for task := range tasks {
-		results <- task.runTask(worker_id)
+		results <- task.RunTask(worker_id)
 	}
 	logus.Debug("worker finished", worker_logus.WorkerID(worker_id))
 }
@@ -128,7 +130,7 @@ func (taskPool *TaskPool[taskT]) RunTemporalPool(tasks []taskT) {
 
 	if taskPool.disable_parallelism {
 		for pseudo_worker_id, task := range tasks {
-			task.runTask(worker_types.WorkerID(pseudo_worker_id))
+			task.RunTask(worker_types.WorkerID(pseudo_worker_id))
 		}
 	} else {
 		status_codes := taskPool.runTasksinTemporalWorkers(tasks)
@@ -137,7 +139,7 @@ func (taskPool *TaskPool[taskT]) RunTemporalPool(tasks []taskT) {
 
 	for task_number, task := range tasks {
 		task_id := worker_types.TaskID(task_number)
-		if !task.isDone() && !taskPool.allow_failed_tasks {
+		if !task.IsDone() && !taskPool.allow_failed_tasks {
 			logus.Error("task failed", worker_logus.TaskID(task_id))
 		}
 		logus.Debug("task succeed", worker_logus.TaskID(task_id))

@@ -1,7 +1,8 @@
-package worker
+package worker_tests
 
 import (
 	"darkbot/app/settings/logus"
+	"darkbot/app/settings/worker"
 	"darkbot/app/settings/worker/worker_logus"
 	"darkbot/app/settings/worker/worker_types"
 	"fmt"
@@ -11,9 +12,9 @@ import (
 )
 
 func TestWorkerPersistent(t *testing.T) {
-	taskPool := NewTaskPoolPersistent[*TaskTest](
-		WithAllowFailedTasks[*TaskTest](),
-		WithDisableParallelism[*TaskTest](false),
+	taskPool := worker.NewTaskPoolPersistent[*TaskTest](
+		worker.WithAllowFailedTasks[*TaskTest](),
+		worker.WithDisableParallelism[*TaskTest](false),
 	)
 
 	tasks := []*TaskTest{}
@@ -34,8 +35,8 @@ func TestWorkerPersistent(t *testing.T) {
 	done_count := 0
 	failed_count := 0
 	for task_number, task := range tasks {
-		logus.Debug(fmt.Sprintf("task.Done=%t", task.done), worker_logus.TaskID(worker_types.TaskID(task_number)), TaskResult(task.result))
-		if task.done {
+		logus.Debug(fmt.Sprintf("task.Done=%t", task.IsDone()), worker_logus.TaskID(worker_types.TaskID(task_number)), TaskResult(task.result))
+		if task.IsDone() {
 			done_count += 1
 		} else {
 			failed_count += 1
