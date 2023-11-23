@@ -34,7 +34,8 @@ type JobPool[jobd IJob] struct {
 	jobTimeout worker_types.Seconds
 	numWorkers int
 
-	allow_failed_jobs bool
+	allow_failed_jobs   bool
+	disable_parallelism worker_types.DebugDisableParallelism
 }
 
 type JobPoolOption[T IJob] func(r *JobPool[T])
@@ -51,6 +52,10 @@ func WithWorkersAmount[T IJob](value int) JobPoolOption[T] {
 
 func WithJobTimeout[T IJob](value worker_types.Seconds) JobPoolOption[T] {
 	return func(c *JobPool[T]) { c.jobTimeout = value }
+}
+
+func WithDisableParallelism[T IJob](disable_parallelism worker_types.DebugDisableParallelism) JobPoolOption[T] {
+	return func(c *JobPool[T]) { c.disable_parallelism = disable_parallelism }
 }
 
 func NewJobPool[T IJob](opts ...JobPoolOption[T]) JobPool[T] {
@@ -81,7 +86,6 @@ func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
 	// We make 2 channels for this.
 	jobs_channel := make(chan jobd, numJobs)
 	result_channel := make(chan worker_types.JobStatusCode, numJobs)
-
 	status_codes := []worker_types.JobStatusCode{}
 
 	// This starts up N workers, initially blocked because there are no jobs yet.
@@ -93,6 +97,7 @@ func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
 	for _, job := range jobs {
 		jobs_channel <- job
 	}
+
 	// then close that channel to indicate that is all the work we have.
 	close(jobs_channel)
 
@@ -113,13 +118,13 @@ func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
 	return status_codes
 }
 
-func RunJobPool[J IJob](debug worker_types.DebugDisableParallelism, jobPool JobPool[J], jobs []J) {
+func (jobPool *JobPool[jobd]) RunJobPool(jobs []jobd) {
 	/*
 		Switcher executing jobs with smth resembling multithreaded pool
 		or executing synrconously if debug is on
 	*/
 
-	if debug {
+	if jobPool.disable_parallelism {
 		for pseudo_worker_id, job := range jobs {
 			job.runJob(worker_types.WorkerID(pseudo_worker_id))
 		}
