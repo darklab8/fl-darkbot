@@ -52,7 +52,7 @@ func TestWorkerTemp(t *testing.T) {
 		jobs = append(jobs, NewJobTest(worker_types.JobID(job_id)))
 	}
 
-	jobPool.RunJobPool(jobs)
+	jobPool.RunTemporalPool(jobs)
 
 	done_count := 0
 	failed_count := 0

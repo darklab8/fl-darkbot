@@ -28,3 +28,9 @@ func StatusCodes(status_codes []worker_types.JobStatusCode) logus.SlogParam {
 		c.Params["status_codes"] = strings.Join(str_status_codes, ",")
 	}
 }
+
+func StatusCode(value worker_types.JobStatusCode) logus.SlogParam {
+	return func(c *logus.SlogGroup) {
+		c.Params["status_code"] = strconv.Itoa(int(value))
+	}
+}

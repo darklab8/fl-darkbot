@@ -58,7 +58,7 @@ func WithDisableParallelism[T IJob](disable_parallelism worker_types.DebugDisabl
 	return func(c *JobPool[T]) { c.disable_parallelism = disable_parallelism }
 }
 
-func NewJobPool[T IJob](opts ...JobPoolOption[T]) JobPool[T] {
+func NewJobPool[T IJob](opts ...JobPoolOption[T]) *JobPool[T] {
 	j := &JobPool[T]{
 		numWorkers: 3,
 		jobTimeout: 30,
@@ -68,10 +68,10 @@ func NewJobPool[T IJob](opts ...JobPoolOption[T]) JobPool[T] {
 		opt(j)
 	}
 
-	return *j
+	return j
 }
 
-func (j JobPool[jobd]) launchWorker(worker_id worker_types.WorkerID, jobs <-chan jobd, results chan<- worker_types.JobStatusCode) {
+func (j *JobPool[jobd]) launchWorker(worker_id worker_types.WorkerID, jobs <-chan jobd, results chan<- worker_types.JobStatusCode) {
 	logus.Debug("worker started", worker_logus.WorkerID(worker_id))
 	for job := range jobs {
 		results <- job.runJob(worker_id)
@@ -79,7 +79,9 @@ func (j JobPool[jobd]) launchWorker(worker_id worker_types.WorkerID, jobs <-chan
 	logus.Debug("worker finished", worker_logus.WorkerID(worker_id))
 }
 
-func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
+/// Temporal
+
+func (j *JobPool[jobd]) runJobsinTemporalWorkers(jobs []jobd) []worker_types.JobStatusCode {
 	numJobs := len(jobs)
 
 	// In order to use our pool of workers we need to send them work and collect their results.
@@ -118,7 +120,7 @@ func (j JobPool[jobd]) doJobs(jobs []jobd) []worker_types.JobStatusCode {
 	return status_codes
 }
 
-func (jobPool *JobPool[jobd]) RunJobPool(jobs []jobd) {
+func (jobPool *JobPool[jobd]) RunTemporalPool(jobs []jobd) {
 	/*
 		Switcher executing jobs with smth resembling multithreaded pool
 		or executing synrconously if debug is on
@@ -129,7 +131,7 @@ func (jobPool *JobPool[jobd]) RunJobPool(jobs []jobd) {
 			job.runJob(worker_types.WorkerID(pseudo_worker_id))
 		}
 	} else {
-		status_codes := jobPool.doJobs(jobs)
+		status_codes := jobPool.runJobsinTemporalWorkers(jobs)
 		logus.Debug("results", worker_logus.StatusCodes(status_codes))
 	}
 

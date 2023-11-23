@@ -11,17 +11,25 @@ import (
 )
 
 func TestWorkerPersistent(t *testing.T) {
-	jobPool := NewJobPool[*JobTest](
+	jobPool := NewJobPoolPersistent[*JobTest](
 		WithAllowFailedJobs[*JobTest](),
 		WithDisableParallelism[*JobTest](false),
 	)
 
 	jobs := []*JobTest{}
 	for job_id := 1; job_id <= 3; job_id++ {
-		jobs = append(jobs, NewJobTest(worker_types.JobID(job_id)))
+		jobs = append(jobs, NewJobTest(worker_types.JobID(2)))
 	}
 
-	jobPool.RunJobPool(jobs)
+	for _, job := range jobs {
+		jobPool.DelayJob(job)
+	}
+
+	// U can test that it works even without awaitings
+	// Awaiting is during prod usage necessary if u are going to timeout tasks though
+	for range jobs {
+		jobPool.AwaitSomeJob()
+	}
 
 	done_count := 0
 	failed_count := 0
