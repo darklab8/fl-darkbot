@@ -42,13 +42,11 @@ func JobResult(value worker_types.JobID) logus.SlogParam {
 }
 
 func TestWorker(t *testing.T) {
-	jobPool := NewJobPool[*JobTest](
-		WithAllowFailedJobs[*JobTest](true),
-	)
+	jobPool := NewJobPool[*JobTest](WithAllowFailedJobs[*JobTest]())
 
 	jobs := []*JobTest{}
 	for job_id := 1; job_id <= 3; job_id++ {
-		jobs = append(jobs, &JobTest{Job: NewJob(worker_types.JobID(job_id))})
+		jobs = append(jobs, NewJobTest(worker_types.JobID(job_id)))
 	}
 
 	RunJobPool(worker_types.DebugDisableParallelism(false), jobPool, jobs)

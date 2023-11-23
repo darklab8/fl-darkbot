@@ -39,9 +39,9 @@ type JobPool[jobd IJob] struct {
 
 type JobPoolOption[T IJob] func(r *JobPool[T])
 
-func WithAllowFailedJobs[T IJob](value bool) JobPoolOption[T] {
+func WithAllowFailedJobs[T IJob]() JobPoolOption[T] {
 	return func(c *JobPool[T]) {
-		c.allow_failed_jobs = value
+		c.allow_failed_jobs = true
 	}
 }
 
