@@ -103,7 +103,12 @@ func (v ChannelView) DeleteOld() {
 			continue
 		}
 
-		v.api.Discorder.DeleteMessage(v.ChannelID, msg.ID)
+		err := v.api.Discorder.DeleteMessage(v.ChannelID, msg.ID)
+		if err != nil {
+			// No point to continue deleting in this channel if first one failed
+			// it will make more optimized amount of network requests
+			return
+		}
 		logus.Info("deleted message with id", logus.MessageID(msg.ID))
 		deleteLimit--
 	}

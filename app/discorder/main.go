@@ -52,9 +52,10 @@ func (d *Discorder) EditMessage(channelID types.DiscordChannelID, messageID type
 	return err
 }
 
-func (d *Discorder) DeleteMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID) {
+func (d *Discorder) DeleteMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID) error {
 	err := d.dg.ChannelMessageDelete(string(channelID), string(messageID))
 	logus.CheckWarn(err, "failed deleting message in discorder", logus.ChannelID(channelID))
+	return err
 }
 
 type DiscordMessage struct {
