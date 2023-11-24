@@ -64,7 +64,7 @@ func WithDisableParallelism[T ITask](disable_parallelism worker_types.DebugDisab
 func NewTaskPool[T ITask](opts ...TaskPoolOption[T]) *TaskPool[T] {
 	j := &TaskPool[T]{
 		numWorkers:  3,
-		taskTimeout: 30,
+		taskTimeout: 120,
 	}
 
 	for _, opt := range opts {
