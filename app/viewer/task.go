@@ -57,7 +57,7 @@ func GetMutex(MutexKey string) *sync.Mutex {
 
 func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) worker_types.TaskStatusCode {
 	channel_info, err := v.api.Discorder.GetDiscordSession().Channel(string(v.channelID))
-	if logus.CheckError(err, "unable to get channel info") {
+	if logus.CheckError(err, "unable to get channel info", logus.ChannelID(v.channelID)) {
 		return worker.CodeFailure
 	}
 
