@@ -11,6 +11,8 @@ type APIurl string
 type ScrappyLoopDelay int
 type ViewerLoopDelay int
 
+type ViewerDelayBetweenChannels int
+
 type DiscordChannelID string
 
 type DiscordMessageID string

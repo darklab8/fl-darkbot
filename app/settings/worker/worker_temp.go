@@ -30,6 +30,7 @@ func NewTask(id worker_types.TaskID) *Task {
 const (
 	CodeSuccess worker_types.TaskStatusCode = 0
 	CodeTimeout worker_types.TaskStatusCode = 1
+	CodeFailure worker_types.TaskStatusCode = 2
 )
 
 type TaskPool[taskT ITask] struct {
@@ -74,11 +75,11 @@ func NewTaskPool[T ITask](opts ...TaskPoolOption[T]) *TaskPool[T] {
 }
 
 func (j *TaskPool[taskT]) launchWorker(worker_id worker_types.WorkerID, tasks <-chan taskT, results chan<- worker_types.TaskStatusCode) {
-	logus.Debug("worker started", worker_logus.WorkerID(worker_id))
+	logus.Info("worker started", worker_logus.WorkerID(worker_id))
 	for task := range tasks {
 		results <- task.RunTask(worker_id)
 	}
-	logus.Debug("worker finished", worker_logus.WorkerID(worker_id))
+	logus.Info("worker finished", worker_logus.WorkerID(worker_id))
 }
 
 /// Temporal

@@ -5,7 +5,7 @@ import (
 	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
-	"os"
+	"darkbot/app/settings/utils"
 	"testing"
 )
 
@@ -26,10 +26,6 @@ func newMockedThreadsQuery() MockedThreadsQuery {
 	return MockedThreadsQuery{threads: one_thread}
 }
 
-func FixtureDevEnv() bool {
-	return os.Getenv("DEV_ENV") == "true"
-}
-
 func TestForumerSending(t *testing.T) {
 
 	mocked_post_requester := FixtureDetailedRequester()
@@ -40,7 +36,7 @@ func TestForumerSending(t *testing.T) {
 
 		cg_channel := configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath))
 
-		if FixtureDevEnv() {
+		if utils.FixtureDevEnv() {
 			cg_channel.Add(dev_env_channel)
 		}
 
@@ -64,7 +60,7 @@ func TestSubForumSending(t *testing.T) {
 
 		cg_channel := configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath))
 
-		if FixtureDevEnv() {
+		if utils.FixtureDevEnv() {
 			cg_channel.Add(dev_env_channel)
 		}
 

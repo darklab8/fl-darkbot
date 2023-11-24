@@ -4,11 +4,13 @@ import (
 	"darkbot/app/discorder"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
+	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
 	"darkbot/app/viewer/views/baseview"
 	"darkbot/app/viewer/views/eventview"
 	"darkbot/app/viewer/views/playerview"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -61,8 +63,10 @@ func (v *ChannelView) Render() {
 // Edit if message ID is present.
 // Send if not present.
 func (v ChannelView) Send() {
-	for _, view := range v.views {
-		view.Send()
+	for view_num, view := range v.views {
+		utils.TimeMeasure(func() {
+			view.Send()
+		}, fmt.Sprintf("view.Send view_num=%d, view=%v", view_num, view), logus.ChannelID(v.ChannelID))
 	}
 }
 

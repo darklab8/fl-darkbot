@@ -3,6 +3,7 @@ package views
 import (
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
+	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"fmt"
 	"strings"
@@ -88,9 +89,16 @@ func (t *SharedViewTableSplitter) MatchMessageID(messageID types.DiscordMessageI
 }
 
 func (t *SharedViewTableSplitter) Send() {
-	for _, view := range t.views {
-		for _, msg := range view.Msgs {
-			msg.Send(t.api)
+	utils.TimeMeasure(func() {
+
+		for _, view := range t.views {
+			utils.TimeMeasure(func() {
+				for _, msg := range view.Msgs {
+					utils.TimeMeasure(func() {
+						msg.Send(t.api)
+					}, fmt.Sprintf("SharedViewTableSplitter.send.msg=%v, msgID=%v, viewID=%v,", msg, msg.MessageID, msg.ViewID))
+				}
+			}, fmt.Sprintf("SharedViewTableSplitter.send.view=%v", view))
 		}
-	}
+	}, fmt.Sprintf("SharedViewTableSplitter.send=%v", t))
 }
