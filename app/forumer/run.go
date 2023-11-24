@@ -240,7 +240,7 @@ func (v *Forumer) update() {
 		v.GetPost(thread, func(new_post *forum_types.Post) {
 			for _, channel := range channelIDs {
 				msgs, err := v.Discorder.GetLatestMessages(channel)
-				if logus.CheckError(err, "failed to get discord latest msgs") {
+				if logus.CheckError(err, "failed to get discord latest msgs", logus.ChannelID(channel)) {
 					continue
 				}
 				v.TrySendMsg(channel, new_post, msgs)
@@ -267,7 +267,7 @@ func (v *Forumer) RetryMsgs() {
 	channelIDs, _ := v.Channels.List()
 	for _, channel := range channelIDs {
 		msgs, err := v.Discorder.GetLatestMessages(channel)
-		if logus.CheckError(err, "failed to get discord latest msgs") {
+		if logus.CheckError(err, "failed to get discord latest msgs", logus.ChannelID(channel)) {
 			continue
 		}
 
