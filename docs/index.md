@@ -15,13 +15,16 @@ Darkbot repeatedly updates information to discord channel
 - You must be Server owner or having `bot_controller` role in order to command the bot.
 - add to some channel by writing `. connect`
 - get help which commands are available by `. --help` or requesting help on sub commands `. base --help`
-- add base tag for tracking `. base add Research Station`
-- confirm it was added `. base list`
+- add base tag for tracking `. base tags add Research Station`
+- confirm it was added `. base tags list`
 - in around 20 seconds you should see rendered and constantly updated view at this channel
 
 ![](index_assets/base_render.png)
 
-- remove tag by `. base remove Research Station` or by `. base clear`
+- remove tag by `. base remove Research Station` or by `. base tags clear`
+
+See other documentation in [Darkbot forum posts](https://discoverygc.com/forums/showthread.php?tid=188040)
+- it has documented new appeared features and commands
 
 # Features
 
