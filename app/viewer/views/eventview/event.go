@@ -5,6 +5,7 @@ import (
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
+	"darkbot/app/viewer/views/viewer_msg"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -12,7 +13,7 @@ import (
 )
 
 type EventView struct {
-	main views.ViewTable
+	main *views.ViewTable
 
 	*views.SharedViewTableSplitter
 	channelID types.DiscordChannelID
@@ -20,10 +21,15 @@ type EventView struct {
 
 func NewEventRenderer(api *apis.API, channelID types.DiscordChannelID) *EventView {
 	base := EventView{}
-	base.main.ViewID = "#darkbot-event-view"
+	base.main = views.NewViewTable(viewer_msg.NewTableMsg(
+		types.ViewID("#darkbot-event-view"),
+		types.ViewHeader("**Event table of players**\n"),
+		types.ViewBeginning("```json\n"),
+		types.ViewEnd("```\n"),
+	))
 	base.channelID = channelID
 
-	base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, channelID, &base, &base.main)
+	base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, channelID, &base, base.main)
 
 	return &base
 }
@@ -44,13 +50,6 @@ func (t *EventView) GenerateRecords() error {
 	logus.CheckDebug(err, "failed to acquire player event list", logus.ChannelID(t.channelID))
 
 	if len(eventTags) > 0 {
-		var beginning strings.Builder
-		var end strings.Builder
-
-		beginning.WriteString("**Event table of players**\n")
-		beginning.WriteString("```json\n")
-		t.main.ViewBeginning = types.ViewBeginning(beginning.String())
-
 		for _, eventTag := range eventTags {
 			var record strings.Builder
 			record.WriteString(fmt.Sprintf(`"%s": `, eventTag))
@@ -69,10 +68,6 @@ func (t *EventView) GenerateRecords() error {
 			record.WriteString("\n")
 			t.main.AppendRecord(types.ViewRecord(record.String()))
 		}
-
-		end.WriteString("```\n")
-		t.main.ViewEnd = types.ViewEnd(end.String())
-
 	}
 
 	return nil

@@ -7,6 +7,7 @@ import (
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
+	"darkbot/app/viewer/views/viewer_msg"
 	_ "embed"
 	"fmt"
 	"text/template"
@@ -22,16 +23,16 @@ import (
 // Send
 
 type PlayersFriends struct {
-	mainTable views.ViewTable
-	alertTmpl views.ViewTable
+	mainTable *views.ViewTable
+	alertTmpl *views.ViewTable
 }
 type PlayersEnemies struct {
-	mainTable views.ViewTable
-	alertTmpl views.ViewTable
+	mainTable *views.ViewTable
+	alertTmpl *views.ViewTable
 }
 type PlayersNeutral struct {
-	mainTable views.ViewTable
-	alertTmpl views.ViewTable
+	mainTable *views.ViewTable
+	alertTmpl *views.ViewTable
 }
 
 type PlayersTemplates struct {
@@ -46,24 +47,45 @@ type PlayersTemplates struct {
 func NewTemplatePlayers(api *apis.API, channelID types.DiscordChannelID) *PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.api = api
-	templator.channelID = channelID
-	templator.friends.mainTable.ViewID = "#darkbot-players-friends-table"
-	templator.neutral.mainTable.ViewID = "#darkbot-players-neutral-table"
-	templator.enemies.mainTable.ViewID = "#darkbot-players-enemies-table"
-	templator.friends.alertTmpl.ViewID = "#darkbot-players-friends-alert"
-	templator.neutral.alertTmpl.ViewID = "#darkbot-players-neutral-alert"
-	templator.enemies.alertTmpl.ViewID = "#darkbot-players-enemies-alert"
+	templator.channelID = channelID //
+	templator.friends.mainTable = views.NewViewTable(viewer_msg.NewTableMsg(
+		types.ViewID("#darkbot-players-friends-table"),
+		types.ViewHeader("**Friend players in all systems and regions**\n"),
+		types.ViewBeginning("\n```diff\n"),
+		types.ViewEnd("```\n"),
+	))
+	templator.neutral.mainTable = views.NewViewTable(viewer_msg.NewTableMsg(
+		types.ViewID("#darkbot-players-neutral-table"),
+		types.ViewHeader("**Neutral players in tracked systems and regions**\n"),
+		types.ViewBeginning("```json\n"),
+		types.ViewEnd("```\n"),
+	))
+	templator.enemies.mainTable = views.NewViewTable(viewer_msg.NewTableMsg(
+		types.ViewID("#darkbot-players-enemies-table"),
+		types.ViewHeader("**Enemy players in tracked systems and regions**\n"),
+		types.ViewBeginning("```diff\n"),
+		types.ViewEnd("```\n"),
+	))
+	templator.friends.alertTmpl = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-players-friends-alert"),
+	))
+	templator.neutral.alertTmpl = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-players-neutral-alert"),
+	))
+	templator.enemies.alertTmpl = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-players-enemies-alert"),
+	))
 
 	templator.SharedViewTableSplitter = views.NewSharedViewSplitter(
 		api,
 		channelID,
 		&templator,
-		&templator.friends.mainTable,
-		&templator.neutral.mainTable,
-		&templator.enemies.mainTable,
-		&templator.friends.alertTmpl,
-		&templator.neutral.alertTmpl,
-		&templator.enemies.alertTmpl,
+		templator.friends.mainTable,
+		templator.neutral.mainTable,
+		templator.enemies.mainTable,
+		templator.friends.alertTmpl,
+		templator.neutral.alertTmpl,
+		templator.enemies.alertTmpl,
 	)
 	return &templator
 }
@@ -118,35 +140,27 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	}
 
 	if len(systemTags) > 0 || len(regionTags) > 0 {
-		t.neutral.mainTable.ViewBeginning = "**Neutral players in tracked systems and regions**\n```json\n"
-		t.neutral.mainTable.ViewEnd = "```\n"
 		for _, playerVars := range neutralPlayers {
 			t.neutral.mainTable.AppendRecord(types.ViewRecord(utils.TmpRender(playerTemplate, playerVars)))
 		}
 
-		protectAgainstResend(&neutralPlayers, &t.neutral.mainTable)
+		protectAgainstResend(&neutralPlayers, t.neutral.mainTable)
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
-		t.enemies.mainTable.ViewBeginning = "**Enemy players in tracked systems and regions**\n```diff\n"
-		t.enemies.mainTable.ViewEnd = "```\n"
-
 		for _, playerVars := range enemyPlayers {
 			t.enemies.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("-%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
 
-		protectAgainstResend(&enemyPlayers, &t.enemies.mainTable)
+		protectAgainstResend(&enemyPlayers, t.enemies.mainTable)
 	}
 
 	if len(friendTags) > 0 {
-		t.friends.mainTable.ViewBeginning = "**Friend players in all systems and regions**\n```diff\n"
-		t.friends.mainTable.ViewEnd = "```\n"
-
 		for _, playerVars := range friendPlayers {
 			t.friends.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("+%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
 
-		protectAgainstResend(&friendPlayers, &t.friends.mainTable)
+		protectAgainstResend(&friendPlayers, t.friends.mainTable)
 	}
 
 	// Alerts

@@ -26,6 +26,9 @@ type Tag string
 type ViewID string
 type ViewEnumeratedID string
 
+// Message
+type ViewTimeStamp string
 type ViewBeginning string
+type ViewHeader string
 type ViewRecord string
 type ViewEnd string

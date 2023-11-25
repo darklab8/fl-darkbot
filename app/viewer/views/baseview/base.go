@@ -7,6 +7,7 @@ import (
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
+	"darkbot/app/viewer/views/viewer_msg"
 	_ "embed"
 	"fmt"
 	"sort"
@@ -26,10 +27,10 @@ func init() {
 // Base
 
 type TemplateBase struct {
-	main                    views.ViewTable
-	alertHealthLowerThan    views.ViewTable
-	alertHealthIsDecreasing views.ViewTable
-	alertBaseUnderAttack    views.ViewTable
+	main                    *views.ViewTable
+	alertHealthLowerThan    *views.ViewTable
+	alertHealthIsDecreasing *views.ViewTable
+	alertBaseUnderAttack    *views.ViewTable
 	api                     *apis.API
 	*views.SharedViewTableSplitter
 	channelID types.DiscordChannelID
@@ -39,19 +40,32 @@ func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateB
 	base := TemplateBase{}
 	base.api = api
 	base.channelID = channelID
-	base.main.ViewID = "#darkbot-base-view"
-	base.alertHealthLowerThan.ViewID = "#darkbot-base-alert-health-lower-than"
-	base.alertHealthIsDecreasing.ViewID = "#darkbot-base-health-is-decreasing"
-	base.alertBaseUnderAttack.ViewID = "#darkbot-base-base-under-attack"
+	base.main = views.NewViewTable(viewer_msg.NewTableMsg(
+		types.ViewID("#darkbot-base-view"),
+		types.ViewHeader("**Bases:**\n"),
+		types.ViewBeginning(""),
+		types.ViewEnd(""),
+	))
+
+	//
+	base.alertHealthLowerThan = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-base-alert-health-lower-than"),
+	))
+	base.alertHealthIsDecreasing = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-base-health-is-decreasing"),
+	))
+	base.alertBaseUnderAttack = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-base-base-under-attack"),
+	))
 
 	base.SharedViewTableSplitter = views.NewSharedViewSplitter(
 		api,
 		channelID,
 		&base,
-		&base.main,
-		&base.alertHealthLowerThan,
-		&base.alertHealthIsDecreasing,
-		&base.alertBaseUnderAttack,
+		base.main,
+		base.alertHealthLowerThan,
+		base.alertHealthIsDecreasing,
+		base.alertBaseUnderAttack,
 	)
 	return &base
 }
@@ -98,10 +112,6 @@ func (b *TemplateBase) GenerateRecords() error {
 	sort.Slice(record.List, func(i, j int) bool {
 		return record.List[i].Name < record.List[j].Name
 	})
-
-	var beginning strings.Builder
-	beginning.WriteString("**Bases:**\n")
-	b.main.ViewBeginning = types.ViewBeginning(beginning.String())
 
 	HealthDecreasePhrase := "\n@healthDecreasing;"
 	UnderAttackPhrase := "\n@underAttack;"

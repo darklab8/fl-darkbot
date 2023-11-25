@@ -53,10 +53,10 @@ func (v *ChannelView) Discover() error {
 	return nil
 }
 
-// Render new messages (ensure preserved Message ID)
-func (v *ChannelView) Render() {
+// RenderViews new messages (ensure preserved Message ID)
+func (v *ChannelView) RenderViews() {
 	for _, view := range v.views {
-		view.Render()
+		view.RenderView()
 	}
 }
 

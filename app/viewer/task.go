@@ -73,7 +73,7 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) worker_typ
 	time_new_channel.Close()
 
 	time_render := utils.NewTimeMeasure("channel.Render", logus.ChannelID(v.channelID))
-	channel.Render()
+	channel.RenderViews()
 	time_render.Close()
 
 	time_discover := utils.NewTimeMeasure("channel.Discover", logus.ChannelID(v.channelID))

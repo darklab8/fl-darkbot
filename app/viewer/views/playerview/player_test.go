@@ -33,19 +33,19 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		players.Add(record)
 
 		playerView := NewTemplatePlayers(api, channelID)
-		playerView.Render()
-		logus.Debug(playerView.friends.mainTable.Msgs[0].Render())
-		logus.Debug(playerView.enemies.mainTable.Msgs[0].Render())
-		logus.Debug(playerView.neutral.mainTable.Msgs[0].Render())
+		playerView.RenderView()
+		logus.Debug(playerView.friends.mainTable.GetMsgs()[0].Render())
+		logus.Debug(playerView.enemies.mainTable.GetMsgs()[0].Render())
+		logus.Debug(playerView.neutral.mainTable.GetMsgs()[0].Render())
 		logus.Debug("test TestPlayerViewer is finished")
 
-		assert.NotZero(t, playerView.friends.mainTable.ViewRecords)
-		assert.NotZero(t, playerView.enemies.mainTable.ViewRecords)
-		assert.NotZero(t, playerView.neutral.mainTable.ViewRecords)
+		assert.True(t, playerView.friends.mainTable.HasRecords())
+		assert.True(t, playerView.enemies.mainTable.HasRecords())
+		assert.True(t, playerView.neutral.mainTable.HasRecords())
 
-		assert.Zero(t, playerView.friends.alertTmpl.ViewRecords)
-		assert.Zero(t, playerView.enemies.alertTmpl.ViewRecords)
-		assert.Zero(t, playerView.neutral.alertTmpl.ViewRecords)
+		assert.False(t, playerView.friends.alertTmpl.HasRecords())
+		assert.False(t, playerView.enemies.alertTmpl.HasRecords())
+		assert.False(t, playerView.neutral.alertTmpl.HasRecords())
 
 		enemyAlerts := configurator.NewCfgAlertEnemyPlayersGreaterThan(configurator.NewConfigurator(dbpath))
 		_, err := enemyAlerts.Status(channelID)
@@ -57,11 +57,11 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		assert.Nil(t, err)
 
 		playerView = NewTemplatePlayers(api, channelID)
-		playerView.Render()
+		playerView.RenderView()
 
-		assert.NotZero(t, playerView.enemies.alertTmpl.ViewRecords)
-		assert.Zero(t, playerView.friends.alertTmpl.ViewRecords)
-		assert.Zero(t, playerView.neutral.alertTmpl.ViewRecords)
+		assert.True(t, playerView.enemies.alertTmpl.HasRecords())
+		assert.False(t, playerView.friends.alertTmpl.HasRecords())
+		assert.False(t, playerView.neutral.alertTmpl.HasRecords())
 
 	})
 }
@@ -77,13 +77,13 @@ func TestPlayerViewerRealData(t *testing.T) {
 		configurator.NewConfiguratorPlayerFriend(configur).TagsAdd(channelID, []types.Tag{"RM"}...)
 
 		playerView := NewTemplatePlayers(apis.NewAPI(dbpath, storage), channelID)
-		playerView.Render()
+		playerView.RenderView()
 
-		assert.NotZero(t, playerView.friends.mainTable.ViewRecords)
-		assert.Zero(t, playerView.enemies.mainTable.ViewRecords)
-		assert.Zero(t, playerView.neutral.mainTable.ViewRecords)
+		assert.True(t, playerView.friends.mainTable.HasRecords())
+		assert.False(t, playerView.enemies.mainTable.HasRecords())
+		assert.False(t, playerView.neutral.mainTable.HasRecords())
 
-		logus.Debug(playerView.friends.mainTable.Msgs[0].Render())
+		logus.Debug(playerView.friends.mainTable.GetMsgs()[0].Render())
 
 		logus.Debug("test TestPlayerViewer is finished")
 	})

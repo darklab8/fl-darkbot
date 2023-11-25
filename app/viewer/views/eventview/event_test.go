@@ -30,11 +30,11 @@ func TestPlayerEvent(t *testing.T) {
 		players.Add(record)
 
 		playerView := NewEventRenderer(api, channelID)
-		playerView.Render()
+		playerView.RenderView()
 		// logus.Debug(len(playerView.main.ViewRecords))
 		logus.Debug("test TestPlayerEvent is finished")
 
-		assert.Equal(t, 2, len(playerView.main.ViewRecords))
-		assert.Equal(t, 1, len(playerView.main.Msgs))
+		assert.Equal(t, 2, playerView.main.RecordCount())
+		assert.Equal(t, 1, len(playerView.main.GetMsgs()))
 	})
 }

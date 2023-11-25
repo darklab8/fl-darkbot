@@ -5,6 +5,7 @@ import (
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
+	"darkbot/app/viewer/views/viewer_msg"
 	"fmt"
 	"strings"
 )
@@ -38,25 +39,26 @@ type OriginalRenderer interface {
 	GenerateRecords() error
 }
 
-func (t *SharedViewTableSplitter) Render() error {
+func (t *SharedViewTableSplitter) RenderView() error {
 	err := t.original_view.GenerateRecords()
 
 	for _, view := range t.views {
 		msg_count := 0
-		msg := NewMsg(view.MsgShared, msg_count, t.channelID)
+		msg := viewer_msg.NewMsg(view.msgShared, msg_count, t.channelID)
 
-		for _, record := range view.ViewRecords {
+		for _, record := range view.viewRecords {
 			if len(*record)+msg.Len() > DiscordMsgLimit {
-				view.Msgs = append(view.Msgs, msg)
+				view.msgs = append(view.msgs, msg)
 				msg_count += 1
-				msg = NewMsg(view.MsgShared, msg_count, t.channelID)
+				msg = viewer_msg.NewMsg(view.msgShared, msg_count, t.channelID)
 			}
 
-			msg.Records = append(msg.Records, record)
+			msg.AppendRecord(record)
+			msg.AppendRecord(record)
 		}
 
-		if len(msg.Records) > 0 {
-			view.Msgs = append(view.Msgs, msg)
+		if msg.HasRecords() {
+			view.msgs = append(view.msgs, msg)
 		}
 	}
 
@@ -66,10 +68,10 @@ func (t *SharedViewTableSplitter) Render() error {
 // Time comlexity: Must be called only after Generate()
 func (t *SharedViewTableSplitter) DiscoverMessageID(content string, msgID types.DiscordMessageID) {
 	for _, view := range t.views {
-		for _, msg := range view.Msgs {
-			if strings.Contains(content, string(msg.ViewEnumeratedID)) {
-				logus.Debug(fmt.Sprintf("discovered content to ViewEnumeratedID=%v", msg.ViewEnumeratedID))
-				msg.MessageID = msgID
+		for _, msg := range view.msgs {
+			if strings.Contains(content, string(msg.GetViewEnumeratedID())) {
+				logus.Debug(fmt.Sprintf("discovered content to ViewEnumeratedID=%v", viewer_msg.LogusMsg(msg)))
+				msg.SetMessageID(msgID)
 			}
 		}
 	}
@@ -78,9 +80,9 @@ func (t *SharedViewTableSplitter) DiscoverMessageID(content string, msgID types.
 // Time Complexity: Must be called only after DiscoverMessageID
 func (t *SharedViewTableSplitter) MatchMessageID(messageID types.DiscordMessageID) bool {
 	for _, view := range t.views {
-		for _, msg := range view.Msgs {
-			if msg.MessageID == messageID {
-				logus.Debug(fmt.Sprintf("found match messageID=%v to msg.MessageID=%v", messageID, msg.MessageID))
+		for _, msg := range view.msgs {
+			if msg.GetMessageID() == messageID {
+				logus.Debug(fmt.Sprintf("found match messageID=%v to msg.MessageID=%v", messageID, msg.GetMessageID()))
 				return true
 			}
 		}
@@ -90,13 +92,12 @@ func (t *SharedViewTableSplitter) MatchMessageID(messageID types.DiscordMessageI
 
 func (t *SharedViewTableSplitter) Send() {
 	utils.TimeMeasure(func() {
-
 		for _, view := range t.views {
 			utils.TimeMeasure(func() {
-				for _, msg := range view.Msgs {
+				for _, msg := range view.msgs {
 					utils.TimeMeasure(func() {
 						msg.Send(t.api)
-					}, fmt.Sprintf("SharedViewTableSplitter.send.msg=%v, msgID=%v, viewID=%v,", msg, msg.MessageID, msg.ViewID))
+					}, "SharedViewTableSplitter.send", viewer_msg.LogusMsg(msg))
 				}
 			}, fmt.Sprintf("SharedViewTableSplitter.send.view=%v", view))
 		}

@@ -35,13 +35,13 @@ func TestBaseViewerMocked(t *testing.T) {
 		api := apis.NewAPI(dbpath, scrapper)
 
 		render := NewTemplateBase(api, channelID)
-		render.Render()
-		logus.Debug(fmt.Sprintf("render.main.Content=%v", render.main.ViewRecords))
+		render.RenderView()
+		logus.Debug(fmt.Sprintf("render.main.Content=%v", render.main.GetMsgs()))
 
-		assert.NotZero(t, render.main.ViewRecords)
-		assert.Zero(t, render.alertHealthLowerThan.ViewRecords)
-		assert.Zero(t, render.alertHealthIsDecreasing.ViewRecords)
-		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
+		assert.True(t, render.main.HasRecords())
+		assert.False(t, render.alertHealthLowerThan.HasRecords())
+		assert.False(t, render.alertHealthIsDecreasing.HasRecords())
+		assert.False(t, render.alertBaseUnderAttack.HasRecords())
 
 		// alerts
 		baseAlertDecreasing := configurator.NewCfgAlertBaseHealthIsDecreasing(configurator.NewConfigurator(dbpath))
@@ -58,12 +58,12 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.True(t, isEnabled)
 
 		render = NewTemplateBase(api, channelID)
-		render.Render()
+		render.RenderView()
 
-		assert.NotZero(t, render.main.ViewRecords)
-		assert.NotZero(t, render.alertHealthIsDecreasing.ViewRecords)
-		assert.Zero(t, render.alertHealthLowerThan.ViewRecords)
-		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
+		assert.True(t, render.main.HasRecords())
+		assert.True(t, render.alertHealthIsDecreasing.HasRecords())
+		assert.False(t, render.alertHealthLowerThan.HasRecords())
+		assert.False(t, render.alertBaseUnderAttack.HasRecords())
 
 		baseAlertBelowThreshold := configurator.NewCfgAlertBaseHealthLowerThan(configurator.NewConfigurator(dbpath))
 		_, err := baseAlertBelowThreshold.Status(channelID)
@@ -71,37 +71,37 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		baseAlertBelowThreshold.Set(channelID, 40)
 		render = NewTemplateBase(api, channelID)
-		render.Render()
+		render.RenderView()
 
-		assert.NotZero(t, render.main.ViewRecords)
-		assert.NotZero(t, render.alertHealthIsDecreasing.ViewRecords)
-		assert.Zero(t, render.alertHealthLowerThan.ViewRecords)
-		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
+		assert.True(t, render.main.HasRecords())
+		assert.True(t, render.alertHealthIsDecreasing.HasRecords())
+		assert.False(t, render.alertHealthLowerThan.HasRecords())
+		assert.False(t, render.alertBaseUnderAttack.HasRecords())
 
 		baseAlertBelowThreshold.Set(channelID, 60)
 		render = NewTemplateBase(api, channelID)
-		render.Render()
+		render.RenderView()
 
-		assert.NotZero(t, render.main.ViewRecords)
-		assert.NotZero(t, render.alertHealthIsDecreasing.ViewRecords)
-		assert.NotZero(t, render.alertHealthLowerThan.ViewRecords)
-		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
+		assert.True(t, render.main.HasRecords())
+		assert.True(t, render.alertHealthIsDecreasing.HasRecords())
+		assert.True(t, render.alertHealthLowerThan.HasRecords())
+		assert.False(t, render.alertBaseUnderAttack.HasRecords())
 
 		record = records.NewStampedObjects[base.Base]()
 		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
 		scrapper.GetBaseStorage().Add(record)
 		cg.TagsAdd(channelID, []types.Tag{"Bank"}...)
 		render = NewTemplateBase(api, channelID)
-		render.Render()
+		render.RenderView()
 
-		assert.Zero(t, render.alertBaseUnderAttack.ViewRecords)
+		assert.False(t, render.alertBaseUnderAttack.HasRecords())
 
 		baseUnderAttackalert := configurator.NewCfgAlertBaseIsUnderAttack(configurator.NewConfigurator(dbpath))
 		baseUnderAttackalert.Enable(channelID)
 		render = NewTemplateBase(api, channelID)
-		render.Render()
+		render.RenderView()
 
-		assert.NotZero(t, render.alertBaseUnderAttack.ViewRecords)
+		assert.True(t, render.alertBaseUnderAttack.HasRecords())
 	})
 }
 
@@ -126,8 +126,8 @@ func TestBaseViewerRealData(t *testing.T) {
 		})
 
 		base := NewTemplateBase(api, channelID)
-		base.Render()
-		logus.Debug(fmt.Sprintf("base.main.Content=%v", base.main.ViewRecords))
+		base.RenderView()
+		logus.Debug(fmt.Sprintf("base.main.Msgs=%v", base.main.GetMsgs()))
 	})
 }
 
@@ -204,8 +204,8 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		baseUnderAttackalert.Enable(channelID)
 
 		render := NewTemplateBase(api, channelID)
-		render.Render()
+		render.RenderView()
 
-		assert.NotZero(t, render.alertBaseUnderAttack.ViewRecords)
+		assert.True(t, render.alertBaseUnderAttack.HasRecords())
 	})
 }
