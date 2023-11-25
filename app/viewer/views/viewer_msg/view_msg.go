@@ -15,7 +15,15 @@ type MsgShared struct {
 	viewHeader    types.ViewHeader
 	viewBeginning types.ViewBeginning
 	viewEnd       types.ViewEnd
+	viewType      viewType
 }
+
+type viewType int
+
+const (
+	MsgAlert viewType = iota
+	MsgTable
+)
 
 func NewTableMsg(
 	viewID types.ViewID,
@@ -28,6 +36,7 @@ func NewTableMsg(
 		viewHeader:    viewHeader,
 		viewBeginning: viewBeginning,
 		viewEnd:       viewEnd,
+		viewType:      MsgTable,
 	}
 }
 
@@ -35,7 +44,8 @@ func NewAlertMsg(
 	viewID types.ViewID,
 ) *MsgShared {
 	return &MsgShared{
-		viewID: viewID,
+		viewID:   viewID,
+		viewType: MsgAlert,
 	}
 }
 
@@ -78,7 +88,7 @@ func (m *Msg) HasRecords() bool { return len(m.records) > 0 }
 
 func (m *Msg) SetMessageID(messagID types.DiscordMessageID) { m.messageID = messagID }
 
-func (m *Msg) AppendRecord(record *types.ViewRecord) { m.records = append(m.records, record) }
+func (m *Msg) AppendRecordToMsg(record *types.ViewRecord) { m.records = append(m.records, record) }
 
 func (m *Msg) Len() int {
 	size := m.LenShared()
@@ -90,13 +100,22 @@ func (m *Msg) Len() int {
 
 func (v *Msg) Render() string {
 	var content strings.Builder
-	content.WriteString(string(v.viewEnumeratedID) + string(v.GetTimestamp()) + "\n")
-	content.WriteString(string(v.viewHeader))
-	content.WriteString(string(v.viewBeginning))
-	for _, record := range v.records {
-		content.WriteString(string(*record))
+
+	if v.viewType == MsgTable {
+		content.WriteString(string(v.viewEnumeratedID) + string(v.GetTimestamp()) + "\n")
+		content.WriteString(string(v.viewHeader))
+		content.WriteString(string(v.viewBeginning))
+		for _, record := range v.records {
+			content.WriteString(string(*record))
+		}
+		content.WriteString(string(v.viewEnd))
+	} else {
+		// Mobile friendly way to render alert
+		for _, record := range v.records {
+			content.WriteString(string(*record))
+		}
+		content.WriteString("\n" + string(v.viewEnumeratedID) + string(v.GetTimestamp()))
 	}
-	content.WriteString(string(v.viewEnd))
 	return content.String()
 }
 

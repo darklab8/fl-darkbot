@@ -53,8 +53,7 @@ func (t *SharedViewTableSplitter) RenderView() error {
 				msg = viewer_msg.NewMsg(view.msgShared, msg_count, t.channelID)
 			}
 
-			msg.AppendRecord(record)
-			msg.AppendRecord(record)
+			msg.AppendRecordToMsg(record)
 		}
 
 		if msg.HasRecords() {
