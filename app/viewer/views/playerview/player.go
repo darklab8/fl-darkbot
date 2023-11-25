@@ -51,7 +51,7 @@ func NewTemplatePlayers(api *apis.API, channelID types.DiscordChannelID) *Player
 	templator.friends.mainTable = views.NewViewTable(viewer_msg.NewTableMsg(
 		types.ViewID("#darkbot-players-friends-table"),
 		types.ViewHeader("**Friend players in all systems and regions**\n"),
-		types.ViewBeginning("\n```diff\n"),
+		types.ViewBeginning("```diff\n"),
 		types.ViewEnd("```\n"),
 	))
 	templator.neutral.mainTable = views.NewViewTable(viewer_msg.NewTableMsg(
@@ -135,7 +135,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 
 	protectAgainstResend := func(player *[]player.Player, view *views.ViewTable) {
 		if len(*player) == 0 {
-			view.AppendRecord(types.ViewRecord(" "))
+			view.AppendRecord(types.ViewRecord(" \n"))
 		}
 	}
 
