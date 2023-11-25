@@ -8,6 +8,8 @@ import (
 	"darkbot/app/consoler/printer"
 	"darkbot/app/settings"
 	"darkbot/app/settings/logus"
+	"darkbot/app/settings/types"
+	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -45,14 +47,31 @@ func CreateConsoler(
 	)
 	root := newRootCommands(&rootGroup)
 
+	baseGroup := root.GetChild(
+		root.CurrentCmd,
+		cmdgroup.Command("base"),
+		cmdgroup.ShortDesc("Base commands"),
+	)
+
 	NewTagCommands(
-		root.GetChild(
-			root.CurrentCmd,
-			cmdgroup.Command("base"),
-			cmdgroup.ShortDesc("Base commands"),
+		baseGroup.GetChild(
+			baseGroup.CurrentCmd,
+			cmdgroup.Command("tags"),
+			cmdgroup.ShortDesc("base tags u add for tracking"),
 		),
 		configurator.NewConfiguratorBase(configur),
 		configurator.NewConfiguratorChannel(configur),
+	)
+
+	NewAlertSetStringCommand[models.ConfigBaseOrderingKey](
+		baseGroup.GetChild(
+			baseGroup.CurrentCmd,
+			cmdgroup.Command("order_by"),
+			cmdgroup.ShortDesc(fmt.Sprintf("changing ordering to one of allowed keys: %v", models.ConfigBaseOrderingKeyAllowedTags)),
+		),
+		configurator.NewCfgBaseOrderingKey(configur),
+		configurator.NewConfiguratorChannel(configur),
+		models.ConfigBaseOrderingKeyAllowedTags,
 	)
 
 	forumGroup := root.GetChild(
@@ -237,6 +256,7 @@ func CreateConsoler(
 		),
 		configurator.NewCfgAlertPingMessage(configur),
 		configurator.NewConfiguratorChannel(configur),
+		[]types.OrderKey{},
 	)
 
 	return consolerCmd

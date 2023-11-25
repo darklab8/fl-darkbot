@@ -64,38 +64,58 @@ func (t AlertTresholdShared) GetThreshold() int {
 }
 
 type AlertNeutralPlayersEqualOrGreater struct {
-	AlertTemplate
+	OneValueTemplate
 	AlertTresholdShared
 }
 
 type AlertEnemiesEqualOrGreater struct {
-	AlertTemplate
+	OneValueTemplate
 	AlertTresholdShared
 }
 
 type AlertFriendsEqualOrGreater struct {
-	AlertTemplate
+	OneValueTemplate
 	AlertTresholdShared
 }
 
 // ====== Shared alerts for all bases =========
 type AlertBaseHealthLowerThan struct {
-	AlertTemplate
+	OneValueTemplate
 	AlertTresholdShared
 }
 
 type AlertBaseIfHealthDecreasing struct {
-	AlertTemplate
+	OneValueTemplate
 }
 type AlertBaseIfUnderAttack struct {
-	AlertTemplate
+	OneValueTemplate
 }
 
 type AlertPingMessage struct {
-	AlertTemplate
+	OneValueTemplate
 	Value string
 }
 
 func (a AlertPingMessage) GetValue() string {
+	return a.Value
+}
+
+// ====== Configs =========
+
+type ConfigBaseOrderingKey struct {
+	OneValueTemplate
+	Value string
+}
+
+// i know it can be Constraint. But if i add it as `struct tag` it breaks typing
+// and kind of hard to figure out how to fix nicely
+const (
+	BaseKeyName        types.OrderKey = "name"
+	BaseKeyAffiliation types.OrderKey = "affiliation"
+)
+
+var ConfigBaseOrderingKeyAllowedTags = []types.OrderKey{BaseKeyName, BaseKeyAffiliation}
+
+func (a ConfigBaseOrderingKey) GetValue() string {
 	return a.Value
 }

@@ -1,6 +1,7 @@
 package baseview
 
 import (
+	"darkbot/app/configurator/models"
 	"darkbot/app/scrappy/base"
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
@@ -102,6 +103,33 @@ func MatchBases(bases []base.Base, tags []types.Tag) []base.Base {
 	return result
 }
 
+type ForbiddenOrderKey struct{ order_key types.OrderKey }
+
+func ErrorForbiddenOrderKey(order_key types.OrderKey) ForbiddenOrderKey {
+	return ForbiddenOrderKey{order_key: order_key}
+}
+
+func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order key=%s", f.order_key) }
+
+func (b *TemplateBase) sortBases(bases []base.Base, order_key types.OrderKey) ([]base.Base, error) {
+
+	switch order_key {
+	case models.BaseKeyName:
+		sort.Slice(bases, func(i, j int) bool {
+			return bases[i].Name < bases[j].Name
+		})
+	case models.BaseKeyAffiliation:
+		sort.Slice(bases, func(i, j int) bool {
+			return bases[i].Affiliation < bases[j].Affiliation
+		})
+	default:
+		logus.Error(fmt.Sprintf("forbidden order order_key=%s, only keys=%v are allowed", order_key, models.ConfigBaseOrderingKeyAllowedTags))
+		return bases, ErrorForbiddenOrderKey(order_key)
+	}
+
+	return bases, nil
+}
+
 const HealthRateDecreasingThreshold = -0.01
 
 func (b *TemplateBase) GenerateRecords() error {
@@ -117,9 +145,20 @@ func (b *TemplateBase) GenerateRecords() error {
 	UnderAttackPhrase := "\n@underAttack;"
 	bases := []TemplateAugmentedBase{}
 
-	tags, _ := b.api.Bases.TagsList(b.channelID)
-
+	tags, _ := b.api.Bases.Tags.TagsList(b.channelID)
 	matchedBases := MatchBases(record.List, tags)
+
+	order_key, err := b.api.Bases.OrderBy.Status(b.channelID)
+	if !logus.CheckDebug(err, "failed to query Order by key") {
+		matchedBases, err = b.sortBases(matchedBases, types.OrderKey(order_key))
+
+		base_table_will_be_rendered := len(matchedBases) > 0
+		if err != nil && base_table_will_be_rendered {
+			b.main.AppendRecord(types.ViewRecord(fmt.Sprintf("ERR %s", err.Error())))
+			return err
+		}
+	}
+
 	healthDeritives, healthDerivativeErr := CalculateDerivates(tags, b.api)
 	DerivativesInitializing := healthDerivativeErr != nil
 

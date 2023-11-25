@@ -8,7 +8,8 @@ import (
 )
 
 func GetPingingMessage(ChannelID types.DiscordChannelID, configurator *Configurators, Discorder *discorder.Discorder) types.PingMessage {
-	pingMessage, err := configurator.Alerts.PingMessage.Status(ChannelID)
+	pingMessageStr, err := configurator.Alerts.PingMessage.Status(ChannelID)
+	pingMessage := types.PingMessage(pingMessageStr)
 	logus.Debug("RenderAlertTemplate.PingMessage.Status", logus.OptError(err), logus.PingMessage(pingMessage))
 	if err != nil {
 		ownerID, err := Discorder.GetOwnerID(ChannelID)

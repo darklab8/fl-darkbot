@@ -55,6 +55,7 @@ func (cg *Configurator) AutoMigrateSchema() *Configurator {
 		&models.AlertBaseIfHealthDecreasing{},
 		&models.AlertBaseIfUnderAttack{},
 		&models.AlertPingMessage{},
+		&models.ConfigBaseOrderingKey{},
 	)
 	if !logus.CheckWarn(err, "AutoMigrateSchema was executed with problems", logus.OptError(err)) {
 		logus.Info("AutoMigrateSchema was executed fine")

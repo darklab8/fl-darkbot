@@ -33,8 +33,12 @@ type Forum struct {
 	Thread   ForumThread
 	Subforum ForumSubforum
 }
+type Base struct {
+	Tags    ConfiguratorBase
+	OrderBy CfgBaseOrderingKey
+}
 type Configurators struct {
-	Bases    ConfiguratorBase
+	Bases    Base
 	Players  Players
 	Alerts   Alerts
 	Forum    Forum
@@ -49,7 +53,10 @@ func NewConfigugurators(dbpath types.Dbpath) *Configurators {
 	return &Configurators{
 		Configur: configur,
 		Channels: NewConfiguratorChannel(configur),
-		Bases:    NewConfiguratorBase(configur),
+		Bases: Base{
+			Tags:    NewConfiguratorBase(configur),
+			OrderBy: NewCfgBaseOrderingKey(configur),
+		},
 		Players: Players{
 			Systems: NewConfiguratorSystem(configur),
 			Regions: NewConfiguratorRegion(configur),

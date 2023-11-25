@@ -5,7 +5,10 @@ import (
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/printer"
 	"darkbot/app/settings/logus"
+	"darkbot/app/settings/types"
+	"darkbot/app/settings/utils"
 	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -225,15 +228,16 @@ func NewAlertSetStringCommand[T configurator.AlertStringType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertString[T],
 	channels configurator.ConfiguratorChannel,
+	allowed_order_keys []types.OrderKey,
 ) *AlertSetStringCommand[T] {
 	t := &AlertSetStringCommand[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
-	t.CreateSetCmd()
+	t.CreateSetCmd(allowed_order_keys)
 	t.CreateUnsetCmd()
 	t.CreateStatusCmd()
 	return t
 }
 
-func (t *AlertSetStringCommand[T]) CreateSetCmd() {
+func (t *AlertSetStringCommand[T]) CreateSetCmd(allowed_order_keys []types.OrderKey) {
 	command := &cobra.Command{
 		Use:   "set",
 		Short: "Set Value (provide 'set StringValue')",
@@ -245,6 +249,22 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd() {
 			}
 
 			str := args[0]
+
+			if len(allowed_order_keys) > 0 {
+				is_allowed_tag := false
+				for _, tag := range allowed_order_keys {
+					if string(tag) == str {
+						is_allowed_tag = true
+					}
+				}
+
+				if !is_allowed_tag {
+					printer.Println(cmd, "ERR only next values are allowed: "+strings.Join(utils.CompL(allowed_order_keys,
+						func(x types.OrderKey) string { return string(x) }), ", "))
+					return
+				}
+			}
+
 			err := t.cfgTags.Set(t.GetChannelID(), str)
 			if err != nil {
 				printer.Println(cmd, "ERR msg="+err.Error())

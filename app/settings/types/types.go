@@ -32,3 +32,5 @@ type ViewBeginning string
 type ViewHeader string
 type ViewRecord string
 type ViewEnd string
+
+type OrderKey string

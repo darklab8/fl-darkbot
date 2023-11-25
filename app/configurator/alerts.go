@@ -21,8 +21,8 @@ type AlertBoolType interface {
 }
 
 type AlertStringType interface {
-	models.AlertPingMessage
-
+	models.AlertPingMessage |
+		models.ConfigBaseOrderingKey
 	GetValue() string
 }
 
@@ -79,10 +79,14 @@ type CfgAlertPingMessage = IConfiguratorAlertString[models.AlertPingMessage]
 
 var NewCfgAlertPingMessage = NewConfiguratorAlertString[models.AlertPingMessage]
 
+type CfgBaseOrderingKey = IConfiguratorAlertString[models.ConfigBaseOrderingKey]
+
+var NewCfgBaseOrderingKey = NewConfiguratorAlertString[models.ConfigBaseOrderingKey]
+
 func (c IConfiguratorAlertThreshold[T]) Set(channelID types.DiscordChannelID, value int) error {
 	c.Unset(channelID)
 	obj := T{
-		AlertTemplate:       models.AlertTemplate{ChannelID: channelID},
+		OneValueTemplate:    models.OneValueTemplate{ChannelID: channelID},
 		AlertTresholdShared: models.AlertTresholdShared{Threshold: value},
 	}
 	result2 := c.db.Create(&obj)
@@ -120,9 +124,7 @@ func (c IConfiguratorAlertThreshold[T]) Status(channelID types.DiscordChannelID)
 ///////////////////////////
 
 func (c IConfiguratorAlertBool[T]) Enable(channelID types.DiscordChannelID) error {
-	obj := T{
-		AlertTemplate: models.AlertTemplate{ChannelID: channelID},
-	}
+	obj := T{OneValueTemplate: models.OneValueTemplate{ChannelID: channelID}}
 	result := c.db.Create(&obj)
 	return result.Error
 }
@@ -157,8 +159,8 @@ func (c IConfiguratorAlertBool[T]) Status(channelID types.DiscordChannelID) (boo
 func (c IConfiguratorAlertString[T]) Set(channelID types.DiscordChannelID, value string) error {
 	c.Unset(channelID)
 	obj := T{
-		AlertTemplate: models.AlertTemplate{ChannelID: channelID},
-		Value:         value,
+		OneValueTemplate: models.OneValueTemplate{ChannelID: channelID},
+		Value:            value,
 	}
 	result2 := c.db.Create(&obj)
 	return result2.Error
@@ -172,7 +174,7 @@ func (c IConfiguratorAlertString[T]) Unset(channelID types.DiscordChannelID) err
 	return result.Error
 }
 
-func (c IConfiguratorAlertString[T]) Status(channelID types.DiscordChannelID) (types.PingMessage, error) {
+func (c IConfiguratorAlertString[T]) Status(channelID types.DiscordChannelID) (string, error) {
 	var obj T
 	result := c.db.Where("channel_id = ?", channelID).Limit(1).Find(&obj)
 	if result.Error != nil {
@@ -184,5 +186,5 @@ func (c IConfiguratorAlertString[T]) Status(channelID types.DiscordChannelID) (t
 	}
 
 	str := obj.GetValue()
-	return types.PingMessage(str), result.Error
+	return str, result.Error
 }

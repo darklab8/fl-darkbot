@@ -29,7 +29,7 @@ func TestGrabStdout(t *testing.T) {
 func TestAddBaseTag(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
-		assert.Contains(t, NewConsoler(dbpath).Execute(settings.Config.ConsolerPrefix+` base add "bla bla" sdf`, channelID).String(), "OK tags are added")
+		assert.Contains(t, NewConsoler(dbpath).Execute(settings.Config.ConsolerPrefix+` base tags add "bla bla" sdf`, channelID).String(), "OK tags are added")
 	})
 }
 
