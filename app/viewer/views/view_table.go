@@ -23,6 +23,8 @@ func (m *ViewTable) RecordCount() int { return len(m.viewRecords) }
 
 func (v *ViewTable) GetMsgs() []*viewer_msg.Msg { return v.msgs }
 
+func (v *ViewTable) SetHeader(header types.ViewHeader) { v.msgShared.SetHeader(header) }
+
 func (v *ViewTable) AppendRecord(record types.ViewRecord) {
 	v.viewRecords = append(v.viewRecords, &record)
 }

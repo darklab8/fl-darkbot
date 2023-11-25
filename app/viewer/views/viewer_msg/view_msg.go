@@ -49,6 +49,8 @@ func NewAlertMsg(
 	}
 }
 
+func (v *MsgShared) SetHeader(header types.ViewHeader) { v.viewHeader = header }
+
 func (m *MsgShared) GetTimestamp() types.ViewTimeStamp {
 	return types.ViewTimeStamp(fmt.Sprintf(" (last updated: %s)", time.Now().String()))
 }
@@ -111,10 +113,13 @@ func (v *Msg) Render() string {
 		content.WriteString(string(v.viewEnd))
 	} else {
 		// Mobile friendly way to render alert
-		for _, record := range v.records {
-			content.WriteString(string(*record))
-		}
+		content.WriteString(string(v.viewHeader))
 		content.WriteString("\n" + string(v.viewEnumeratedID) + string(v.GetTimestamp()))
+		// content.WriteString(string(v.viewBeginning))
+		// for _, record := range v.records {
+		// 	content.WriteString(string(*record))
+		// }
+		// content.WriteString(string(v.viewEnd))
 	}
 	return content.String()
 }

@@ -8,6 +8,7 @@ import (
 	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -63,6 +64,8 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 		assert.False(t, playerView.friends.alertTmpl.HasRecords())
 		assert.False(t, playerView.neutral.alertTmpl.HasRecords())
 
+		// rendering one of alerts
+		fmt.Println(playerView.enemies.alertTmpl.GetMsgs()[0].Render())
 	})
 }
 
@@ -83,7 +86,7 @@ func TestPlayerViewerRealData(t *testing.T) {
 		assert.False(t, playerView.enemies.mainTable.HasRecords())
 		assert.False(t, playerView.neutral.mainTable.HasRecords())
 
-		logus.Debug(playerView.friends.mainTable.GetMsgs()[0].Render())
+		fmt.Println(playerView.friends.mainTable.GetMsgs()[0].Render())
 
 		logus.Debug("test TestPlayerViewer is finished")
 	})

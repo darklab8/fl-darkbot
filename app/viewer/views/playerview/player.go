@@ -167,30 +167,20 @@ func (t *PlayersTemplates) GenerateRecords() error {
 
 	if alertNeutralCount, err := t.api.Alerts.NeutralsGreaterThan.Status(t.channelID); err == nil {
 		if len(neutralPlayers) >= alertNeutralCount {
-
-			t.neutral.alertTmpl.AppendRecord(views.RenderAlertTemplate(
-				t.channelID,
-				fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount),
-				t.api,
-			))
+			t.neutral.alertTmpl.SetHeader(views.RenderAlertTemplate(t.channelID, fmt.Sprintf("Amount %d of neutral players is above threshold %d", len(neutralPlayers), alertNeutralCount), t.api))
+			t.neutral.alertTmpl.AppendRecord("")
 		}
 	}
 	if alertEnemyCount, err := t.api.Alerts.EnemiesGreaterThan.Status(t.channelID); err == nil {
 		if len(enemyPlayers) >= alertEnemyCount {
-			t.enemies.alertTmpl.AppendRecord(views.RenderAlertTemplate(
-				t.channelID,
-				fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount),
-				t.api,
-			))
+			t.enemies.alertTmpl.SetHeader(views.RenderAlertTemplate(t.channelID, fmt.Sprintf("Amount %d of enemy players is above threshold %d", len(enemyPlayers), alertEnemyCount), t.api))
+			t.enemies.alertTmpl.AppendRecord("")
 		}
 	}
 	if alertFriendCount, err := t.api.Alerts.FriendsGreaterThan.Status(t.channelID); err == nil {
 		if len(friendPlayers) >= alertFriendCount {
-			t.friends.alertTmpl.AppendRecord(views.RenderAlertTemplate(
-				t.channelID,
-				fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount),
-				t.api,
-			))
+			t.friends.alertTmpl.SetHeader(views.RenderAlertTemplate(t.channelID, fmt.Sprintf("Amount %d of friendly players is above threshold %d", len(friendPlayers), alertFriendCount), t.api))
+			t.friends.alertTmpl.AppendRecord("")
 		}
 	}
 	return nil

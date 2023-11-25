@@ -22,7 +22,7 @@ type TemplateAlertInput struct {
 	Msg         string
 }
 
-func RenderAlertTemplate(ChannelID types.DiscordChannelID, Msg string, api *apis.API) types.ViewRecord {
+func RenderAlertTemplate(ChannelID types.DiscordChannelID, Msg string, api *apis.API) types.ViewHeader {
 	// pingMessage, err := api.Alerts.PingMessage.Status(ChannelID)
 	// ownerID, err := api.Discorder.GetOwnerID(ChannelID)
 
@@ -31,5 +31,5 @@ func RenderAlertTemplate(ChannelID types.DiscordChannelID, Msg string, api *apis
 		PingMessage: pingMessage,
 		Msg:         Msg,
 	}
-	return types.ViewRecord(utils.TmpRender(alertTemplate, input))
+	return types.ViewHeader(utils.TmpRender(alertTemplate, input))
 }

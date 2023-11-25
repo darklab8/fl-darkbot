@@ -155,11 +155,12 @@ func (b *TemplateBase) GenerateRecords() error {
 	if healthThreshold, err := b.api.Alerts.BaseHealthLowerThan.Status(b.channelID); err == nil {
 		for _, base := range bases {
 			if int(base.Health) < healthThreshold {
-				b.alertHealthLowerThan.AppendRecord(views.RenderAlertTemplate(
+				b.alertHealthLowerThan.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
 					fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), healthThreshold),
 					b.api,
 				))
+				b.alertHealthLowerThan.AppendRecord("")
 				break
 			}
 		}
@@ -168,11 +169,12 @@ func (b *TemplateBase) GenerateRecords() error {
 	if isAlertEnabled, err := b.api.Alerts.BaseHealthIsDecreasing.Status(b.channelID); err == nil && isAlertEnabled {
 		for _, base := range bases {
 			if base.IsHealthDecreasing {
-				b.alertHealthIsDecreasing.AppendRecord(views.RenderAlertTemplate(
+				b.alertHealthIsDecreasing.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
 					fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(base.Health), base.HealthChange),
 					b.api,
 				))
+				b.alertHealthIsDecreasing.AppendRecord("")
 				break
 			}
 		}
@@ -181,7 +183,7 @@ func (b *TemplateBase) GenerateRecords() error {
 	if isAlertEnabled, _ := b.api.Alerts.BaseIsUnderAttack.Status(b.channelID); isAlertEnabled {
 		for _, base := range bases {
 			if base.IsUnderAttack {
-				b.alertBaseUnderAttack.AppendRecord(views.RenderAlertTemplate(
+				b.alertBaseUnderAttack.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
 					fmt.Sprintf("Base %s health %d is probably under attack because health change %s is dropping faster than %f. Or it was detected at forum attack declaration thread.",
 						base.Name,
@@ -191,6 +193,7 @@ func (b *TemplateBase) GenerateRecords() error {
 					),
 					b.api,
 				))
+				b.alertBaseUnderAttack.AppendRecord("")
 				break
 			}
 		}
