@@ -10,16 +10,12 @@ import (
 	"darkbot/app/settings"
 	"darkbot/app/settings/types"
 	"strings"
-
-	"github.com/spf13/cobra"
 )
 
 type Consoler struct {
-	buffStdout Writer
-	buffStderr Writer
-	dbpath     types.Dbpath
-	rootCmd    *cobra.Command
-	params     *consoler_types.ChannelParams
+	dbpath   types.Dbpath
+	params   *consoler_types.ChannelParams
+	configur *configurator.Configurator
 }
 
 func NewConsoler(
@@ -29,33 +25,29 @@ func NewConsoler(
 
 	c.dbpath = dbpath
 	c.params = consoler_types.NewChannelParams("", dbpath)
-	configur := configurator.NewConfigurator(dbpath)
+	c.configur = configurator.NewConfigurator(dbpath)
 
-	c.rootCmd = commands.CreateConsoler(c.params, configur)
 	return c
 }
 
 func (c *Consoler) Execute(
 	cmd string,
 	channelID types.DiscordChannelID,
-) *Consoler {
+) string {
 	// only commands starting from prefix are allowed
 	if !strings.HasPrefix(cmd, settings.Config.ConsolerPrefix) {
-		return c
+		return ""
 	}
 
-	c.buffStdout = NewWriter()
-	c.buffStderr = NewWriter()
-	c.rootCmd.SetOut(c.buffStdout)
-	c.rootCmd.SetErr(c.buffStderr)
+	rootCmd := commands.CreateConsoler(c.params, c.configur)
+	buffStdout := NewWriter()
+	buffStderr := NewWriter()
+	rootCmd.SetOut(buffStdout)
+	rootCmd.SetErr(buffStderr)
 
 	c.params.SetChannelID(channelID)
-	c.rootCmd.SetArgs(strings.Split(cmd, " "))
-	c.rootCmd.Execute()
+	rootCmd.SetArgs(strings.Split(cmd, " "))
+	rootCmd.Execute()
 
-	return c
-}
-
-func (c *Consoler) String() string {
-	return c.buffStdout.String() + c.buffStderr.String()
+	return buffStdout.String() + buffStderr.String()
 }
