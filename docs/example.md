@@ -43,5 +43,5 @@ flowchart TD
 ### Contacts
 
 - [Darklab Discord server](https://discord.gg/aukHmTK82J)
-- [feature requests can be opened in Github Issues](https://github.com/darklab8/darklab_darkbot/issues)
+- [feature requests can be opened in Github Issues](https://github.com/darklab8/darklab_fldarkbot/issues)
 - email to `dark.dreamflyer@gmail.com`
