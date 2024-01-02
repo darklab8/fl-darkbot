@@ -3,12 +3,13 @@ package viewer
 import (
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/worker"
-	"darkbot/app/settings/worker/worker_types"
 	"darkbot/app/viewer/apis"
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/worker"
+	"github.com/darklab8/darklab_goutils/goutils/worker/worker_types"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
@@ -56,10 +57,10 @@ func GetMutex(MutexKey string) *sync.Mutex {
 	return new_mutex
 }
 
-func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) worker_types.TaskStatusCode {
+func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	channel_info, err := v.api.Discorder.GetDiscordSession().Channel(string(v.channelID))
 	if darkbot_logus.Log.CheckError(err, "unable to get channel info", darkbot_logus.ChannelID(v.channelID)) {
-		return worker.CodeFailure
+		return err
 	}
 
 	MutexKey := channel_info.GuildID
@@ -82,7 +83,7 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) worker_typ
 	time_discover.Close()
 
 	if darkbot_logus.Log.CheckWarn(err, "unable to grab Discord msgs", darkbot_logus.ChannelID(v.channelID)) {
-		return worker.CodeFailure
+		return err
 	}
 
 	time_send := utils.NewTimeMeasure("channel.Send", darkbot_logus.ChannelID(v.channelID))
@@ -92,7 +93,7 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) worker_typ
 	time_delete_old := utils.NewTimeMeasure("channel.DeleteOld", darkbot_logus.ChannelID(v.channelID))
 	channel.DeleteOld()
 	time_delete_old.Close()
-	v.SetAsDone()
+
 	darkbot_logus.Log.Info(fmt.Sprintf("RunTask finished, TaskID=%d, elapsed=%s, started_at=%s, finished_at=%s",
 		v.Task.GetID(),
 		time.Since(time_run_task_started).String(),
@@ -102,5 +103,5 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) worker_typ
 
 	// Important for Mutex above! Prevents Guild level rate limits. looks like 5 msg edits per 5 second at one server is good
 	time.Sleep(time.Duration(v.delayBetweenChannels) * time.Second)
-	return worker.CodeSuccess
+	return nil
 }

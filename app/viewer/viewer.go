@@ -5,9 +5,10 @@ import (
 	"darkbot/app/settings"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/worker"
 	"darkbot/app/viewer/apis"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/worker"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
@@ -20,7 +21,7 @@ type ViewerDelays struct {
 type Viewer struct {
 	delays  ViewerDelays
 	api     *apis.API
-	workers *worker.TaskPoolPeristent[*TaskRefreshChannel]
+	workers *worker.TaskPoolPeristent
 }
 
 func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Viewer {
@@ -33,10 +34,10 @@ func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Vi
 		},
 	}
 
-	v.workers = worker.NewTaskPoolPersistent[*TaskRefreshChannel](
-		worker.WithAllowFailedTasks[*TaskRefreshChannel](),
-		worker.WithDisableParallelism[*TaskRefreshChannel](false),
-		worker.WithWorkersAmount[*TaskRefreshChannel](10),
+	v.workers = worker.NewTaskPoolPersistent(
+		worker.WithAllowFailedTasks(),
+		worker.WithDisableParallelism(false),
+		worker.WithWorkersAmount(10),
 	)
 
 	return v
@@ -45,11 +46,6 @@ func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Vi
 func (v *Viewer) Run() {
 	darkbot_logus.Log.Info("Viewer is now running.")
 
-	go func() {
-		for {
-			v.workers.AwaitSomeTask()
-		}
-	}()
 	for {
 		v.Update()
 	}
