@@ -2,7 +2,7 @@ package forumer
 
 import (
 	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/utils"
 	"fmt"
 	"os"
@@ -26,7 +26,7 @@ func FixtureDetailedRequester() func(mt MethodType, u forum_types.Url) (*QueryRe
 	detailed_post_content_filepath := filepath.Join(utils.GetCurrrentFolder(), "test_data", "detailed_post_content.html")
 	if _, err := os.Stat(detailed_post_content_filepath); err != nil {
 		query, err := NewQuery("GET", "https://discoverygc.com/forums/showthread.php?tid=200175&action=lastpost")
-		logus.CheckFatal(err, "failed to create mock data")
+		darkbot_logus.Log.CheckFatal(err, "failed to create mock data")
 		os.WriteFile(detailed_post_content_filepath, []byte(query.GetContent()), 0644)
 	}
 	detailed_post_content, _ := os.ReadFile(detailed_post_content_filepath)

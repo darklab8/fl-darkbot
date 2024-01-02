@@ -7,7 +7,7 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/discorder"
 	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"fmt"
 
@@ -18,7 +18,7 @@ var channelDeleteCMD = &cobra.Command{
 	Use:   "channel_delete",
 	Short: "Delete channelID",
 	Run: func(cmd *cobra.Command, args []string) {
-		logus.Info("Cmd is called with args=", logus.Args(args))
+		darkbot_logus.Log.Info("Cmd is called with args=", darkbot_logus.Args(args))
 		channels := configurator.NewConfiguratorChannel(configurator.NewConfigurator(settings.Dbpath))
 
 		fmt.Println("trying to delete ", len(args), args)
@@ -35,7 +35,7 @@ var channelListCMD = &cobra.Command{
 	Short: "List channelIDs",
 	Run: func(cmd *cobra.Command, args []string) {
 		dg := discorder.NewClient()
-		logus.Info("Cmd is called with args=", logus.Args(args))
+		darkbot_logus.Log.Info("Cmd is called with args=", darkbot_logus.Args(args))
 		channels := configurator.NewConfiguratorChannel(configurator.NewConfigurator(settings.Dbpath))
 
 		channelIDs, _ := channels.List()
@@ -66,14 +66,14 @@ var channelInfoCMD = &cobra.Command{
 	Use:   "channel_info",
 	Short: "channel info",
 	Run: func(cmd *cobra.Command, args []string) {
-		logus.Info("Cmd is called with args=", logus.Args(args))
+		darkbot_logus.Log.Info("Cmd is called with args=", darkbot_logus.Args(args))
 
 		dis := discorder.NewClient().GetDiscordSession()
 
 		channel_id := args[0]
 		channel, err := dis.Channel(channel_id)
 
-		if logus.CheckError(err, "failed to get channel", logus.ChannelID(types.DiscordChannelID(channel_id))) {
+		if darkbot_logus.Log.CheckError(err, "failed to get channel", darkbot_logus.ChannelID(types.DiscordChannelID(channel_id))) {
 			return
 		}
 
@@ -84,7 +84,7 @@ var channelInfoCMD = &cobra.Command{
 
 		guild, err := dis.Guild(channel.GuildID)
 
-		if logus.CheckError(err, "failed to get guild="+channel.GuildID, logus.ChannelID(types.DiscordChannelID(channel_id))) {
+		if darkbot_logus.Log.CheckError(err, "failed to get guild="+channel.GuildID, darkbot_logus.ChannelID(types.DiscordChannelID(channel_id))) {
 			return
 		}
 

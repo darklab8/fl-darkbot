@@ -2,7 +2,7 @@ package playerview
 
 import (
 	"darkbot/app/scrappy/player"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
@@ -11,6 +11,8 @@ import (
 	_ "embed"
 	"fmt"
 	"text/template"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
 )
 
 // Discovery players-all, players-friends, players-enemies messages
@@ -92,7 +94,7 @@ func NewTemplatePlayers(api *apis.API, channelID types.DiscordChannelID) *Player
 
 func (t *PlayersTemplates) GenerateRecords() error {
 	record, err := t.api.Scrappy.GetPlayerStorage().GetLatestRecord()
-	if logus.CheckWarn(err, "unable to get players") {
+	if darkbot_logus.Log.CheckWarn(err, "unable to get players") {
 		return err
 	}
 
@@ -100,12 +102,12 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	regionTags, _ := t.api.Players.Regions.TagsList(t.channelID)
 	friendTags, _ := t.api.Players.Friends.TagsList(t.channelID)
 	enemyTags, _ := t.api.Players.Enemies.TagsList(t.channelID)
-	logus.Debug(
+	darkbot_logus.Log.Debug(
 		"PlayerTemplatesRender next",
-		logus.Items(systemTags, "systemTags"),
-		logus.Items(friendTags, "friendTags"),
-		logus.Items(enemyTags, "enemyTags"),
-		logus.Items(record.List, "record.List"),
+		utils_logus.Items(systemTags, "systemTags"),
+		utils_logus.Items(friendTags, "friendTags"),
+		utils_logus.Items(enemyTags, "enemyTags"),
+		utils_logus.Items(record.List, "record.List"),
 	)
 	neutralPlayers := []player.Player{}
 	enemyPlayers := []player.Player{}
@@ -129,9 +131,9 @@ func (t *PlayersTemplates) GenerateRecords() error {
 		neutralPlayers = append(neutralPlayers, player)
 	}
 
-	logus.Debug("friendPlayers=", logus.Items(friendPlayers, "friendPlayers"))
-	logus.Debug("enemyPlayers=", logus.Items(enemyPlayers, "enemyPlayers"))
-	logus.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
+	darkbot_logus.Log.Debug("friendPlayers=", utils_logus.Items(friendPlayers, "friendPlayers"))
+	darkbot_logus.Log.Debug("enemyPlayers=", utils_logus.Items(enemyPlayers, "enemyPlayers"))
+	darkbot_logus.Log.Debug("neutralPlayers=", utils_logus.Items(neutralPlayers, "neutralPlayers"))
 
 	protectAgainstResend := func(player *[]player.Player, view *views.ViewTable) {
 		if len(*player) == 0 {

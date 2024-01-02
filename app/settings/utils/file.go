@@ -2,9 +2,11 @@ package utils
 
 import (
 	"bufio"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"fmt"
 	"os"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
 )
 
 type File struct {
@@ -17,7 +19,7 @@ func (f *File) OpenToReadF() *File {
 	file, err := os.Open(f.Filepath)
 	f.file = file
 
-	logus.CheckFatal(err, "failed to open", logus.FilePath(f.Filepath))
+	darkbot_logus.Log.CheckFatal(err, "failed to open", utils_logus.FilePath(f.Filepath))
 	return f
 }
 
@@ -44,12 +46,12 @@ func (f *File) FileReadLines() []string {
 func (f *File) CreateToWriteF() *File {
 	file, err := os.Create(f.Filepath)
 	f.file = file
-	logus.CheckFatal(err, "failed to open ", logus.FilePath(f.Filepath))
+	darkbot_logus.Log.CheckFatal(err, "failed to open ", utils_logus.FilePath(f.Filepath))
 
 	return f
 }
 func (f *File) WritelnF(msg string) {
 	_, err := f.file.WriteString(fmt.Sprintf("%v\n", msg))
 
-	logus.CheckFatal(err, "failed to write string to file")
+	darkbot_logus.Log.CheckFatal(err, "failed to write string to file")
 }

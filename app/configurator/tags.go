@@ -2,7 +2,7 @@ package configurator
 
 import (
 	"darkbot/app/configurator/models"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 )
@@ -92,14 +92,14 @@ func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...t
 	for _, tag := range presentTags {
 		for _, newtag := range tags {
 			if tag == newtag {
-				logus.Info("TagsAdd. Tag %s is already present in channelID=%s\n", logus.Tag(tag), logus.ChannelID(channelID))
+				darkbot_logus.Log.Info("TagsAdd. Tag %s is already present in channelID=%s\n", darkbot_logus.Tag(tag), darkbot_logus.ChannelID(channelID))
 				return StorageErrorExists{items: []string{string(tag)}}
 			}
 		}
 	}
 
 	res := c.db.Create(objs)
-	logus.CheckWarn(res.Error, "unsuccesful result of c.db.Create")
+	darkbot_logus.Log.CheckWarn(res.Error, "unsuccesful result of c.db.Create")
 	return res.Error
 }
 
@@ -108,7 +108,7 @@ func (c ConfiguratorTags[T]) TagsRemove(channelID types.DiscordChannelID, tags .
 	TotalRowsAffected := 0
 	for _, tag := range tags {
 		result := c.db.Where("channel_id = ? AND tag = ?", channelID, tag).Delete(&T{})
-		logus.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
+		darkbot_logus.Log.CheckWarn(result.Error, "unsuccesful result of c.db.Delete")
 		errors.Append(result.Error)
 		TotalRowsAffected += int(result.RowsAffected)
 	}
@@ -123,7 +123,7 @@ func (c ConfiguratorTags[T]) TagsRemove(channelID types.DiscordChannelID, tags .
 func (c ConfiguratorTags[T]) TagsList(channelID types.DiscordChannelID) ([]types.Tag, error) {
 	objs := []T{}
 	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
-	logus.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
+	darkbot_logus.Log.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 
 	tags := utils.CompL(objs,
 		func(x T) types.Tag { return x.GetTag() })
@@ -141,8 +141,8 @@ func (c ConfiguratorTags[T]) TagsClear(channelID types.DiscordChannelID) error {
 	if len(tags) == 0 {
 		return ErrorZeroAffectedRows{ExtraMsg: "no tags found"}
 	}
-	logus.Debug("Clear.Find", logus.GormResult(result))
+	darkbot_logus.Log.Debug("Clear.Find", darkbot_logus.GormResult(result))
 	result = c.db.Unscoped().Delete(&tags)
-	logus.Debug("Clear.Detete", logus.GormResult(result))
+	darkbot_logus.Log.Debug("Clear.Detete", darkbot_logus.GormResult(result))
 	return result.Error
 }

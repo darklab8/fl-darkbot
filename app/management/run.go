@@ -9,7 +9,7 @@ import (
 	"darkbot/app/listener"
 	"darkbot/app/scrappy"
 	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/utils"
 	"darkbot/app/viewer"
 	"runtime"
@@ -26,7 +26,7 @@ import (
 var runCmd = &cobra.Command{
 	Use: "run",
 	Run: func(cmd *cobra.Command, args []string) {
-		logus.Info("run called")
+		darkbot_logus.Log.Info("run called")
 
 		// migrate db
 		configurator.NewConfigurator(settings.Dbpath).AutoMigrateSchema()

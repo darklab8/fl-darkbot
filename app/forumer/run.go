@@ -5,7 +5,7 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/discorder"
 	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"fmt"
@@ -78,9 +78,9 @@ func (v *Forumer) GetPost(thread *forum_types.LatestThread, new_post_callback fu
 		post, ok = v.cache[thread_key]
 	})
 	if !ok {
-		logus.Debug("cache is not found. requesting new post for thread", logus.Thread(thread))
+		darkbot_logus.Log.Debug("cache is not found. requesting new post for thread", darkbot_logus.Thread(thread))
 		post, err = v.post_requester.GetDetailedPost(thread)
-		logus.CheckError(err, "failed get detailed post for thread=", logus.Thread(thread))
+		darkbot_logus.Log.CheckError(err, "failed get detailed post for thread=", darkbot_logus.Thread(thread))
 		new_post_callback(post)
 
 		v.WithCacheLock(func() {
@@ -92,7 +92,7 @@ func (v *Forumer) GetPost(thread *forum_types.LatestThread, new_post_callback fu
 	v.WithCacheLock(func() {
 		if len(v.cache_keys) > 50 {
 			key_to_delete := v.cache_keys[0]
-			logus.Debug("deleting old cached key_to_delete=" + string(key_to_delete))
+			darkbot_logus.Log.Debug("deleting old cached key_to_delete=" + string(key_to_delete))
 			v.cache_keys = append(v.cache_keys[1:])
 			delete(v.cache, key_to_delete)
 		}
@@ -105,16 +105,16 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 	var matched_tags []string
 
 	thread_watch_tags, err := v.Forum.Thread.Watch.TagsList(channel)
-	logus.CheckDebug(err, "failed to get watch tags")
+	darkbot_logus.Log.CheckDebug(err, "failed to get watch tags")
 
 	thread_ignore_tags, err := v.Forum.Thread.Ignore.TagsList(channel)
-	logus.CheckDebug(err, "failed to get ignore tags")
+	darkbot_logus.Log.CheckDebug(err, "failed to get ignore tags")
 
 	subforum_watch_tags, err := v.Forum.Subforum.Watch.TagsList(channel)
-	logus.CheckDebug(err, "failed to get watch tags")
+	darkbot_logus.Log.CheckDebug(err, "failed to get watch tags")
 
 	subforum_ignore_tags, err := v.Forum.Subforum.Ignore.TagsList(channel)
-	logus.CheckDebug(err, "failed to get ignore tags")
+	darkbot_logus.Log.CheckDebug(err, "failed to get ignore tags")
 
 	for _, watch_tag := range thread_watch_tags {
 		if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) ||
@@ -165,11 +165,11 @@ func CreateDeDuplicator(new_post *forum_types.Post, msgs []*discorder.DiscordMes
 			}
 
 			if strings.Contains(content, string(new_post.PostPermamentLink)) {
-				logus.Debug("Post already exists!", logus.Post(new_post))
+				darkbot_logus.Log.Debug("Post already exists!", darkbot_logus.Post(new_post))
 				return true
 			}
 		}
-		logus.Debug("Post does not exist like that", logus.Post(new_post))
+		darkbot_logus.Log.Debug("Post does not exist like that", darkbot_logus.Post(new_post))
 		return false
 	})
 }
@@ -223,7 +223,7 @@ func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_typ
 			purple_color := 10181046
 			embed.Color = purple_color
 			_, err := dg.ChannelMessageSendComplex(string(channel), &discordgo.MessageSend{Embeds: []*discordgo.MessageEmbed{embed}, Content: string(pingMessage)})
-			logus.CheckError(err, "failed sending msg")
+			darkbot_logus.Log.CheckError(err, "failed sending msg")
 			return nil
 		})
 }
@@ -232,7 +232,7 @@ func (v *Forumer) update() {
 	channelIDs, _ := v.Channels.List()
 
 	threads, err := v.threads_requester.GetLatestThreads()
-	if logus.CheckError(err, "failed to get threads") {
+	if darkbot_logus.Log.CheckError(err, "failed to get threads") {
 		return
 	}
 
@@ -240,7 +240,7 @@ func (v *Forumer) update() {
 		v.GetPost(thread, func(new_post *forum_types.Post) {
 			for _, channel := range channelIDs {
 				msgs, err := v.Discorder.GetLatestMessages(channel)
-				if logus.CheckError(err, "failed to get discord latest msgs", logus.ChannelID(channel)) {
+				if darkbot_logus.Log.CheckError(err, "failed to get discord latest msgs", darkbot_logus.ChannelID(channel)) {
 					continue
 				}
 				v.TrySendMsg(channel, new_post, msgs)
@@ -267,7 +267,7 @@ func (v *Forumer) RetryMsgs() {
 	channelIDs, _ := v.Channels.List()
 	for _, channel := range channelIDs {
 		msgs, err := v.Discorder.GetLatestMessages(channel)
-		if logus.CheckError(err, "failed to get discord latest msgs", logus.ChannelID(channel)) {
+		if darkbot_logus.Log.CheckError(err, "failed to get discord latest msgs", darkbot_logus.ChannelID(channel)) {
 			continue
 		}
 
@@ -295,14 +295,14 @@ func (v *Forumer) Run() {
 	delay := time.Second * 60
 	go func() {
 		for {
-			logus.Debug("retrying to send msgs")
+			darkbot_logus.Log.Debug("retrying to send msgs")
 			v.RetryMsgs()
 			time.Sleep(delay)
 		}
 	}()
 
 	for {
-		logus.Debug("trying new forumer cycle")
+		darkbot_logus.Log.Debug("trying new forumer cycle")
 		v.update()
 		time.Sleep(delay)
 	}

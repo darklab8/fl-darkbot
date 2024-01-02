@@ -5,7 +5,7 @@ package management
 
 import (
 	"darkbot/app/discorder"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ var checkCmd = &cobra.Command{
 	Use:   "check",
 	Short: "Experimental command",
 	Run: func(cmd *cobra.Command, args []string) {
-		logus.Info("check called")
+		darkbot_logus.Log.Info("check called")
 		dg := discorder.NewClient()
 		// dg.SengMessage("838802002582175756", "123message")
 		dg.GetLatestMessages("838802002582175756")

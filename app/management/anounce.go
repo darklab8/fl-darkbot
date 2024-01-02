@@ -7,7 +7,7 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/discorder"
 	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/viewer/views"
 	"strings"
 
@@ -19,7 +19,7 @@ var amounceCmd = &cobra.Command{
 	Use:   "anounce",
 	Short: "Anounce something",
 	Run: func(cmd *cobra.Command, args []string) {
-		logus.Info("Anounce is called with args=", logus.Args(args))
+		darkbot_logus.Log.Info("Anounce is called with args=", darkbot_logus.Args(args))
 		dg := discorder.NewClient()
 
 		channels := configurator.NewConfiguratorChannel(configurator.NewConfigurator(settings.Dbpath))

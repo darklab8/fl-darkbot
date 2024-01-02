@@ -4,8 +4,6 @@ type LogLevel string
 
 type Dbpath string
 
-type RegExp string
-
 type APIurl string
 
 type ScrappyLoopDelay int

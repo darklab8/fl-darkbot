@@ -3,7 +3,7 @@ package player
 import (
 	"darkbot/app/scrappy/shared/parser"
 	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 )
 
 type Player struct {
@@ -22,15 +22,15 @@ type PlayerStorage struct {
 // Conveniently born some factory
 func (b *PlayerStorage) Update() {
 	data, err := b.api.GetPlayerData()
-	if logus.CheckWarn(err, "quering API with error in PlayerStorage") {
+	if darkbot_logus.Log.CheckWarn(err, "quering API with error in PlayerStorage") {
 		return
 	}
 	record, err := b.parser.Parse(data)
-	if logus.CheckWarn(err, "received bad parser parsing result in PlayerStorage. Ignoring.") {
+	if darkbot_logus.Log.CheckWarn(err, "received bad parser parsing result in PlayerStorage. Ignoring.") {
 		return
 	}
 	b.Add(record)
-	logus.Info("updated player storage")
+	darkbot_logus.Log.Info("updated player storage")
 }
 
 func NewPlayerStorage(api IPlayerAPI) *PlayerStorage {

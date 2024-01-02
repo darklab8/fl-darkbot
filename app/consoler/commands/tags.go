@@ -4,7 +4,7 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/printer"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"fmt"
 	"strings"
@@ -33,7 +33,7 @@ func (t *tagCommands) CreateTagAdd() {
 		Short: "Add tags",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			logus.Debug("CreateTagAdd.consoler running with args=", logus.Args(args))
+			darkbot_logus.Log.Debug("CreateTagAdd.consoler running with args=", darkbot_logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -43,7 +43,7 @@ func (t *tagCommands) CreateTagAdd() {
 				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
-			logus.Debug("CreateTagAdd", logus.Args(args))
+			darkbot_logus.Log.Debug("CreateTagAdd", darkbot_logus.Args(args))
 
 			printer.Println(cmd, "OK tags are added")
 		},
@@ -57,7 +57,7 @@ func (t *tagCommands) CreateTagRemove() {
 		Short: "Remove tags",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			logus.Debug("CreateTagRemove.consoler running with args=", logus.Args(args))
+			darkbot_logus.Log.Debug("CreateTagRemove.consoler running with args=", darkbot_logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -78,7 +78,7 @@ func (t *tagCommands) CreateTagRemove() {
 			}
 
 			printer.Println(cmd, "OK tags are removed: "+strings.Join(args, " "))
-			logus.Debug("executed Create Tag Remove with args", logus.Args(args))
+			darkbot_logus.Log.Debug("executed Create Tag Remove with args", darkbot_logus.Args(args))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)
@@ -90,7 +90,7 @@ func (t *tagCommands) CreateTagClear() {
 		Use:   "clear",
 		Short: "Clear tags",
 		Run: func(cmd *cobra.Command, args []string) {
-			logus.Debug("CreateTagClear.consoler running with args=", logus.Args(args))
+			darkbot_logus.Log.Debug("CreateTagClear.consoler running with args=", darkbot_logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -116,7 +116,7 @@ func (t *tagCommands) CreateTagList() {
 		Use:   "list",
 		Short: "List tags",
 		Run: func(cmd *cobra.Command, args []string) {
-			logus.Debug("CreateTagList.consoler running with args=", logus.Args(args))
+			darkbot_logus.Log.Debug("CreateTagList.consoler running with args=", darkbot_logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -132,7 +132,7 @@ func (t *tagCommands) CreateTagList() {
 				return
 			}
 
-			logus.Debug("CreateTagList continuied", logus.Tags(tags))
+			darkbot_logus.Log.Debug("CreateTagList continuied", darkbot_logus.Tags(tags))
 			var sb strings.Builder
 			for number, tag := range tags {
 				sb.WriteString(fmt.Sprintf("\"%s\"", tag))

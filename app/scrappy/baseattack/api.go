@@ -3,7 +3,7 @@ package baseattack
 import (
 	"darkbot/app/scrappy/shared/api"
 	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 )
 
@@ -43,7 +43,7 @@ func (b *BaseAttackStorage) GetData() BaseAttackData { return BaseAttackData(b.d
 
 func (b *BaseAttackStorage) Update() {
 	data, err := b.api.GetBaseAttackData()
-	if logus.CheckWarn(err, "quering API with error in BaseAttackStorage") {
+	if darkbot_logus.Log.CheckWarn(err, "quering API with error in BaseAttackStorage") {
 		return
 	}
 	b.data = BaseAttackData(string((data)))

@@ -1,7 +1,7 @@
 package worker_tests
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/worker"
 	"darkbot/app/settings/worker/worker_logus"
 	"darkbot/app/settings/worker/worker_types"
@@ -35,7 +35,7 @@ func TestWorkerPersistent(t *testing.T) {
 	done_count := 0
 	failed_count := 0
 	for task_number, task := range tasks {
-		logus.Debug(fmt.Sprintf("task.Done=%t", task.IsDone()), worker_logus.TaskID(worker_types.TaskID(task_number)), TaskResult(task.result))
+		darkbot_logus.Log.Debug(fmt.Sprintf("task.Done=%t", task.IsDone()), worker_logus.TaskID(worker_types.TaskID(task_number)), TaskResult(task.result))
 		if task.IsDone() {
 			done_count += 1
 		} else {

@@ -9,6 +9,10 @@ github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5P
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
+github.com/darklab8/darklab_goutils v0.1.4 h1:3xKHf586Q7L/al/TTrmSSLv9WIZYZ7R+CQ/3fbKuQ4k=
+github.com/darklab8/darklab_goutils v0.1.4/go.mod h1:fwAR1vOR38m5ODksGhIBkqAQLkv3ryV+LzK4EHkM0p4=
+github.com/darklab8/darklab_goutils v0.2.0 h1:MPQGyGXyMUbo3kJTo4qkHAIyyW0Fm19hZSAKd9ZZFRw=
+github.com/darklab8/darklab_goutils v0.2.0/go.mod h1:fwAR1vOR38m5ODksGhIBkqAQLkv3ryV+LzK4EHkM0p4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

@@ -1,6 +1,6 @@
 module darkbot
 
-go 1.19
+go 1.21.1
 
 require (
 	github.com/bwmarrin/discordgo v0.26.1
@@ -15,6 +15,7 @@ require (
 
 require (
 	github.com/anaskhan96/soup v1.2.5 // indirect
+	github.com/darklab8/darklab_goutils v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/felixge/fgprof v0.9.3 // indirect
 	github.com/google/pprof v0.0.0-20211214055906-6f57359322fd // indirect

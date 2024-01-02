@@ -1,10 +1,11 @@
 package configurator
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"testing"
 
+	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,19 +19,19 @@ func TestChannels(t *testing.T) {
 		cg.Add("3")
 
 		channels, _ := cg.List()
-		logus.Debug("invoked List", logus.Items(channels, "channels"))
+		darkbot_logus.Log.Debug("invoked List", utils_logus.Items(channels, "channels"))
 		assert.Len(t, channels, 3)
 
 		cg.Remove("3")
 
 		channels, _ = cg.List()
-		logus.Debug("", logus.Items(channels, "channels"))
+		darkbot_logus.Log.Debug("", utils_logus.Items(channels, "channels"))
 		assert.Len(t, channels, 2)
 
 		cg.Add("3")
 
 		channels, _ = cg.List()
-		logus.Debug("", logus.Items(channels, "channels"))
+		darkbot_logus.Log.Debug("", utils_logus.Items(channels, "channels"))
 		assert.Len(t, channels, 3)
 	})
 }

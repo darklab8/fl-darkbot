@@ -2,7 +2,7 @@ package forumer
 
 import (
 	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"io"
 	"net/http"
 
@@ -28,7 +28,7 @@ func (q *QueryResult) GetContent() string {
 func NewQuery(method_type MethodType, url forum_types.Url) (*QueryResult, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest(string(method_type), string(url), nil)
-	if logus.CheckWarn(err, "Failed to create request") {
+	if darkbot_logus.Log.CheckWarn(err, "Failed to create request") {
 		return nil, err
 	}
 	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
@@ -38,22 +38,22 @@ func NewQuery(method_type MethodType, url forum_types.Url) (*QueryResult, error)
 	req.Header.Set("CONTENT-TYPE", "")
 
 	resp, err := client.Do(req)
-	if logus.CheckWarn(err, "Failed to make query") {
+	if darkbot_logus.Log.CheckWarn(err, "Failed to make query") {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 300 && resp.StatusCode <= 399 {
-		logus.Debug("this request is redirecting!")
+		darkbot_logus.Log.Debug("this request is redirecting!")
 		redirectUrl, err := resp.Location()
-		if logus.CheckError(err, "Error getting redirect location") {
+		if darkbot_logus.Log.CheckError(err, "Error getting redirect location") {
 			return nil, err
 		}
 
 		req.URL = redirectUrl
 		resp, err = client.Do(req)
-		if logus.CheckError(err, "Error sending redirect request:") {
+		if darkbot_logus.Log.CheckError(err, "Error sending redirect request:") {
 			return nil, err
 		}
 

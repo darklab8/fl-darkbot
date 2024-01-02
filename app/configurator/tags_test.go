@@ -1,10 +1,11 @@
 package configurator
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"testing"
 
+	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,7 +45,7 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 
 		assert.Error(t, err, "expected error to get in test")
 		assert.Contains(t, err.Error(), "database already has those items")
-		logus.Debug("err=", logus.OptError(err))
+		darkbot_logus.Log.Debug("err=", utils_logus.OptError(err))
 
 		// make a test to check? :thinking:
 		tags, _ = cg.TagsList("c2")

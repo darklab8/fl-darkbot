@@ -2,7 +2,7 @@ package base
 
 import (
 	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"encoding/json"
 )
 
@@ -20,8 +20,8 @@ func (b baseParser) Parse(body []byte) (records.StampedObjects[Base], error) {
 
 	bases := map[string]baseSerializer{}
 	if err := json.Unmarshal(body, &bases); err != nil {
-		logus.CheckWarn(err, "unable to unmarshal base request", logus.Body(body))
-		logus.Warn("unable to marshal base body=")
+		darkbot_logus.Log.CheckWarn(err, "unable to unmarshal base request", darkbot_logus.Body(body))
+		darkbot_logus.Log.Warn("unable to marshal base body=")
 		return record, err
 	}
 

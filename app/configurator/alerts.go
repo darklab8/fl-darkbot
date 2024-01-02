@@ -2,7 +2,7 @@ package configurator
 
 import (
 	"darkbot/app/configurator/models"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 )
 
@@ -169,7 +169,7 @@ func (c IConfiguratorAlertString[T]) Set(channelID types.DiscordChannelID, value
 func (c IConfiguratorAlertString[T]) Unset(channelID types.DiscordChannelID) error {
 	objs := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
-	logus.CheckWarn(result.Error, "attempted to unset with errors", logus.GormResult(result))
+	darkbot_logus.Log.CheckWarn(result.Error, "attempted to unset with errors", darkbot_logus.GormResult(result))
 	result = c.db.Unscoped().Delete(&objs)
 	return result.Error
 }

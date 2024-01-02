@@ -1,7 +1,7 @@
 package records
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/utils"
 	"sync"
 )
@@ -37,7 +37,7 @@ func (b *Records[T]) GetLatestRecord() (T, error) {
 		var obj T
 		return obj, utils.ErrorNotFound{}
 	}
-	logus.Debug("records.GetLatestRecord", logus.Records(b.records))
+	darkbot_logus.Log.Debug("records.GetLatestRecord", darkbot_logus.Records(b.records))
 
 	return b.records[len(b.records)-1], nil
 }

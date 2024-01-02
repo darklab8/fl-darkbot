@@ -1,7 +1,7 @@
 package worker
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/worker/worker_logus"
 	"darkbot/app/settings/worker/worker_types"
 	"time"
@@ -38,10 +38,10 @@ func (j *TaskPoolPeristent[taskT]) DelayTask(task taskT) {
 func (j *TaskPoolPeristent[taskT]) AwaitSomeTask() {
 	select {
 	case status_code := <-j.result_channel:
-		logus.Debug("finished some task succesfully", worker_logus.StatusCode(status_code))
+		darkbot_logus.Log.Debug("finished some task succesfully", worker_logus.StatusCode(status_code))
 	case <-time.After(time.Duration(j.taskTimeout) * time.Second):
 		// non zero exit by timeout
-		logus.Error("finished tasks with", worker_logus.StatusCode(CodeTimeout)) // TODO add worker_logus.TaskNumber(worker_types.TaskID(task_number)
+		darkbot_logus.Log.Error("finished tasks with", worker_logus.StatusCode(CodeTimeout)) // TODO add worker_logus.TaskNumber(worker_types.TaskID(task_number)
 	}
 }
 

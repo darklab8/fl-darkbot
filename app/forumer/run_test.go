@@ -3,7 +3,7 @@ package forumer
 import (
 	"darkbot/app/configurator"
 	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"testing"
@@ -21,7 +21,7 @@ func newMockedThreadsQuery() MockedThreadsQuery {
 	mocked_threads_requester := FixtureMockedThreadsRequester()
 	threads_requester := NewLatestThreads(WithMockedPageRequester(mocked_threads_requester))
 	threads, err := threads_requester.GetLatestThreads()
-	logus.CheckFatal(err, "unexpected error from GetLatestThreads")
+	darkbot_logus.Log.CheckFatal(err, "unexpected error from GetLatestThreads")
 	one_thread := threads[:1]
 	return MockedThreadsQuery{threads: one_thread}
 }

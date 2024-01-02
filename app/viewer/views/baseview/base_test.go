@@ -7,7 +7,7 @@ import (
 	"darkbot/app/scrappy/baseattack"
 	"darkbot/app/scrappy/player"
 	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"fmt"
@@ -36,7 +36,7 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		render := NewTemplateBase(api, channelID)
 		render.RenderView()
-		logus.Debug(fmt.Sprintf("render.main.Content=%v", render.main.GetMsgs()))
+		darkbot_logus.Log.Debug(fmt.Sprintf("render.main.Content=%v", render.main.GetMsgs()))
 
 		assert.True(t, render.main.HasRecords())
 		assert.False(t, render.alertHealthLowerThan.HasRecords())
@@ -127,20 +127,20 @@ func TestBaseViewerRealData(t *testing.T) {
 
 		base := NewTemplateBase(api, channelID)
 		base.RenderView()
-		logus.Debug(fmt.Sprintf("base.main.Msgs=%v", base.main.GetMsgs()))
+		darkbot_logus.Log.Debug(fmt.Sprintf("base.main.Msgs=%v", base.main.GetMsgs()))
 	})
 }
 
 func TestGetDerivativeBaseHealth(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
-		logus.Debug("1")
+		darkbot_logus.Log.Debug("1")
 		tags := []types.Tag{""}
-		logus.Debug("2")
+		darkbot_logus.Log.Debug("2")
 		scrapper := scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.FixturePlayerAPIMock(), baseattack.FixtureBaseAttackAPIMock())
-		logus.Debug("2.1")
-		logus.Debug("2.2")
+		darkbot_logus.Log.Debug("2.1")
+		darkbot_logus.Log.Debug("2.2")
 		scrapper.Update()
-		logus.Debug("2.3")
+		darkbot_logus.Log.Debug("2.3")
 
 		api := apis.NewAPI(dbpath, scrapper)
 
@@ -150,7 +150,7 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 			values[1].Timestamp = values[0].Timestamp.Add(time.Minute * 15)
 		})
 
-		logus.Debug("3")
+		darkbot_logus.Log.Debug("3")
 
 		result1 := make(map[string]base.Base)
 		result2 := make(map[string]base.Base)
@@ -163,18 +163,18 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 				result2[base.Name] = base
 			}
 		})
-		logus.Debug("4")
+		darkbot_logus.Log.Debug("4")
 		res1 := result1["Stockholm Base"]
 		res2 := result2["Stockholm Base"]
 		_ = res1
 		_ = res2
 
-		logus.Debug("5")
+		darkbot_logus.Log.Debug("5")
 		baseDerivatives, _ := CalculateDerivates(tags, api)
 		for baseName, baseDeravative := range baseDerivatives {
-			logus.Info(fmt.Sprintf("baseName=%s, baseDeravative=%f", baseName, baseDeravative))
+			darkbot_logus.Log.Info(fmt.Sprintf("baseName=%s, baseDeravative=%f", baseName, baseDeravative))
 		}
-		logus.Debug("6")
+		darkbot_logus.Log.Debug("6")
 	})
 }
 

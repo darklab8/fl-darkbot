@@ -2,7 +2,7 @@ package forumer
 
 import (
 	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/utils"
 	"os"
 	"path/filepath"
@@ -15,7 +15,7 @@ func FixtureMockedThreadsRequester() func(mt MethodType, u forum_types.Url) (*Qu
 	thread_post_content_filepath := filepath.Join(utils.GetCurrrentFolder(), "test_data", "latest_threads.html")
 	if _, err := os.Stat(thread_post_content_filepath); err != nil {
 		query, err := NewQuery("GET", ThreadPageURL)
-		logus.CheckFatal(err, "failed to create mock data")
+		darkbot_logus.Log.CheckFatal(err, "failed to create mock data")
 		os.WriteFile(thread_post_content_filepath, []byte(query.GetContent()), 0644)
 	}
 	thread_post_content, _ := os.ReadFile(thread_post_content_filepath)

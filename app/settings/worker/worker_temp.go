@@ -1,7 +1,7 @@
 package worker
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/worker/worker_logus"
 	"darkbot/app/settings/worker/worker_types"
 	"time"
@@ -75,11 +75,11 @@ func NewTaskPool[T ITask](opts ...TaskPoolOption[T]) *TaskPool[T] {
 }
 
 func (j *TaskPool[taskT]) launchWorker(worker_id worker_types.WorkerID, tasks <-chan taskT, results chan<- worker_types.TaskStatusCode) {
-	logus.Info("worker started", worker_logus.WorkerID(worker_id))
+	darkbot_logus.Log.Info("worker started", worker_logus.WorkerID(worker_id))
 	for task := range tasks {
 		results <- task.RunTask(worker_id)
 	}
-	logus.Info("worker finished", worker_logus.WorkerID(worker_id))
+	darkbot_logus.Log.Info("worker finished", worker_logus.WorkerID(worker_id))
 }
 
 /// Temporal
@@ -116,7 +116,7 @@ func (j *TaskPool[taskT]) runTasksinTemporalWorkers(tasks []taskT) []worker_type
 		case <-time.After(time.Duration(j.taskTimeout) * time.Second):
 			// non zero exit by timeout
 			status_codes = append(status_codes, CodeTimeout)
-			logus.Error("timeout for", worker_logus.TaskID(worker_types.TaskID(task_number)))
+			darkbot_logus.Log.Error("timeout for", worker_logus.TaskID(worker_types.TaskID(task_number)))
 		}
 
 	}
@@ -135,14 +135,14 @@ func (taskPool *TaskPool[taskT]) RunTemporalPool(tasks []taskT) {
 		}
 	} else {
 		status_codes := taskPool.runTasksinTemporalWorkers(tasks)
-		logus.Debug("results", worker_logus.StatusCodes(status_codes))
+		darkbot_logus.Log.Debug("results", worker_logus.StatusCodes(status_codes))
 	}
 
 	for task_number, task := range tasks {
 		task_id := worker_types.TaskID(task_number)
 		if !task.IsDone() && !taskPool.allow_failed_tasks {
-			logus.Error("task failed", worker_logus.TaskID(task_id))
+			darkbot_logus.Log.Error("task failed", worker_logus.TaskID(task_id))
 		}
-		logus.Debug("task succeed", worker_logus.TaskID(task_id))
+		darkbot_logus.Log.Debug("task succeed", worker_logus.TaskID(task_id))
 	}
 }

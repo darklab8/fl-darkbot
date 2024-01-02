@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"os"
 	"os/signal"
 	"sync"
@@ -15,7 +15,7 @@ func SleepAwaitCtrlC() {
 }
 
 func SleepForever() {
-	logus.Debug("awaiting smth forever in SleepForever")
+	darkbot_logus.Log.Debug("awaiting smth forever in SleepForever")
 	mu := sync.Mutex{}
 	mu.Lock()
 	mu.Lock()

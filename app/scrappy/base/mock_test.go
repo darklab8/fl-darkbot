@@ -2,7 +2,7 @@ package base
 
 import (
 	"darkbot/app/scrappy/tests"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/utils"
 	"os"
 	"path"
@@ -15,7 +15,7 @@ func TestRegenerateBaseData(t *testing.T) {
 		path_testdata := tests.FixtureCreateTestDataFolder()
 		path_testfile := path.Join(path_testdata, "basedata.json")
 		err := os.WriteFile(path_testfile, data, os.ModePerm)
-		logus.CheckFatal(err, "unable to write file")
+		darkbot_logus.Log.CheckFatal(err, "unable to write file")
 		return nil
 	})
 }

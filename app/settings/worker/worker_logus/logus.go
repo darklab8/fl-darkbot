@@ -1,36 +1,37 @@
 package worker_logus
 
 import (
-	"darkbot/app/settings/logus"
 	"darkbot/app/settings/utils"
 	"darkbot/app/settings/worker/worker_types"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
 )
 
-func WorkerID(value worker_types.WorkerID) logus.SlogParam {
-	return func(c *logus.SlogGroup) {
+func WorkerID(value worker_types.WorkerID) utils_logus.SlogParam {
+	return func(c *utils_logus.SlogGroup) {
 		c.Params["worker_id"] = strconv.Itoa(int(value))
 	}
 }
 
-func TaskID(value worker_types.TaskID) logus.SlogParam {
-	return func(c *logus.SlogGroup) {
+func TaskID(value worker_types.TaskID) utils_logus.SlogParam {
+	return func(c *utils_logus.SlogGroup) {
 		c.Params["task_id"] = strconv.Itoa(int(value))
 	}
 }
 
-func StatusCodes(status_codes []worker_types.TaskStatusCode) logus.SlogParam {
+func StatusCodes(status_codes []worker_types.TaskStatusCode) utils_logus.SlogParam {
 	str_status_codes := utils.CompL(status_codes, func(x worker_types.TaskStatusCode) string { return fmt.Sprintf("%d", x) })
-	return func(c *logus.SlogGroup) {
+	return func(c *utils_logus.SlogGroup) {
 
 		c.Params["status_codes"] = strings.Join(str_status_codes, ",")
 	}
 }
 
-func StatusCode(value worker_types.TaskStatusCode) logus.SlogParam {
-	return func(c *logus.SlogGroup) {
+func StatusCode(value worker_types.TaskStatusCode) utils_logus.SlogParam {
+	return func(c *utils_logus.SlogGroup) {
 		c.Params["status_code"] = strconv.Itoa(int(value))
 	}
 }

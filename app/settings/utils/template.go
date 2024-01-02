@@ -2,7 +2,7 @@ package utils
 
 import (
 	"bytes"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"strings"
 	"text/template"
 )
@@ -10,7 +10,7 @@ import (
 func TmpRender(templateRef *template.Template, data interface{}) string {
 	header := bytes.Buffer{}
 	err := templateRef.Execute(&header, data)
-	logus.CheckFatal(err, "failed to render template")
+	darkbot_logus.Log.CheckFatal(err, "failed to render template")
 	return header.String()
 }
 
@@ -22,6 +22,6 @@ func TmpInit(content string) *template.Template {
 
 	var err error
 	templateRef, err := template.New("test").Funcs(funcs).Parse(content)
-	logus.CheckFatal(err, "failed to init template")
+	darkbot_logus.Log.CheckFatal(err, "failed to init template")
 	return templateRef
 }

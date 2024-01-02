@@ -1,9 +1,10 @@
 package player
 
 import (
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"testing"
 
+	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,8 +17,8 @@ func TestGetPlayers(t *testing.T) {
 	storage.Update()
 
 	bases, err := storage.GetLatestRecord()
-	logus.CheckFatal(err, "not found latest base record")
+	darkbot_logus.Log.CheckFatal(err, "not found latest base record")
 
 	assert.True(t, len(bases.List) > 0)
-	logus.Debug("", logus.Items(bases.List, "bases.List"))
+	darkbot_logus.Log.Debug("", utils_logus.Items(bases.List, "bases.List"))
 }

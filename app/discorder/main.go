@@ -9,7 +9,7 @@ package discorder
 
 import (
 	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
+	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/settings/utils"
 	"fmt"
@@ -29,7 +29,7 @@ func (d *Discorder) GetDiscordSession() *discordgo.Session {
 func NewClient() *Discorder {
 	d := &Discorder{}
 	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
-	logus.CheckFatal(err, "failed to init discord")
+	darkbot_logus.Log.CheckFatal(err, "failed to init discord")
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
 	d.dg = dg
@@ -38,7 +38,7 @@ func NewClient() *Discorder {
 
 func (d *Discorder) SengMessage(channelID types.DiscordChannelID, content string) error {
 	_, err := d.dg.ChannelMessageSend(string(channelID), content)
-	logus.CheckWarn(err, "failed sending message in discorder", logus.ChannelID(channelID))
+	darkbot_logus.Log.CheckWarn(err, "failed sending message in discorder", darkbot_logus.ChannelID(channelID))
 	return err
 }
 
@@ -46,15 +46,15 @@ func (d *Discorder) EditMessage(channelID types.DiscordChannelID, messageID type
 	var err error
 	utils.TimeMeasure(func() {
 		msg, err := d.dg.ChannelMessageEdit(string(channelID), string(messageID), content)
-		logus.CheckWarn(err, "failed editing message in discorder", logus.ChannelID(channelID))
-		logus.Debug(fmt.Sprintf("Discorder.EditMessage.msg=%v", msg))
-	}, fmt.Sprintf("Discorder.EditMessage content=%s", content), logus.ChannelID(channelID), logus.MessageID(messageID))
+		darkbot_logus.Log.CheckWarn(err, "failed editing message in discorder", darkbot_logus.ChannelID(channelID))
+		darkbot_logus.Log.Debug(fmt.Sprintf("Discorder.EditMessage.msg=%v", msg))
+	}, fmt.Sprintf("Discorder.EditMessage content=%s", content), darkbot_logus.ChannelID(channelID), darkbot_logus.MessageID(messageID))
 	return err
 }
 
 func (d *Discorder) DeleteMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID) error {
 	err := d.dg.ChannelMessageDelete(string(channelID), string(messageID))
-	logus.CheckWarn(err, "failed deleting message in discorder", logus.ChannelID(channelID))
+	darkbot_logus.Log.CheckWarn(err, "failed deleting message in discorder", darkbot_logus.ChannelID(channelID))
 	return err
 }
 
@@ -68,7 +68,7 @@ type DiscordMessage struct {
 func (d *Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*DiscordMessage, error) {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(string(channelID), messagesLimitToGrab, "", "", "")
-	if logus.CheckWarn(err, "Unable to get messages from channelId=", logus.ChannelID(channelID)) {
+	if darkbot_logus.Log.CheckWarn(err, "Unable to get messages from channelId=", darkbot_logus.ChannelID(channelID)) {
 		return []*DiscordMessage{}, err
 	}
 
@@ -88,21 +88,21 @@ func (d *Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*Disc
 
 func (d *Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOwnerID, error) {
 	channel, err := d.dg.Channel(string(channelID))
-	if logus.CheckError(err, "discord is not connected") {
+	if darkbot_logus.Log.CheckError(err, "discord is not connected") {
 		return types.DiscordOwnerID(""), err
 	}
 	channel_owner := types.DiscordOwnerID(channel.OwnerID)
 
-	logus.Debug("channel.OwnerID=", logus.OwnerID(channel_owner))
+	darkbot_logus.Log.Debug("channel.OwnerID=", darkbot_logus.OwnerID(channel_owner))
 	guildID := channel.GuildID
 
 	guild, err := d.dg.Guild(guildID)
-	if logus.CheckWarn(err, "unable to get Guild Owner", logus.ChannelID(channelID)) {
+	if darkbot_logus.Log.CheckWarn(err, "unable to get Guild Owner", darkbot_logus.ChannelID(channelID)) {
 		return "", err
 	}
-	logus.CheckWarn(err, "Failed getting Guild ID")
+	darkbot_logus.Log.CheckWarn(err, "Failed getting Guild ID")
 	guild_owner_id := types.DiscordOwnerID(guild.OwnerID)
-	logus.Debug("guild.OwnerID=", logus.OwnerID(guild_owner_id))
+	darkbot_logus.Log.Debug("guild.OwnerID=", darkbot_logus.OwnerID(guild_owner_id))
 
 	return guild_owner_id, nil
 }
@@ -138,11 +138,11 @@ func (d *Discorder) SendDeduplicatedMsg(
 	send_callback func(channel types.DiscordChannelID, dg *discordgo.Session) error,
 ) error {
 	if deduplicator.isDuplicated() {
-		logus.Debug("not sending duplicated", logus.ChannelID(channel))
+		darkbot_logus.Log.Debug("not sending duplicated", darkbot_logus.ChannelID(channel))
 		return DuplicatedError{}
 	}
 
 	err := send_callback(channel, d.dg)
-	logus.CheckWarn(err, "failed sending message in discorder", logus.ChannelID(channel))
+	darkbot_logus.Log.CheckWarn(err, "failed sending message in discorder", darkbot_logus.ChannelID(channel))
 	return err
 }
