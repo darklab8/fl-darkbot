@@ -3,10 +3,11 @@ package baseattack
 import (
 	"darkbot/app/scrappy/tests"
 	"darkbot/app/settings/darkbot_logus"
-	"darkbot/app/settings/utils"
 	"os"
 	"path"
 	"testing"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 func TestRegenerateBaseData(t *testing.T) {

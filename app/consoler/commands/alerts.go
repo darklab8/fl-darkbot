@@ -6,11 +6,12 @@ import (
 	"darkbot/app/consoler/printer"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"strconv"
 	"strings"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
+	"github.com/darklab8/darklab_goutils/goutils/utils"
+
+	"github.com/darklab8/darklab_goutils/goutils/logus"
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +47,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 			printer.Println(cmd, "Attempting to parse input into integer number")
 			rawInteger := args[0]
 			integer, err := strconv.Atoi(rawInteger)
-			if darkbot_logus.Log.CheckWarn(err, "Atoi result with warning", utils_logus.OptError(err)) {
+			if darkbot_logus.Log.CheckWarn(err, "Atoi result with warning", logus.OptError(err)) {
 				printer.Println(cmd, "failed to parse value to integer. Value="+rawInteger)
 			}
 

@@ -1,10 +1,11 @@
 package web
 
 import (
-	"darkbot/app/settings/utils"
 	_ "embed"
 	"net/http"
 	"text/template"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 //go:embed 404.md

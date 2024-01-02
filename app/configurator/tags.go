@@ -4,7 +4,8 @@ import (
 	"darkbot/app/configurator/models"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type IConfiguratorTags interface {

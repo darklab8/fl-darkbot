@@ -3,9 +3,10 @@ package settings
 import (
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"path/filepath"
 	"strconv"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"

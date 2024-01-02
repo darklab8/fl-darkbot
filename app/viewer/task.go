@@ -3,13 +3,14 @@ package viewer
 import (
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/settings/worker"
 	"darkbot/app/settings/worker/worker_types"
 	"darkbot/app/viewer/apis"
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type TaskRefreshChannel struct {

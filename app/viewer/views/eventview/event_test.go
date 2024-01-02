@@ -31,7 +31,7 @@ func TestPlayerEvent(t *testing.T) {
 
 		playerView := NewEventRenderer(api, channelID)
 		playerView.RenderView()
-		//utils_logus.Debug(len(playerView.main.ViewRecords))
+		//logus.Debug(len(playerView.main.ViewRecords))
 		darkbot_logus.Log.Debug("test TestPlayerEvent is finished")
 
 		assert.Equal(t, 2, playerView.main.RecordCount())

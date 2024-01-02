@@ -4,8 +4,9 @@ import (
 	"darkbot/app/settings"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"os"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 func FixtureConfigurator(dbpath types.Dbpath) *Configurator {

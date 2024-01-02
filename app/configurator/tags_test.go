@@ -5,7 +5,7 @@ import (
 	"darkbot/app/settings/types"
 	"testing"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
+	"github.com/darklab8/darklab_goutils/goutils/logus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +45,7 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 
 		assert.Error(t, err, "expected error to get in test")
 		assert.Contains(t, err.Error(), "database already has those items")
-		darkbot_logus.Log.Debug("err=", utils_logus.OptError(err))
+		darkbot_logus.Log.Debug("err=", logus.OptError(err))
 
 		// make a test to check? :thinking:
 		tags, _ = cg.TagsList("c2")

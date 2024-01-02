@@ -10,10 +10,11 @@ import (
 	"darkbot/app/scrappy"
 	"darkbot/app/settings"
 	"darkbot/app/settings/darkbot_logus"
-	"darkbot/app/settings/utils"
 	"darkbot/app/viewer"
 	"runtime"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 
 	"net/http"
 	_ "net/http/pprof"

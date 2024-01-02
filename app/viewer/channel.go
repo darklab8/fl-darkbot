@@ -4,7 +4,6 @@ import (
 	"darkbot/app/discorder"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
 	"darkbot/app/viewer/views/baseview"
@@ -13,6 +12,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type ChannelView struct {

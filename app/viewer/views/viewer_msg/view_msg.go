@@ -3,11 +3,12 @@ package viewer_msg
 import (
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type MsgShared struct {

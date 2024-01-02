@@ -3,11 +3,12 @@ package forumer
 import (
 	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/darkbot_logus"
-	"darkbot/app/settings/utils"
 	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 
 	"github.com/stretchr/testify/assert"
 )

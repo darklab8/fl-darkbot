@@ -68,11 +68,11 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 
 	// If u wish getting author from here
 	// post_author := post.Find("td", "class", "postcat")
-	// ifutils_logus.CheckError(post_author.Error, "failed to get post author") {
+	// iflogus.CheckError(post_author.Error, "failed to get post author") {
 	// 	return nil, post_author.Error
 	// }
 	// post_author_a := post_author.Find("a")
-	// ifutils_logus.CheckError(post_author_a.Error, "failed to get post_author_a") {
+	// iflogus.CheckError(post_author_a.Error, "failed to get post_author_a") {
 	// 	return nil, post_author_a.Error
 	// }
 	// post_author_name := post_author_a.Text()

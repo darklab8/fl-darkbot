@@ -5,7 +5,6 @@ import (
 	"darkbot/app/scrappy/base"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
 	"darkbot/app/viewer/views/viewer_msg"
@@ -15,6 +14,8 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 //go:embed base_template.md

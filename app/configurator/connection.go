@@ -10,7 +10,7 @@ import (
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
+	"github.com/darklab8/darklab_goutils/goutils/logus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -58,7 +58,7 @@ func (cg *Configurator) AutoMigrateSchema() *Configurator {
 		&models.AlertPingMessage{},
 		&models.ConfigBaseOrderingKey{},
 	)
-	if !darkbot_logus.Log.CheckWarn(err, "AutoMigrateSchema was executed with problems", utils_logus.OptError(err)) {
+	if !darkbot_logus.Log.CheckWarn(err, "AutoMigrateSchema was executed with problems", logus.OptError(err)) {
 		darkbot_logus.Log.Info("AutoMigrateSchema was executed fine")
 	}
 	return cg

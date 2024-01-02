@@ -3,10 +3,11 @@ package views
 import (
 	"darkbot/app/configurator"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	_ "embed"
 	"text/template"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 //go:embed alert_template.md

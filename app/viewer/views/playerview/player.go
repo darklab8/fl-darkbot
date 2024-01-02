@@ -4,7 +4,6 @@ import (
 	"darkbot/app/scrappy/player"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
 	"darkbot/app/viewer/views/viewer_msg"
@@ -12,7 +11,9 @@ import (
 	"fmt"
 	"text/template"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
+	"github.com/darklab8/darklab_goutils/goutils/utils"
+
+	"github.com/darklab8/darklab_goutils/goutils/logus"
 )
 
 // Discovery players-all, players-friends, players-enemies messages
@@ -104,10 +105,10 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	enemyTags, _ := t.api.Players.Enemies.TagsList(t.channelID)
 	darkbot_logus.Log.Debug(
 		"PlayerTemplatesRender next",
-		utils_logus.Items(systemTags, "systemTags"),
-		utils_logus.Items(friendTags, "friendTags"),
-		utils_logus.Items(enemyTags, "enemyTags"),
-		utils_logus.Items(record.List, "record.List"),
+		logus.Items(systemTags, "systemTags"),
+		logus.Items(friendTags, "friendTags"),
+		logus.Items(enemyTags, "enemyTags"),
+		logus.Items(record.List, "record.List"),
 	)
 	neutralPlayers := []player.Player{}
 	enemyPlayers := []player.Player{}
@@ -131,9 +132,9 @@ func (t *PlayersTemplates) GenerateRecords() error {
 		neutralPlayers = append(neutralPlayers, player)
 	}
 
-	darkbot_logus.Log.Debug("friendPlayers=", utils_logus.Items(friendPlayers, "friendPlayers"))
-	darkbot_logus.Log.Debug("enemyPlayers=", utils_logus.Items(enemyPlayers, "enemyPlayers"))
-	darkbot_logus.Log.Debug("neutralPlayers=", utils_logus.Items(neutralPlayers, "neutralPlayers"))
+	darkbot_logus.Log.Debug("friendPlayers=", logus.Items(friendPlayers, "friendPlayers"))
+	darkbot_logus.Log.Debug("enemyPlayers=", logus.Items(enemyPlayers, "enemyPlayers"))
+	darkbot_logus.Log.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
 
 	protectAgainstResend := func(player *[]player.Player, view *views.ViewTable) {
 		if len(*player) == 0 {

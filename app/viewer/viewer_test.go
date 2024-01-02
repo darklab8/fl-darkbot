@@ -1,8 +1,9 @@
 package viewer
 
 import (
-	"darkbot/app/settings/utils"
 	"testing"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 func TestDebugPerformance(t *testing.T) {

@@ -1,14 +1,15 @@
 package envs
 
 import (
-	"darkbot/app/settings/types"
 	"os"
 	"strings"
+
+	"github.com/darklab8/darklab_goutils/goutils/logus/logus_types"
 )
 
 var LogTurnJSONLogging bool
 var LogShowFileLocations bool
-var LogLevel types.LogLevel
+var LogLevel logus_types.LogLevel
 
 const (
 	EnvTrue = "true"
@@ -22,5 +23,5 @@ func init() {
 	if !is_log_level_set {
 		log_level_str = "WARN"
 	}
-	LogLevel = types.LogLevel(log_level_str)
+	LogLevel = logus_types.LogLevel(log_level_str)
 }

@@ -5,8 +5,9 @@ import (
 	"darkbot/app/forumer/forum_types"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"testing"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type MockedThreadsQuery struct {

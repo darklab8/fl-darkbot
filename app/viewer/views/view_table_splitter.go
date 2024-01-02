@@ -3,11 +3,12 @@ package views
 import (
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views/viewer_msg"
 	"fmt"
 	"strings"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type SharedViewTableSplitter struct {

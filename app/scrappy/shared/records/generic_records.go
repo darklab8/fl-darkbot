@@ -2,8 +2,9 @@ package records
 
 import (
 	"darkbot/app/settings/darkbot_logus"
-	"darkbot/app/settings/utils"
 	"sync"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type Deletable interface {

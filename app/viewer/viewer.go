@@ -5,10 +5,11 @@ import (
 	"darkbot/app/settings"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"darkbot/app/settings/worker"
 	"darkbot/app/viewer/apis"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 )
 
 type ViewerDelays struct {

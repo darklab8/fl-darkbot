@@ -4,7 +4,7 @@ import (
 	"darkbot/app/settings/darkbot_logus"
 	"testing"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
+	"github.com/darklab8/darklab_goutils/goutils/logus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +20,7 @@ func TestGetBases(t *testing.T) {
 	darkbot_logus.Log.CheckFatal(err, "not found latest base record")
 
 	assert.True(t, len(bases.List) > 0)
-	darkbot_logus.Log.Debug("", utils_logus.Items(bases.List, "bases.List"))
+	darkbot_logus.Log.Debug("", logus.Items(bases.List, "bases.List"))
 }
 
 func TestAddManyRecords(t *testing.T) {

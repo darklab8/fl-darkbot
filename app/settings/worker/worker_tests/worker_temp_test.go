@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils_logus"
+	"github.com/darklab8/darklab_goutils/goutils/logus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,8 +37,8 @@ func (data *TaskTest) RunTask(worker_id worker_types.WorkerID) worker_types.Task
 	return worker.CodeSuccess
 }
 
-func TaskResult(value worker_types.TaskID) utils_logus.SlogParam {
-	return func(c *utils_logus.SlogGroup) {
+func TaskResult(value worker_types.TaskID) logus.SlogParam {
+	return func(c *logus.SlogGroup) {
 		c.Params["task_result"] = strconv.Itoa(int(value))
 	}
 }

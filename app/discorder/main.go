@@ -11,9 +11,10 @@ import (
 	"darkbot/app/settings"
 	"darkbot/app/settings/darkbot_logus"
 	"darkbot/app/settings/types"
-	"darkbot/app/settings/utils"
 	"fmt"
 	"time"
+
+	"github.com/darklab8/darklab_goutils/goutils/utils"
 
 	"github.com/bwmarrin/discordgo"
 )
