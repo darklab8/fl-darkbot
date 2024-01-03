@@ -7,7 +7,7 @@ package listener
 import (
 	"darkbot/app/consoler"
 	"darkbot/app/settings"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"fmt"
 	"strings"
@@ -19,7 +19,7 @@ import (
 
 func Run() {
 	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
-	darkbot_logus.Log.CheckFatal(err, "failed to init discord")
+	logus.Log.CheckFatal(err, "failed to init discord")
 
 	// Register the messageCreate func as a callback for MessageCreate events.
 	dg.AddHandler(consolerHandler)
@@ -29,12 +29,12 @@ func Run() {
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
-	darkbot_logus.Log.CheckFatal(err, "error opening connection,")
+	logus.Log.CheckFatal(err, "error opening connection,")
 	defer dg.Close()
 
-	darkbot_logus.Log.Info("Bot is now running.  Press CTRL-C to exit.")
+	logus.Log.Info("Bot is now running.  Press CTRL-C to exit.")
 	utils.SleepAwaitCtrlC()
-	darkbot_logus.Log.Info("gracefully closed discord conn")
+	logus.Log.Info("gracefully closed discord conn")
 }
 
 func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
@@ -110,5 +110,5 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if rendered != "" {
 		s.ChannelMessageSend(m.ChannelID, rendered)
 	}
-	darkbot_logus.Log.Debug("consolerHandler finished", darkbot_logus.ChannelID(channelID))
+	logus.Log.Debug("consolerHandler finished", logus.ChannelID(channelID))
 }

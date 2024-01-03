@@ -3,7 +3,7 @@ package baseview
 import (
 	"darkbot/app/scrappy/base"
 	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"math"
@@ -15,7 +15,7 @@ type ErrorCalculatingDerivative struct {
 
 func (t ErrorCalculatingDerivative) Error() string {
 	err_msg := "Some error calculating derivative :), msg=" + t.msg
-	darkbot_logus.Log.Warn("ErrorCalculatingDerivative", darkbot_logus.ErrorMsg(err_msg))
+	logus.Log.Warn("ErrorCalculatingDerivative", logus.ErrorMsg(err_msg))
 	return err_msg
 }
 
@@ -23,7 +23,7 @@ type WarningNoNonZeroDerivatives struct {
 }
 
 func (t WarningNoNonZeroDerivatives) Error() string {
-	darkbot_logus.Log.Warn("No unzero derivatives")
+	logus.Log.Warn("No unzero derivatives")
 	return "No unzero derivatives"
 }
 

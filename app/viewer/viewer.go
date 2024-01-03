@@ -3,7 +3,7 @@ package viewer
 import (
 	"darkbot/app/scrappy"
 	"darkbot/app/settings"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"time"
@@ -44,7 +44,7 @@ func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Vi
 }
 
 func (v *Viewer) Run() {
-	darkbot_logus.Log.Info("Viewer is now running.")
+	logus.Log.Info("Viewer is now running.")
 
 	for {
 		v.Update()
@@ -53,10 +53,10 @@ func (v *Viewer) Run() {
 
 func (v *Viewer) Update() {
 	time_viewer_started := time.Now()
-	darkbot_logus.Log.Info("Viewer.Update")
+	logus.Log.Info("Viewer.Update")
 
 	channelIDs, _ := v.api.Channels.List()
-	darkbot_logus.Log.Info("Viewer.Update.channelIDs=", darkbot_logus.ChannelIDs(channelIDs))
+	logus.Log.Info("Viewer.Update.channelIDs=", logus.ChannelIDs(channelIDs))
 
 	// For each channel
 	allChannelsTime := utils.NewTimeMeasure("all channels")
@@ -65,9 +65,9 @@ func (v *Viewer) Update() {
 			task := NewRefreshChannelTask(v.api, channelID, v.delays.betweenChannels)
 			// task.RunTask(worker_types.WorkerID(0))
 			v.workers.DelayTask(task)
-		}, "one channel", darkbot_logus.ChannelID(channelID))
+		}, "one channel", logus.ChannelID(channelID))
 	}
 	allChannelsTime.Close()
-	darkbot_logus.Log.Info("Viewer.Update Finished " + time.Since(time_viewer_started).String())
+	logus.Log.Info("Viewer.Update Finished " + time.Since(time_viewer_started).String())
 	time.Sleep(time.Duration(v.delays.betweenLoops) * time.Second)
 }

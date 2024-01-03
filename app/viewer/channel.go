@@ -2,7 +2,7 @@ package viewer
 
 import (
 	"darkbot/app/discorder"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
@@ -36,9 +36,9 @@ func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView
 // Query all Discord messages
 // Try to grab already sent message by ID, if yes, assign to found objects with message ID.
 func (v *ChannelView) Discover() error {
-	darkbot_logus.Log.Debug("viewer.Init.channelID=", darkbot_logus.ChannelID(v.ChannelID))
+	logus.Log.Debug("viewer.Init.channelID=", logus.ChannelID(v.ChannelID))
 	msgs, err := v.api.Discorder.GetLatestMessages(v.ChannelID)
-	if darkbot_logus.Log.CheckWarn(err, "unable to grab latst msg", darkbot_logus.ChannelID(v.ChannelID)) {
+	if logus.Log.CheckWarn(err, "unable to grab latst msg", logus.ChannelID(v.ChannelID)) {
 		return err
 	}
 
@@ -67,7 +67,7 @@ func (v ChannelView) Send() {
 	for view_num, view := range v.views {
 		utils.TimeMeasure(func() {
 			view.Send()
-		}, fmt.Sprintf("view.Send view_num=%d, view=%v", view_num, view), darkbot_logus.ChannelID(v.ChannelID))
+		}, fmt.Sprintf("view.Send view_num=%d, view=%v", view_num, view), logus.ChannelID(v.ChannelID))
 	}
 }
 
@@ -110,7 +110,7 @@ func (v ChannelView) DeleteOld() {
 			// it will make more optimized amount of network requests
 			return
 		}
-		darkbot_logus.Log.Info("deleted message with id", darkbot_logus.MessageID(msg.ID))
+		logus.Log.Info("deleted message with id", logus.MessageID(msg.ID))
 		deleteLimit--
 	}
 }

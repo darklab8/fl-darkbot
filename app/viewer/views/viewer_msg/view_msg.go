@@ -1,7 +1,7 @@
 package viewer_msg
 
 import (
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"fmt"
@@ -132,7 +132,7 @@ func (v *Msg) Send(api *apis.API) {
 			if len(v.records) == 0 && v.messageID != "" {
 				api.Discorder.DeleteMessage(v.channelID, v.messageID)
 			}
-		}, fmt.Sprintf("msg.Send DeleteMessage. Msg=%v", *v), darkbot_logus.ChannelID(v.channelID))
+		}, fmt.Sprintf("msg.Send DeleteMessage. Msg=%v", *v), logus.ChannelID(v.channelID))
 
 		if len(v.records) == 0 {
 			return
@@ -147,7 +147,7 @@ func (v *Msg) Send(api *apis.API) {
 			if v.messageID == "" {
 				utils.TimeMeasure(func() {
 					err = api.Discorder.SengMessage(v.channelID, content)
-					darkbot_logus.Log.CheckWarn(err, "unable to send msg", darkbot_logus.ChannelID(v.channelID))
+					logus.Log.CheckWarn(err, "unable to send msg", logus.ChannelID(v.channelID))
 					CheckTooLongMsgErr(err, api, v.channelID, v.viewEnumeratedID, ActSend, "")
 				}, fmt.Sprintf("Msg.Send().SendMessage + ChecTooLongMsg msg=%v", v))
 			} else {
@@ -156,7 +156,7 @@ func (v *Msg) Send(api *apis.API) {
 						err = api.Discorder.EditMessage(v.channelID, v.messageID, content)
 					}, fmt.Sprintf("Msg.Send().EditMessage.only msg=%v", v))
 					utils.TimeMeasure(func() {
-						darkbot_logus.Log.CheckWarn(err, "unable to edit msg", darkbot_logus.ChannelID(v.channelID))
+						logus.Log.CheckWarn(err, "unable to edit msg", logus.ChannelID(v.channelID))
 						CheckTooLongMsgErr(err, api, v.channelID, v.viewEnumeratedID, ActEdit, v.messageID)
 					}, fmt.Sprintf("Msg.Send().EditMessage.CheckTooLongMsgErr msg=%v", v))
 				}, fmt.Sprintf("Msg.Send().EditMessage + ChecTooLongMsg msg=%v", v))
@@ -185,7 +185,7 @@ func CheckTooLongMsgErr(err error, api *apis.API, channeID types.DiscordChannelI
 		case ActEdit:
 			api.Discorder.EditMessage(channeID, MessageID, msg)
 		}
-	}, fmt.Sprintf("CheckTooLongMsgErr. header=%s, messageID=%s, action=%d", header, MessageID, action), darkbot_logus.ChannelID(channeID))
+	}, fmt.Sprintf("CheckTooLongMsgErr. header=%s, messageID=%s, action=%d", header, MessageID, action), logus.ChannelID(channeID))
 }
 
 const (

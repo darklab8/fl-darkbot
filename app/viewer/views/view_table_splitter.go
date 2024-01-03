@@ -1,7 +1,7 @@
 package views
 
 import (
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views/viewer_msg"
@@ -70,7 +70,7 @@ func (t *SharedViewTableSplitter) DiscoverMessageID(content string, msgID types.
 	for _, view := range t.views {
 		for _, msg := range view.msgs {
 			if strings.Contains(content, string(msg.GetViewEnumeratedID())) {
-				darkbot_logus.Log.Debug(fmt.Sprintf("discovered content to ViewEnumeratedID=%v", viewer_msg.LogusMsg(msg)))
+				logus.Log.Debug(fmt.Sprintf("discovered content to ViewEnumeratedID=%v", viewer_msg.LogusMsg(msg)))
 				msg.SetMessageID(msgID)
 			}
 		}
@@ -82,7 +82,7 @@ func (t *SharedViewTableSplitter) MatchMessageID(messageID types.DiscordMessageI
 	for _, view := range t.views {
 		for _, msg := range view.msgs {
 			if msg.GetMessageID() == messageID {
-				darkbot_logus.Log.Debug(fmt.Sprintf("found match messageID=%v to msg.MessageID=%v", messageID, msg.GetMessageID()))
+				logus.Log.Debug(fmt.Sprintf("found match messageID=%v to msg.MessageID=%v", messageID, msg.GetMessageID()))
 				return true
 			}
 		}

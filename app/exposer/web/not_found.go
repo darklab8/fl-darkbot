@@ -6,10 +6,11 @@ import (
 	"text/template"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/darklab_goutils/goutils/utils/utils_types"
 )
 
 //go:embed 404.md
-var NotFoundPage string
+var NotFoundPage utils_types.TemplateExpression
 var NotFoundTemplate *template.Template
 
 func init() {

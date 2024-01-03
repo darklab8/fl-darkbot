@@ -2,7 +2,7 @@ package forumer
 
 import (
 	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"fmt"
 	"net/url"
 	"strings"
@@ -36,7 +36,7 @@ func NewDetailedPostRequester(opts ...detailedPostParam) *PostRequester {
 
 func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*forum_types.Post, error) {
 	query, err := p.requester(GET, thread.ThreadLink.GetUrl())
-	if darkbot_logus.Log.CheckError(err, "failed to query ThreadLink.GetUrl()="+string(thread.ThreadLink)) {
+	if logus.Log.CheckError(err, "failed to query ThreadLink.GetUrl()="+string(thread.ThreadLink)) {
 		return nil, err
 	}
 
@@ -45,20 +45,20 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 	post_id := forum_types.PostID(params["pid"][0])
 
 	forum := doc.Find("div", "id", "forum")
-	if darkbot_logus.Log.CheckError(forum.Error, "failed to get forum object") {
+	if logus.Log.CheckError(forum.Error, "failed to get forum object") {
 		return nil, forum.Error
 	}
 	thread_header := forum.Find("td", "class", "thead")
-	if darkbot_logus.Log.CheckError(thread_header.Error, "failed to get thread_header object") {
+	if logus.Log.CheckError(thread_header.Error, "failed to get thread_header object") {
 		return nil, thread_header.Error
 	}
 	thread_name := thread_header.FullText()
 	thread_name = strings.ReplaceAll(thread_name, "\n", "")
 	thread_name = strings.ReplaceAll(thread_name, "\t", "")
-	darkbot_logus.Log.Debug("thread_name=" + thread_name)
+	logus.Log.Debug("thread_name=" + thread_name)
 
 	post := doc.Find("table", "id", fmt.Sprintf("post_%s", string(post_id)))
-	if darkbot_logus.Log.CheckError(post.Error, "failed to get post object") {
+	if logus.Log.CheckError(post.Error, "failed to get post object") {
 		return nil, post.Error
 	}
 
@@ -79,7 +79,7 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 	// post_author_link := post_author_a.Attrs()["href"]
 
 	post_body := post.Find("div", "class", "post_body")
-	if darkbot_logus.Log.CheckError(post_body.Error, "failed to get post_body object") {
+	if logus.Log.CheckError(post_body.Error, "failed to get post_body object") {
 		return nil, post_body.Error
 	}
 	post_content := post_body.FullText()

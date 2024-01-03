@@ -2,7 +2,7 @@ package baseattack
 
 import (
 	"darkbot/app/scrappy/tests"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"os"
 	"path"
 )
@@ -29,6 +29,6 @@ func (a BaseAttackAPISpy) GetBaseAttackData() ([]byte, error) {
 	path_testdata := tests.FixtureCreateTestDataFolder()
 	path_testfile := path.Join(path_testdata, a.Filename)
 	data, err := os.ReadFile(path_testfile)
-	darkbot_logus.Log.CheckFatal(err, "unable to read file")
+	logus.Log.CheckFatal(err, "unable to read file")
 	return data, nil
 }

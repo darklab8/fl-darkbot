@@ -5,7 +5,7 @@ import (
 	"darkbot/app/scrappy/baseattack"
 	"darkbot/app/scrappy/player"
 	"darkbot/app/settings"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"time"
 )
 
@@ -49,11 +49,11 @@ func NewScrappyWithApis() *ScrappyStorage {
 }
 
 func (s *ScrappyStorage) Run() {
-	darkbot_logus.Log.Info("initialized scrappy")
-	darkbot_logus.Log.Info("starting scrappy infinity update loop")
+	logus.Log.Info("initialized scrappy")
+	logus.Log.Info("starting scrappy infinity update loop")
 	for {
 		s.Update()
 		time.Sleep(time.Duration(settings.ScrappyLoopDelay) * time.Second)
 	}
-	darkbot_logus.Log.Info("gracefully shutdown scrappy infinity loop")
+	logus.Log.Info("gracefully shutdown scrappy infinity loop")
 }

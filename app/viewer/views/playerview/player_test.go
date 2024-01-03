@@ -5,7 +5,7 @@ import (
 	"darkbot/app/scrappy"
 	"darkbot/app/scrappy/player"
 	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"fmt"
@@ -35,10 +35,10 @@ func TestPlayerViewerMadeUpData(t *testing.T) {
 
 		playerView := NewTemplatePlayers(api, channelID)
 		playerView.RenderView()
-		darkbot_logus.Log.Debug(playerView.friends.mainTable.GetMsgs()[0].Render())
-		darkbot_logus.Log.Debug(playerView.enemies.mainTable.GetMsgs()[0].Render())
-		darkbot_logus.Log.Debug(playerView.neutral.mainTable.GetMsgs()[0].Render())
-		darkbot_logus.Log.Debug("test TestPlayerViewer is finished")
+		logus.Log.Debug(playerView.friends.mainTable.GetMsgs()[0].Render())
+		logus.Log.Debug(playerView.enemies.mainTable.GetMsgs()[0].Render())
+		logus.Log.Debug(playerView.neutral.mainTable.GetMsgs()[0].Render())
+		logus.Log.Debug("test TestPlayerViewer is finished")
 
 		assert.True(t, playerView.friends.mainTable.HasRecords())
 		assert.True(t, playerView.enemies.mainTable.HasRecords())
@@ -88,6 +88,6 @@ func TestPlayerViewerRealData(t *testing.T) {
 
 		fmt.Println(playerView.friends.mainTable.GetMsgs()[0].Render())
 
-		darkbot_logus.Log.Debug("test TestPlayerViewer is finished")
+		logus.Log.Debug("test TestPlayerViewer is finished")
 	})
 }

@@ -8,10 +8,11 @@ import (
 	"text/template"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/darklab_goutils/goutils/utils/utils_types"
 )
 
 //go:embed alert_template.md
-var alertMarkup string
+var alertMarkup utils_types.TemplateExpression
 var alertTemplate *template.Template
 
 func init() {

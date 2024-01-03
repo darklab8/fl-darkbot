@@ -1,7 +1,7 @@
 package eventview
 
 import (
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
@@ -42,12 +42,12 @@ type PlayerTemplate struct {
 
 func (t *EventView) GenerateRecords() error {
 	player_record, err := t.GetAPI().Scrappy.GetPlayerStorage().GetLatestRecord()
-	if darkbot_logus.Log.CheckWarn(err, "unable to get players") {
+	if logus.Log.CheckWarn(err, "unable to get players") {
 		return err
 	}
 
 	eventTags, err := t.GetAPI().Players.Events.TagsList(t.channelID)
-	darkbot_logus.Log.CheckDebug(err, "failed to acquire player event list", darkbot_logus.ChannelID(t.channelID))
+	logus.Log.CheckDebug(err, "failed to acquire player event list", logus.ChannelID(t.channelID))
 
 	if len(eventTags) > 0 {
 		for _, eventTag := range eventTags {
@@ -62,7 +62,7 @@ func (t *EventView) GenerateRecords() error {
 				}
 			}
 			result, err := json.Marshal(matchedPlayers)
-			darkbot_logus.Log.CheckError(err, "failed to marshal event matched players")
+			logus.Log.CheckError(err, "failed to marshal event matched players")
 			record.WriteString(string(result))
 
 			record.WriteString("\n")

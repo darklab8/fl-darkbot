@@ -5,7 +5,7 @@ import (
 	"darkbot/app/scrappy"
 	"darkbot/app/scrappy/player"
 	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"testing"
@@ -32,7 +32,7 @@ func TestPlayerEvent(t *testing.T) {
 		playerView := NewEventRenderer(api, channelID)
 		playerView.RenderView()
 		//logus.Debug(len(playerView.main.ViewRecords))
-		darkbot_logus.Log.Debug("test TestPlayerEvent is finished")
+		logus.Log.Debug("test TestPlayerEvent is finished")
 
 		assert.Equal(t, 2, playerView.main.RecordCount())
 		assert.Equal(t, 1, len(playerView.main.GetMsgs()))

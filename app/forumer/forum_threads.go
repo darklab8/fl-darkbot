@@ -2,7 +2,7 @@ package forumer
 
 import (
 	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"fmt"
 	"net/url"
 
@@ -40,7 +40,7 @@ func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]*forum_t
 	records := []*forum_types.LatestThread{}
 
 	query, err := p.requester(GET, ThreadPageURL)
-	if darkbot_logus.Log.CheckError(err, "Failed to make query") {
+	if logus.Log.CheckError(err, "Failed to make query") {
 		return nil, err
 	}
 
@@ -50,21 +50,21 @@ func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]*forum_t
 
 	for _, forum_post := range forum_posts {
 		thread := forum_post.Find("strong").Find("a")
-		if darkbot_logus.Log.CheckError(thread.Error, "failed to get thread object") {
+		if logus.Log.CheckError(thread.Error, "failed to get thread object") {
 			return nil, thread.Error
 		}
 
 		thread_link := thread.Attrs()["href"]
 		thread_name := thread.Text()
 		span_section := forum_post.Find("span")
-		if darkbot_logus.Log.CheckError(span_section.Error, "failed to get span_section object") {
+		if logus.Log.CheckError(span_section.Error, "failed to get span_section object") {
 			return nil, span_section.Error
 		}
 
 		forum_timestamp := span_section.Find("span").Attrs()["title"]
 
 		author := span_section.Find("a")
-		if darkbot_logus.Log.CheckError(author.Error, "failed to get author object") {
+		if logus.Log.CheckError(author.Error, "failed to get author object") {
 			return nil, author.Error
 		}
 		author_link := author.Attrs()["href"]
@@ -83,7 +83,7 @@ func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]*forum_t
 		}
 		records = append(records, latest_thread)
 
-		darkbot_logus.Log.Debug(fmt.Sprintf("latest_thread=%v", latest_thread))
+		logus.Log.Debug(fmt.Sprintf("latest_thread=%v", latest_thread))
 	}
 	return records, nil
 }

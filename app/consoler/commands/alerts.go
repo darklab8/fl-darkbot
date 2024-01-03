@@ -4,14 +4,14 @@ import (
 	"darkbot/app/configurator"
 	"darkbot/app/consoler/commands/cmdgroup"
 	"darkbot/app/consoler/printer"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"strconv"
 	"strings"
 
+	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 
-	"github.com/darklab8/darklab_goutils/goutils/logus"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +39,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 		Short: "Set alert (Works as set {number})",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateSetAlertCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateSetAlertCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -47,7 +47,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 			printer.Println(cmd, "Attempting to parse input into integer number")
 			rawInteger := args[0]
 			integer, err := strconv.Atoi(rawInteger)
-			if darkbot_logus.Log.CheckWarn(err, "Atoi result with warning", logus.OptError(err)) {
+			if logus.Log.CheckWarn(err, "Atoi result with warning", logus_core.OptError(err)) {
 				printer.Println(cmd, "failed to parse value to integer. Value="+rawInteger)
 			}
 
@@ -57,7 +57,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
-			darkbot_logus.Log.Debug("checking args again?", darkbot_logus.Args(args))
+			logus.Log.Debug("checking args again?", logus.Args(args))
 
 			printer.Println(cmd, "OK alert threshold is set")
 		},
@@ -70,7 +70,7 @@ func (t *alertThresholdCommands[T]) CreateUnsetCmd() {
 		Use:   "unset",
 		Short: "Unsert alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateUnsetCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -95,7 +95,7 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 		Use:   "status",
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateStatusCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -142,7 +142,7 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 		Use:   "enable",
 		Short: "Enable alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateEnableCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateEnableCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -156,7 +156,7 @@ func (t *AlertBoolCommands[T]) CreateEnableCmd() {
 				}
 				return
 			}
-			darkbot_logus.Log.Debug("Create Enable is finished", darkbot_logus.Args(args))
+			logus.Log.Debug("Create Enable is finished", logus.Args(args))
 
 			printer.Println(cmd, "OK alert is enabled")
 		},
@@ -169,7 +169,7 @@ func (t *AlertBoolCommands[T]) CreateDisableCmd() {
 		Use:   "disable",
 		Short: "Disable alert / Clear alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateDisableCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateDisableCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -194,7 +194,7 @@ func (t *AlertBoolCommands[T]) CreateStatusCmd() {
 		Use:   "status",
 		Short: "Status of alert",
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateStatusCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -245,7 +245,7 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd(allowed_order_keys []types.Order
 		Short: "Set Value (provide 'set StringValue')",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateSetAlertCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateSetAlertCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -272,7 +272,7 @@ func (t *AlertSetStringCommand[T]) CreateSetCmd(allowed_order_keys []types.Order
 				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
-			darkbot_logus.Log.Debug("finished CreateSetCmd", darkbot_logus.Args(args))
+			logus.Log.Debug("finished CreateSetCmd", logus.Args(args))
 
 			printer.Println(cmd, "OK value is set")
 		},
@@ -285,7 +285,7 @@ func (t *AlertSetStringCommand[T]) CreateUnsetCmd() {
 		Use:   "unset",
 		Short: "Unsert / Clear ",
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateUnsetCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateUnsetCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}
@@ -310,7 +310,7 @@ func (t *AlertSetStringCommand[T]) CreateStatusCmd() {
 		Use:   "status",
 		Short: "Status",
 		Run: func(cmd *cobra.Command, args []string) {
-			darkbot_logus.Log.Debug("CreateStatusCmd.consoler running with args=", darkbot_logus.Args(args))
+			logus.Log.Debug("CreateStatusCmd.consoler running with args=", logus.Args(args))
 			if !CheckCommandAllowedToRun(cmd, t.channels, t.GetChannelID()) {
 				return
 			}

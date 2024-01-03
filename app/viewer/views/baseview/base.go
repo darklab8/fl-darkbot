@@ -3,7 +3,7 @@ package baseview
 import (
 	"darkbot/app/configurator/models"
 	"darkbot/app/scrappy/base"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
@@ -16,10 +16,11 @@ import (
 	"text/template"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/darklab_goutils/goutils/utils/utils_types"
 )
 
 //go:embed base_template.md
-var baseMarkup string
+var baseMarkup utils_types.TemplateExpression
 var baseTemplate *template.Template
 
 func init() {
@@ -124,7 +125,7 @@ func (b *TemplateBase) sortBases(bases []base.Base, order_key types.OrderKey) ([
 			return bases[i].Affiliation < bases[j].Affiliation
 		})
 	default:
-		darkbot_logus.Log.Error(fmt.Sprintf("forbidden order order_key=%s, only keys=%v are allowed", order_key, models.ConfigBaseOrderingKeyAllowedTags))
+		logus.Log.Error(fmt.Sprintf("forbidden order order_key=%s, only keys=%v are allowed", order_key, models.ConfigBaseOrderingKeyAllowedTags))
 		return bases, ErrorForbiddenOrderKey(order_key)
 	}
 
@@ -135,7 +136,7 @@ const HealthRateDecreasingThreshold = -0.01
 
 func (b *TemplateBase) GenerateRecords() error {
 	record, err := b.api.Scrappy.GetBaseStorage().GetLatestRecord()
-	if darkbot_logus.Log.CheckWarn(err, "unable to query bases from storage in Template base Generate records") {
+	if logus.Log.CheckWarn(err, "unable to query bases from storage in Template base Generate records") {
 		return err
 	}
 	sort.Slice(record.List, func(i, j int) bool {
@@ -150,7 +151,7 @@ func (b *TemplateBase) GenerateRecords() error {
 	matchedBases := MatchBases(record.List, tags)
 
 	order_key, err := b.api.Bases.OrderBy.Status(b.channelID)
-	if !darkbot_logus.Log.CheckDebug(err, "failed to query Order by key") {
+	if !logus.Log.CheckDebug(err, "failed to query Order by key") {
 		matchedBases, err = b.sortBases(matchedBases, types.OrderKey(order_key))
 
 		base_table_will_be_rendered := len(matchedBases) > 0

@@ -4,7 +4,7 @@ import (
 	"darkbot/app/scrappy/shared/parser"
 	"darkbot/app/scrappy/shared/records"
 
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 )
 
 type Base struct {
@@ -23,15 +23,15 @@ type BaseStorage struct {
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
 	data, err := b.api.GetBaseData()
-	if darkbot_logus.Log.CheckWarn(err, "quering API with error in BaseStorage") {
+	if logus.Log.CheckWarn(err, "quering API with error in BaseStorage") {
 		return
 	}
 	record, err := b.parser.Parse(data)
-	if darkbot_logus.Log.CheckWarn(err, "received bad parser parsing result in BaseStorage. Ignoring.") {
+	if logus.Log.CheckWarn(err, "received bad parser parsing result in BaseStorage. Ignoring.") {
 		return
 	}
 	b.Add(record)
-	darkbot_logus.Log.Info("updated base storage")
+	logus.Log.Info("updated base storage")
 }
 
 func NewBaseStorage(api IbaseAPI) *BaseStorage {

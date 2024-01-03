@@ -2,7 +2,7 @@ package configurator
 
 import (
 	"darkbot/app/settings"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"os"
 
@@ -18,7 +18,7 @@ func FixtureMigrator(callback func(dbpath types.Dbpath)) *Configurator {
 	dbname := utils.TokenHex(8)
 	dbpath := types.Dbpath(settings.NewDBPath(dbname))
 	// setup
-	darkbot_logus.Log.Debug("", darkbot_logus.Dbpath(dbpath))
+	logus.Log.Debug("", logus.Dbpath(dbpath))
 	os.Remove(string(dbpath))
 	os.Remove(string(dbpath) + "-shm")
 	os.Remove(string(dbpath) + "-wal")

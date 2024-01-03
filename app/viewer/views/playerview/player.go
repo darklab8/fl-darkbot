@@ -2,7 +2,7 @@ package playerview
 
 import (
 	"darkbot/app/scrappy/player"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"darkbot/app/viewer/views"
@@ -11,9 +11,9 @@ import (
 	"fmt"
 	"text/template"
 
+	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"github.com/darklab8/darklab_goutils/goutils/utils"
-
-	"github.com/darklab8/darklab_goutils/goutils/logus"
+	"github.com/darklab8/darklab_goutils/goutils/utils/utils_types"
 )
 
 // Discovery players-all, players-friends, players-enemies messages
@@ -95,7 +95,7 @@ func NewTemplatePlayers(api *apis.API, channelID types.DiscordChannelID) *Player
 
 func (t *PlayersTemplates) GenerateRecords() error {
 	record, err := t.api.Scrappy.GetPlayerStorage().GetLatestRecord()
-	if darkbot_logus.Log.CheckWarn(err, "unable to get players") {
+	if logus.Log.CheckWarn(err, "unable to get players") {
 		return err
 	}
 
@@ -103,12 +103,12 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	regionTags, _ := t.api.Players.Regions.TagsList(t.channelID)
 	friendTags, _ := t.api.Players.Friends.TagsList(t.channelID)
 	enemyTags, _ := t.api.Players.Enemies.TagsList(t.channelID)
-	darkbot_logus.Log.Debug(
+	logus.Log.Debug(
 		"PlayerTemplatesRender next",
-		logus.Items(systemTags, "systemTags"),
-		logus.Items(friendTags, "friendTags"),
-		logus.Items(enemyTags, "enemyTags"),
-		logus.Items(record.List, "record.List"),
+		logus_core.Items(systemTags, "systemTags"),
+		logus_core.Items(friendTags, "friendTags"),
+		logus_core.Items(enemyTags, "enemyTags"),
+		logus_core.Items(record.List, "record.List"),
 	)
 	neutralPlayers := []player.Player{}
 	enemyPlayers := []player.Player{}
@@ -132,9 +132,9 @@ func (t *PlayersTemplates) GenerateRecords() error {
 		neutralPlayers = append(neutralPlayers, player)
 	}
 
-	darkbot_logus.Log.Debug("friendPlayers=", logus.Items(friendPlayers, "friendPlayers"))
-	darkbot_logus.Log.Debug("enemyPlayers=", logus.Items(enemyPlayers, "enemyPlayers"))
-	darkbot_logus.Log.Debug("neutralPlayers=", logus.Items(neutralPlayers, "neutralPlayers"))
+	logus.Log.Debug("friendPlayers=", logus_core.Items(friendPlayers, "friendPlayers"))
+	logus.Log.Debug("enemyPlayers=", logus_core.Items(enemyPlayers, "enemyPlayers"))
+	logus.Log.Debug("neutralPlayers=", logus_core.Items(neutralPlayers, "neutralPlayers"))
 
 	protectAgainstResend := func(player *[]player.Player, view *views.ViewTable) {
 		if len(*player) == 0 {
@@ -190,7 +190,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 }
 
 //go:embed player_template.md
-var playerMarkup string
+var playerMarkup utils_types.TemplateExpression
 var playerTemplate *template.Template
 
 func init() {

@@ -1,7 +1,7 @@
 package viewer
 
 import (
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"darkbot/app/viewer/apis"
 	"fmt"
@@ -59,7 +59,7 @@ func GetMutex(MutexKey string) *sync.Mutex {
 
 func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	channel_info, err := v.api.Discorder.GetDiscordSession().Channel(string(v.channelID))
-	if darkbot_logus.Log.CheckError(err, "unable to get channel info", darkbot_logus.ChannelID(v.channelID)) {
+	if logus.Log.CheckError(err, "unable to get channel info", logus.ChannelID(v.channelID)) {
 		return err
 	}
 
@@ -69,32 +69,32 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	defer GuildMutex.Unlock()
 
 	time_run_task_started := time.Now()
-	time_new_channel := utils.NewTimeMeasure("new_channel", darkbot_logus.ChannelID(v.channelID))
+	time_new_channel := utils.NewTimeMeasure("new_channel", logus.ChannelID(v.channelID))
 	channel := NewChannelView(v.api, v.channelID)
 
 	time_new_channel.Close()
 
-	time_render := utils.NewTimeMeasure("channel.Render", darkbot_logus.ChannelID(v.channelID))
+	time_render := utils.NewTimeMeasure("channel.Render", logus.ChannelID(v.channelID))
 	channel.RenderViews()
 	time_render.Close()
 
-	time_discover := utils.NewTimeMeasure("channel.Discover", darkbot_logus.ChannelID(v.channelID))
+	time_discover := utils.NewTimeMeasure("channel.Discover", logus.ChannelID(v.channelID))
 	err = channel.Discover()
 	time_discover.Close()
 
-	if darkbot_logus.Log.CheckWarn(err, "unable to grab Discord msgs", darkbot_logus.ChannelID(v.channelID)) {
+	if logus.Log.CheckWarn(err, "unable to grab Discord msgs", logus.ChannelID(v.channelID)) {
 		return err
 	}
 
-	time_send := utils.NewTimeMeasure("channel.Send", darkbot_logus.ChannelID(v.channelID))
+	time_send := utils.NewTimeMeasure("channel.Send", logus.ChannelID(v.channelID))
 	channel.Send()
 	time_send.Close()
 
-	time_delete_old := utils.NewTimeMeasure("channel.DeleteOld", darkbot_logus.ChannelID(v.channelID))
+	time_delete_old := utils.NewTimeMeasure("channel.DeleteOld", logus.ChannelID(v.channelID))
 	channel.DeleteOld()
 	time_delete_old.Close()
 
-	darkbot_logus.Log.Info(fmt.Sprintf("RunTask finished, TaskID=%d, elapsed=%s, started_at=%s, finished_at=%s",
+	logus.Log.Info(fmt.Sprintf("RunTask finished, TaskID=%d, elapsed=%s, started_at=%s, finished_at=%s",
 		v.Task.GetID(),
 		time.Since(time_run_task_started).String(),
 		time_run_task_started.String(),

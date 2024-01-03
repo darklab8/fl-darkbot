@@ -1,7 +1,7 @@
 package web
 
 import (
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"net/http"
 )
 
@@ -31,6 +31,6 @@ func (s *Server) GetMux() *http.ServeMux {
 	for route, endpoint := range s.router {
 		mux.Handle(string(route), endpoint)
 	}
-	darkbot_logus.Log.Info("started server")
+	logus.Log.Info("started server")
 	return mux
 }

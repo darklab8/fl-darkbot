@@ -1,7 +1,7 @@
 package settings
 
 import (
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 	"path/filepath"
 	"strconv"
@@ -46,35 +46,35 @@ func NewDBPath(dbname string) types.Dbpath {
 }
 
 func load() {
-	darkbot_logus.Log.Info("identifying folder of settings")
-	Workdir = filepath.Dir(filepath.Dir(utils.GetCurrrentFolder()))
+	logus.Log.Info("identifying folder of settings")
+	Workdir = filepath.Dir(filepath.Dir(utils.GetCurrrentFolder().ToString()))
 
 	err := godotenv.Load(filepath.Join(Workdir, ".env"))
 	if err == nil {
-		darkbot_logus.Log.Info("loadded settings from .env")
+		logus.Log.Info("loadded settings from .env")
 	}
 
 	opts := env.Options{RequiredIfNoDef: true}
 	err = env.Parse(&Config, opts)
 
-	darkbot_logus.Log.CheckFatal(err, "settings have unset variable")
+	logus.Log.CheckFatal(err, "settings have unset variable")
 
-	darkbot_logus.Log.Debug("settings were downloaded. Scrappy base url=", darkbot_logus.APIUrl(Config.ScrappyBaseUrl))
+	logus.Log.Debug("settings were downloaded. Scrappy base url=", logus.APIUrl(Config.ScrappyBaseUrl))
 
 	Dbpath = NewDBPath(Config.ConfiguratorDbname)
 
 	scrappy_loop_delay, err := strconv.Atoi(Config.ScrappyLoopDelay)
-	darkbot_logus.Log.CheckFatal(err, "failed to parse ScrappyLoopDelay")
+	logus.Log.CheckFatal(err, "failed to parse ScrappyLoopDelay")
 	ScrappyLoopDelay = types.ScrappyLoopDelay(scrappy_loop_delay)
 
 	viewer_loop_delay, err := strconv.Atoi(Config.ViewerLoopDelay)
-	darkbot_logus.Log.CheckFatal(err, "failed to parse ViewerLoopDelay")
+	logus.Log.CheckFatal(err, "failed to parse ViewerLoopDelay")
 	ViewerLoopDelay = types.ViewerLoopDelay(viewer_loop_delay)
 
-	darkbot_logus.Log.Info("settings.ScrappyLoopDelay=", darkbot_logus.ScrappyLoopDelay(ScrappyLoopDelay))
+	logus.Log.Info("settings.ScrappyLoopDelay=", logus.ScrappyLoopDelay(ScrappyLoopDelay))
 }
 
 func init() {
-	darkbot_logus.Log.Info("attempt to load settings")
+	logus.Log.Info("attempt to load settings")
 	load()
 }

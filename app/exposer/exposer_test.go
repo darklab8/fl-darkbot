@@ -1,7 +1,7 @@
 package exposer
 
 import (
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"io"
 	"net/http"
 	"strings"
@@ -22,7 +22,7 @@ func FixtureTestWebServer() {
 			if body == "pong!" {
 				break
 			}
-			darkbot_logus.Log.Debug("sleeping to acquire server pong")
+			logus.Log.Debug("sleeping to acquire server pong")
 		}
 		time.Sleep(50 * time.Millisecond)
 	}
@@ -30,7 +30,7 @@ func FixtureTestWebServer() {
 
 func testQuery(url string) (string, error) {
 	resp, err := http.Get("http://localhost:8080" + url)
-	if darkbot_logus.Log.CheckError(err, "query failed") {
+	if logus.Log.CheckError(err, "query failed") {
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -41,9 +41,9 @@ func testQuery(url string) (string, error) {
 func TestHomePage(t *testing.T) {
 	FixtureTestWebServer()
 	body, err := testQuery("/")
-	darkbot_logus.Log.CheckFatal(err, "readAll failed")
+	logus.Log.CheckFatal(err, "readAll failed")
 
-	darkbot_logus.Log.Debug(body)
+	logus.Log.Debug(body)
 
 	if !strings.Contains(body, "Not found") {
 		t.Error("")
@@ -53,9 +53,9 @@ func TestHomePage(t *testing.T) {
 func TestPlayers(t *testing.T) {
 	FixtureTestWebServer()
 	body, err := testQuery("/players")
-	darkbot_logus.Log.CheckFatal(err, "readAll failed")
+	logus.Log.CheckFatal(err, "readAll failed")
 
-	darkbot_logus.Log.Debug(body)
+	logus.Log.Debug(body)
 
 	if !strings.Contains(body, "Another page") {
 		t.Error("")

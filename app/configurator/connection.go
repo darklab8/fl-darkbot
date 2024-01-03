@@ -7,10 +7,10 @@ package configurator
 import (
 	"darkbot/app/configurator/models"
 	"darkbot/app/settings"
-	"darkbot/app/settings/darkbot_logus"
+	"darkbot/app/settings/logus"
 	"darkbot/app/settings/types"
 
-	"github.com/darklab8/darklab_goutils/goutils/logus"
+	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -31,7 +31,7 @@ func NewConfigurator(dbpath types.Dbpath) *Configurator {
 	db, err := gorm.Open(
 		sqlite.Open(string(dbpath)+"?cache=shared&mode=rwc&_journal_mode=WAL"), &gorm.Config{},
 	)
-	darkbot_logus.Log.CheckFatal(err, "failed to connect database at dbpath=", darkbot_logus.Dbpath(settings.Dbpath))
+	logus.Log.CheckFatal(err, "failed to connect database at dbpath=", logus.Dbpath(settings.Dbpath))
 
 	return &Configurator{db: db, dbpath: dbpath}
 }
@@ -58,8 +58,8 @@ func (cg *Configurator) AutoMigrateSchema() *Configurator {
 		&models.AlertPingMessage{},
 		&models.ConfigBaseOrderingKey{},
 	)
-	if !darkbot_logus.Log.CheckWarn(err, "AutoMigrateSchema was executed with problems", logus.OptError(err)) {
-		darkbot_logus.Log.Info("AutoMigrateSchema was executed fine")
+	if !logus.Log.CheckWarn(err, "AutoMigrateSchema was executed with problems", logus_core.OptError(err)) {
+		logus.Log.Info("AutoMigrateSchema was executed fine")
 	}
 	return cg
 }
