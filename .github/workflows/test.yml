@@ -6,6 +6,9 @@ name: Test
 on:
   push:
     branches: ["master"]
+  schedule:
+    # every sunday
+    - cron: '0 10 * * 0'
 
 jobs:
   test:
