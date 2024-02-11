@@ -5,10 +5,10 @@ User settings. Probably in Sqlite3? :thinking:
 package configurator
 
 import (
-	"github.com/darklab/fl-darkbot/app/configurator/models"
-	"github.com/darklab/fl-darkbot/app/settings"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/configurator/models"
+	"github.com/darklab8/fl-darkbot/app/settings"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/go-typelog/typelog"
 
 	"gorm.io/driver/sqlite"

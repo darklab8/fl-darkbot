@@ -1,10 +1,10 @@
 package base
 
 import (
-	"github.com/darklab/fl-darkbot/app/scrappy/shared/parser"
-	"github.com/darklab/fl-darkbot/app/scrappy/shared/records"
+	"github.com/darklab8/fl-darkbot/app/scrappy/shared/parser"
+	"github.com/darklab8/fl-darkbot/app/scrappy/shared/records"
 
-	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
 
 type Base struct {

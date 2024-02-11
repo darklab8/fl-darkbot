@@ -1,6 +1,6 @@
 # Create a docker image resource
 # -> docker pull nginx:latest
-resource "docker_image" "github.com/darklab/fl-darkbot" {
+resource "docker_image" "github.com/darklab8/fl-darkbot" {
   name         = "darkwind8/darkbot:${var.tag_version}"
   keep_locally = true
 }
@@ -28,8 +28,8 @@ variable "secrets" {
 
 # # Create a docker container resource
 # # -> same as 'docker run --name nginx -p8080:80 -d nginx:latest'
-resource "docker_container" "github.com/darklab/fl-darkbot" {
-  name  = "github.com/darklab/fl-darkbot"
+resource "docker_container" "github.com/darklab8/fl-darkbot" {
+  name  = "github.com/darklab8/fl-darkbot"
   image = docker_image.darkbot.image_id
 
   env = [
@@ -41,7 +41,7 @@ resource "docker_container" "github.com/darklab/fl-darkbot" {
     "SCRAPPY_LOOP_DELAY=60",
     "VIEWER_LOOP_DELAY=10",
     "DEVENV_MOCK_API=false",
-    "github.com/darklab/fl-darkbot_LOG_LEVEL=${var.debug ? "DEBUG" : "WARN"}"
+    "github.com/darklab8/fl-darkbot_LOG_LEVEL=${var.debug ? "DEBUG" : "WARN"}"
   ]
 
   restart = "always"

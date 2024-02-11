@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"net/http"
 
-	"github.com/darklab/fl-darkbot/app/exposer/web"
+	"github.com/darklab8/fl-darkbot/app/exposer/web"
 )
 
 //go:embed home.md

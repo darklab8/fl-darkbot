@@ -4,8 +4,8 @@ import (
 	_ "embed"
 	"net/http"
 
-	"github.com/darklab/fl-darkbot/app/exposer/routes"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/exposer/routes"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
 
 func NewExposer() {

@@ -14,7 +14,7 @@ provider "docker" {
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-i", "~/.ssh/id_rsa.darklab"]
 }
 
-data "aws_ssm_parameter" "github.com/darklab/fl-darkbot" {
+data "aws_ssm_parameter" "github.com/darklab8/fl-darkbot" {
   name = "/terraform/hetzner/darkbot/staging"
 }
 
@@ -22,7 +22,7 @@ locals {
   secrets = nonsensitive(jsondecode(data.aws_ssm_parameter.darkbot.value))
 }
 
-module "github.com/darklab/fl-darkbot" {
+module "github.com/darklab8/fl-darkbot" {
   source              = "../modules/darkbot"
   configurator_dbname = "staging"
   consoler_prefix     = ","

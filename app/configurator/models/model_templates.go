@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
 
 	"gorm.io/gorm"
 )

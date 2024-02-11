@@ -6,11 +6,11 @@ package consoler
 import (
 	"strings"
 
-	"github.com/darklab/fl-darkbot/app/configurator"
-	"github.com/darklab/fl-darkbot/app/consoler/commands"
-	"github.com/darklab/fl-darkbot/app/consoler/consoler_types"
-	"github.com/darklab/fl-darkbot/app/settings"
-	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/consoler/commands"
+	"github.com/darklab8/fl-darkbot/app/consoler/consoler_types"
+	"github.com/darklab8/fl-darkbot/app/settings"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
 )
 
 type Consoler struct {

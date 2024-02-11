@@ -4,8 +4,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
 )
 
 type APIrequest struct {

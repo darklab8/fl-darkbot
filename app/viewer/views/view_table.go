@@ -1,8 +1,8 @@
 package views
 
 import (
-	"github.com/darklab/fl-darkbot/app/settings/types"
-	"github.com/darklab/fl-darkbot/app/viewer/views/viewer_msg"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/viewer/views/viewer_msg"
 )
 
 type ViewTable struct {

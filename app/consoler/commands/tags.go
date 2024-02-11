@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/darklab/fl-darkbot/app/configurator"
-	"github.com/darklab/fl-darkbot/app/consoler/commands/cmdgroup"
-	"github.com/darklab/fl-darkbot/app/consoler/printer"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/consoler/commands/cmdgroup"
+	"github.com/darklab8/fl-darkbot/app/consoler/printer"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
 
 	"github.com/spf13/cobra"
 )

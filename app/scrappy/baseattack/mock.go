@@ -4,8 +4,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/darklab/fl-darkbot/app/scrappy/tests"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/scrappy/tests"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
 
 // SPY

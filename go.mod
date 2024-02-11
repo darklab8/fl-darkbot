@@ -1,4 +1,4 @@
-module github.com/darklab/fl-darkbot
+module github.com/darklab8/fl-darkbot
 
 go 1.21.1
 

@@ -1,6 +1,6 @@
 package configurator
 
-import "github.com/darklab/fl-darkbot/app/settings/types"
+import "github.com/darklab8/fl-darkbot/app/settings/types"
 
 type Players struct {
 	Systems ConfiguratorSystem

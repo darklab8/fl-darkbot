@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"text/template"
 
-	"github.com/darklab/fl-darkbot/app/scrappy/player"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/settings/types"
-	"github.com/darklab/fl-darkbot/app/viewer/apis"
-	"github.com/darklab/fl-darkbot/app/viewer/views"
-	"github.com/darklab/fl-darkbot/app/viewer/views/viewer_msg"
+	"github.com/darklab8/fl-darkbot/app/scrappy/player"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/viewer/apis"
+	"github.com/darklab8/fl-darkbot/app/viewer/views"
+	"github.com/darklab8/fl-darkbot/app/viewer/views/viewer_msg"
 
 	"github.com/darklab8/go-typelog/typelog"
 	"github.com/darklab8/go-utils/goutils/utils"

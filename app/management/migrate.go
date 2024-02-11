@@ -4,9 +4,9 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package management
 
 import (
-	"github.com/darklab/fl-darkbot/app/configurator"
-	"github.com/darklab/fl-darkbot/app/settings"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/settings"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
 
 	"github.com/spf13/cobra"
 )

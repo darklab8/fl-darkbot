@@ -1,9 +1,9 @@
 package scrappy
 
 import (
-	"github.com/darklab/fl-darkbot/app/scrappy/base"
-	"github.com/darklab/fl-darkbot/app/scrappy/baseattack"
-	"github.com/darklab/fl-darkbot/app/scrappy/player"
+	"github.com/darklab8/fl-darkbot/app/scrappy/base"
+	"github.com/darklab8/fl-darkbot/app/scrappy/baseattack"
+	"github.com/darklab8/fl-darkbot/app/scrappy/player"
 )
 
 func FixtureMockedStorage(opts ...storageParam) *ScrappyStorage {

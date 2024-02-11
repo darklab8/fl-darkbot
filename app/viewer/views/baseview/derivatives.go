@@ -3,11 +3,11 @@ package baseview
 import (
 	"math"
 
-	"github.com/darklab/fl-darkbot/app/scrappy/base"
-	"github.com/darklab/fl-darkbot/app/scrappy/shared/records"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/settings/types"
-	"github.com/darklab/fl-darkbot/app/viewer/apis"
+	"github.com/darklab8/fl-darkbot/app/scrappy/base"
+	"github.com/darklab8/fl-darkbot/app/scrappy/shared/records"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 )
 
 type ErrorCalculatingDerivative struct {

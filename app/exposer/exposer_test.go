@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
 
 var (

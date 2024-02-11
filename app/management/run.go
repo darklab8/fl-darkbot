@@ -7,13 +7,13 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/darklab/fl-darkbot/app/configurator"
-	"github.com/darklab/fl-darkbot/app/forumer"
-	"github.com/darklab/fl-darkbot/app/listener"
-	"github.com/darklab/fl-darkbot/app/scrappy"
-	"github.com/darklab/fl-darkbot/app/settings"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/viewer"
+	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/forumer"
+	"github.com/darklab8/fl-darkbot/app/listener"
+	"github.com/darklab8/fl-darkbot/app/scrappy"
+	"github.com/darklab8/fl-darkbot/app/settings"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/viewer"
 
 	"github.com/darklab8/go-utils/goutils/utils"
 

@@ -11,9 +11,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/darklab/fl-darkbot/app/settings"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/settings"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/go-utils/goutils/utils"
 

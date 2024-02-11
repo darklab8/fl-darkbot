@@ -5,14 +5,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/darklab/fl-darkbot/app/discorder"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
-	"github.com/darklab/fl-darkbot/app/settings/types"
-	"github.com/darklab/fl-darkbot/app/viewer/apis"
-	"github.com/darklab/fl-darkbot/app/viewer/views"
-	"github.com/darklab/fl-darkbot/app/viewer/views/baseview"
-	"github.com/darklab/fl-darkbot/app/viewer/views/eventview"
-	"github.com/darklab/fl-darkbot/app/viewer/views/playerview"
+	"github.com/darklab8/fl-darkbot/app/discorder"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkbot/app/viewer/apis"
+	"github.com/darklab8/fl-darkbot/app/viewer/views"
+	"github.com/darklab8/fl-darkbot/app/viewer/views/baseview"
+	"github.com/darklab8/fl-darkbot/app/viewer/views/eventview"
+	"github.com/darklab8/fl-darkbot/app/viewer/views/playerview"
 
 	"github.com/darklab8/go-utils/goutils/utils"
 )

@@ -3,11 +3,11 @@ package scrappy
 import (
 	"time"
 
-	"github.com/darklab/fl-darkbot/app/scrappy/base"
-	"github.com/darklab/fl-darkbot/app/scrappy/baseattack"
-	"github.com/darklab/fl-darkbot/app/scrappy/player"
-	"github.com/darklab/fl-darkbot/app/settings"
-	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/fl-darkbot/app/scrappy/base"
+	"github.com/darklab8/fl-darkbot/app/scrappy/baseattack"
+	"github.com/darklab8/fl-darkbot/app/scrappy/player"
+	"github.com/darklab8/fl-darkbot/app/settings"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
 
 type ScrappyStorage struct {
