@@ -5,8 +5,9 @@ Those functions are capable to print back to user to Discord via Cobra
 */
 
 import (
-	"darkbot/app/settings/logus"
 	"fmt"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 
 	"github.com/spf13/cobra"
 )

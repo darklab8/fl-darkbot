@@ -1,9 +1,10 @@
 package baseattack
 
 import (
-	"darkbot/app/settings/logus"
 	"strings"
 	"testing"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 
 	"github.com/stretchr/testify/assert"
 )

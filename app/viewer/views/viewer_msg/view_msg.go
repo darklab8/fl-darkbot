@@ -1,12 +1,13 @@
 package viewer_msg
 
 import (
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )

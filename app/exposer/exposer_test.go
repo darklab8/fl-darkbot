@@ -1,12 +1,13 @@
 package exposer
 
 import (
-	"darkbot/app/settings/logus"
 	"io"
 	"net/http"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 )
 
 var (

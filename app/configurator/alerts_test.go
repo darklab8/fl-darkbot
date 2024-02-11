@@ -1,10 +1,11 @@
 package configurator
 
 import (
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"fmt"
 	"testing"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/stretchr/testify/assert"
 )

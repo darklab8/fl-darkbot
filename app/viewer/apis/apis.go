@@ -1,10 +1,10 @@
 package apis
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/discorder"
-	"darkbot/app/scrappy"
-	"darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/discorder"
+	"github.com/darklab/fl-darkbot/app/scrappy"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 )
 
 type API struct {

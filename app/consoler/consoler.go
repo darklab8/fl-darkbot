@@ -4,12 +4,13 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package consoler
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/consoler/commands"
-	"darkbot/app/consoler/consoler_types"
-	"darkbot/app/settings"
-	"darkbot/app/settings/types"
 	"strings"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/consoler/commands"
+	"github.com/darklab/fl-darkbot/app/consoler/consoler_types"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 )
 
 type Consoler struct {

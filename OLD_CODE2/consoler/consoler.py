@@ -14,7 +14,7 @@ def process_cli() -> SimpleNamespace:
 
     actions_choices = root_parser.add_subparsers(
         dest="command",
-        help="Darkbot help",
+        help="github.com/darklab/fl-darkbot help",
         required=True,
     )
 

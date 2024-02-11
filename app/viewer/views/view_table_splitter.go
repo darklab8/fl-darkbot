@@ -1,12 +1,13 @@
 package views
 
 import (
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
-	"darkbot/app/viewer/views/viewer_msg"
 	"fmt"
 	"strings"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
+	"github.com/darklab/fl-darkbot/app/viewer/views/viewer_msg"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )

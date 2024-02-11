@@ -1,10 +1,11 @@
 package configurator
 
 import (
-	"darkbot/app/discorder"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"fmt"
+
+	"github.com/darklab/fl-darkbot/app/discorder"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 )

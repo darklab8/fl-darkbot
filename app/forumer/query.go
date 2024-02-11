@@ -1,10 +1,11 @@
 package forumer
 
 import (
-	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
 	"io"
 	"net/http"
+
+	"github.com/darklab/fl-darkbot/app/forumer/forum_types"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 
 	"golang.org/x/net/html/charset"
 )

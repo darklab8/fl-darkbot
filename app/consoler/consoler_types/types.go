@@ -1,6 +1,6 @@
 package consoler_types
 
-import "darkbot/app/settings/types"
+import "github.com/darklab/fl-darkbot/app/settings/types"
 
 type ChannelParams struct {
 	channelID types.DiscordChannelID

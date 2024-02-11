@@ -1,10 +1,11 @@
 package forumer
 
 import (
-	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
 	"fmt"
 	"net/url"
+
+	"github.com/darklab/fl-darkbot/app/forumer/forum_types"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 
 	"github.com/anaskhan96/soup"
 )

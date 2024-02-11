@@ -1,10 +1,11 @@
 package api
 
 import (
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"io"
 	"net/http"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 )
 
 type APIrequest struct {

@@ -1,10 +1,11 @@
 package baseattack
 
 import (
-	"darkbot/app/scrappy/tests"
-	"darkbot/app/settings/logus"
 	"os"
 	"path"
+
+	"github.com/darklab/fl-darkbot/app/scrappy/tests"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 )
 
 // SPY

@@ -1,8 +1,9 @@
 package main
 
 import (
-	"darkbot/app/exposer"
 	_ "embed"
+
+	"github.com/darklab/fl-darkbot/app/exposer"
 )
 
 func main() {

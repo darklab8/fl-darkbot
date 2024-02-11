@@ -4,7 +4,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package main
 
 import (
-	"darkbot/app/management"
+	"github.com/darklab/fl-darkbot/app/management"
 )
 
 func main() {

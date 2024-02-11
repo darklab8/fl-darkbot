@@ -5,12 +5,13 @@ Interacting with Discord API
 package listener
 
 import (
-	"darkbot/app/consoler"
-	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"fmt"
 	"strings"
+
+	"github.com/darklab/fl-darkbot/app/consoler"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 

@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"darkbot/app/exposer/web"
 	_ "embed"
 	"net/http"
+
+	"github.com/darklab/fl-darkbot/app/exposer/web"
 )
 
 //go:embed home.md

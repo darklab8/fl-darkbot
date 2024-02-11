@@ -1,17 +1,18 @@
 package viewer
 
 import (
-	"darkbot/app/discorder"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
-	"darkbot/app/viewer/views"
-	"darkbot/app/viewer/views/baseview"
-	"darkbot/app/viewer/views/eventview"
-	"darkbot/app/viewer/views/playerview"
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/darklab/fl-darkbot/app/discorder"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
+	"github.com/darklab/fl-darkbot/app/viewer/views"
+	"github.com/darklab/fl-darkbot/app/viewer/views/baseview"
+	"github.com/darklab/fl-darkbot/app/viewer/views/eventview"
+	"github.com/darklab/fl-darkbot/app/viewer/views/playerview"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )

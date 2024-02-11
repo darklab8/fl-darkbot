@@ -1,9 +1,10 @@
 package configurator
 
 import (
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"testing"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"github.com/stretchr/testify/assert"

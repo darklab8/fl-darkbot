@@ -1,14 +1,15 @@
 package eventview
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/scrappy"
-	"darkbot/app/scrappy/player"
-	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
 	"testing"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/scrappy"
+	"github.com/darklab/fl-darkbot/app/scrappy/player"
+	"github.com/darklab/fl-darkbot/app/scrappy/shared/records"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
 
 	"github.com/stretchr/testify/assert"
 )

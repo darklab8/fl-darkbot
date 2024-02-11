@@ -1,11 +1,12 @@
 package forumer
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"testing"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/forumer/forum_types"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )

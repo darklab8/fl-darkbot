@@ -1,11 +1,12 @@
 package views
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
 	_ "embed"
 	"text/template"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 	"github.com/darklab8/darklab_goutils/goutils/utils/utils_types"

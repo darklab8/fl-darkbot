@@ -1,12 +1,13 @@
 package baseview
 
 import (
-	"darkbot/app/scrappy/base"
-	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
 	"math"
+
+	"github.com/darklab/fl-darkbot/app/scrappy/base"
+	"github.com/darklab/fl-darkbot/app/scrappy/shared/records"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
 )
 
 type ErrorCalculatingDerivative struct {

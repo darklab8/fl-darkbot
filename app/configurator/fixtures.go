@@ -1,10 +1,11 @@
 package configurator
 
 import (
-	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"os"
+
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )

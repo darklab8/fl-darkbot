@@ -2,15 +2,16 @@ package forumer
 
 import (
 	"crypto/md5"
-	"darkbot/app/configurator"
-	"darkbot/app/discorder"
-	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"fmt"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/discorder"
+	"github.com/darklab/fl-darkbot/app/forumer/forum_types"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 

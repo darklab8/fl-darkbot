@@ -1,8 +1,9 @@
 package routes
 
 import (
-	"darkbot/app/exposer/web"
 	"net/http"
+
+	"github.com/darklab/fl-darkbot/app/exposer/web"
 )
 
 var Server *web.Server = web.NewServer()

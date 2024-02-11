@@ -1,8 +1,8 @@
 package cmdgroup
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/consoler/consoler_types"
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/consoler/consoler_types"
 
 	"github.com/spf13/cobra"
 )

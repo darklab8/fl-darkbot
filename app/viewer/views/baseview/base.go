@@ -1,19 +1,20 @@
 package baseview
 
 import (
-	"darkbot/app/configurator/models"
-	"darkbot/app/scrappy/base"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
-	"darkbot/app/viewer/views"
-	"darkbot/app/viewer/views/viewer_msg"
 	_ "embed"
 	"fmt"
 	"sort"
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/darklab/fl-darkbot/app/configurator/models"
+	"github.com/darklab/fl-darkbot/app/scrappy/base"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
+	"github.com/darklab/fl-darkbot/app/viewer/views"
+	"github.com/darklab/fl-darkbot/app/viewer/views/viewer_msg"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 	"github.com/darklab8/darklab_goutils/goutils/utils/utils_types"

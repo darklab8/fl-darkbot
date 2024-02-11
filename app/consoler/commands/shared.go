@@ -1,11 +1,12 @@
 package commands
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/consoler/printer"
-	"darkbot/app/settings"
-	"darkbot/app/settings/types"
 	"fmt"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/consoler/printer"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/spf13/cobra"
 )
@@ -19,7 +20,7 @@ func CheckCommandAllowedToRun(cmd *cobra.Command, channels configurator.Configur
 	}
 
 	if !isChannelEnabled {
-		printer.Println(cmd, fmt.Sprintf("Darkbot is not connected to this channel. Run `%s connect`", settings.Config.ConsolerPrefix))
+		printer.Println(cmd, fmt.Sprintf("github.com/darklab/fl-darkbot is not connected to this channel. Run `%s connect`", settings.Config.ConsolerPrefix))
 		return false
 	}
 

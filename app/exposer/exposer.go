@@ -1,9 +1,10 @@
 package exposer
 
 import (
-	"darkbot/app/exposer/routes"
 	_ "embed"
 	"net/http"
+
+	"github.com/darklab/fl-darkbot/app/exposer/routes"
 )
 
 func NewExposer() {

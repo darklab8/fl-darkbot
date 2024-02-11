@@ -1,15 +1,16 @@
 package eventview
 
 import (
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
-	"darkbot/app/viewer/views"
-	"darkbot/app/viewer/views/viewer_msg"
 	_ "embed"
 	"encoding/json"
 	"fmt"
 	"strings"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
+	"github.com/darklab/fl-darkbot/app/viewer/views"
+	"github.com/darklab/fl-darkbot/app/viewer/views/viewer_msg"
 )
 
 type EventView struct {

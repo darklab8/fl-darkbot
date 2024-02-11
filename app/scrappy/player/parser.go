@@ -1,9 +1,10 @@
 package player
 
 import (
-	"darkbot/app/scrappy/shared/records"
-	"darkbot/app/settings/logus"
 	"encoding/json"
+
+	"github.com/darklab/fl-darkbot/app/scrappy/shared/records"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 )
 
 type SerializedPlayers struct {

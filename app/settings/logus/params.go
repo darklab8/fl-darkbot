@@ -1,9 +1,10 @@
 package logus
 
 import (
-	"darkbot/app/forumer/forum_types"
-	"darkbot/app/settings/types"
 	"fmt"
+
+	"github.com/darklab/fl-darkbot/app/forumer/forum_types"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"gorm.io/gorm"

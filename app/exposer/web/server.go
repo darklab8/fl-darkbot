@@ -1,8 +1,9 @@
 package web
 
 import (
-	"darkbot/app/settings/logus"
 	"net/http"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 )
 
 type Server struct {

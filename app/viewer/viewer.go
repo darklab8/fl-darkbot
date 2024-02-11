@@ -1,12 +1,13 @@
 package viewer
 
 import (
-	"darkbot/app/scrappy"
-	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
 	"time"
+
+	"github.com/darklab/fl-darkbot/app/scrappy"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
 
 	"github.com/darklab8/darklab_goutils/goutils/worker"
 

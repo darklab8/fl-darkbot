@@ -1,13 +1,14 @@
 package commands
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/consoler/commands/cmdgroup"
-	"darkbot/app/consoler/printer"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"fmt"
 	"strings"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/consoler/commands/cmdgroup"
+	"github.com/darklab/fl-darkbot/app/consoler/printer"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/spf13/cobra"
 )

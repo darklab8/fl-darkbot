@@ -1,8 +1,9 @@
 package views
 
 import (
-	"darkbot/app/settings/types"
 	"strings"
+
+	"github.com/darklab/fl-darkbot/app/settings/types"
 )
 
 func TagContains(name string, tags []types.Tag) bool {

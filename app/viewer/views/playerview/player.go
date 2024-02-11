@@ -1,15 +1,16 @@
 package playerview
 
 import (
-	"darkbot/app/scrappy/player"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
-	"darkbot/app/viewer/apis"
-	"darkbot/app/viewer/views"
-	"darkbot/app/viewer/views/viewer_msg"
 	_ "embed"
 	"fmt"
 	"text/template"
+
+	"github.com/darklab/fl-darkbot/app/scrappy/player"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/viewer/apis"
+	"github.com/darklab/fl-darkbot/app/viewer/views"
+	"github.com/darklab/fl-darkbot/app/viewer/views/viewer_msg"
 
 	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"github.com/darklab8/darklab_goutils/goutils/utils"

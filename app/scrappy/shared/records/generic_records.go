@@ -1,8 +1,9 @@
 package records
 
 import (
-	"darkbot/app/settings/logus"
 	"sync"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 )

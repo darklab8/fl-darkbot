@@ -4,15 +4,16 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package management
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/forumer"
-	"darkbot/app/listener"
-	"darkbot/app/scrappy"
-	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
-	"darkbot/app/viewer"
 	"runtime"
 	"time"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/forumer"
+	"github.com/darklab/fl-darkbot/app/listener"
+	"github.com/darklab/fl-darkbot/app/scrappy"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/viewer"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 

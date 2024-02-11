@@ -4,12 +4,13 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package management
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/discorder"
-	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"fmt"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/discorder"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/spf13/cobra"
 )

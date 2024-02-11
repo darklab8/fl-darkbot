@@ -1,10 +1,10 @@
 package baseattack
 
 import (
-	"darkbot/app/scrappy/shared/api"
-	"darkbot/app/settings"
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
+	"github.com/darklab/fl-darkbot/app/scrappy/shared/api"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 )
 
 type basesattackAPI struct {

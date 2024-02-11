@@ -1,10 +1,11 @@
 package settings
 
 import (
-	"darkbot/app/settings/logus"
-	"darkbot/app/settings/types"
 	"path/filepath"
 	"strconv"
+
+	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/darklab_goutils/goutils/utils"
 

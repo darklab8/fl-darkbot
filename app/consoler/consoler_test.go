@@ -1,10 +1,11 @@
 package consoler
 
 import (
-	"darkbot/app/configurator"
-	"darkbot/app/settings"
-	"darkbot/app/settings/types"
 	"testing"
+
+	"github.com/darklab/fl-darkbot/app/configurator"
+	"github.com/darklab/fl-darkbot/app/settings"
+	"github.com/darklab/fl-darkbot/app/settings/types"
 
 	"github.com/stretchr/testify/assert"
 )

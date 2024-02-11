@@ -4,8 +4,8 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package management
 
 import (
-	"darkbot/app/discorder"
-	"darkbot/app/settings/logus"
+	"github.com/darklab/fl-darkbot/app/discorder"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 
 	"github.com/spf13/cobra"
 )
