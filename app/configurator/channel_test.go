@@ -5,8 +5,8 @@ import (
 
 	"github.com/darklab/fl-darkbot/app/settings/logus"
 	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/go-typelog/typelog"
 
-	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,19 +20,19 @@ func TestChannels(t *testing.T) {
 		cg.Add("3")
 
 		channels, _ := cg.List()
-		logus.Log.Debug("invoked List", logus_core.Items(channels, "channels"))
+		logus.Log.Debug("invoked List", typelog.Items(channels, "channels"))
 		assert.Len(t, channels, 3)
 
 		cg.Remove("3")
 
 		channels, _ = cg.List()
-		logus.Log.Debug("", logus_core.Items(channels, "channels"))
+		logus.Log.Debug("", typelog.Items(channels, "channels"))
 		assert.Len(t, channels, 2)
 
 		cg.Add("3")
 
 		channels, _ = cg.List()
-		logus.Log.Debug("", logus_core.Items(channels, "channels"))
+		logus.Log.Debug("", typelog.Items(channels, "channels"))
 		assert.Len(t, channels, 3)
 	})
 }

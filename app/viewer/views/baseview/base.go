@@ -16,8 +16,8 @@ import (
 	"github.com/darklab/fl-darkbot/app/viewer/views"
 	"github.com/darklab/fl-darkbot/app/viewer/views/viewer_msg"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils"
-	"github.com/darklab8/darklab_goutils/goutils/utils/utils_types"
+	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/goutils/utils/utils_types"
 )
 
 //go:embed base_template.md

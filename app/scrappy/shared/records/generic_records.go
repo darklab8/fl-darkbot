@@ -5,7 +5,7 @@ import (
 
 	"github.com/darklab/fl-darkbot/app/settings/logus"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/go-utils/goutils/utils"
 )
 
 type Deletable interface {

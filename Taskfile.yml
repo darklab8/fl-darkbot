@@ -94,7 +94,7 @@ tasks:
   profile:render:
     cmds:
       - curl http://localhost:8080/debug/pprof/heap > heap.{{.DATE}}.pprof
-      - go tool pprof --pdf ~/repos/pet_projects/darklab_fldarkbot/main heap.{{.DATE}}.pprof > file_{{.DATE}}.pdf
+      - go tool pprof --pdf ~/repos/pet_projects/fl-darkbot/main heap.{{.DATE}}.pprof > file_{{.DATE}}.pdf
       - rm heap.{{.DATE}}.pprof
     vars:
       DATE:
@@ -103,7 +103,7 @@ tasks:
   profile:render2:
     cmds:
       - curl http://localhost:8080/debug/pprof/heap > heap.{{.DATE}}.pprof
-      - go tool pprof --base heap.1675610376.pprof --pdf ~/repos/pet_projects/darklab_fldarkbot/main heap.{{.DATE}}.pprof > file_diff_{{.DATE}}.pdf
+      - go tool pprof --base heap.1675610376.pprof --pdf ~/repos/pet_projects/fl-darkbot/main heap.{{.DATE}}.pprof > file_diff_{{.DATE}}.pdf
       - rm heap.{{.DATE}}.pprof
     vars:
       DATE:

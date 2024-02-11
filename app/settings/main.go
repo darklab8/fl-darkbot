@@ -7,7 +7,7 @@ import (
 	"github.com/darklab/fl-darkbot/app/settings/logus"
 	"github.com/darklab/fl-darkbot/app/settings/types"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/go-utils/goutils/utils"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
@@ -48,7 +48,7 @@ func NewDBPath(dbname string) types.Dbpath {
 
 func load() {
 	logus.Log.Info("identifying folder of settings")
-	Workdir = filepath.Dir(filepath.Dir(utils.GetCurrrentFolder().ToString()))
+	Workdir = filepath.Dir(filepath.Dir(utils.GetCurrentFolder().ToString()))
 
 	err := godotenv.Load(filepath.Join(Workdir, ".env"))
 	if err == nil {

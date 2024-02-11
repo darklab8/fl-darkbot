@@ -5,8 +5,8 @@ import (
 	"github.com/darklab/fl-darkbot/app/settings/logus"
 	"github.com/darklab/fl-darkbot/app/settings/types"
 
-	"github.com/darklab8/darklab_goutils/goutils/logus_core"
-	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/go-typelog/typelog"
+	"github.com/darklab8/go-utils/goutils/utils"
 )
 
 func NewConfiguratorChannel(con *Configurator) ConfiguratorChannel {
@@ -25,13 +25,13 @@ func (c ConfiguratorChannel) Add(channelID types.DiscordChannelID) error {
 	}
 
 	if result.Error != nil {
-		logus.Log.Info("channels.Add", logus_core.OptError(result.Error))
+		logus.Log.Info("channels.Add", typelog.OptError(result.Error))
 	}
 
 	channel := models.Channel{ChannelID: channelID}
 	result = c.db.Create(&channel)
 	if result.Error != nil {
-		logus.Log.Info("channels.Add.Error2=", logus_core.OptError(result.Error))
+		logus.Log.Info("channels.Add.Error2=", typelog.OptError(result.Error))
 	}
 	return result.Error
 }

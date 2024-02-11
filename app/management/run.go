@@ -15,7 +15,7 @@ import (
 	"github.com/darklab/fl-darkbot/app/settings/logus"
 	"github.com/darklab/fl-darkbot/app/viewer"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/go-utils/goutils/utils"
 
 	"net/http"
 	_ "net/http/pprof"
@@ -53,7 +53,8 @@ var runCmd = &cobra.Command{
 			defer p.Stop()
 
 			go func() {
-				http.ListenAndServe(":8080", nil)
+				err := http.ListenAndServe(":8080", nil)
+				logus.Log.CheckError(err, "failed to listen to 8080")
 			}()
 		}
 

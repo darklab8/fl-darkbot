@@ -14,7 +14,7 @@ import (
 	"github.com/darklab/fl-darkbot/app/viewer/views/eventview"
 	"github.com/darklab/fl-darkbot/app/viewer/views/playerview"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/go-utils/goutils/utils"
 )
 
 type ChannelView struct {

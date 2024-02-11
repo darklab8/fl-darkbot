@@ -5,8 +5,8 @@ import (
 
 	"github.com/darklab/fl-darkbot/app/settings/logus"
 	"github.com/darklab/fl-darkbot/app/settings/types"
+	"github.com/darklab8/go-typelog/typelog"
 
-	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -46,7 +46,7 @@ func TestCanWriteRepeatedTagsPerChannels(t *testing.T) {
 
 		assert.Error(t, err, "expected error to get in test")
 		assert.Contains(t, err.Error(), "database already has those items")
-		logus.Log.Debug("err=", logus_core.OptError(err))
+		logus.Log.Debug("err=", typelog.OptError(err))
 
 		// make a test to check? :thinking:
 		tags, _ = cg.TagsList("c2")

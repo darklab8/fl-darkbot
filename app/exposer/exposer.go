@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/darklab/fl-darkbot/app/exposer/routes"
+	"github.com/darklab/fl-darkbot/app/settings/logus"
 )
 
 func NewExposer() {
-	http.ListenAndServe(":8080", routes.Server.GetMux())
+	err := http.ListenAndServe(":8080", routes.Server.GetMux())
+	logus.Log.CheckError(err, "failed to listen to this port")
 }

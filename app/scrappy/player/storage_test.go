@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/darklab/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/go-typelog/typelog"
 
-	"github.com/darklab8/darklab_goutils/goutils/logus_core"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,5 +21,5 @@ func TestGetPlayers(t *testing.T) {
 	logus.Log.CheckFatal(err, "not found latest base record")
 
 	assert.True(t, len(bases.List) > 0)
-	logus.Log.Debug("", logus_core.Items(bases.List, "bases.List"))
+	logus.Log.Debug("", typelog.Items(bases.List, "bases.List"))
 }

@@ -1,11 +1,17 @@
 package viewer_msg
 
-import "github.com/darklab8/darklab_goutils/goutils/logus_core"
+import (
+	"log/slog"
 
-func LogusMsg(value *Msg) logus_core.SlogParam {
-	return func(c *logus_core.SlogGroup) {
-		c.Params["msg_message_id"] = string(value.messageID)
-		c.Params["msg_view_id"] = string(value.viewID)
-		c.Params["msg_view_enumerated_id"] = string(value.viewEnumeratedID)
+	"github.com/darklab8/go-typelog/typelog"
+)
+
+func LogusMsg(value *Msg) typelog.LogType {
+	return func(c *typelog.LogAtrs) {
+		c.Append(
+			slog.String("msg_message_id", string(value.messageID)),
+			slog.String("msg_view_id", string(value.viewID)),
+			slog.String("msg_view_enumerated_id", string(value.viewEnumeratedID)),
+		)
 	}
 }

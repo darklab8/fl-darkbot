@@ -9,7 +9,7 @@ import (
 	"github.com/darklab/fl-darkbot/app/settings/types"
 	"github.com/darklab/fl-darkbot/app/viewer/apis"
 
-	"github.com/darklab8/darklab_goutils/goutils/utils"
+	"github.com/darklab8/go-utils/goutils/utils"
 )
 
 type MsgShared struct {
