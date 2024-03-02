@@ -20,7 +20,7 @@ func CheckCommandAllowedToRun(cmd *cobra.Command, channels configurator.Configur
 	}
 
 	if !isChannelEnabled {
-		printer.Println(cmd, fmt.Sprintf("github.com/darklab8/fl-darkbot is not connected to this channel. Run `%s connect`", settings.Config.ConsolerPrefix))
+		printer.Println(cmd, fmt.Sprintf("darkbot is not connected to this channel. Run `%s connect`", settings.Config.ConsolerPrefix))
 		return false
 	}
 

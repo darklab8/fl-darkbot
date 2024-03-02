@@ -9,7 +9,7 @@ output "cluster_ip" {
   value = module.stack.cluster_ip
 }
 
-data "aws_ssm_parameter" "github.com/darklab8/fl-darkbot" {
+data "aws_ssm_parameter" "darkbot" {
   name = "/terraform/hetzner/darkbot/production"
 }
 
@@ -22,7 +22,7 @@ provider "docker" {
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-i", "~/.ssh/id_rsa.darklab"]
 }
 
-module "github.com/darklab8/fl-darkbot" {
+module "darkbot" {
   source              = "../modules/darkbot"
   configurator_dbname = "production"
   consoler_prefix     = "."

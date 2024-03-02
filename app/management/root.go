@@ -11,7 +11,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "github.com/darklab8/fl-darkbot",
+	Use:   "darkbot",
 	Short: "A brief description of your application",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
