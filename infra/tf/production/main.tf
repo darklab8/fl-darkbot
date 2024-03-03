@@ -21,7 +21,7 @@ locals {
 }
 
 provider "docker" {
-  host     = "ssh://root@${module.stack.cluster_ip}:22"
+  host     = "ssh://root@${module.stack.ipv4_address}:22"
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-i", "~/.ssh/id_rsa.darklab"]
 }
 
@@ -31,4 +31,5 @@ module "darkbot" {
   consoler_prefix     = "."
   secrets             = local.secrets
   tag_version         = "v1.5.1"
+  mode                = "docker"
 }
