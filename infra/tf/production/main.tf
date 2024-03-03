@@ -11,9 +11,6 @@ module "stack" {
   datacenter   = "ash-dc1"
 }
 
-output "cluster_ip" {
-  value = module.stack.cluster_ip
-}
 
 data "aws_ssm_parameter" "darkbot" {
   name = "/terraform/hetzner/darkbot/production"
