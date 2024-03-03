@@ -1,6 +1,0 @@
-discord.py
-aiohttp
-pydantic
-
-# for import of data from configurator actions
-SQLAlchemy

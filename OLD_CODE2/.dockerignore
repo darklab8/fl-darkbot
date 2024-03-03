@@ -1,9 +1,0 @@
-.env*
-__pycache__/
-*.bkp
-*.dtmp
-venv/
-venv_*/
-sql_app.db
-test_sql_app.db
-.git
