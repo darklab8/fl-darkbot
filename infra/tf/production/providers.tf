@@ -19,8 +19,11 @@ terraform {
   }
 }
 
+data "aws_ssm_parameter" "hetzner" {
+  name = "/terraform/hetzner/production"
+}
 provider "hcloud" {
-  token = local.secrets["HETZNER_TOKEN"]
+  token = data.aws_ssm_parameter.hetzner.value
 }
 
 data "aws_ssm_parameter" "cloudflare_key" {

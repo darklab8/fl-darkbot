@@ -6,8 +6,7 @@ module "stack" {
   source       = "../../../../infra/tf/modules/hetzner_server"
   environment  = "production"
   name         = "node-darkbot"
-  server_power = "cpx21"
-  backups      = false
+  hardware     = "cpx21"
   ssh_key_id   = module.ssh_key.id
   datacenter   = "ash-dc1"
 }
