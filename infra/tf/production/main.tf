@@ -1,8 +1,15 @@
+module "ssh_key" {
+   source       = "../../../../infra/tf/modules/hetzner_ssh_key/data"
+}
+
 module "stack" {
-  source       = "../modules/hetzner_server"
+  source       = "../../../../infra/tf/modules/hetzner_server"
   environment  = "production"
+  name         = "production-cluster"
   server_power = "cpx21"
   backups      = false
+  ssh_key_id   = module.ssh_key.id
+  datacenter   = "ash-dc1"
 }
 
 output "cluster_ip" {
