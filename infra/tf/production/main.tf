@@ -5,7 +5,7 @@ module "ssh_key" {
 module "stack" {
   source       = "../../../../infra/tf/modules/hetzner_server"
   environment  = "production"
-  name         = "production-cluster"
+  name         = "cluster-amd"
   server_power = "cpx21"
   backups      = false
   ssh_key_id   = module.ssh_key.id
