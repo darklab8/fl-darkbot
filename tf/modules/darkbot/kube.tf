@@ -1,5 +1,5 @@
 locals {
-    namespace = "darkbot-${var.environment}"
+  namespace = "darkbot-${var.environment}"
 }
 
 resource "kubernetes_namespace_v1" "example" {
