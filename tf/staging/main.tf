@@ -1,5 +1,5 @@
 module "server" {
-  source = "../../../../infra/tf/modules/hetzner_server/data"
+  source = "../../../infra/tf/modules/hetzner_server/data"
   name   = "node-arm"
 }
 

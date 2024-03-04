@@ -58,4 +58,10 @@ resource "kubernetes_pod_v1" "test" {
       }
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      metadata,
+    ]
+  }
 }

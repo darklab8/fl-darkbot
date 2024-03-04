@@ -1,9 +1,9 @@
 module "ssh_key" {
-  source = "../../../../infra/tf/modules/hetzner_ssh_key/data"
+  source = "../../../infra/tf/modules/hetzner_ssh_key/data"
 }
 
 module "stack" {
-  source      = "../../../../infra/tf/modules/hetzner_server"
+  source      = "../../../infra/tf/modules/hetzner_server"
   environment = "production"
   name        = "node-darkbot"
   hardware    = "cpx21"
@@ -32,4 +32,5 @@ module "darkbot" {
   secrets             = local.secrets
   tag_version         = "v1.5.1"
   mode                = "docker"
+  environment         = "production"
 }
