@@ -1,14 +1,14 @@
 module "ssh_key" {
-   source       = "../../../../infra/tf/modules/hetzner_ssh_key/data"
+  source = "../../../../infra/tf/modules/hetzner_ssh_key/data"
 }
 
 module "stack" {
-  source       = "../../../../infra/tf/modules/hetzner_server"
-  environment  = "production"
-  name         = "node-darkbot"
-  hardware     = "cpx21"
-  ssh_key_id   = module.ssh_key.id
-  datacenter   = "ash-dc1"
+  source      = "../../../../infra/tf/modules/hetzner_server"
+  environment = "production"
+  name        = "node-darkbot"
+  hardware    = "cpx21"
+  ssh_key_id  = module.ssh_key.id
+  datacenter  = "ash-dc1"
 }
 
 

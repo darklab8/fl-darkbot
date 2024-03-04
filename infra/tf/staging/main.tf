@@ -1,6 +1,6 @@
 module "server" {
-  source       = "../../../../infra/tf/modules/hetzner_server/data"
-  name         = "node-arm"
+  source = "../../../../infra/tf/modules/hetzner_server/data"
+  name   = "node-arm"
 }
 
 data "aws_ssm_parameter" "darkbot" {
@@ -23,5 +23,6 @@ module "darkbot" {
   secrets             = local.secrets
   tag_version         = "v1.5.1-arm"
   debug               = false
-  mode                = "docker"
+  mode                = "kubernetes"
+  environment         = "staging"
 }

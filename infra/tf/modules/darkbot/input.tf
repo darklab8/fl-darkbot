@@ -24,6 +24,15 @@ variable "mode" {
 
   validation {
     condition     = contains(["kubernetes", "docker"], var.mode)
-    error_message = "Valid mode. should be docker or kubernetes"
-  } 
+    error_message = "Invalid mode. should be docker or kubernetes"
+  }
+}
+
+variable "environment" {
+  type = string
+
+  validation {
+    condition     = contains(["staging", "production"], var.environment)
+    error_message = "Invalid environment."
+  }
 }
