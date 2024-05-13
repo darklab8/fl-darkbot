@@ -15,3 +15,4 @@ heap.*.pprof
 __debug_bin
 cover.out
 go.work*
+.venv/

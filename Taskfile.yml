@@ -79,9 +79,22 @@ tasks:
       - scp -i ~/.ssh/id_rsa.darklab ./data/prod.sqlite3-shm root@5.161.54.150:/var/lib/darklab/darkbot/
       - scp -i ~/.ssh/id_rsa.darklab ./data/prod.sqlite3-wal root@5.161.54.150:/var/lib/darklab/darkbot/
 
+  venv:create:
+    cmds:
+      - python3 -m venv .venv
+    status:
+      - test -d .venv
+
+  venv:install:
+    cmds:
+      - .venv/bin/pip install -r requirements.txt -c constraints.txt
+    status:
+      - test -f .venv/bin/mkdocs
+
   mkdocs:dev:
     cmds:
-      - poetry run -- mkdocs serve
+      - task: venv:install
+      - .venv/bin/mkdocs serve
 
   backup: # /var/lib/darklab/prod/darkbot
     cmds: # ssh -i ~/.ssh/id_rsa.darklab root@5.161.179.34

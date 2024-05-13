@@ -26,7 +26,7 @@ jobs:
           python3 -m ensurepip
       - name: Install requirements.txt
         run: >
-          pip install -r requirements.txt
+          pip install -r requirements.txt -c constraints.txt
       - name: Build docs
         run: >
           mkdocs build
