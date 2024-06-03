@@ -34,7 +34,8 @@
 
 - remove tag by `. base remove Research Station` or by `. base tags clear`
 
-Continue with [documentation there](https://darklab8.github.io/fl-darkbot/). See meny with feature documentations at the left.
+<!-- Continue with [documentation there](https://darklab8.github.io/fl-darkbot/). See menu with feature documentations at the left. -->
+Continue with checking tabs at the left, regarding each feature details.
 
 # Permissions for running
 
