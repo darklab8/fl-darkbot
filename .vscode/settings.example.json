@@ -1,6 +1,32 @@
 {
+    "go.testFlags": [
+        "-v"
+    ],
+    "go.testEnvVars": {
+        "DEV_ENV": "true",
+        "TF_VAR_production_hcloud_token": "**********", // Needed only for deployment
+        "DOCKERHUB_USERNAME": "darkwind8", // Needed only for deployment
+        "DOCKERHUB_TOKEN": "**********", // Needed only for deployment
+        "DISCORDER_BOT_TOKEN": "**********",
+        "DARKBOT_LOG_LEVEL": "INFO",
+        "CONFIGURATOR_DBNAME": "dev",
+        "DEVENV_MOCK_API": "true",
+        "SCRAPPY_PLAYER_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+        "SCRAPPY_BASE_URL": "**********" // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+    },
+    "go.testTimeout": "30000s",
     "editor.formatOnSave": true,
     "terminal.integrated.env.linux": {
         // "DARK_TEST_REGENERATE": "false",
+        "DEV_ENV": "true",
+        "TF_VAR_production_hcloud_token": "**********", // Needed only for deployment
+        "DOCKERHUB_USERNAME": "darkwind8", // Needed only for deployment
+        "DOCKERHUB_TOKEN": "**********", // Needed only for deployment
+        "DISCORDER_BOT_TOKEN": "**********",
+        "DARKBOT_LOG_LEVEL": "INFO",
+        "CONFIGURATOR_DBNAME": "dev",
+        "DEVENV_MOCK_API": "true",
+        "SCRAPPY_PLAYER_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+        "SCRAPPY_BASE_URL": "**********" // Not required for dev env if u use "DEVENV_MOCK_API": "true"
     }
 }

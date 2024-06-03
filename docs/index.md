@@ -1,13 +1,21 @@
-# Description
+# Darkbot - Introduction
 
-- This project is a discord bot **Darkbot3** for open source game community [Freelancer Discovery](https://discoverygc.com/)
-- It underwent a major refactorization and now reimplemented in golang with clean architecture for code scalability to add new features
-- general stability added, because all errors are now handled way better with Golang approach that handles most of them at compile time.
-- project saves ready for deployment docker images [at docker hub](https://hub.docker.com/repository/docker/darkwind8/darkbot/general), see [settings here](https://github.com/darklab8/fl-darkbot/blob/master/infra/kubernetes/charts/darkbot/templates/main.yml)
-- darkbot has its own server now only for itself
+- It implements Discord bot to track player bases, players themselves and forum posting with notifications to Discord.
+- The logic of it: User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track. Darkbot repeatedly updates information to discord channel
 
-User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track.
-Darkbot repeatedly updates information to discord channel
+# Features
+
+- Adding player bases for tracking in discord channel
+- Adding players for tracking based on tag in nickname or star systems / regions to track
+- Adding configurable alert triggers to base, player of forum tracking
+- Adding forum post for tracking
+
+# Important links
+
+- [Documentation for the bot, how to use it](https://darklab8.github.io/fl-darkbot/)
+- [Discovery Forum Thread and anouncements](https://discoverygc.com/forums/showthread.php?tid=188040)
+- [Github of the project](https://github.com/darklab8/fl-darkbot)
+- [See other Dark Tools for Freelancer here](https://darklab8.github.io/blog/pet_projects.html#DiscoveryFreelancercommunity)
 
 # How to get started
 
@@ -23,38 +31,15 @@ Darkbot repeatedly updates information to discord channel
 
 - remove tag by `. base remove Research Station` or by `. base tags clear`
 
-See other documentation in [Darkbot forum posts](https://discoverygc.com/forums/showthread.php?tid=188040)
-- it has documented new appeared features and commands
+Continue with [documentation there](https://darklab8.github.io/fl-darkbot/)
 
-# Features
+# Development specific stuff
 
-- Adding player bases for tracking in discord channel
-- Adding players for tracking based on tag in nickname or star systems / regions to track
-- Adding configurable alert triggers to base, player of forum tracking
-- Adding forum post for tracking
-
-# Project status
-
-- Finished its core development of features
-    - Still processes minor feature requests to implement
-- May have some issues which will be resolved as soon as possible
-- Announcement about new releases will be made into Discord channel where it joined and here.
-
-# Possible future plans
-
-- Adding resource tracking at player bases (blocked)
-  - Requires API access, which is lacked for implementation
-- Adding some useful help scripts to calculate analytics
-
-# Acknowledgements
-
-- Freelancer Discovery API provided by [Alex](https://github.com/dsyalex) as a way to deliver info from Flhook to the bot
-- [Pobbot](https://github.com/dr-lameos/Pobbot) originally made by dr.lameos sparkled this project
-- Forum tracking is inspired by Biqqles project [forumlancer](https://github.com/biqqles/forumlancer)
+See [Github Readme.md](<https://github.com/darklab8/fl-darkbot/blob/master/README.md>) for details
 
 # Contacts
 
 - [join Darklab discord server](https://discord.gg/zFzSs82y3W)
 - [write to Discovery forum account](https://discoverygc.com/forums/member.php?action=profile&uid=42166)
-- [or write to email dark.dreamflyer@gmail.com]
-- [Github repository of the project](https://github.com/darklab8/fl-darkbot)
+- or write to email `dark.dreamflyer@gmail.com`
+- [Optionally open Github Issue at repository](https://github.com/darklab8/fl-darkbot)
