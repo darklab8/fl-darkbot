@@ -18,11 +18,11 @@
 - `. alert base_is_under_attack enable` - turns on alert if spotting the base in forum thread for base attack declarations.
 enable, disable, status sub commands are similar.
 
-### Base Health decreasal (may be miss maintained. To check.)
+### Base Health decreasal
 
 ![](https://raw.githubusercontent.com/darklab8/fl-darkbot/master/docs/index_assets/alerts_base1_commands.png)
 
-- you can turn on `. alert base_health_is_decreasing enable` command for making alert if base rapidly looses its health.
+- you can turn on `. alert base_health_is_decreasing enable` command for making alert if base loses its health.
 
 ## Player alerts
 
