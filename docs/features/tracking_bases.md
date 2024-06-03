@@ -1,4 +1,4 @@
-# Base tracking
+# Player Bases (PoBs) tracking
 
 ![bases view](https://raw.githubusercontent.com/darklab8/fl-darkbot/master/docs/index_assets/base_render3.png)
 
