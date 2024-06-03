@@ -37,8 +37,7 @@ The project has 5 package parts parts:
 - consoler is a CLI interface to accept input from listener and render its CLI answer back
 - viewer is application that in a loop gets user settings and connected channels, and rerenders to them view based on available data in scrappy and configurator settings
 
-![architecture](architecture/architecture.drawio.svg)
-(TODO refactor to mermaid.js)
+![architecture, TODO refactor to mermaid.js](architecture/architecture.drawio.svg)
 
 # Tech stack
 
