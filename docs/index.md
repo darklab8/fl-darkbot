@@ -24,6 +24,7 @@
 - invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=207952&scope=bot)
 - You must be Server owner or having `bot_controller` role in order to command the bot.
 - add to some channel by writing `. connect` (if u wish to disconnect bot from channel, write `.disconnect`)
+    - ensure you use bot on dedicated channel created for it. It automatically erases all not related msgs to bot operation after some time.
 - get help which commands are available by `. --help` or requesting help on sub commands `. base --help`
 - add base tag for tracking `. base tags add Research Station`
 - confirm it was added `. base tags list`
@@ -33,7 +34,7 @@
 
 - remove tag by `. base remove Research Station` or by `. base tags clear`
 
-Continue with [documentation there](https://darklab8.github.io/fl-darkbot/)
+Continue with [documentation there](https://darklab8.github.io/fl-darkbot/). See meny with feature documentations at the left.
 
 # Permissions for running
 

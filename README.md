@@ -21,9 +21,11 @@
 - The logic of it: User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track. Darkbot repeatedly updates information to discord channel
 - project saves ready for deployment docker images [at docker hub](https://hub.docker.com/repository/docker/darkwind8/darkbot/general), see [settings here](https://github.com/darklab8/fl-darkbot/blob/master/tf/modules/production), which are invoking [this configuration](https://github.com/darklab8/fl-darkbot/blob/master/tf/modules/darkbot)
 
-![](docs/index_assets/base_render2.png)
+![base tracking table](docs/index_assets/base_render2.png)
 
-![](docs/index_assets/player_render2.png)
+![player tracking table](docs/index_assets/player_render2.png)
+
+![forum tracking notifications](docs/index_assets/forum_tracking.png)
 
 # Architecture
 
@@ -71,6 +73,9 @@ by providing it through [Environment variables documentated there](./.vscode/set
 - By default Console prefix to use command is `;`. Like `; --help` for dev env.
 - We use README for dev specific stuff to documetn
 - We use static site generator via mkdocs to document stuff for end users
+
+- The project depends on having two private URL from Discovery API for its running. Provided by Alex.
+  - Development is possible without them as with env var you can mock data receved from them.
 
 # Dev standards
 

@@ -1,6 +1,6 @@
 # Forum tracking
 
-![forum tracking](forum_tracking.png)
+![forum tracking](https://raw.githubusercontent.com/darklab8/fl-darkbot/master/docs/index_assets/forum_tracking.png)
 
 ### Thread tracking
 

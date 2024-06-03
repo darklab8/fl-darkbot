@@ -9,3 +9,9 @@
 
 - `. base` or `. base --help` will invoke how to use the command
 - `. base order_by --help` or `. base order_by`. You can navigate around which commands are available in bot interactively. By finding next sub commands and checking how to use them.
+
+### Auto msg cleanup
+
+- darkbot auto cleans all not related msgs in a minute of time at the channel it is using
+    - which u chose with `. connect` command.
+- to stop msg deletion (and bot activity), just use `. disconnect` in the same channel
