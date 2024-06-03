@@ -15,4 +15,4 @@ markdown_extensions:
     - pymdownx.snippets
     - toc:
           permalink: "#"
-          baselevel: 2
+          baselevel: 1

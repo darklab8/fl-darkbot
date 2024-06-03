@@ -1,5 +1,7 @@
 # Darkbot - Introduction
 
+![logo](./index_assets/fulllogo.png)
+
 - It implements Discord bot to track player bases, players themselves and forum posting with notifications to Discord.
 - The logic of it: User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track. Darkbot repeatedly updates information to discord channel
 
@@ -19,9 +21,9 @@
 
 # How to get started
 
-- invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
+- invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=207952&scope=bot)
 - You must be Server owner or having `bot_controller` role in order to command the bot.
-- add to some channel by writing `. connect`
+- add to some channel by writing `. connect` (if u wish to disconnect bot from channel, write `.disconnect`)
 - get help which commands are available by `. --help` or requesting help on sub commands `. base --help`
 - add base tag for tracking `. base tags add Research Station`
 - confirm it was added `. base tags list`
@@ -32,6 +34,19 @@
 - remove tag by `. base remove Research Station` or by `. base tags clear`
 
 Continue with [documentation there](https://darklab8.github.io/fl-darkbot/)
+
+# Permissions for running
+
+- Bot expects having sufficient permissions for its working, which is seeing the channel it works in, writing, editing, deleting msgs and reading msg history. [The default link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=207952&scope=bot) configured for permissions that should be enough in theory:
+    - Read Messages
+    - Send Messages
+    - Manage Messages
+    - Read Message History
+    - Mention everyone here and all roles
+    - Manage channels (Probably not needed permission)
+    - Add reactions (Just added for future if ever will be needed)
+
+- If default inviting link is not good enough, [use invite link as admin](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
 
 # Development specific stuff
 
