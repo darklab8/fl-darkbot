@@ -4,7 +4,7 @@
   <img src="docs/index_assets/fulllogo.png" style="width: 300px; height: 180px;"/>
 </p>
 
-# Getting started
+# Getting started for users
 
 - [Getting started and documentation how to use it](https://darklab8.github.io/fl-darkbot/)
 
@@ -14,7 +14,7 @@
 - [Github of the project](https://github.com/darklab8/fl-darkbot)
 - [See other Dark Tools for Freelancer here](https://darklab8.github.io/blog/pet_projects.html#DiscoveryFreelancercommunity)
 
-# Project Description for devs (See Getting started for users)
+# Project Description for devs
 
 - This project is a discord bot **Darkbot3** for open source game community [Freelancer Discovery](https://discoverygc.com/)
 - It implements Discord bot to track player bases, players themselves and forum posting with notifications to Discord.
