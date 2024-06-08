@@ -27,6 +27,39 @@
 
 ![forum tracking notifications](docs/index_assets/forum_tracking.png)
 
+# Getting started with development:
+
+- create your own Discord app link and invite it to some Discord server
+- If you are me, then just use your dev env inviting link you already created:
+
+  - https://discord.com/api/oauth2/authorize?client_id=1071516990348460033&permissions=8&scope=bot
+- Ensure you have set [Environment variables](./.vscode/settings.example.json) documented in .vscode
+
+  - [App specific configurations](./app/settings/main.go) can be found here.
+- Launch app as `go run . run` (see `go run . --help` for other available commands)
+- Visit your Discord server again where bot is connected. Select empty channel and write `; connect`
+
+  - By default Console prefix to use command is `;`. Seee `; --help` for other commands.
+  - Try smth list `; base tags list`
+- Optionally install [Taskfile](https://taskfile.dev/usage/)
+
+  - and run dev commands like `task test` for running unit tests
+  - or see them inside [Taskfile](Taskfile.yml) for manual copy pasting to shell
+  - `task --list-all` to list available commands
+
+If you wish making changes to mkdocs:
+
+- We use static site generator via mkdocs to document stuff for end users
+- install preferably [Taskfile](https://taskfile.dev/usage/) or peak commands in it for manual copy pasting
+- Install python3 of version no less than it is mention in [CI file](.github/workflows/pages.yml)
+- run `task mkdocs:dev` to open web server with documentation at http://127.0.0.1:8000/ , then change files in [/docs](docs/index.md) folder
+
+Note for deployment
+
+- The project depends on having two private URL from Discovery API for its running. Provided by Alex.
+- Development is possible without them as with env var you can mock data receved from them.
+- by default DEV_ENV_MOCK_API=true for convinience of easier getting started
+
 # Architecture
 
 The project has 5 package parts parts:
@@ -39,6 +72,15 @@ The project has 5 package parts parts:
 
 ![architecture, TODO refactor to mermaid.js](architecture/architecture.drawio.svg)
 
+# Dev standards
+
+- Code architecture should be unit testable, even if tests will not be covering everything (Intercepting input from Discord to Cobra CLI and rendering output from it to Discord was made to minimize Discord code footprint to minimum for this reason)
+  - Integration (kind of unit testing) is available for majority of code logic by just triggering Cobra CLI commands.
+- following different OOP principles, like having minimum exposed interfaces to rest of a code
+- following semantic versioning and generating changelogs with the help of [autogit](https://github.com/darklab8/autogit)
+- Keep amount of dependencies low for easier long term maintanance. (TODO Recheck which dependencies u can delete later)
+  - To simplify long term maintanance, dependencies will be vendored in.
+
 # Tech stack
 
 - golang
@@ -48,42 +90,6 @@ The project has 5 package parts parts:
 - docker
 - terraform (hetzner / docker cli ami image)
 - terraform docker provider
-
-# Dev commands
-
-install taskfile.dev for dev commands
-
-go run . --help
-
-task test # to test
-task --list-all # to list other commands
-
-See [Taskfile.yml](<./Taskfile.yml>) for the rest of available dev commands
-
-# Dev Configurations:
-
-- create your own Discord app link and use it for development
-by providing it through [Environment variables documentated there](./.vscode/settings.example.json)
-
-- If you are me, then just use your dev env inviting link you already created:
-    - https://discord.com/api/oauth2/authorize?client_id=1071516990348460033&permissions=8&scope=bot
-
-- [App specific configurations](./app/settings/main.go) can be found here.
-- By default Console prefix to use command is `;`. Like `; --help` for dev env.
-- We use README for dev specific stuff to documetn
-- We use static site generator via mkdocs to document stuff for end users
-
-- The project depends on having two private URL from Discovery API for its running. Provided by Alex.
-  - Development is possible without them as with env var you can mock data receved from them.
-
-# Dev standards
-
-- Code architecture should be unit testable, even if tests will not be covering everything (Intercepting input from Discord to Cobra CLI and rendering output from it to Discord was made to minimize Discord code footprint to minimum for this reason)
-  - Integration (kind of unit testing) is available for majority of code logic by just triggering Cobra CLI commands.
-- following different OOP principles, like having minimum exposed interfaces to rest of a code
-- following semantic versioning and generating changelogs with the help of [autogit](https://github.com/darklab8/autogit)
-- Keep amount of dependencies low for easier long term maintanance. (TODO Recheck which dependencies u can delete later)
-  - To simplify long term maintanance, dependencies will be vendored in.
 
 # Project status
 
