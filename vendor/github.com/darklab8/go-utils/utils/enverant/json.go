@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"regexp"
+	"strconv"
 
 	"github.com/darklab8/go-typelog/typelog"
 	"github.com/darklab8/go-utils/utils/regexy"
@@ -41,5 +43,27 @@ func ReadJson(path string) map[string]interface{} {
 
 	err = json.Unmarshal(cleaned_json.Bytes(), &env_map)
 	utils_logus.Log.CheckPanic(err, "failed to parse json with env vars")
+
+	for key, value := range env_map {
+
+		if _, ok := os.LookupEnv(key); ok {
+			continue
+		}
+
+		switch v := value.(type) {
+		case bool:
+			os.Setenv(key, strconv.FormatBool(v))
+		case string:
+			os.Setenv(key, v)
+		case int:
+			os.Setenv(key, fmt.Sprintf("%d", v))
+		case float64:
+			os.Setenv(key, fmt.Sprintf("%.0f", v))
+		default:
+			panic(fmt.Sprintln("enverant value in file has not supported type", key, fmt.Sprintf("%T", value)))
+		}
+
+	}
+
 	return env_map
 }
