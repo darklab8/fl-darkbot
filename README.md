@@ -36,6 +36,7 @@
 - Ensure you have set [Environment variables](./.vscode/settings.example.json) documented in .vscode
 
   - [App specific configurations](./app/settings/main.go) can be found here.
+- Install golang of version no less than it is mention in [test.yml file](.github/workflows/test.yml)
 - Launch app as `go run . run` (see `go run . --help` for other available commands)
 - Visit your Discord server again where bot is connected. Select empty channel and write `; connect`
 
