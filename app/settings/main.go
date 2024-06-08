@@ -6,8 +6,8 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 
-	"github.com/darklab8/go-utils/utils"
-	"github.com/darklab8/go-utils/utils/utils_env"
+	"github.com/darklab8/go-utils/utils/enverant"
+	"github.com/darklab8/go-utils/utils/utils_os"
 	"github.com/darklab8/go-utils/utils/utils_settings"
 )
 
@@ -35,25 +35,27 @@ var Env DarkbotEnv
 func init() {
 	logus.Log.Info("attempt to load settings")
 
-	envs := utils_env.NewEnvConfig()
+	envs := enverant.NewEnverant(
+		enverant.WithEnvFile(utils_os.GetCurrentFolder().Dir().Dir().Join(".vscode", "enverant.json").ToString()),
+	)
 	Env = DarkbotEnv{
 		UtilsEnvs:            utils_settings.Envs,
-		DevEnvMockApi:        envs.GetEnvBoolWithDefault("DEV_ENV_MOCK_API", true),
-		ScrappyBaseUrl:       envs.GetEnvWithDefault("SCRAPPY_BASE_URL", ""),
-		ScrappyPlayerUrl:     envs.GetEnvWithDefault("SCRAPPY_PLAYER_URL", ""),
-		ScrappyBaseAttackUrl: envs.GetEnvWithDefault("SCRAPPY_BASE_ATTACK_URL", "https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"),
+		DevEnvMockApi:        envs.GetBoolOr("DEV_ENV_MOCK_API", true),
+		ScrappyBaseUrl:       envs.GetStrOr("SCRAPPY_BASE_URL", ""),
+		ScrappyPlayerUrl:     envs.GetStrOr("SCRAPPY_PLAYER_URL", ""),
+		ScrappyBaseAttackUrl: envs.GetStrOr("SCRAPPY_BASE_ATTACK_URL", "https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"),
 
-		DiscorderBotToken: envs.GetEnvWithDefault("DISCORDER_BOT_TOKEN", ""),
+		DiscorderBotToken: envs.GetStrOr("DISCORDER_BOT_TOKEN", ""),
 
-		ConfiguratorDbname: envs.GetEnvWithDefault("CONFIGURATOR_DBNAME", "dev"),
+		ConfiguratorDbname: envs.GetStrOr("CONFIGURATOR_DBNAME", "dev"),
 
-		ConsolerPrefix:   envs.GetEnvWithDefault("CONSOLER_PREFIX", ";"),
-		ProfilingEnabled: envs.GetEnvBoolWithDefault("PROFILING", false),
+		ConsolerPrefix:   envs.GetStrOr("CONSOLER_PREFIX", ";"),
+		ProfilingEnabled: envs.GetBoolOr("PROFILING", false),
 
-		ScrappyLoopDelay: envs.GetIntWithDefault("SCRAPPY_LOOP_DELAY", 10),
-		ViewerLoopDelay:  envs.GetIntWithDefault("VIEWER_LOOP_DELAY", 10),
+		ScrappyLoopDelay: envs.GetIntOr("SCRAPPY_LOOP_DELAY", 10),
+		ViewerLoopDelay:  envs.GetIntOr("VIEWER_LOOP_DELAY", 10),
 	}
-	Workdir = filepath.Dir(filepath.Dir(utils.GetCurrentFolder().ToString()))
+	Workdir = filepath.Dir(filepath.Dir(utils_os.GetCurrentFolder().ToString()))
 	Dbpath = NewDBPath(Env.ConfiguratorDbname)
 
 	if !Env.DevEnvMockApi {

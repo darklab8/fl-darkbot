@@ -7,14 +7,13 @@ import (
 
 	"github.com/darklab8/fl-darkbot/app/forumer/forum_types"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
-
-	"github.com/darklab8/go-utils/utils"
+	"github.com/darklab8/go-utils/utils/utils_os"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func FixtureMockedThreadsRequester() func(mt MethodType, u forum_types.Url) (*QueryResult, error) {
-	thread_post_content_filepath := filepath.Join(utils.GetCurrentFolder().ToString(), "test_data", "latest_threads.html")
+	thread_post_content_filepath := filepath.Join(utils_os.GetCurrentFolder().ToString(), "test_data", "latest_threads.html")
 	if _, err := os.Stat(thread_post_content_filepath); err != nil {
 		query, err := NewQuery("GET", ThreadPageURL)
 		logus.Log.CheckFatal(err, "failed to create mock data")

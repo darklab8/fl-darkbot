@@ -33,8 +33,7 @@
 - If you are me, then just use your dev env inviting link you already created:
 
   - https://discord.com/api/oauth2/authorize?client_id=1071516990348460033&permissions=8&scope=bot
-- Ensure you have set [Environment variables](./.vscode/settings.example.json) documented in .vscode
-
+- Ensure you have set necessary [Environment variables](./.vscode/enverant.example.json) in your own enverant.json file or as real environment variables
   - [App specific configurations](./app/settings/main.go) can be found here.
 - Install golang of version no less than it is mention in [test.yml file](.github/workflows/test.yml)
 - Launch app as `go run . run` (see `go run . --help` for other available commands)

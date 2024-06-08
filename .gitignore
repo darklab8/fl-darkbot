@@ -4,7 +4,6 @@
 /chromedriver
 /data/*
 !/data/.gitkeep
-settings.json
 .terraform/
 *.svg.bkp
 config
@@ -16,3 +15,7 @@ __debug_bin
 cover.out
 go.work*
 .venv/
+!.vscode
+.vscode/enverant.json
+!.vscode/enverant.example.json
+!.vscode/settings.json

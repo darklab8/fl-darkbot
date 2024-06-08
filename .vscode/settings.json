@@ -1,0 +1,9 @@
+{
+    "go.testFlags": [
+        "-v"
+    ],
+    "go.testEnvVars": {},
+    "go.testTimeout": "30000s",
+    "editor.formatOnSave": true,
+    "terminal.integrated.env.linux": {}
+}

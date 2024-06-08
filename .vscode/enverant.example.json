@@ -1,0 +1,10 @@
+{
+    // "SCRAPPY_PLAYER_URL": "**********", // Not required for dev env if u use "DEV_ENV_MOCK_API": "true"
+    // "SCRAPPY_BASE_URL": "**********", // Not required for dev env if u use "DEV_ENV_MOCK_API": "true"
+    // "DARK_TEST_REGENERATE": "false",
+    "DEV_ENV": "true",
+    "DEV_ENV_MOCK_API": "true",
+    "DARKBOT_LOG_LEVEL": "INFO",
+    "CONFIGURATOR_DBNAME": "dev",
+    "DISCORDER_BOT_TOKEN": "**********" // Get your own app token at https://discord.com/developers/applications
+}
