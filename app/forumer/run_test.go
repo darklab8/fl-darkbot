@@ -5,10 +5,9 @@ import (
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
 	"github.com/darklab8/fl-darkbot/app/forumer/forum_types"
+	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
-
-	"github.com/darklab8/go-utils/goutils/utils"
 )
 
 type MockedThreadsQuery struct {
@@ -38,7 +37,7 @@ func TestForumerSending(t *testing.T) {
 
 		cg_channel := configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath))
 
-		if utils.FixtureDevEnv() {
+		if settings.Env.IsDevEnv {
 			cg_channel.Add(dev_env_channel)
 		}
 
@@ -62,7 +61,7 @@ func TestSubForumSending(t *testing.T) {
 
 		cg_channel := configurator.NewConfiguratorChannel(configurator.NewConfigurator(dbpath))
 
-		if utils.FixtureDevEnv() {
+		if settings.Env.IsDevEnv {
 			cg_channel.Add(dev_env_channel)
 		}
 

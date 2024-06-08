@@ -6,8 +6,8 @@ require (
 	github.com/anaskhan96/soup v1.2.5
 	github.com/bwmarrin/discordgo v0.27.1
 	github.com/caarlos0/env/v6 v6.10.1
-	github.com/darklab8/go-typelog v0.3.2
-	github.com/darklab8/go-utils v0.10.6
+	github.com/darklab8/go-typelog v0.3.3
+	github.com/darklab8/go-utils v0.14.2
 	github.com/joho/godotenv v1.5.1
 	github.com/pkg/profile v1.7.0
 	github.com/spf13/cobra v1.8.0

@@ -15,7 +15,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/viewer"
 
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils"
 
 	"net/http"
 	_ "net/http/pprof"

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/darklab8/go-typelog/typelog"
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils"
 )
 
 func LogusStatusCodes(tasks []ITask) typelog.LogType {

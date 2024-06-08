@@ -4,7 +4,7 @@ import (
 	"log/slog"
 
 	"github.com/darklab8/go-typelog/typelog"
-	"github.com/darklab8/go-utils/goutils/worker/worker_types"
+	"github.com/darklab8/go-utils/utils/worker/worker_types"
 )
 
 var Log *typelog.Logger = typelog.NewLogger("worker")

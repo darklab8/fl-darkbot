@@ -6,7 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/darklab8/go-typelog/typelog"
-	"github.com/darklab8/go-utils/goutils/utils/utils_logus"
+	"github.com/darklab8/go-utils/utils/utils_logus"
 )
 
 func ShellRunArgs(program string, args ...string) {
@@ -22,5 +22,5 @@ func ShellRunArgs(program string, args ...string) {
 	}
 	err := command.Run()
 
-	utils_logus.Log.CheckFatal(err, "failed to run shell command")
+	utils_logus.Log.CheckPanic(err, "failed to run shell command")
 }

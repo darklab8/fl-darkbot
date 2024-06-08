@@ -8,8 +8,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 	"github.com/darklab8/fl-darkbot/app/viewer/views/viewer_msg"
-
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils/timeit"
 )
 
 type SharedViewTableSplitter struct {
@@ -92,15 +91,15 @@ func (t *SharedViewTableSplitter) MatchMessageID(messageID types.DiscordMessageI
 }
 
 func (t *SharedViewTableSplitter) Send() {
-	utils.TimeMeasure(func() {
-		for _, view := range t.views {
-			utils.TimeMeasure(func() {
-				for _, msg := range view.msgs {
-					utils.TimeMeasure(func() {
-						msg.Send(t.api)
-					}, "SharedViewTableSplitter.send", viewer_msg.LogusMsg(msg))
-				}
-			}, fmt.Sprintf("SharedViewTableSplitter.send.view=%v", view))
+	timer := timeit.NewTimer(fmt.Sprintf("SharedViewTableSplitter.send=%v", t))
+	for _, view := range t.views {
+		timer := timeit.NewTimer(fmt.Sprintf("SharedViewTableSplitter.send.view=%v", view))
+		for _, msg := range view.msgs {
+			timer := timeit.NewTimerL("SharedViewTableSplitter.send", viewer_msg.LogusMsg(msg))
+			msg.Send(t.api)
+			timer.Close()
 		}
-	}, fmt.Sprintf("SharedViewTableSplitter.send=%v", t))
+		timer.Close()
+	}
+	timer.Close()
 }

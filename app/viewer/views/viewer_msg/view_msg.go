@@ -9,7 +9,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils/timeit"
 )
 
 type MsgShared struct {
@@ -127,47 +127,47 @@ func (v *Msg) Render() string {
 }
 
 func (v *Msg) Send(api *apis.API) {
-	utils.TimeMeasure(func() {
+	timeit.NewTimerMF(fmt.Sprintf("Msg.Send() msg=%v", v), func(m *timeit.Timer) {
 
-		utils.TimeMeasure(func() {
+		timeit.NewTimerMFL(fmt.Sprintf("msg.Send DeleteMessage. Msg=%v", *v), func(m *timeit.Timer) {
 			if len(v.records) == 0 && v.messageID != "" {
 				api.Discorder.DeleteMessage(v.channelID, v.messageID)
 			}
-		}, fmt.Sprintf("msg.Send DeleteMessage. Msg=%v", *v), logus.ChannelID(v.channelID))
+		}, logus.ChannelID(v.channelID))
 
 		if len(v.records) == 0 {
 			return
 		}
 
-		time_render := utils.NewTimeMeasure(fmt.Sprintf("msg.Render, msg=%v", v))
+		time_render := timeit.NewTimer(fmt.Sprintf("msg.Render, msg=%v", v))
 		content := v.Render()
 		time_render.Close()
 
-		utils.TimeMeasure(func() {
+		timeit.NewTimerMF(fmt.Sprintf("Msg.Send().SecondSection msg=%v", v), func(m *timeit.Timer) {
 			var err error
 			if v.messageID == "" {
-				utils.TimeMeasure(func() {
+				timeit.NewTimerMF(fmt.Sprintf("Msg.Send().SendMessage + ChecTooLongMsg msg=%v", v), func(m *timeit.Timer) {
 					err = api.Discorder.SengMessage(v.channelID, content)
 					logus.Log.CheckWarn(err, "unable to send msg", logus.ChannelID(v.channelID))
 					CheckTooLongMsgErr(err, api, v.channelID, v.viewEnumeratedID, ActSend, "")
-				}, fmt.Sprintf("Msg.Send().SendMessage + ChecTooLongMsg msg=%v", v))
+				})
 			} else {
-				utils.TimeMeasure(func() {
-					utils.TimeMeasure(func() {
+				timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage + ChecTooLongMsg msg=%v", v), func(m *timeit.Timer) {
+					timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage.only msg=%v", v), func(m *timeit.Timer) {
 						err = api.Discorder.EditMessage(v.channelID, v.messageID, content)
-					}, fmt.Sprintf("Msg.Send().EditMessage.only msg=%v", v))
-					utils.TimeMeasure(func() {
+					})
+					timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage.CheckTooLongMsgErr msg=%v", v), func(m *timeit.Timer) {
 						logus.Log.CheckWarn(err, "unable to edit msg", logus.ChannelID(v.channelID))
 						CheckTooLongMsgErr(err, api, v.channelID, v.viewEnumeratedID, ActEdit, v.messageID)
-					}, fmt.Sprintf("Msg.Send().EditMessage.CheckTooLongMsgErr msg=%v", v))
-				}, fmt.Sprintf("Msg.Send().EditMessage + ChecTooLongMsg msg=%v", v))
+					})
+				})
 			}
-		}, fmt.Sprintf("Msg.Send().SecondSection msg=%v", v))
-	}, fmt.Sprintf("Msg.Send() msg=%v", v))
+		})
+	})
 }
 
 func CheckTooLongMsgErr(err error, api *apis.API, channeID types.DiscordChannelID, header types.ViewEnumeratedID, action MsgAction, MessageID types.DiscordMessageID) {
-	utils.TimeMeasure(func() {
+	timeit.NewTimerMFL(fmt.Sprintf("CheckTooLongMsgErr. header=%s, messageID=%s, action=%d", header, MessageID, action), func(m *timeit.Timer) {
 
 		if err == nil {
 			return
@@ -186,7 +186,7 @@ func CheckTooLongMsgErr(err error, api *apis.API, channeID types.DiscordChannelI
 		case ActEdit:
 			api.Discorder.EditMessage(channeID, MessageID, msg)
 		}
-	}, fmt.Sprintf("CheckTooLongMsgErr. header=%s, messageID=%s, action=%d", header, MessageID, action), logus.ChannelID(channeID))
+	}, logus.ChannelID(channeID))
 }
 
 const (

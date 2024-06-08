@@ -20,19 +20,19 @@ func TestChannels(t *testing.T) {
 		cg.Add("3")
 
 		channels, _ := cg.List()
-		logus.Log.Debug("invoked List", typelog.Items(channels, "channels"))
+		logus.Log.Debug("invoked List", typelog.Items("channels", channels))
 		assert.Len(t, channels, 3)
 
 		cg.Remove("3")
 
 		channels, _ = cg.List()
-		logus.Log.Debug("", typelog.Items(channels, "channels"))
+		logus.Log.Debug("", typelog.Items("channels", channels))
 		assert.Len(t, channels, 2)
 
 		cg.Add("3")
 
 		channels, _ = cg.List()
-		logus.Log.Debug("", typelog.Items(channels, "channels"))
+		logus.Log.Debug("", typelog.Items("channels", channels))
 		assert.Len(t, channels, 3)
 	})
 }

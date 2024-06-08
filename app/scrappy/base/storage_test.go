@@ -21,7 +21,7 @@ func TestGetBases(t *testing.T) {
 	logus.Log.CheckFatal(err, "not found latest base record")
 
 	assert.True(t, len(bases.List) > 0)
-	logus.Log.Debug("", typelog.Items(bases.List, "bases.List"))
+	logus.Log.Debug("", typelog.Items("bases.List", bases.List))
 }
 
 func TestAddManyRecords(t *testing.T) {

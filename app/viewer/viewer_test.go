@@ -3,11 +3,11 @@ package viewer
 import (
 	"testing"
 
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/fl-darkbot/app/settings"
 )
 
 func TestDebugPerformance(t *testing.T) {
-	if !utils.FixtureDevEnv() {
+	if !settings.Env.IsDevEnv {
 		return
 	}
 

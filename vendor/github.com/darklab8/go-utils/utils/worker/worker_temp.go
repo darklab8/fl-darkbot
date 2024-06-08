@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/darklab8/go-utils/goutils/worker/worker_logus"
-	"github.com/darklab8/go-utils/goutils/worker/worker_types"
+	"github.com/darklab8/go-utils/utils/worker/worker_logus"
+	"github.com/darklab8/go-utils/utils/worker/worker_types"
 )
 
 // ====================
@@ -151,9 +151,15 @@ func runTasksinTemporalWorkers(tasks []ITask, j *TaskPool) {
 func RunTasksInTempPool(tasks []ITask, opts ...TaskPoolOption) {
 	numTasks := len(tasks)
 	result_channel := make(chan ITask, numTasks)
-	taskPool := NewTaskPool(WithTaskObServer(func(task ITask) {
-		result_channel <- task
-	}))
+
+	total_options := []TaskPoolOption{
+		WithTaskObServer(func(task ITask) {
+			result_channel <- task
+		}),
+	}
+
+	total_options = append(total_options, opts...)
+	taskPool := NewTaskPool(total_options...)
 	finished_tasks := []ITask{}
 
 	/*

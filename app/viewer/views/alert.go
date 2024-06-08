@@ -8,8 +8,8 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 
-	"github.com/darklab8/go-utils/goutils/utils"
-	"github.com/darklab8/go-utils/goutils/utils/utils_types"
+	"github.com/darklab8/go-utils/utils"
+	"github.com/darklab8/go-utils/utils/utils_types"
 )
 
 //go:embed alert_template.md

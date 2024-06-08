@@ -12,15 +12,15 @@ import (
 )
 
 func Records[T any](value []T) typelog.LogType {
-	return typelog.Items[T](value, "records")
+	return typelog.Items[T]("records", value)
 }
 
 func Args(value []string) typelog.LogType {
-	return typelog.Items[string](value, "args")
+	return typelog.Items[string]("args", value)
 }
 
 func Tags(value []types.Tag) typelog.LogType {
-	return typelog.Items[types.Tag](value, "tags")
+	return typelog.Items[types.Tag]("tags", value)
 }
 
 func APIUrl(value types.APIurl) typelog.LogType {

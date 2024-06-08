@@ -9,9 +9,8 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 
-	"github.com/darklab8/go-utils/goutils/worker"
-
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils/timeit"
+	"github.com/darklab8/go-utils/utils/worker"
 )
 
 type ViewerDelays struct {
@@ -60,13 +59,13 @@ func (v *Viewer) Update() {
 	logus.Log.Info("Viewer.Update.channelIDs=", logus.ChannelIDs(channelIDs))
 
 	// For each channel
-	allChannelsTime := utils.NewTimeMeasure("all channels")
+	allChannelsTime := timeit.NewTimer("all channels")
 	for _, channelID := range channelIDs {
-		utils.TimeMeasure(func() {
+		timeit.NewTimerF(func(m *timeit.Timer) {
 			task := NewRefreshChannelTask(v.api, channelID, v.delays.betweenChannels)
 			// task.RunTask(worker_types.WorkerID(0))
 			v.workers.DelayTask(task)
-		}, "one channel", logus.ChannelID(channelID))
+		}, timeit.WithMsg("one channel"), timeit.WithLogs(logus.ChannelID(channelID)))
 	}
 	allChannelsTime.Close()
 	logus.Log.Info("Viewer.Update Finished " + time.Since(time_viewer_started).String())

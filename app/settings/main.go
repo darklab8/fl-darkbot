@@ -7,7 +7,8 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils"
+	"github.com/darklab8/go-utils/utils/utils_settings"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
@@ -75,7 +76,18 @@ func load() {
 	logus.Log.Info("settings.ScrappyLoopDelay=", logus.ScrappyLoopDelay(ScrappyLoopDelay))
 }
 
+type DarkbotEnv struct {
+	utils_settings.UtilsEnvs
+}
+
+var Env DarkbotEnv
+
 func init() {
 	logus.Log.Info("attempt to load settings")
+	//legacy
 	load()
+
+	Env = DarkbotEnv{
+		UtilsEnvs: utils_settings.Envs,
+	}
 }

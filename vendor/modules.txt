@@ -7,17 +7,20 @@ github.com/bwmarrin/discordgo
 # github.com/caarlos0/env/v6 v6.10.1
 ## explicit; go 1.17
 github.com/caarlos0/env/v6
-# github.com/darklab8/go-typelog v0.3.2
+# github.com/darklab8/go-typelog v0.3.3
 ## explicit; go 1.21.1
 github.com/darklab8/go-typelog/typelog
-# github.com/darklab8/go-utils v0.10.6
+# github.com/darklab8/go-utils v0.14.2
 ## explicit; go 1.21.1
-github.com/darklab8/go-utils/goutils/utils
-github.com/darklab8/go-utils/goutils/utils/utils_logus
-github.com/darklab8/go-utils/goutils/utils/utils_types
-github.com/darklab8/go-utils/goutils/worker
-github.com/darklab8/go-utils/goutils/worker/worker_logus
-github.com/darklab8/go-utils/goutils/worker/worker_types
+github.com/darklab8/go-utils/utils
+github.com/darklab8/go-utils/utils/timeit
+github.com/darklab8/go-utils/utils/utils_env
+github.com/darklab8/go-utils/utils/utils_logus
+github.com/darklab8/go-utils/utils/utils_settings
+github.com/darklab8/go-utils/utils/utils_types
+github.com/darklab8/go-utils/utils/worker
+github.com/darklab8/go-utils/utils/worker/worker_logus
+github.com/darklab8/go-utils/utils/worker/worker_types
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew

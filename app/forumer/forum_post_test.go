@@ -9,7 +9,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/forumer/forum_types"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils"
 
 	"github.com/stretchr/testify/assert"
 )

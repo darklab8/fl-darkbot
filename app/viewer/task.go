@@ -9,10 +9,9 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 
-	"github.com/darklab8/go-utils/goutils/worker"
-	"github.com/darklab8/go-utils/goutils/worker/worker_types"
-
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils/timeit"
+	"github.com/darklab8/go-utils/utils/worker"
+	"github.com/darklab8/go-utils/utils/worker/worker_types"
 )
 
 type TaskRefreshChannel struct {
@@ -70,16 +69,16 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	defer GuildMutex.Unlock()
 
 	time_run_task_started := time.Now()
-	time_new_channel := utils.NewTimeMeasure("new_channel", logus.ChannelID(v.channelID))
+	time_new_channel := timeit.NewTimerL("new_channel", logus.ChannelID(v.channelID))
 	channel := NewChannelView(v.api, v.channelID)
 
 	time_new_channel.Close()
 
-	time_render := utils.NewTimeMeasure("channel.Render", logus.ChannelID(v.channelID))
+	time_render := timeit.NewTimerL("channel.Render", logus.ChannelID(v.channelID))
 	channel.RenderViews()
 	time_render.Close()
 
-	time_discover := utils.NewTimeMeasure("channel.Discover", logus.ChannelID(v.channelID))
+	time_discover := timeit.NewTimerL("channel.Discover", logus.ChannelID(v.channelID))
 	err = channel.Discover()
 	time_discover.Close()
 
@@ -87,11 +86,11 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 		return err
 	}
 
-	time_send := utils.NewTimeMeasure("channel.Send", logus.ChannelID(v.channelID))
+	time_send := timeit.NewTimerL("channel.Send", logus.ChannelID(v.channelID))
 	channel.Send()
 	time_send.Close()
 
-	time_delete_old := utils.NewTimeMeasure("channel.DeleteOld", logus.ChannelID(v.channelID))
+	time_delete_old := timeit.NewTimerL("channel.DeleteOld", logus.ChannelID(v.channelID))
 	channel.DeleteOld()
 	time_delete_old.Close()
 

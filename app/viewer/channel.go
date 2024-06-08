@@ -13,8 +13,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/viewer/views/baseview"
 	"github.com/darklab8/fl-darkbot/app/viewer/views/eventview"
 	"github.com/darklab8/fl-darkbot/app/viewer/views/playerview"
-
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils/timeit"
 )
 
 type ChannelView struct {
@@ -66,9 +65,9 @@ func (v *ChannelView) RenderViews() {
 // Send if not present.
 func (v ChannelView) Send() {
 	for view_num, view := range v.views {
-		utils.TimeMeasure(func() {
+		timeit.NewTimerMFL(fmt.Sprintf("view.Send view_num=%d, view=%v", view_num, view), func(m *timeit.Timer) {
 			view.Send()
-		}, fmt.Sprintf("view.Send view_num=%d, view=%v", view_num, view), logus.ChannelID(v.ChannelID))
+		}, logus.ChannelID(v.ChannelID))
 	}
 }
 

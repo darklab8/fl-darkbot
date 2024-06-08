@@ -14,8 +14,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
-
-	"github.com/darklab8/go-utils/goutils/utils"
+	"github.com/darklab8/go-utils/utils/timeit"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -46,11 +45,11 @@ func (d *Discorder) SengMessage(channelID types.DiscordChannelID, content string
 
 func (d *Discorder) EditMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID, content string) error {
 	var err error
-	utils.TimeMeasure(func() {
+	timeit.NewTimerMFL(fmt.Sprintf("Discorder.EditMessage content=%s", content), func(m *timeit.Timer) {
 		msg, err := d.dg.ChannelMessageEdit(string(channelID), string(messageID), content)
 		logus.Log.CheckWarn(err, "failed editing message in discorder", logus.ChannelID(channelID))
 		logus.Log.Debug(fmt.Sprintf("Discorder.EditMessage.msg=%v", msg))
-	}, fmt.Sprintf("Discorder.EditMessage content=%s", content), logus.ChannelID(channelID), logus.MessageID(messageID))
+	}, logus.ChannelID(channelID), logus.MessageID(messageID))
 	return err
 }
 

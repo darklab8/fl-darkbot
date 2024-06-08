@@ -5,14 +5,14 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/darklab8/go-utils/goutils/utils/utils_logus"
-	"github.com/darklab8/go-utils/goutils/utils/utils_types"
+	"github.com/darklab8/go-utils/utils/utils_logus"
+	"github.com/darklab8/go-utils/utils/utils_types"
 )
 
 func TmpRender(templateRef *template.Template, data interface{}) string {
 	header := bytes.Buffer{}
 	err := templateRef.Execute(&header, data)
-	utils_logus.Log.CheckFatal(err, "failed to render template")
+	utils_logus.Log.CheckPanic(err, "failed to render template")
 	return header.String()
 }
 
@@ -24,6 +24,6 @@ func TmpInit(content utils_types.TemplateExpression) *template.Template {
 
 	var err error
 	templateRef, err := template.New("test").Funcs(funcs).Parse(string(content))
-	utils_logus.Log.CheckFatal(err, "failed to init template")
+	utils_logus.Log.CheckPanic(err, "failed to init template")
 	return templateRef
 }
