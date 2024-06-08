@@ -3,30 +3,25 @@
         "-v"
     ],
     "go.testEnvVars": {
+        "SCRAPPY_PLAYER_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+        "SCRAPPY_BASE_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+        // "DARK_TEST_REGENERATE": "false",
         "DEV_ENV": "true",
-        "TF_VAR_production_hcloud_token": "**********", // Needed only for deployment
-        "DOCKERHUB_USERNAME": "darkwind8", // Needed only for deployment
-        "DOCKERHUB_TOKEN": "**********", // Needed only for deployment
-        "DISCORDER_BOT_TOKEN": "**********",
         "DARKBOT_LOG_LEVEL": "INFO",
         "CONFIGURATOR_DBNAME": "dev",
         "DEVENV_MOCK_API": "true",
-        "SCRAPPY_PLAYER_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
-        "SCRAPPY_BASE_URL": "**********" // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+        "DISCORDER_BOT_TOKEN": "**********", // Get your own app token at https://discord.com/developers/applications
     },
     "go.testTimeout": "30000s",
     "editor.formatOnSave": true,
     "terminal.integrated.env.linux": {
+        "SCRAPPY_PLAYER_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+        "SCRAPPY_BASE_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
         // "DARK_TEST_REGENERATE": "false",
         "DEV_ENV": "true",
-        "TF_VAR_production_hcloud_token": "**********", // Needed only for deployment
-        "DOCKERHUB_USERNAME": "darkwind8", // Needed only for deployment
-        "DOCKERHUB_TOKEN": "**********", // Needed only for deployment
-        "DISCORDER_BOT_TOKEN": "**********",
         "DARKBOT_LOG_LEVEL": "INFO",
         "CONFIGURATOR_DBNAME": "dev",
         "DEVENV_MOCK_API": "true",
-        "SCRAPPY_PLAYER_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
-        "SCRAPPY_BASE_URL": "**********" // Not required for dev env if u use "DEVENV_MOCK_API": "true"
+        "DISCORDER_BOT_TOKEN": "**********", // Get your own app token at https://discord.com/developers/applications
     }
 }

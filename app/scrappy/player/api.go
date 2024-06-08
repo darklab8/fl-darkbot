@@ -21,6 +21,6 @@ type IPlayerAPI interface {
 
 func NewPlayerAPI() PlayerAPI {
 	a := PlayerAPI{}
-	a.url = types.APIurl(settings.Config.ScrappyPlayerUrl)
+	a.url = types.APIurl(settings.Env.ScrappyPlayerUrl)
 	return a
 }

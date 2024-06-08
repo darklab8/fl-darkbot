@@ -35,7 +35,7 @@ var runCmd = &cobra.Command{
 		forumenacer := forumer.NewForumer(settings.Dbpath)
 
 		var scrappy_storage *scrappy.ScrappyStorage
-		if settings.Config.DevEnvMockApi == "true" {
+		if settings.Env.DevEnvMockApi {
 			scrappy_storage = scrappy.FixtureMockedStorage()
 		} else {
 			scrappy_storage = scrappy.NewScrappyWithApis()
@@ -48,7 +48,7 @@ var runCmd = &cobra.Command{
 		go forumenacer.Run()
 
 		// profiler
-		if settings.Config.ProfilingEnabled == settings.EnvTrue {
+		if settings.Env.ProfilingEnabled {
 			p := profile.Start(profile.MemProfile, profile.ProfilePath("."), profile.NoShutdownHook)
 			defer p.Stop()
 

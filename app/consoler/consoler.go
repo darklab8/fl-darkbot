@@ -36,7 +36,7 @@ func (c *Consoler) Execute(
 	channelID types.DiscordChannelID,
 ) string {
 	// only commands starting from prefix are allowed
-	if !strings.HasPrefix(cmd, settings.Config.ConsolerPrefix) {
+	if !strings.HasPrefix(cmd, settings.Env.ConsolerPrefix) {
 		return ""
 	}
 

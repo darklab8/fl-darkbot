@@ -21,6 +21,6 @@ type IbaseAPI interface {
 
 func NewBaseApi() IbaseAPI {
 	b := basesAPI{}
-	b.url = types.APIurl(settings.Config.ScrappyBaseUrl)
+	b.url = types.APIurl(settings.Env.ScrappyBaseUrl)
 	return b
 }

@@ -19,7 +19,7 @@ import (
 )
 
 func Run() {
-	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
+	dg, err := discordgo.New("Bot " + settings.Env.DiscorderBotToken)
 	logus.Log.CheckFatal(err, "failed to init discord")
 
 	// Register the messageCreate func as a callback for MessageCreate events.
@@ -43,7 +43,7 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	messageAuthorID := m.Author.ID
 	botCreatorID := "370435997974134785"
 
-	if !strings.HasPrefix(m.Content, settings.Config.ConsolerPrefix) {
+	if !strings.HasPrefix(m.Content, settings.Env.ConsolerPrefix) {
 		return false
 	}
 

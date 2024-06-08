@@ -54,7 +54,7 @@ func (s *ScrappyStorage) Run() {
 	logus.Log.Info("starting scrappy infinity update loop")
 	for {
 		s.Update()
-		time.Sleep(time.Duration(settings.ScrappyLoopDelay) * time.Second)
+		time.Sleep(time.Duration(settings.Env.ScrappyLoopDelay) * time.Second)
 	}
 	logus.Log.Info("gracefully shutdown scrappy infinity loop")
 }

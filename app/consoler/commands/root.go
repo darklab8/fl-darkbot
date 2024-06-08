@@ -43,7 +43,7 @@ func CreateConsoler(
 		consolerCmd,
 		channelInfo,
 		configur,
-		cmdgroup.Command(settings.Config.ConsolerPrefix),
+		cmdgroup.Command(settings.Env.ConsolerPrefix),
 		cmdgroup.ShortDesc("Welcome to darkbot!"),
 	)
 	root := newRootCommands(&rootGroup)

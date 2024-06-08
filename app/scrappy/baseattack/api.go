@@ -22,7 +22,7 @@ type IbaseAttackAPI interface {
 
 func NewBaseAttackAPI() IbaseAttackAPI {
 	a := basesattackAPI{}
-	a.url = types.APIurl(settings.Config.ScrappyBaseAttackUrl)
+	a.url = types.APIurl(settings.Env.ScrappyBaseAttackUrl)
 	return a
 }
 

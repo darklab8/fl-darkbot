@@ -30,7 +30,7 @@ func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Vi
 		api: api,
 		delays: ViewerDelays{
 			betweenChannels: 10,
-			betweenLoops:    settings.ViewerLoopDelay,
+			betweenLoops:    types.ViewerLoopDelay(settings.Env.ViewerLoopDelay),
 		},
 	}
 

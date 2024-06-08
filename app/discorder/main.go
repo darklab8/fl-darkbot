@@ -29,7 +29,7 @@ func (d *Discorder) GetDiscordSession() *discordgo.Session {
 
 func NewClient() *Discorder {
 	d := &Discorder{}
-	dg, err := discordgo.New("Bot " + settings.Config.DiscorderBotToken)
+	dg, err := discordgo.New("Bot " + settings.Env.DiscorderBotToken)
 	logus.Log.CheckFatal(err, "failed to init discord")
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
