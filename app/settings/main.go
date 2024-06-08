@@ -39,7 +39,7 @@ func init() {
 		enverant.WithEnvFile(utils_os.GetCurrentFolder().Dir().Dir().Join(".vscode", "enverant.json").ToString()),
 	)
 	Env = DarkbotEnv{
-		UtilsEnvs:            utils_settings.Envs,
+		UtilsEnvs:            utils_settings.GetEnvs(envs),
 		DevEnvMockApi:        envs.GetBoolOr("DEV_ENV_MOCK_API", true),
 		ScrappyBaseUrl:       envs.GetStrOr("SCRAPPY_BASE_URL", ""),
 		ScrappyPlayerUrl:     envs.GetStrOr("SCRAPPY_PLAYER_URL", ""),
