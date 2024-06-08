@@ -5,13 +5,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"regexp"
 	"strconv"
 
-	"github.com/darklab8/go-typelog/typelog"
 	"github.com/darklab8/go-utils/utils/regexy"
-	"github.com/darklab8/go-utils/utils/utils_logus"
 )
 
 var regexConfiglines *regexp.Regexp
@@ -24,9 +23,11 @@ func ReadJson(path string) map[string]interface{} {
 	env_map := make(map[string]interface{})
 
 	file, err := os.Open(path)
-	if utils_logus.Log.CheckWarn(err, "not found env file at path", typelog.String("path", path)) {
+	if err != nil {
+		log.Println(err, "not found env file at path=", path)
 		return env_map
 	}
+
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
@@ -42,7 +43,9 @@ func ReadJson(path string) map[string]interface{} {
 	}
 
 	err = json.Unmarshal(cleaned_json.Bytes(), &env_map)
-	utils_logus.Log.CheckPanic(err, "failed to parse json with env vars")
+	if err != nil {
+		panic(fmt.Sprintln(err, "failed to parse json with env vars"))
+	}
 
 	for key, value := range env_map {
 

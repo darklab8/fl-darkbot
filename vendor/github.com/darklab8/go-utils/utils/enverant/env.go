@@ -5,13 +5,12 @@ Manager for getting values from Environment variables
 */
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
 
-	"github.com/darklab8/go-typelog/typelog"
 	"github.com/darklab8/go-utils/utils/ptr"
-	"github.com/darklab8/go-utils/utils/utils_logus"
 )
 
 type Enverant struct {
@@ -115,7 +114,7 @@ func (e *Enverant) GetString(key string, opts ...ValueOption) (string, bool) {
 	}
 
 	if e.validate_missing {
-		utils_logus.Log.Panic("enverant value is not defined", typelog.String("key", key))
+		panic(fmt.Sprintln("enverant value is not defined, key=", key))
 	}
 
 	return "", false
@@ -155,7 +154,7 @@ func (e *Enverant) GetBoolean(key string, opts ...ValueOption) (bool, bool) {
 	}
 
 	if e.validate_missing {
-		utils_logus.Log.Panic("enverant value is not defined", typelog.String("key", key))
+		panic(fmt.Sprintln("enverant value is not defined, key=", key))
 	}
 
 	return false, false
@@ -188,7 +187,9 @@ func (e *Enverant) GetInteger(key string, opts ...ValueOption) (int, bool) {
 
 	if value, ok := os.LookupEnv(key); ok {
 		int_value, err := strconv.Atoi(value)
-		utils_logus.Log.CheckPanic(err, "expected to be int", typelog.String("key", key))
+		if err != nil {
+			panic(fmt.Sprintln(err, "expected to be int, key=", key))
+		}
 		return int_value, true
 	}
 
@@ -197,7 +198,7 @@ func (e *Enverant) GetInteger(key string, opts ...ValueOption) (int, bool) {
 	}
 
 	if e.validate_missing {
-		utils_logus.Log.Panic("enverant value is not defined", typelog.String("key", key))
+		panic(fmt.Sprintln("enverant value is not defined, key=", key))
 	}
 
 	return 0, false
