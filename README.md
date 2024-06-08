@@ -47,6 +47,7 @@
   - and run dev commands like `task test` for running unit tests
   - or see them inside [Taskfile](Taskfile.yml) for manual copy pasting to shell
   - `task --list-all` to list available commands
+- If you update any dependencies, make sure to rerun `go mod vendor` to sync their vendoring
 
 If you wish making changes to mkdocs:
 
@@ -58,8 +59,8 @@ If you wish making changes to mkdocs:
 Note for deployment
 
 - The project depends on having two private URL from Discovery API for its running. Provided by Alex.
-- Development is possible without them as with env var you can mock data receved from them.
-- by default DEV_ENV_MOCK_API=true for convinience of easier getting started
+  - Development is possible without them as with env var you can mock data receved from them.
+  - by default DEV_ENV_MOCK_API=true for convinience of easier getting started
 
 # Architecture
 
