@@ -58,10 +58,10 @@ func init() {
 
 	if !Env.DevEnvMockApi {
 		if Env.ScrappyBaseUrl == "" {
-			logus.Log.Panic("DEVENV_MOCK_API=false, Expected SCRAPPY_BASE_URL env var to be defined")
+			logus.Log.Panic("DevEnvMockApi=false, Expected SCRAPPY_BASE_URL env var to be defined")
 		}
 		if Env.ScrappyPlayerUrl == "" {
-			logus.Log.Panic("DEVENV_MOCK_API=false, Expected SCRAPPY_PLAYER_URL env var to be defined")
+			logus.Log.Panic("DevEnvMockApi=false, Expected SCRAPPY_PLAYER_URL env var to be defined")
 		}
 	}
 }

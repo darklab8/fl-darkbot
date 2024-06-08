@@ -11,7 +11,7 @@ locals {
     CONSOLER_PREFIX     = "${var.consoler_prefix}"
     SCRAPPY_LOOP_DELAY  = "60"
     VIEWER_LOOP_DELAY   = "10"
-    DEVENV_MOCK_API     = "false"
+    DEV_ENV_MOCK_API     = "false"
     DARKBOT_LOG_LEVEL   = "${var.debug ? "DEBUG" : "WARN"}"
   }
 }
