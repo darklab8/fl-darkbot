@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package management
 
 import (
+	"fmt"
 	"runtime"
 	"time"
 
@@ -29,6 +30,8 @@ var runCmd = &cobra.Command{
 	Use: "run",
 	Run: func(cmd *cobra.Command, args []string) {
 		logus.Log.Info("run called")
+
+		settings.LoadEnv(settings.Environ.GetValidating())
 
 		// migrate db
 		configurator.NewConfigurator(settings.Dbpath).AutoMigrateSchema()
@@ -66,6 +69,7 @@ var runCmd = &cobra.Command{
 			}
 		}()
 
+		fmt.Println("darkbot is launched. Awaiting Ctrl+C to disrupt")
 		utils.SleepAwaitCtrlC()
 	},
 }

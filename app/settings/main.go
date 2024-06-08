@@ -1,9 +1,9 @@
 package settings
 
 import (
+	"log"
 	"path/filepath"
 
-	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 
 	"github.com/darklab8/go-utils/utils/enverant"
@@ -32,12 +32,18 @@ type DarkbotEnv struct {
 
 var Env DarkbotEnv
 
-func init() {
-	logus.Log.Info("attempt to load settings")
+var Environ *enverant.Enverant
 
-	envs := enverant.NewEnverant(
+func init() {
+	log.Println("attempt to load settings")
+
+	Environ = enverant.NewEnverant(
 		enverant.WithEnvFile(utils_os.GetCurrentFolder().Dir().Dir().Join(".vscode", "enverant.json").ToString()),
 	)
+	LoadEnv(Environ)
+}
+
+func LoadEnv(envs *enverant.Enverant) {
 	Env = DarkbotEnv{
 		UtilsEnvs:            utils_settings.GetEnvs(envs),
 		DevEnvMockApi:        envs.GetBoolOr("DEV_ENV_MOCK_API", true),
@@ -45,7 +51,7 @@ func init() {
 		ScrappyPlayerUrl:     envs.GetStrOr("SCRAPPY_PLAYER_URL", ""),
 		ScrappyBaseAttackUrl: envs.GetStrOr("SCRAPPY_BASE_ATTACK_URL", "https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"),
 
-		DiscorderBotToken: envs.GetStrOr("DISCORDER_BOT_TOKEN", ""),
+		DiscorderBotToken: envs.GetStr("DISCORDER_BOT_TOKEN"),
 
 		ConfiguratorDbname: envs.GetStrOr("CONFIGURATOR_DBNAME", "dev"),
 
@@ -60,10 +66,10 @@ func init() {
 
 	if !Env.DevEnvMockApi {
 		if Env.ScrappyBaseUrl == "" {
-			logus.Log.Panic("DevEnvMockApi=false, Expected SCRAPPY_BASE_URL env var to be defined")
+			log.Panic("DevEnvMockApi=false, Expected SCRAPPY_BASE_URL env var to be defined")
 		}
 		if Env.ScrappyPlayerUrl == "" {
-			logus.Log.Panic("DevEnvMockApi=false, Expected SCRAPPY_PLAYER_URL env var to be defined")
+			log.Panic("DevEnvMockApi=false, Expected SCRAPPY_PLAYER_URL env var to be defined")
 		}
 	}
 }
