@@ -7,9 +7,9 @@
         "SCRAPPY_BASE_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
         // "DARK_TEST_REGENERATE": "false",
         "DEV_ENV": "true",
+        "DEV_ENV_MOCK_API": "true",
         "DARKBOT_LOG_LEVEL": "INFO",
         "CONFIGURATOR_DBNAME": "dev",
-        "DEVENV_MOCK_API": "true",
         "DISCORDER_BOT_TOKEN": "**********", // Get your own app token at https://discord.com/developers/applications
     },
     "go.testTimeout": "30000s",
@@ -19,9 +19,9 @@
         "SCRAPPY_BASE_URL": "**********", // Not required for dev env if u use "DEVENV_MOCK_API": "true"
         // "DARK_TEST_REGENERATE": "false",
         "DEV_ENV": "true",
+        "DEV_ENV_MOCK_API": "true",
         "DARKBOT_LOG_LEVEL": "INFO",
         "CONFIGURATOR_DBNAME": "dev",
-        "DEVENV_MOCK_API": "true",
         "DISCORDER_BOT_TOKEN": "**********", // Get your own app token at https://discord.com/developers/applications
     }
 }

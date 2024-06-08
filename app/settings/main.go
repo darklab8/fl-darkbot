@@ -38,23 +38,32 @@ func init() {
 	envs := utils_env.NewEnvConfig()
 	Env = DarkbotEnv{
 		UtilsEnvs:            utils_settings.Envs,
-		ScrappyBaseUrl:       envs.GetEnvWithDefault("SCRAPPY_BASE_URL", "undefined"),
-		ScrappyPlayerUrl:     envs.GetEnvWithDefault("SCRAPPY_PLAYER_URL", "undefined"),
+		DevEnvMockApi:        envs.GetEnvBoolWithDefault("DEV_ENV_MOCK_API", true),
+		ScrappyBaseUrl:       envs.GetEnvWithDefault("SCRAPPY_BASE_URL", ""),
+		ScrappyPlayerUrl:     envs.GetEnvWithDefault("SCRAPPY_PLAYER_URL", ""),
 		ScrappyBaseAttackUrl: envs.GetEnvWithDefault("SCRAPPY_BASE_ATTACK_URL", "https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"),
 
-		DiscorderBotToken: envs.GetEnvWithDefault("DISCORDER_BOT_TOKEN", "undefined"),
+		DiscorderBotToken: envs.GetEnvWithDefault("DISCORDER_BOT_TOKEN", ""),
 
 		ConfiguratorDbname: envs.GetEnvWithDefault("CONFIGURATOR_DBNAME", "dev"),
 
 		ConsolerPrefix:   envs.GetEnvWithDefault("CONSOLER_PREFIX", ";"),
-		ProfilingEnabled: envs.GetEnvBool("PROFILING"),
+		ProfilingEnabled: envs.GetEnvBoolWithDefault("PROFILING", false),
 
 		ScrappyLoopDelay: envs.GetIntWithDefault("SCRAPPY_LOOP_DELAY", 10),
 		ViewerLoopDelay:  envs.GetIntWithDefault("VIEWER_LOOP_DELAY", 10),
-		DevEnvMockApi:    envs.GetEnvBoolWithDefault("DEVENV_MOCK_API", true),
 	}
 	Workdir = filepath.Dir(filepath.Dir(utils.GetCurrentFolder().ToString()))
 	Dbpath = NewDBPath(Env.ConfiguratorDbname)
+
+	if !Env.DevEnvMockApi {
+		if Env.ScrappyBaseUrl == "" {
+			logus.Log.Panic("DEVENV_MOCK_API=false, Expected SCRAPPY_BASE_URL env var to be defined")
+		}
+		if Env.ScrappyPlayerUrl == "" {
+			logus.Log.Panic("DEVENV_MOCK_API=false, Expected SCRAPPY_PLAYER_URL env var to be defined")
+		}
+	}
 }
 
 var Dbpath types.Dbpath
