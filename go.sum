@@ -11,6 +11,8 @@ github.com/darklab8/go-typelog v0.3.3 h1:ZBj26swTbqe0LtutxG2abnX5JJHz1QWOIvxM8GI
 github.com/darklab8/go-typelog v0.3.3/go.mod h1:AwwOf3dkp/tpevHFNbkB+PbwlDrUUgO1CVFkEnj+q5w=
 github.com/darklab8/go-utils v0.15.0 h1:Xsgl7chxJoUYgWwu5NnVo8jSqggKoxazT3I8T7407tM=
 github.com/darklab8/go-utils v0.15.0/go.mod h1:zApy0zIFiGCw496OIot7dl8i2cAsQMyPyf3PCMMpS3g=
+github.com/darklab8/go-utils v0.16.0 h1:xgzYrea74ps2EOWZQghnP0ah9TvD+2/iSsFg3jnUGSo=
+github.com/darklab8/go-utils v0.16.0/go.mod h1:zApy0zIFiGCw496OIot7dl8i2cAsQMyPyf3PCMMpS3g=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
