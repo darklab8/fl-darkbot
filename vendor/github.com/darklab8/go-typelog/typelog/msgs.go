@@ -28,7 +28,7 @@ func (l *Logger) Info(msg string, opts ...LogType) {
 
 }
 
-// Just potentially bad behavior to be aware of
+// Warn is for just potentially bad behavior to be aware of
 func (l *Logger) Warn(msg string, opts ...LogType) {
 	if IsMsgEnabled(l.level_log, LEVEL_WARN) {
 		args := append([]SlogAttr{}, newSlogArgs(opts...)...)
@@ -40,7 +40,7 @@ func (l *Logger) Warn(msg string, opts ...LogType) {
 
 }
 
-// It is bad but program can recover from it
+// Error is bad but program can recover from it
 func (l *Logger) Error(msg string, opts ...LogType) {
 	if IsMsgEnabled(l.level_log, LEVEL_ERROR) {
 		args := append([]SlogAttr{}, newSlogArgs(opts...)...)
@@ -52,7 +52,7 @@ func (l *Logger) Error(msg string, opts ...LogType) {
 
 }
 
-// Program is not allowed to run further with fatal
+// Fatal when encountered, Program is not allowed to run further with fatal
 func (l *Logger) Fatal(msg string, opts ...LogType) {
 	args := append([]SlogAttr{}, newSlogArgs(opts...)...)
 	if l.enable_file_showing {
@@ -111,7 +111,7 @@ func (l *Logger) CheckError(err error, msg string, opts ...LogType) bool {
 	return true
 }
 
-// It has shorter error output in comparison to CheckPanic
+// CheckFatal has shorter error output in comparison to CheckPanic
 func (l *Logger) CheckFatal(err error, msg string, opts ...LogType) {
 	if err == nil {
 		return
@@ -127,7 +127,11 @@ func (l *Logger) CheckPanic(err error, msg string, opts ...LogType) {
 		return
 	}
 	args := append([]SlogAttr{}, newSlogArgs(opts...)...)
-	args = append(args, slog.String("error", fmt.Sprintf("%v", err)))
+	args = append(args,
+		slog.String("err_msg", fmt.Sprintf("%v", err)),
+		slog.String("err_type", fmt.Sprintf("%T", err)),
+	)
 	l.logger.Error(msg, args...)
-	panic(msg)
+	panic_logger.Error(msg, args...)
+	panic(panic_str.String())
 }

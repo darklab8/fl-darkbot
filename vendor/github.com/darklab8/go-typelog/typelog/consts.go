@@ -32,8 +32,5 @@ func LevelToInt(level LogLevel) int {
 }
 
 func IsMsgEnabled(current_level, msg_level LogLevel) bool {
-	if LevelToInt(current_level) <= LevelToInt(msg_level) {
-		return true
-	}
-	return false
+	return LevelToInt(current_level) <= LevelToInt(msg_level)
 }

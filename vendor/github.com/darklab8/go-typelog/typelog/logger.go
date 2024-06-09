@@ -1,7 +1,12 @@
+/*
+Package typelog is a slog modified for extra static type safety
+and extra boilerplating out of the box
+*/
 package typelog
 
 import (
 	"fmt"
+	"io"
 	"log/slog"
 	"os"
 	"strings"
@@ -14,6 +19,7 @@ type Logger struct {
 	enable_json_format  bool
 	log_level_slog      *slog.LevelVar
 	level_log           LogLevel
+	io_writer           io.Writer
 }
 
 type LoggerParam func(r *Logger)
@@ -21,6 +27,12 @@ type LoggerParam func(r *Logger)
 func WithJsonFormat(state bool) LoggerParam {
 	return func(logger *Logger) {
 		logger.enable_json_format = state
+	}
+}
+
+func WithIoWriter(writer io.Writer) LoggerParam {
+	return func(logger *Logger) {
+		logger.io_writer = writer
 	}
 }
 
@@ -59,7 +71,7 @@ func WithLogLevel(log_level_str LogLevel) LoggerParam {
 }
 
 /*
-Leaving option for end applications to access all registered loggers
+RegisteredLoggers leaves option for end applications to access all registered loggers
 and choosing their own log levels to override for them
 */
 var RegisteredLoggers []*Logger
@@ -72,12 +84,13 @@ func NewLogger(
 ) *Logger {
 
 	logger := &Logger{
-		name: name,
+		name:      name,
+		io_writer: os.Stdout,
 	}
 	RegisteredLoggers = append(RegisteredLoggers, logger)
 
-	WithJsonFormat(bool(EnvTurnJSON))(logger)
-	WithFileShowing(EnvTurnFileShowing)(logger)
+	WithJsonFormat(Env.EnableJson)(logger)
+	WithFileShowing(Env.EnableFileShowing)(logger)
 	WithLogLevelStr(os.Getenv(strings.ToUpper(name) + "_LOG_LEVEL"))(logger)
 
 	for _, opt := range options {
@@ -88,28 +101,28 @@ func NewLogger(
 }
 
 /*
-For overrides by external libraries
+OverrideOption for overrides by external libraries
 */
-func (logger *Logger) OverrideOption(options ...LoggerParam) *Logger {
+func (l *Logger) OverrideOption(options ...LoggerParam) *Logger {
 	for _, opt := range options {
-		opt(logger)
+		opt(l)
 	}
 
-	return logger.Initialized()
+	return l.Initialized()
 }
 
-func (logger *Logger) Initialized() *Logger {
-	if logger.enable_json_format {
-		logger.logger = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: logger.log_level_slog}))
+func (l *Logger) Initialized() *Logger {
+	if l.enable_json_format {
+		l.logger = slog.New(slog.NewJSONHandler(l.io_writer, &slog.HandlerOptions{Level: l.log_level_slog}))
 	} else {
-		logger.logger = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: logger.log_level_slog}))
+		l.logger = slog.New(slog.NewTextHandler(l.io_writer, &slog.HandlerOptions{Level: l.log_level_slog}))
 	}
-	return logger
+	return l
 }
 
 func (l *Logger) WithFields(opts ...LogType) *Logger {
-	var new_logger Logger = *l
-	new_logger.Initialized()
-	new_logger.logger = new_logger.logger.With(newSlogArgs(opts...)...)
-	return &new_logger
+	var newLogger Logger = *l
+	newLogger.Initialized()
+	newLogger.logger = newLogger.logger.With(newSlogArgs(opts...)...)
+	return &newLogger
 }
