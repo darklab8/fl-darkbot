@@ -2,8 +2,12 @@
     "go.testFlags": [
         "-v"
     ],
-    "go.testEnvVars": {},
+    "go.testEnvVars": {
+        "ENVERANT_ENV_FILE": "${workspaceFolder}/.vscode/enverant.json"
+    },
     "go.testTimeout": "30000s",
     "editor.formatOnSave": true,
-    "terminal.integrated.env.linux": {}
+    "terminal.integrated.env.linux": {
+        "ENVERANT_ENV_FILE": "${workspaceFolder}/.vscode/enverant.json"
+    }
 }

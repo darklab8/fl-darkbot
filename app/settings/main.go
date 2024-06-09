@@ -37,9 +37,7 @@ var Environ *enverant.Enverant
 func init() {
 	log.Println("attempt to load settings")
 
-	Environ = enverant.NewEnverant(
-		enverant.WithEnvFile(utils_os.GetCurrentFolder().Dir().Dir().Join(".vscode", "enverant.json").ToString()),
-	)
+	Environ = enverant.NewEnverant()
 	LoadEnv(Environ)
 }
 

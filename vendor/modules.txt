@@ -7,7 +7,7 @@ github.com/bwmarrin/discordgo
 # github.com/darklab8/go-typelog v0.3.3
 ## explicit; go 1.21.1
 github.com/darklab8/go-typelog/typelog
-# github.com/darklab8/go-utils v0.17.3
+# github.com/darklab8/go-utils v0.17.5
 ## explicit; go 1.21.1
 github.com/darklab8/go-utils/utils
 github.com/darklab8/go-utils/utils/enverant
