@@ -23,6 +23,6 @@ module "darkbot" {
   secrets             = local.secrets
   tag_version         = "v1.5.1-arm"
   debug               = false
-  mode                = "kubernetes"
+  mode                = "docker"
   environment         = "staging"
 }

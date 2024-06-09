@@ -7,7 +7,7 @@ resource "docker_image" "darkbot" {
 resource "docker_container" "darkbot" {
   count = var.mode == "docker" ? 1 : 0
 
-  name  = "darkbot"
+  name  = "darkbot-${var.environment}"
   image = docker_image.darkbot[0].image_id
 
   env = [for k, v in local.envs : "${k}=${v}"]
@@ -16,7 +16,7 @@ resource "docker_container" "darkbot" {
   volumes {
     container_path = "/code/data"
     read_only      = false
-    host_path      = "/var/lib/darklab/darkbot"
+    host_path      = "/var/lib/darklab/darkbot-${var.environment}"
   }
 
   memory = 1000 # MBs

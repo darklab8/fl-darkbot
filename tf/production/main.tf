@@ -26,6 +26,6 @@ module "darkbot" {
   consoler_prefix     = "."
   secrets             = local.secrets
   tag_version         = "v1.5.1-arm"
-  mode                = "kubernetes"
+  mode                = "docker"
   environment         = "production"
 }
