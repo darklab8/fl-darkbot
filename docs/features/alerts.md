@@ -45,6 +45,6 @@ enable, disable, status sub commands are similar.
 ## Ping message
 
 - By default Discord server owner is pinged ( `<@DiscordServer.Owner.ID>` )
-- `. alert ping_message @here` - You can change to `@here` or `@specific_role` by setting this
+- `. alert ping_message set @here` - You can change to `@here` or `@specific_role` by setting this
 - `. alert ping_message status` - you can use sub command `status` to check configuration like 
 - `. alert ping_message unset` - you can unset to default ping message
