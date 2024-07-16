@@ -1,13 +1,14 @@
 package viewer
 
 import (
-	"fmt"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
+	"github.com/darklab8/go-typelog/typelog"
 
 	"github.com/darklab8/go-utils/utils/timeit"
 	"github.com/darklab8/go-utils/utils/worker"
@@ -58,8 +59,17 @@ func GetMutex(MutexKey string) *sync.Mutex {
 }
 
 func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
+	logus_ch := logus.Log.WithFields(logus.ChannelID(v.channelID))
 	channel_info, err := v.api.Discorder.GetDiscordSession().Channel(string(v.channelID))
-	if logus.Log.CheckError(err, "unable to get channel info", logus.ChannelID(v.channelID)) {
+
+	if logus_ch.CheckError(err, "unable to get channel info") {
+
+		// not needed longer to use channel
+		if strings.Contains(err.Error(), "Unknown Channel") {
+			logus_ch.Info("channel is Unknown Channel. situation for auto deletion.")
+			logus_ch.CheckWarn(v.api.Channels.Remove(v.channelID), "failed to delete channel")
+		}
+
 		return err
 	}
 
@@ -82,7 +92,7 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	err = channel.Discover()
 	time_discover.Close()
 
-	if logus.Log.CheckWarn(err, "unable to grab Discord msgs", logus.ChannelID(v.channelID)) {
+	if logus_ch.CheckWarn(err, "unable to grab Discord msgs") {
 		return err
 	}
 
@@ -94,12 +104,12 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	channel.DeleteOld()
 	time_delete_old.Close()
 
-	logus.Log.Info(fmt.Sprintf("RunTask finished, TaskID=%d, elapsed=%s, started_at=%s, finished_at=%s",
-		v.Task.GetID(),
-		time.Since(time_run_task_started).String(),
-		time_run_task_started.String(),
-		time.Now().String(),
-	))
+	logus_ch.Info("RunTask finished",
+		typelog.Int("task_id", int(v.Task.GetID())),
+		typelog.String("elapsed", time.Since(time_run_task_started).String()),
+		typelog.String("started_at", time_run_task_started.String()),
+		typelog.String("finished_at", time.Now().String()),
+	)
 
 	// Important for Mutex above! Prevents Guild level rate limits. looks like 5 msg edits per 5 second at one server is good
 	time.Sleep(time.Duration(v.delayBetweenChannels) * time.Second)
