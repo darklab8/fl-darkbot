@@ -39,6 +39,7 @@ func (v *ChannelView) Discover() error {
 	logus.Log.Debug("viewer.Init.channelID=", logus.ChannelID(v.ChannelID))
 	msgs, err := v.api.Discorder.GetLatestMessages(v.ChannelID)
 	if logus.Log.CheckWarn(err, "unable to grab latst msg", logus.ChannelID(v.ChannelID)) {
+		TryChannelAutoRemoval(v.api, err, v.ChannelID)
 		return err
 	}
 

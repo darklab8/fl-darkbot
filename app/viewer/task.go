@@ -58,18 +58,22 @@ func GetMutex(MutexKey string) *sync.Mutex {
 	return new_mutex
 }
 
+func TryChannelAutoRemoval(api *apis.API, err error, channel_id types.DiscordChannelID) {
+	logus_ch := logus.Log.WithFields(logus.ChannelID(channel_id), typelog.OptError(err))
+	logus_ch.Info("checking channel for auto removing conditions")
+	if strings.Contains(err.Error(), "Unknown Channel") {
+		logus_ch.Info("channel matched condition to be removed because Unknown channel")
+		logus_ch.CheckWarn(api.Channels.Remove(channel_id), "failed to delete channel")
+		return
+	}
+	logus_ch.Warn("failed channel autoremoval")
+}
+
 func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	logus_ch := logus.Log.WithFields(logus.ChannelID(v.channelID))
 	channel_info, err := v.api.Discorder.GetDiscordSession().Channel(string(v.channelID))
 
 	if logus_ch.CheckError(err, "unable to get channel info") {
-
-		// not needed longer to use channel
-		if strings.Contains(err.Error(), "Unknown Channel") {
-			logus_ch.Info("channel is Unknown Channel. situation for auto deletion.")
-			logus_ch.CheckWarn(v.api.Channels.Remove(v.channelID), "failed to delete channel")
-		}
-
 		return err
 	}
 
