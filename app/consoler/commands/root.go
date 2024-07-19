@@ -353,46 +353,46 @@ func (r *rootCommands) CreateConfig() {
 			// bases
 			sb.WriteString("\nBases:\n")
 			sb.WriteString(fmt.Sprintln("base tags = ", r.Bases.Tags.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("base order by = ", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
+			sb.WriteString(fmt.Sprintln("base order_by = ", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
 			sb.WriteString("\n")
 
 			// players
 			sb.WriteString("\nPlayers:\n")
-			sb.WriteString(fmt.Sprintln("regions tags = ", r.Players.Regions.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("systems tags = ", r.Players.Systems.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("friends tags = ", r.Players.Friends.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("enemies tags = ", r.Players.Enemies.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("events tags = ", r.Players.Events.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("player region = ", r.Players.Regions.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("player system = ", r.Players.Systems.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("player friend = ", r.Players.Friends.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("player enemy = ", r.Players.Enemies.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("player event = ", r.Players.Events.TagsList2(channel_id)))
 			sb.WriteString("\n")
 
 			// forum
 			sb.WriteString("\nForum:\n")
-			sb.WriteString(fmt.Sprintln("subforum watch tags = ", r.Forum.Subforum.Watch.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("subforum ignore tags = ", r.Forum.Subforum.Ignore.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("thread watch tags = ", r.Forum.Thread.Watch.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("thread ignore tags = ", r.Forum.Thread.Ignore.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("forum subforum watch = ", r.Forum.Subforum.Watch.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("forum subforum ignore = ", r.Forum.Subforum.Ignore.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("forum thread watch = ", r.Forum.Thread.Watch.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("forum thread ignore = ", r.Forum.Thread.Ignore.TagsList2(channel_id)))
 			sb.WriteString("\n")
 
 			// alerts
 			sb.WriteString("\nAlerts:\n")
 
-			sb.WriteString(fmt.Sprintln("BaseHealthIsDecreasing = ", GetStatus(r.Alerts.BaseHealthIsDecreasing, channel_id)))
-			sb.WriteString(fmt.Sprintln("BaseHealthLowerThan = ", GetStatus(r.Alerts.BaseHealthLowerThan, channel_id)))
-			sb.WriteString(fmt.Sprintln("BaseIsUnderAttack = ", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
-			sb.WriteString(fmt.Sprintln("EnemiesGreaterThan = ", GetStatus(r.Alerts.EnemiesGreaterThan, channel_id)))
-			sb.WriteString(fmt.Sprintln("FriendsGreaterThan = ", GetStatus(r.Alerts.FriendsGreaterThan, channel_id)))
-			sb.WriteString(fmt.Sprintln("NeutralsGreaterThan = ", GetStatus(r.Alerts.NeutralsGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintln("alert base_health_is_decreasing = ", GetStatus(r.Alerts.BaseHealthIsDecreasing, channel_id)))
+			sb.WriteString(fmt.Sprintln("alert base_health_is_lower_than = ", GetStatus(r.Alerts.BaseHealthLowerThan, channel_id)))
+			sb.WriteString(fmt.Sprintln("alert base_is_under_attack = ", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
+			sb.WriteString(fmt.Sprintln("alert player_enemy_count_above = ", GetStatus(r.Alerts.EnemiesGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintln("alert player_friend_count_above = ", GetStatus(r.Alerts.FriendsGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintln("alert player_neutral_count_above = ", GetStatus(r.Alerts.NeutralsGreaterThan, channel_id)))
 
 			value, err := r.Alerts.PingMessage.Status(channel_id)
 			if err != nil {
 				switch err.(type) {
 				case configurator.ErrorZeroAffectedRows:
-					sb.WriteString(fmt.Sprintln("ping message = Server Owner"))
+					sb.WriteString(fmt.Sprintln("alert ping_message = Server Owner"))
 				default:
-					sb.WriteString(fmt.Sprintln("ping message = ", err.Error()))
+					sb.WriteString(fmt.Sprintln("alert ping_message = ", err.Error()))
 				}
 			} else {
-				sb.WriteString(fmt.Sprintln("ping message = ", fmt.Sprintf("`%s`", value)))
+				sb.WriteString(fmt.Sprintln("alert ping_message = ", fmt.Sprintf("`%s`", value)))
 			}
 			sb.WriteString("\n")
 
