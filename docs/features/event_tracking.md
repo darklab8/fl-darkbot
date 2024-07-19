@@ -1,6 +1,6 @@
 # Event helper
 
-![events view](/index_assets/events_table.png)
+![events view](/fl-darkbot/index_assets/events_table.png)
 
 This feature was implemented on request from Event manager Barrier, for the purpose of easily tracking
 that all players participating in event, arrived to the scene.

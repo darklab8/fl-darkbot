@@ -1,6 +1,6 @@
 # Forum tracking
 
-![forum tracking](/index_assets/forum_tracking.png)
+![forum tracking](/fl-darkbot/index_assets/forum_tracking.png)
 
 ### Thread tracking
 

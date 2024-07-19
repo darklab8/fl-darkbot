@@ -1,9 +1,9 @@
 # Alerts
 
-![](/index_assets/alert_example.png)
+![](/fl-darkbot/index_assets/alert_example.png)
 
 - `. alert` or `. alert --help` helps to find out all avilable alerts. Continue using `--help` for discovered sub commands, to find out all options.
-![](/index_assets/alerts_commands.png)
+![](/fl-darkbot/index_assets/alerts_commands.png)
 
 ## Base alerts
 
@@ -20,7 +20,7 @@ enable, disable, status sub commands are similar.
 
 ### Base Health decreasal
 
-![](/index_assets/alerts_base1_commands.png)
+![](/fl-darkbot/index_assets/alerts_base1_commands.png)
 
 - you can turn on `. alert base_health_is_decreasing enable` command for making alert if base loses its health.
 

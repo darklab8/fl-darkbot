@@ -1,6 +1,6 @@
 # Player tracking
 
-![player view](/index_assets/player_render2.png)
+![player view](/fl-darkbot/index_assets/player_render2.png)
 
 ### Rules
 

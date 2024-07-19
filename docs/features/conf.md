@@ -2,4 +2,4 @@
 
 you can query the config in one go with `. conf` command
 
-![conf](/index_assets/conf.png)
+![conf](/fl-darkbot/index_assets/conf.png)
