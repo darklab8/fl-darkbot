@@ -3,7 +3,7 @@
 ### Msg splitting
 
 - bot is smart enough to split content between multiple discord msgs if it can't fit into one
-![msg split](https://raw.githubusercontent.com/darklab8/fl-darkbot/master/docs/index_assets/bases_split_msgs.png)
+![msg split](/index_assets/bases_split_msgs.png)
 
 ### Check commands usage
 
