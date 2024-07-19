@@ -1,7 +1,7 @@
 version: "3"
 
 env:
-  tag_version: v1.5.3
+  tag_version: v1.6.1
   DOCKER_HOST: ssh://root@darklab:22
 
 tasks:

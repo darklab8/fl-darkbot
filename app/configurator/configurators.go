@@ -49,7 +49,10 @@ type Configurators struct {
 func NewConfigugurators(dbpath types.Dbpath) *Configurators {
 
 	configur := NewConfigurator(dbpath)
+	return NewConfiguratorsFromConfigur(configur)
+}
 
+func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 	return &Configurators{
 		Configur: configur,
 		Channels: NewConfiguratorChannel(configur),

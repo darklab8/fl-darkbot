@@ -136,6 +136,11 @@ func (c ConfiguratorTags[T]) TagsList(channelID types.DiscordChannelID) ([]types
 	return tags, result.Error
 }
 
+func (c ConfiguratorTags[T]) TagsList2(channelID types.DiscordChannelID) []types.Tag {
+	tags, _ := c.TagsList(channelID)
+	return tags
+}
+
 func (c ConfiguratorTags[T]) TagsClear(channelID types.DiscordChannelID) error {
 	tags := []T{}
 	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)

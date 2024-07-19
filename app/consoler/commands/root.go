@@ -2,6 +2,8 @@ package commands
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
 	"github.com/darklab8/fl-darkbot/app/configurator/models"
@@ -46,7 +48,7 @@ func CreateConsoler(
 		cmdgroup.Command(settings.Env.ConsolerPrefix),
 		cmdgroup.ShortDesc("Welcome to darkbot!"),
 	)
-	root := newRootCommands(&rootGroup)
+	root := newRootCommands(&rootGroup, configur)
 
 	baseGroup := root.GetChild(
 		root.CurrentCmd,
@@ -266,16 +268,23 @@ func CreateConsoler(
 type rootCommands struct {
 	*cmdgroup.CmdGroup
 	channels configurator.ConfiguratorChannel
+	*configurator.Configurators
 }
 
 func newRootCommands(
 	cmdgroup *cmdgroup.CmdGroup,
+	configur *configurator.Configurator,
 ) *rootCommands {
-	r := &rootCommands{CmdGroup: cmdgroup}
+	r := &rootCommands{
+		CmdGroup:      cmdgroup,
+		Configurators: configurator.NewConfiguratorsFromConfigur(configur),
+	}
 	r.channels = configurator.NewConfiguratorChannel(r.Configurator)
+
 	r.CreatePing()
 	r.CreateConnect()
 	r.CreateDisconnect()
+	r.CreateConfig()
 	return r
 }
 
@@ -322,4 +331,93 @@ func (r *rootCommands) CreateDisconnect() {
 		},
 	}
 	r.CurrentCmd.AddCommand(command)
+}
+
+func (r *rootCommands) CreateConfig() {
+	command := &cobra.Command{
+		Use:   "conf",
+		Short: "See all your configs",
+		Run: func(cmd *cobra.Command, args []string) {
+			var sb strings.Builder
+
+			channel_id := r.GetChannelID()
+
+			is_enabled_channel, _ := r.channels.IsEnabled(channel_id)
+			sb.WriteString(fmt.Sprintln("is channel connected = ", strconv.FormatBool(is_enabled_channel)))
+
+			if !is_enabled_channel {
+				printer.Println(cmd, sb.String())
+				return
+			}
+
+			// bases
+			sb.WriteString("\nBases:\n")
+			sb.WriteString(fmt.Sprintln("base tags = ", r.Bases.Tags.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("base order by = ", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
+			sb.WriteString("\n")
+
+			// players
+			sb.WriteString("\nPlayers:\n")
+			sb.WriteString(fmt.Sprintln("regions tags = ", r.Players.Regions.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("systems tags = ", r.Players.Systems.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("friends tags = ", r.Players.Friends.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("enemies tags = ", r.Players.Enemies.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("events tags = ", r.Players.Events.TagsList2(channel_id)))
+			sb.WriteString("\n")
+
+			// forum
+			sb.WriteString("\nForum:\n")
+			sb.WriteString(fmt.Sprintln("subforum watch tags = ", r.Forum.Subforum.Watch.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("subforum ignore tags = ", r.Forum.Subforum.Ignore.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("thread watch tags = ", r.Forum.Thread.Watch.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("thread ignore tags = ", r.Forum.Thread.Ignore.TagsList2(channel_id)))
+			sb.WriteString("\n")
+
+			// alerts
+			sb.WriteString("\nAlerts:\n")
+
+			sb.WriteString(fmt.Sprintln("BaseHealthIsDecreasing = ", GetStatus(r.Alerts.BaseHealthIsDecreasing, channel_id)))
+			sb.WriteString(fmt.Sprintln("BaseHealthLowerThan = ", GetStatus(r.Alerts.BaseHealthLowerThan, channel_id)))
+			sb.WriteString(fmt.Sprintln("BaseIsUnderAttack = ", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
+			sb.WriteString(fmt.Sprintln("EnemiesGreaterThan = ", GetStatus(r.Alerts.EnemiesGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintln("FriendsGreaterThan = ", GetStatus(r.Alerts.FriendsGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintln("NeutralsGreaterThan = ", GetStatus(r.Alerts.NeutralsGreaterThan, channel_id)))
+
+			value, err := r.Alerts.PingMessage.Status(channel_id)
+			if err != nil {
+				switch err.(type) {
+				case configurator.ErrorZeroAffectedRows:
+					sb.WriteString(fmt.Sprintln("ping message = Server Owner"))
+				default:
+					sb.WriteString(fmt.Sprintln("ping message = ", err.Error()))
+				}
+			} else {
+				sb.WriteString(fmt.Sprintln("ping message = ", fmt.Sprintf("`%s`", value)))
+			}
+			sb.WriteString("\n")
+
+			// return all
+			printer.Println(cmd, sb.String())
+		},
+	}
+	r.CurrentCmd.AddCommand(command)
+}
+
+type ConfStatus[T any] interface {
+	Status(channelID types.DiscordChannelID) (T, error)
+}
+
+func GetStatus[T any](r ConfStatus[T], channelID types.DiscordChannelID) string {
+	value, err := r.Status(channelID)
+
+	if err != nil {
+		switch err.(type) {
+		case configurator.ErrorZeroAffectedRows:
+			return "not set"
+		default:
+			return err.Error()
+		}
+	}
+
+	return fmt.Sprint(value)
 }
