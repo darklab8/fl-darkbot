@@ -1,6 +1,7 @@
 site_name: Darkbot
 site_description: discord bot for Freelancer Discovery
 docs_dir: docs
+site_url: http://example.org/fl-darkbot/
 theme:
     name: readthedocs
     highlightjs: true
