@@ -102,3 +102,9 @@ The project has 5 package parts parts:
 - Freelancer Discovery API provided by [Alex](https://github.com/dsyalex) as a way to deliver info from Flhook to the bot
 - [Pobbot](https://github.com/dr-lameos/Pobbot) originally made by dr.lameos sparkled this project
 - Forum tracking is inspired by Biqqles project [forumlancer](https://github.com/biqqles/forumlancer)
+
+# License
+
+fl-darkbot was originally created by Andrei Novoselov (aka darkwind, aka dd84ai)
+The work is released under AGPL, free to modify, copy and etc. as long as you keep code open source and mentioned original author.
+See [LICENSE](./LICENSE) file for details.
