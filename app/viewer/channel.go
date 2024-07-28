@@ -66,7 +66,7 @@ func (v *ChannelView) RenderViews() {
 // Send if not present.
 func (v ChannelView) Send() {
 	for view_num, view := range v.views {
-		timeit.NewTimerMFL(fmt.Sprintf("view.Send view_num=%d, view=%v", view_num, view), func(m *timeit.Timer) {
+		timeit.NewTimerMFL(fmt.Sprintf("view.Send view_num=%d, view=%v", view_num, view), func() {
 			view.Send()
 		}, logus.ChannelID(v.ChannelID))
 	}

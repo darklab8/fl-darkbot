@@ -45,7 +45,7 @@ func (d *Discorder) SengMessage(channelID types.DiscordChannelID, content string
 
 func (d *Discorder) EditMessage(channelID types.DiscordChannelID, messageID types.DiscordMessageID, content string) error {
 	var err error
-	timeit.NewTimerMFL(fmt.Sprintf("Discorder.EditMessage content=%s", content), func(m *timeit.Timer) {
+	timeit.NewTimerMFL(fmt.Sprintf("Discorder.EditMessage content=%s", content), func() {
 		msg, err := d.dg.ChannelMessageEdit(string(channelID), string(messageID), content)
 		logus.Log.CheckWarn(err, "failed editing message in discorder", logus.ChannelID(channelID))
 		logus.Log.Debug(fmt.Sprintf("Discorder.EditMessage.msg=%v", msg))

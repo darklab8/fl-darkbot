@@ -61,7 +61,7 @@ func (v *Viewer) Update() {
 	// For each channel
 	allChannelsTime := timeit.NewTimer("all channels")
 	for _, channelID := range channelIDs {
-		timeit.NewTimerF(func(m *timeit.Timer) {
+		timeit.NewTimerF(func() {
 			task := NewRefreshChannelTask(v.api, channelID, v.delays.betweenChannels)
 			// task.RunTask(worker_types.WorkerID(0))
 			v.workers.DelayTask(task)

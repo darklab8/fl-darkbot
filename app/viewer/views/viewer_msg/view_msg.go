@@ -127,9 +127,9 @@ func (v *Msg) Render() string {
 }
 
 func (v *Msg) Send(api *apis.API) {
-	timeit.NewTimerMF(fmt.Sprintf("Msg.Send() msg=%v", v), func(m *timeit.Timer) {
+	timeit.NewTimerMF(fmt.Sprintf("Msg.Send() msg=%v", v), func() {
 
-		timeit.NewTimerMFL(fmt.Sprintf("msg.Send DeleteMessage. Msg=%v", *v), func(m *timeit.Timer) {
+		timeit.NewTimerMFL(fmt.Sprintf("msg.Send DeleteMessage. Msg=%v", *v), func() {
 			if len(v.records) == 0 && v.messageID != "" {
 				api.Discorder.DeleteMessage(v.channelID, v.messageID)
 			}
@@ -143,20 +143,20 @@ func (v *Msg) Send(api *apis.API) {
 		content := v.Render()
 		time_render.Close()
 
-		timeit.NewTimerMF(fmt.Sprintf("Msg.Send().SecondSection msg=%v", v), func(m *timeit.Timer) {
+		timeit.NewTimerMF(fmt.Sprintf("Msg.Send().SecondSection msg=%v", v), func() {
 			var err error
 			if v.messageID == "" {
-				timeit.NewTimerMF(fmt.Sprintf("Msg.Send().SendMessage + ChecTooLongMsg msg=%v", v), func(m *timeit.Timer) {
+				timeit.NewTimerMF(fmt.Sprintf("Msg.Send().SendMessage + ChecTooLongMsg msg=%v", v), func() {
 					err = api.Discorder.SengMessage(v.channelID, content)
 					logus.Log.CheckWarn(err, "unable to send msg", logus.ChannelID(v.channelID))
 					CheckTooLongMsgErr(err, api, v.channelID, v.viewEnumeratedID, ActSend, "")
 				})
 			} else {
-				timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage + ChecTooLongMsg msg=%v", v), func(m *timeit.Timer) {
-					timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage.only msg=%v", v), func(m *timeit.Timer) {
+				timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage + ChecTooLongMsg msg=%v", v), func() {
+					timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage.only msg=%v", v), func() {
 						err = api.Discorder.EditMessage(v.channelID, v.messageID, content)
 					})
-					timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage.CheckTooLongMsgErr msg=%v", v), func(m *timeit.Timer) {
+					timeit.NewTimerMF(fmt.Sprintf("Msg.Send().EditMessage.CheckTooLongMsgErr msg=%v", v), func() {
 						logus.Log.CheckWarn(err, "unable to edit msg", logus.ChannelID(v.channelID))
 						CheckTooLongMsgErr(err, api, v.channelID, v.viewEnumeratedID, ActEdit, v.messageID)
 					})
@@ -167,7 +167,7 @@ func (v *Msg) Send(api *apis.API) {
 }
 
 func CheckTooLongMsgErr(err error, api *apis.API, channeID types.DiscordChannelID, header types.ViewEnumeratedID, action MsgAction, MessageID types.DiscordMessageID) {
-	timeit.NewTimerMFL(fmt.Sprintf("CheckTooLongMsgErr. header=%s, messageID=%s, action=%d", header, MessageID, action), func(m *timeit.Timer) {
+	timeit.NewTimerMFL(fmt.Sprintf("CheckTooLongMsgErr. header=%s, messageID=%s, action=%d", header, MessageID, action), func() {
 
 		if err == nil {
 			return
