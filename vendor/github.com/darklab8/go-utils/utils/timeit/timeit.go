@@ -12,8 +12,6 @@ type Timer struct {
 	msg         string
 	ops         []typelog.LogType
 	timeStarted time.Time
-
-	ResultErr error
 }
 
 type TimeOption func(m *Timer)
@@ -49,17 +47,17 @@ func (m *Timer) Close() {
 	utils_logus.Log.Debug(fmt.Sprintf("time_measure %v | %s", time.Since(m.timeStarted), m.msg), m.ops...)
 }
 
-func NewTimerF(callback func(m *Timer), opts ...TimeOption) *Timer {
+func NewTimerF(callback func(), opts ...TimeOption) *Timer {
 	m := NewTimerMain(opts...)
 	defer m.Close()
-	callback(m)
+	callback()
 	return m
 }
 
-func NewTimerMF(msg string, callback func(m *Timer), opts ...TimeOption) *Timer {
+func NewTimerMF(msg string, callback func(), opts ...TimeOption) *Timer {
 	return NewTimerF(callback, append([]TimeOption{WithMsg(msg)}, opts...)...)
 }
 
-func NewTimerMFL(msg string, callback func(m *Timer), opts ...typelog.LogType) *Timer {
+func NewTimerMFL(msg string, callback func(), opts ...typelog.LogType) *Timer {
 	return NewTimerMF(msg, callback, WithLogs(opts...))
 }
