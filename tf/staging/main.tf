@@ -4,7 +4,7 @@ module "server" {
 }
 
 data "external" "secrets_darkbot" {
-  program = ["pass", "api/personal/terraform/hetzner/darkbot/staging"]
+  program = ["pass", "personal/terraform/hetzner/darkbot/staging"]
 }
 
 locals {

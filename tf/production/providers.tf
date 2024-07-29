@@ -20,11 +20,11 @@ terraform {
 }
 
 data "external" "secrets_cloudflare" {
-  program = ["pass", "api/personal/terraform/cloudflare/dd84ai"]
+  program = ["pass", "personal/terraform/cloudflare/dd84ai"]
 }
 
 data "external" "secrets_hetzner" {
-  program = ["pass", "api/personal/terraform/hetzner/production"]
+  program = ["pass", "personal/terraform/hetzner/production"]
 }
 
 provider "hcloud" {
