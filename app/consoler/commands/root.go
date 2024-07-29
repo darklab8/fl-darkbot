@@ -343,7 +343,7 @@ func (r *rootCommands) CreateConfig() {
 			channel_id := r.GetChannelID()
 
 			is_enabled_channel, _ := r.channels.IsEnabled(channel_id)
-			sb.WriteString(fmt.Sprintln("is channel connected = ", strconv.FormatBool(is_enabled_channel)))
+			sb.WriteString(fmt.Sprintln("is channel ", channel_id, "connected = ", strconv.FormatBool(is_enabled_channel)))
 
 			if !is_enabled_channel {
 				printer.Println(cmd, sb.String())
@@ -352,25 +352,25 @@ func (r *rootCommands) CreateConfig() {
 
 			// bases
 			sb.WriteString("\nBases:\n")
-			sb.WriteString(fmt.Sprintln("base tags = ", r.Bases.Tags.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("base tags = ", PrintList(r.Bases.Tags.TagsList2(channel_id))))
 			sb.WriteString(fmt.Sprintln("base order_by = ", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
 			sb.WriteString("\n")
 
 			// players
 			sb.WriteString("\nPlayers:\n")
-			sb.WriteString(fmt.Sprintln("player region = ", r.Players.Regions.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("player system = ", r.Players.Systems.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("player friend = ", r.Players.Friends.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("player enemy = ", r.Players.Enemies.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("player event = ", r.Players.Events.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("player region = ", PrintList(r.Players.Regions.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintln("player system = ", PrintList(r.Players.Systems.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintln("player friend = ", PrintList(r.Players.Friends.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintln("player enemy = ", PrintList(r.Players.Enemies.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintln("player event = ", PrintList(r.Players.Events.TagsList2(channel_id))))
 			sb.WriteString("\n")
 
 			// forum
 			sb.WriteString("\nForum:\n")
-			sb.WriteString(fmt.Sprintln("forum subforum watch = ", r.Forum.Subforum.Watch.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("forum subforum ignore = ", r.Forum.Subforum.Ignore.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("forum thread watch = ", r.Forum.Thread.Watch.TagsList2(channel_id)))
-			sb.WriteString(fmt.Sprintln("forum thread ignore = ", r.Forum.Thread.Ignore.TagsList2(channel_id)))
+			sb.WriteString(fmt.Sprintln("forum subforum watch = ", PrintList(r.Forum.Subforum.Watch.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintln("forum subforum ignore = ", PrintList(r.Forum.Subforum.Ignore.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintln("forum thread watch = ", PrintList(r.Forum.Thread.Watch.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintln("forum thread ignore = ", PrintList(r.Forum.Thread.Ignore.TagsList2(channel_id))))
 			sb.WriteString("\n")
 
 			// alerts
@@ -405,6 +405,21 @@ func (r *rootCommands) CreateConfig() {
 
 type ConfStatus[T any] interface {
 	Status(channelID types.DiscordChannelID) (T, error)
+}
+
+func PrintList[T any](smth []T) string {
+	var sb strings.Builder
+
+	sb.WriteString("[ ")
+	for index, obj := range smth {
+		sb.WriteString(fmt.Sprintf("%v", obj))
+
+		if index != len(smth)-1 {
+			sb.WriteString(", ")
+		}
+	}
+	sb.WriteString(" ]")
+	return sb.String()
 }
 
 func GetStatus[T any](r ConfStatus[T], channelID types.DiscordChannelID) string {
