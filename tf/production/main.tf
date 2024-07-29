@@ -7,10 +7,6 @@ module "server" {
   name   = "node-arm"
 }
 
-data "aws_ssm_parameter" "darkbot" {
-  name = "/terraform/hetzner/darkbot/production"
-}
-
 data "external" "secrets_darkbot" {
   program = ["pass", "api/personal/terraform/hetzner/darkbot/production"]
 }

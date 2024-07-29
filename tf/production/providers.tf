@@ -19,16 +19,20 @@ terraform {
   }
 }
 
-data "external" "secrets_providers" {
-  program = ["bash", "${path.module}/secrets_providers.sh"]
+data "external" "secrets_cloudflare" {
+  program = ["pass", "api/personal/terraform/cloudflare/dd84ai"]
+}
+
+data "external" "secrets_hetzner" {
+  program = ["pass", "api/personal/terraform/hetzner/production"]
 }
 
 provider "hcloud" {
-  token = data.external.secrets_providers.result["hetzner_token"]
+  token = data.external.secrets_hetzner.result["token"]
 }
 
 provider "cloudflare" {
-  api_token = data.external.secrets_providers.result["cloudflare_token"]
+  api_token = data.external.secrets_cloudflare.result["token"]
 }
 
 provider "kubernetes" {
