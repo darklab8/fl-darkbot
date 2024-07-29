@@ -224,7 +224,11 @@ func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_typ
 
 			purple_color := 10181046
 			embed.Color = purple_color
-			_, err := dg.ChannelMessageSendComplex(string(channel), &discordgo.MessageSend{Embeds: []*discordgo.MessageEmbed{embed}, Content: string(pingMessage)})
+			_, err := dg.ChannelMessageSendComplex(string(channel), &discordgo.MessageSend{Embeds: []*discordgo.MessageEmbed{embed}, Content: fmt.Sprintf("mail for %s", string(pingMessage))})
+			logus.Log.Debug("sent forumer msg",
+				logus.MsgContent(post_content),
+				logus.ChannelID(channel),
+			)
 			logus.Log.CheckError(err, "failed sending msg")
 			return nil
 		})

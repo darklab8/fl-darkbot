@@ -40,6 +40,17 @@ func ChannelID(value types.DiscordChannelID) typelog.LogType {
 	return typelog.String("channel_id", string(value))
 }
 
+func MsgContent(value string) typelog.LogType {
+	return typelog.String("content", ShortenedMsg(value))
+}
+
+func ShortenedMsg(msg string) string {
+	if len(msg) > 100 {
+		return msg[:100]
+	}
+	return msg
+}
+
 func ChannelIDs(value []types.DiscordChannelID) typelog.LogType {
 	return typelog.Any("channel_ids", value)
 }

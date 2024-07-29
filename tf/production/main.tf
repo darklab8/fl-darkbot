@@ -25,7 +25,8 @@ module "darkbot" {
   configurator_dbname = "production"
   consoler_prefix     = "."
   secrets             = local.secrets
-  tag_version         = "v1.6.4"
+  tag_version         = "v1.6.7"
   mode                = "docker"
   environment         = "production"
+  debug = true
 }

@@ -39,6 +39,10 @@ func NewClient() *Discorder {
 
 func (d *Discorder) SengMessage(channelID types.DiscordChannelID, content string) error {
 	_, err := d.dg.ChannelMessageSend(string(channelID), content)
+	logus.Log.Debug("sending msg to channe",
+		logus.MsgContent(content),
+		logus.ChannelID(channelID),
+	)
 	logus.Log.CheckWarn(err, "failed sending message in discorder", logus.ChannelID(channelID))
 	return err
 }
