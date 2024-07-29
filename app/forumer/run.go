@@ -224,12 +224,29 @@ func (v *Forumer) TrySendMsg(channel types.DiscordChannelID, new_post *forum_typ
 
 			purple_color := 10181046
 			embed.Color = purple_color
+
 			_, err := dg.ChannelMessageSendComplex(string(channel), &discordgo.MessageSend{Embeds: []*discordgo.MessageEmbed{embed}, Content: fmt.Sprintf("mail for %s", string(pingMessage))})
+
+			// helpful to uncover problems with Embeds sending.
+			// There was issue with insufficient granted permission to bot once. Inviting bot as admin helped to fix the issue.
+			// _, err := dg.ChannelMessageSendEmbed(string(channel), embed)
+
+			// if u will wish simpler msg
+			// var normal_msg strings.Builder
+			// normal_msg.WriteString(fmt.Sprintf("%s\n", string(pingMessage)))
+			// normal_msg.WriteString(fmt.Sprintf("[%s](%s)\n", string(new_post.ThreadFullName), string(new_post.PostPermamentLink)))
+			// normal_msg.WriteString(content.String())
+			// normal_msg.WriteString(fmt.Sprintln("**Matched tags**: `", strings.Join(matched_tags, ", "), "`"))
+			// normal_msg.WriteString(fmt.Sprintln("**Timestamp**: `", string(new_post.LastUpdated), "`"))
+			// normal_msg.WriteString(fmt.Sprintln("**Subforums**: `", strings.Join(subforums, " / "), "`"))
+			// _, err := dg.ChannelMessageSend(string(channel), normal_msg.String())
+
 			logus.Log.Debug("sent forumer msg",
 				logus.MsgContent(post_content),
 				logus.ChannelID(channel),
 			)
-			logus.Log.CheckError(err, "failed sending msg")
+			logus.Log.CheckError(err, "failed sending msg", logus.ChannelID(channel))
+
 			return nil
 		})
 }
