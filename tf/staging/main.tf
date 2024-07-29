@@ -3,12 +3,12 @@ module "server" {
   name   = "node-arm"
 }
 
-data "aws_ssm_parameter" "darkbot" {
-  name = "/terraform/hetzner/darkbot/staging"
+data "external" "secrets_darkbot" {
+  program = ["pass", "api/personal/terraform/hetzner/darkbot/staging"]
 }
 
 locals {
-  secrets = nonsensitive(jsondecode(data.aws_ssm_parameter.darkbot.value))
+  secrets = nonsensitive(data.external.secrets_darkbot.result)
 }
 
 provider "docker" {

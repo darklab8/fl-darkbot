@@ -22,16 +22,16 @@ terraform {
   }
 }
 
-data "external" "pass_storage" {
-  program = ["bash", "${path.module}/pass_storage.sh"]
+data "external" "secrets_providers" {
+  program = ["bash", "${path.module}/secrets_providers.sh"]
 }
 
 provider "hcloud" {
-  token = data.external.pass_storage.result["hetzner_token"]
+  token = data.external.secrets_providers.result["hetzner_token"]
 }
 
 provider "cloudflare" {
-  api_token = data.external.pass_storage.result["cloudflare_token"]
+  api_token = data.external.secrets_providers.result["cloudflare_token"]
 }
 
 provider "kubernetes" {

@@ -11,8 +11,12 @@ data "aws_ssm_parameter" "darkbot" {
   name = "/terraform/hetzner/darkbot/production"
 }
 
+data "external" "secrets_darkbot" {
+  program = ["pass", "api/personal/terraform/hetzner/darkbot/production"]
+}
+
 locals {
-  secrets = nonsensitive(jsondecode(data.aws_ssm_parameter.darkbot.value))
+  secrets = nonsensitive(data.external.secrets_darkbot.result)
 }
 
 provider "docker" {
