@@ -19,19 +19,16 @@ terraform {
   }
 }
 
-data "aws_ssm_parameter" "hetzner" {
-  name = "/terraform/hetzner/production"
-}
-provider "hcloud" {
-  token = data.aws_ssm_parameter.hetzner.value
+data "external" "pass_storage" {
+  program = ["bash", "${path.module}/pass_storage.sh"]
 }
 
-data "aws_ssm_parameter" "cloudflare_key" {
-  name = "/terraform/cloudflare/dd84ai"
+provider "hcloud" {
+  token = data.external.pass_storage.result["hetzner_token"]
 }
 
 provider "cloudflare" {
-  api_token = data.aws_ssm_parameter.cloudflare_key.value
+  api_token = data.external.pass_storage.result["cloudflare_token"]
 }
 
 provider "kubernetes" {
