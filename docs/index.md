@@ -21,7 +21,7 @@
 
 # How to get started
 
-- invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=207952&scope=bot)
+- invite both to server [by link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
 - You must be Server owner or having `bot_controller` role in order to command the bot.
 - add to some channel by writing `. connect` (if u wish to disconnect bot from channel, write `.disconnect`)
     - ensure you use bot on dedicated channel created for it. It automatically erases all not related msgs to bot operation after some time.
@@ -39,16 +39,19 @@ Continue with checking tabs at the left, regarding each feature details.
 
 # Permissions for running
 
-- Bot expects having sufficient permissions for its working, which is seeing the channel it works in, writing, editing, deleting msgs and reading msg history. [The default link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=207952&scope=bot) configured for permissions that should be enough in theory:
-    - Read Messages
-    - Send Messages
-    - Manage Messages
-    - Read Message History
-    - Mention everyone here and all roles
-    - Manage channels (Probably not needed permission)
-    - Add reactions (Just added for future if ever will be needed)
+- By default it is offered running by [admin invite link](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot). That ensures both has sufficient permissions for sure.
 
-- If default inviting link is not good enough, [use invite link as admin](https://discord.com/api/oauth2/authorize?client_id=838460303581904949&permissions=8&scope=bot)
+- If you don't want to run as admin, then you need to use less permissive invite, like this one offered below:
+    - Bot expects having sufficient permissions for its working, which is seeing the channel it works in, writing, editing, deleting msgs and reading msg history. [Here is non admin inviting link](https://discord.com/oauth2/authorize?client_id=838460303581904949&permissions=564034433186896&integration_type=0&scope=bot) configured for permissions that should be enough in theory:
+        - Read Messages
+        - Send Messages
+        - Manage Messages
+        - Read Message History
+        - Mention everyone here and all roles
+        - Embed links (probably super necessay for sending forum msgs)
+        - Manage channels (Probably not needed permission)
+        - Add reactions (Just added for future if ever will be needed)
+    - WARN: there is known issue with non admin link potentially having problem to send embedded message for forum tracking features. Ensure u granted plentiful of all possible permissions to be able sending embeds/msgs in channel.
 
 # Development specific stuff
 
