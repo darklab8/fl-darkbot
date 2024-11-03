@@ -1,4 +1,4 @@
-FROM golang:1.22-bullseye as build
+FROM golang:1.22-bullseye as dependencies
 
 RUN apt update
 RUN apt install -y build-essential
@@ -10,10 +10,13 @@ WORKDIR /code
 COPY go.mod go.sum ./
 RUN go mod download -x
 
+FROM dependencies as build
+
 RUN mkdir data
 COPY main.go ./
 COPY app app
-RUN go build -v -o main main.go
+ENV GOCACHE=/root/.cache/go-build
+RUN --mount=type=cache,target="/root/.cache/go-build" go build -v -o main main.go
 
 FROM debian:11.6-slim as runner
 WORKDIR /code
