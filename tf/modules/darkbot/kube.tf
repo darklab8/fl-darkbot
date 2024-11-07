@@ -17,19 +17,19 @@ resource "kubernetes_pod_v1" "test" {
   }
 
   spec {
-    affinity {
-      node_affinity {
-        required_during_scheduling_ignored_during_execution {
-          node_selector_term {
-            match_expressions {
-              key      = "node"
-              operator = "In"
-              values   = ["arm"]
-            }
-          }
-        }
-      }
-    }
+    # affinity {
+    #   node_affinity {
+    #     required_during_scheduling_ignored_during_execution {
+    #       node_selector_term {
+    #         match_expressions {
+    #           key      = "node"
+    #           operator = "In"
+    #           values   = ["arm"]
+    #         }
+    #       }
+    #     }
+    #   }
+    # }
 
     restart_policy = "Always"
     container {

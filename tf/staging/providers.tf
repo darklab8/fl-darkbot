@@ -40,5 +40,5 @@ provider "cloudflare" {
 
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "darklab"
+  config_context = "darkbot-context"
 }

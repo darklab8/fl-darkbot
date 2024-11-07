@@ -24,6 +24,7 @@ resource "docker_container" "darkbot" {
   lifecycle {
     ignore_changes = [
       memory_swap,
+      network_mode,
     ]
   }
 }

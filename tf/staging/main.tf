@@ -1,6 +1,6 @@
 module "server" {
   source = "../../../infra/tf/modules/hetzner_server/data"
-  name   = "node-arm"
+  name   = "node-darkbot"
 }
 
 data "external" "secrets_darkbot" {
