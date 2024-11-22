@@ -39,14 +39,15 @@ func (t *tagCommands) CreateTagAdd() {
 				return
 			}
 
-			err := t.cfgTags.TagsAdd(t.GetChannelID(), types.Tag(strings.Join(args, " ")))
+			tags := types.Tag(strings.Join(args, " "))
+			err := t.cfgTags.TagsAdd(t.GetChannelID(), tags)
 			if err != nil {
 				printer.Println(cmd, "ERR msg="+err.Error())
 				return
 			}
 			logus.Log.Debug("CreateTagAdd", logus.Args(args))
 
-			printer.Println(cmd, "OK tags are added")
+			printer.Println(cmd, fmt.Sprintf("OK tags are added\n```\n%#v\n```\n", tags))
 		},
 	}
 	t.CurrentCmd.AddCommand(command)

@@ -351,37 +351,37 @@ func (r *rootCommands) CreateConfig() {
 			}
 
 			// bases
-			sb.WriteString("\nBases:\n")
-			sb.WriteString(fmt.Sprintln("base tags = ", PrintList(r.Bases.Tags.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("base order_by = ", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
-			sb.WriteString("\n")
+			sb.WriteString("Bases:\n```\n")
+			sb.WriteString(fmt.Sprintf("base tags = %#v\n", PrintList(r.Bases.Tags.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("base order_by = %#v\n", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
+			sb.WriteString("\n```\n")
 
 			// players
-			sb.WriteString("\nPlayers:\n")
-			sb.WriteString(fmt.Sprintln("player region = ", PrintList(r.Players.Regions.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("player system = ", PrintList(r.Players.Systems.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("player friend = ", PrintList(r.Players.Friends.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("player enemy = ", PrintList(r.Players.Enemies.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("player event = ", PrintList(r.Players.Events.TagsList2(channel_id))))
-			sb.WriteString("\n")
+			sb.WriteString("Players:\n```\n")
+			sb.WriteString(fmt.Sprintf("player region = %#v\n", PrintList(r.Players.Regions.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("player system = %#v\n", PrintList(r.Players.Systems.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("player friend = %#v\n", PrintList(r.Players.Friends.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("player enemy = %#v\n", PrintList(r.Players.Enemies.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("player event = %#v\n", PrintList(r.Players.Events.TagsList2(channel_id))))
+			sb.WriteString("\n```\n")
 
 			// forum
-			sb.WriteString("\nForum:\n")
-			sb.WriteString(fmt.Sprintln("forum subforum watch = ", PrintList(r.Forum.Subforum.Watch.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("forum subforum ignore = ", PrintList(r.Forum.Subforum.Ignore.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("forum thread watch = ", PrintList(r.Forum.Thread.Watch.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintln("forum thread ignore = ", PrintList(r.Forum.Thread.Ignore.TagsList2(channel_id))))
-			sb.WriteString("\n")
+			sb.WriteString("Forum:\n```\n")
+			sb.WriteString(fmt.Sprintf("forum subforum watch = %#v\n", PrintList(r.Forum.Subforum.Watch.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("forum subforum ignore = %#v\n", PrintList(r.Forum.Subforum.Ignore.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("forum thread watch = %#v\n", PrintList(r.Forum.Thread.Watch.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("forum thread ignore = %#v\n", PrintList(r.Forum.Thread.Ignore.TagsList2(channel_id))))
+			sb.WriteString("\n```\n")
 
 			// alerts
-			sb.WriteString("\nAlerts:\n")
+			sb.WriteString("Alerts:\n```\n")
 
-			sb.WriteString(fmt.Sprintln("alert base_health_is_decreasing = ", GetStatus(r.Alerts.BaseHealthIsDecreasing, channel_id)))
-			sb.WriteString(fmt.Sprintln("alert base_health_is_lower_than = ", GetStatus(r.Alerts.BaseHealthLowerThan, channel_id)))
-			sb.WriteString(fmt.Sprintln("alert base_is_under_attack = ", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
-			sb.WriteString(fmt.Sprintln("alert player_enemy_count_above = ", GetStatus(r.Alerts.EnemiesGreaterThan, channel_id)))
-			sb.WriteString(fmt.Sprintln("alert player_friend_count_above = ", GetStatus(r.Alerts.FriendsGreaterThan, channel_id)))
-			sb.WriteString(fmt.Sprintln("alert player_neutral_count_above = ", GetStatus(r.Alerts.NeutralsGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert base_health_is_decreasing = %#v\n", GetStatus(r.Alerts.BaseHealthIsDecreasing, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert base_health_is_lower_than = %#v\n", GetStatus(r.Alerts.BaseHealthLowerThan, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert base_is_under_attack = %#v\n", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert player_enemy_count_above = %#v\n", GetStatus(r.Alerts.EnemiesGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert player_friend_count_above = %#v\n", GetStatus(r.Alerts.FriendsGreaterThan, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert player_neutral_count_above = %#v\n", GetStatus(r.Alerts.NeutralsGreaterThan, channel_id)))
 
 			value, err := r.Alerts.PingMessage.Status(channel_id)
 			if err != nil {
@@ -392,9 +392,9 @@ func (r *rootCommands) CreateConfig() {
 					sb.WriteString(fmt.Sprintln("alert ping_message = ", err.Error()))
 				}
 			} else {
-				sb.WriteString(fmt.Sprintln("alert ping_message = ", fmt.Sprintf("`%s`", value)))
+				sb.WriteString(fmt.Sprintf("alert ping_message = %#v\n", fmt.Sprintf("%s", value)))
 			}
-			sb.WriteString("\n")
+			sb.WriteString("\n```\n")
 
 			// return all
 			printer.Println(cmd, sb.String())
