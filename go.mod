@@ -6,7 +6,7 @@ require (
 	github.com/anaskhan96/soup v1.2.5
 	github.com/bwmarrin/discordgo v0.28.1
 	github.com/darklab8/go-typelog v0.6.1
-	github.com/darklab8/go-utils v0.18.1
+	github.com/darklab8/go-utils v0.21.0
 	github.com/pkg/profile v1.7.0
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
