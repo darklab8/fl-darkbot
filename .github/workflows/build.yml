@@ -1,0 +1,68 @@
+name: Build
+
+on:
+    workflow_dispatch:
+    push:
+      tags:
+        - "*"
+
+env:
+  DOCKER_HOST: ssh://root@darkbot
+        
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Task
+        run: |
+          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '^1.22.5'
+
+      - name: Find tags
+        id: branch_name
+        run: |
+          echo "SOURCE_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          echo "SOURCE_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      # SOURCE_NAME: The branch or the tag
+      # SOURCE_BRANCH: The branch or empty
+      # SOURCE_TAG: The tag or empty
+      - name: Echo tags
+        run: |
+          echo $SOURCE_NAME
+          echo $SOURCE_BRANCH
+          echo $SOURCE_TAG
+        env:
+          SOURCE_NAME: ${{ env.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ env.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ env.SOURCE_TAG }}
+      
+      - name: Docker login
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username darkwind8 --password-stdin
+
+      - name: Build image
+        run: docker build --tag darkwind8/darkbot:$SOURCE_TAG .
+      - name: Push image
+        run: |
+          docker push darkwind8/darkbot:$SOURCE_TAG
+          docker tag darkwind8/darkbot:$SOURCE_TAG darkwind8/darkbot:staging
+          docker push darkwind8/darkbot:staging
+
+      - name: Install redock
+        run: curl -L $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/darklab8/redock/releases/latest | sed "s/releases\/tag/releases\/download/")/redock-linux-amd64 -o /usr/local/bin/redock && chmod 777 /usr/local/bin/redock
+      
+      - name: Install ssh key
+        run: |
+          echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+
+      - name: Run redock
+        run: redock --ctr=darkbot-staging --strict_pull=true          
