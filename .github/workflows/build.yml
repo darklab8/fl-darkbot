@@ -47,6 +47,12 @@ jobs:
       - name: Docker login
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username darkwind8 --password-stdin
 
+      - name: Install ssh key
+        run: |
+          echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+
       - name: Build image
         run: docker build --tag darkwind8/darkbot:$SOURCE_NAME .
       - name: Push image
@@ -57,12 +63,7 @@ jobs:
 
       - name: Install redock
         run: curl -L $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/darklab8/redock/releases/latest | sed "s/releases\/tag/releases\/download/")/redock-linux-amd64 -o /usr/local/bin/redock && chmod 777 /usr/local/bin/redock
-      
-      - name: Install ssh key
-        run: |
-          echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          chmod 700 ~/.ssh
+
 
       - name: Run redock
         run: redock --ctr=darkbot-staging --strict_pull=true          
