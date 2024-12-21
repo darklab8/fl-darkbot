@@ -51,13 +51,12 @@ jobs:
         run: |
           mkdir ~/.ssh | true
           echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
-          echo <<EOT >> ~/.ssh/config
-           Host darkbot
-             HostName 95.217.237.232
-             User root
-             IdentityFile ~/.ssh/id_rsa
-             IdentitiesOnly yes
-          EOT
+          echo "Host darkbot" >> ~/.ssh/config
+          echo "    HostName 95.217.237.232" >> ~/.ssh/config
+          echo "    User root" >> ~/.ssh/config
+          echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+          echo "    IdentitiesOnly yes" >> ~/.ssh/config
+
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/*
 
