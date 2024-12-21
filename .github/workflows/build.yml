@@ -7,7 +7,7 @@ on:
         - "*"
 
 env:
-  DOCKER_HOST: ssh://root@95.217.237.232
+  DOCKER_HOST: ssh://root@darkbot
         
 jobs:
   test:
@@ -53,6 +53,13 @@ jobs:
           echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           chmod 700 ~/.ssh
+          echo <<EOT >> ~/.ssh/config
+           Host darkbot
+           HostName 95.217.237.232
+           User root
+           IdentityFile ~/.ssh/id_rsa
+           IdentitiesOnly yes
+          EOT
 
       - name: Build image
         run: docker build --tag darkwind8/darkbot:$SOURCE_NAME .
