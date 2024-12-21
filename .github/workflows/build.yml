@@ -48,11 +48,11 @@ jobs:
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username darkwind8 --password-stdin
 
       - name: Build image
-        run: docker build --tag darkwind8/darkbot:$SOURCE_TAG .
+        run: docker build --tag darkwind8/darkbot:$SOURCE_NAME .
       - name: Push image
         run: |
-          docker push darkwind8/darkbot:$SOURCE_TAG
-          docker tag darkwind8/darkbot:$SOURCE_TAG darkwind8/darkbot:staging
+          docker push darkwind8/darkbot:$SOURCE_NAME
+          docker tag darkwind8/darkbot:$SOURCE_NAME darkwind8/darkbot:staging
           docker push darkwind8/darkbot:staging
 
       - name: Install redock
