@@ -8,7 +8,7 @@ resource "docker_container" "darkbot" {
   count = var.mode == "docker" ? 1 : 0
 
   name  = "darkbot-${var.environment}"
-  image = docker_image.darkbot[0].image_id
+  image = docker_image.darkbot[0].name
 
   env = [for k, v in local.envs : "${k}=${v}"]
 
