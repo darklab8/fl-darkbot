@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -343,6 +344,8 @@ func (r *rootCommands) CreateConfig() {
 			channel_id := r.GetChannelID()
 
 			is_enabled_channel, _ := r.channels.IsEnabled(channel_id)
+
+			sb.WriteString(fmt.Sprintln("darkbot version: ", os.Getenv("BUILD_VERSION")))
 			sb.WriteString(fmt.Sprintln("is channel ", channel_id, "connected = ", strconv.FormatBool(is_enabled_channel)))
 
 			if !is_enabled_channel {

@@ -23,4 +23,6 @@ WORKDIR /code
 RUN mkdir data
 COPY --from=build /code/main main
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ARG BUILD_VERSION
+ENV BUILD_VERSION="${BUILD_VERSION}"
 CMD ./main run
