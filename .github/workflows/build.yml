@@ -24,25 +24,21 @@ jobs:
         with:
           go-version: '^1.22.5'
 
-      - name: Find tags
-        id: branch_name
-        run: |
-          echo "SOURCE_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo "SOURCE_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       # SOURCE_NAME: The branch or the tag
       # SOURCE_BRANCH: The branch or empty
       # SOURCE_TAG: The tag or empty
+      - name: Find tags
+        id: data
+        run: |
+          echo "BUILD_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+          echo "SOURCE_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+          echo "SOURCE_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+
       - name: Echo tags
         run: |
-          echo $SOURCE_NAME
-          echo $SOURCE_BRANCH
-          echo $SOURCE_TAG
-        env:
-          SOURCE_NAME: ${{ env.SOURCE_NAME }}
-          SOURCE_BRANCH: ${{ env.SOURCE_BRANCH }}
-          SOURCE_TAG: ${{ env.SOURCE_TAG }}
+          echo ${{ steps.data.outputs.BUILD_VERSION }}
       
       - name: Docker login
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username darkwind8 --password-stdin
@@ -62,20 +58,14 @@ jobs:
           ssh-keyscan -H darkbot >> ~/.ssh/known_hosts | true
 
       - name: Build image
-        env:
-          SOURCE_NAME: ${{ env.SOURCE_NAME }}
-        run: docker build --build-arg "BUILD_VERSION=$SOURCE_NAME" --tag darkwind8/darkbot:$SOURCE_NAME .
+        run: docker build --build-arg "BUILD_VERSION=${{ steps.data.outputs.BUILD_VERSION }}" --tag darkwind8/darkbot:${{ steps.data.outputs.BUILD_VERSION }} .
       - name: Push image
-        env:
-          SOURCE_NAME: ${{ env.SOURCE_NAME }}
         run: |
-          docker push darkwind8/darkbot:$SOURCE_NAME
-          docker tag darkwind8/darkbot:$SOURCE_NAME darkwind8/darkbot:staging
+          docker push darkwind8/darkbot:${{ steps.data.outputs.BUILD_VERSION }}
+          docker tag darkwind8/darkbot:${{ steps.data.outputs.BUILD_VERSION }} darkwind8/darkbot:staging
           docker push darkwind8/darkbot:staging      
       - name: Install arm64 redock at server (not amd64 in my case)
         run: ssh root@darkbot 'curl -L $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/darklab8/redock/releases/latest | sed "s/releases\/tag/releases\/download/")/redock-linux-arm64 -o /usr/local/bin/redock && chmod 777 /usr/local/bin/redock'
 
       - name: Run redock
-        env:
-          SOURCE_NAME: ${{ env.SOURCE_NAME }}
-        run: ssh root@darkbot 'redock --ctr=darkbot-staging --strict_pull=true --image_name=darkwind8/darkbot:$SOURCE_NAME'
+        run: ssh root@darkbot 'redock --ctr=darkbot-staging --strict_pull=true --image_name=darkwind8/darkbot:${{ steps.data.outputs.BUILD_VERSION }}'
