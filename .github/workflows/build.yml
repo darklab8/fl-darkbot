@@ -76,4 +76,6 @@ jobs:
         run: ssh root@darkbot 'curl -L $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/darklab8/redock/releases/latest | sed "s/releases\/tag/releases\/download/")/redock-linux-arm64 -o /usr/local/bin/redock && chmod 777 /usr/local/bin/redock'
 
       - name: Run redock
-        run: ssh root@darkbot 'redock --ctr=darkbot-staging --strict_pull=true'
+        env:
+          SOURCE_NAME: ${{ env.SOURCE_NAME }}
+        run: ssh root@darkbot 'redock --ctr=darkbot-staging --strict_pull=true --image_name=darkwind8/darkbot:$SOURCE_NAME'
