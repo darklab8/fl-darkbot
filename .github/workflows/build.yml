@@ -51,8 +51,6 @@ jobs:
         run: |
           mkdir ~/.ssh | true
           echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          chmod 700 ~/.ssh
           echo <<EOT >> ~/.ssh/config
            Host darkbot
            HostName 95.217.237.232
@@ -60,6 +58,8 @@ jobs:
            IdentityFile ~/.ssh/id_rsa
            IdentitiesOnly yes
           EOT
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/*
 
       - name: Build image
         run: docker build --tag darkwind8/darkbot:$SOURCE_NAME .
