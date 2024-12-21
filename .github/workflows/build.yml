@@ -51,14 +51,15 @@ jobs:
         run: |
           mkdir ~/.ssh | true
           echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
-          echo "Host darkbot" >> ~/.ssh/config
+          echo "Host darkbot" > ~/.ssh/config
           echo "    HostName 95.217.237.232" >> ~/.ssh/config
           echo "    User root" >> ~/.ssh/config
           echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
           echo "    IdentitiesOnly yes" >> ~/.ssh/config
-
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/*
+          ssh-keyscan -H 95.217.237.232 >> ~/.ssh/known_hosts | true
+          ssh-keyscan -H darkbot >> ~/.ssh/known_hosts | true
 
       - name: Build image
         run: docker build --tag darkwind8/darkbot:$SOURCE_NAME .
