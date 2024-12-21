@@ -7,7 +7,7 @@ on:
         - "*"
 
 env:
-  DOCKER_HOST: ssh://root@darkbot
+  DOCKER_HOST: ssh://root@95.217.237.232
         
 jobs:
   test:
