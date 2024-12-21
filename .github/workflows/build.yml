@@ -10,7 +10,7 @@ env:
   DOCKER_HOST: ssh://root@darkbot
         
 jobs:
-  test:
+  build:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
