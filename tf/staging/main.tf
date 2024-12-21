@@ -21,7 +21,7 @@ module "darkbot" {
   configurator_dbname = "staging"
   consoler_prefix     = ","
   secrets             = local.secrets
-  tag_version         = "staging"
+  tag_version         = "v1.6.6"
   debug               = false
   mode                = "docker"
   environment         = "staging"
