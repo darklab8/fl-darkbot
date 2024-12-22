@@ -4,7 +4,7 @@ module "ssh_key" {
 
 module "server" {
   source = "../../../infra/tf/modules/hetzner_server/data"
-  name   = "node-darkbot"
+  name   = "node-darklab"
 }
 
 data "external" "secrets_darkbot" {
@@ -26,7 +26,7 @@ module "darkbot" {
   consoler_prefix     = "."
   secrets             = local.secrets
   tag_version         = "production"
-  mode                = "docker"
+  mode                = "swarm"
   environment         = "production"
   debug               = false
 }

@@ -23,7 +23,7 @@ variable "mode" {
   type = string
 
   validation {
-    condition     = contains(["kubernetes", "docker"], var.mode)
+    condition     = contains(["kubernetes", "docker", "swarm"], var.mode)
     error_message = "Invalid mode. should be docker or kubernetes"
   }
 }

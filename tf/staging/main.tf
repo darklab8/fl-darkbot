@@ -1,6 +1,6 @@
 module "server" {
   source = "../../../infra/tf/modules/hetzner_server/data"
-  name   = "node-darkbot"
+  name   = "node-darklab"
 }
 
 data "external" "secrets_darkbot" {
@@ -16,6 +16,7 @@ provider "docker" {
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-i", "~/.ssh/id_rsa.darklab"]
 }
 
+# IF USING mode="docker"
 # limitation of `redock` usage with local terraform state. Repair container if necessary.
 # Have remote accessable terraform state if u wish it being resolvable from CI automatically / or utilize docker swarm hmm
 # cd tf/staging
@@ -30,6 +31,6 @@ module "darkbot" {
   secrets             = local.secrets
   tag_version         = "staging"
   debug               = false
-  mode                = "docker"
+  mode                = "swarm"
   environment         = "staging"
 }
