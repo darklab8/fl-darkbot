@@ -19,3 +19,4 @@ go.work*
 .vscode/enverant.json
 !.vscode/enverant.example.json
 !.vscode/settings.json
+*.backup
