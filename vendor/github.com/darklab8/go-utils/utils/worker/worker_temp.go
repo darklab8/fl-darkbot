@@ -2,8 +2,11 @@ package worker
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
+	"github.com/darklab8/go-typelog/examples/logus"
+	"github.com/darklab8/go-typelog/typelog"
 	"github.com/darklab8/go-utils/utils/worker/worker_logus"
 	"github.com/darklab8/go-utils/utils/worker/worker_types"
 )
@@ -102,6 +105,15 @@ func (j *TaskPool) launchWorker(worker_id worker_types.WorkerID, tasks <-chan IT
 
 		task_err := make(chan error, 1)
 		go func() {
+			defer func() {
+				if !j.allow_failed_tasks {
+					return
+				}
+				if r := recover(); r != nil {
+					logus.Log.Error("Recovered in doRunf", typelog.Any("panic", r))
+					task_err <- errors.New(fmt.Sprintln("task paniced", r))
+				}
+			}()
 			task_err <- task.RunTask(worker_id)
 		}()
 

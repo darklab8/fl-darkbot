@@ -1,23 +1,13 @@
 package enverant
 
 import (
-	"bufio"
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"regexp"
 	"strconv"
 
-	"github.com/darklab8/go-utils/utils/regexy"
+	"gopkg.in/yaml.v3"
 )
-
-var regexConfiglines *regexp.Regexp
-
-func init() {
-	regexy.InitRegexExpression(&regexConfiglines, `^(.*)(?:// .*)$`)
-}
 
 var EnverantDebug = os.Getenv("ENVERANT_PRINT_JSON") == "true"
 
@@ -28,32 +18,15 @@ func ReadJson(path string) map[string]interface{} {
 		fmt.Println("enverant path=", path)
 	}
 
-	file, err := os.Open(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		log.Println(err, "not found env file at path=", path)
 		return env_map
 	}
 
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	var cleaned_json bytes.Buffer
-
-	for scanner.Scan() {
-		input_line := scanner.Text()
-		match := regexConfiglines.FindStringSubmatch(input_line)
-		if len(match) > 0 {
-			input_line = match[1]
-		}
-		if EnverantDebug {
-			fmt.Println(input_line)
-		}
-		cleaned_json.WriteString(input_line)
-	}
-
-	err = json.Unmarshal(cleaned_json.Bytes(), &env_map)
+	err = yaml.Unmarshal(data, &env_map)
 	if err != nil {
-		panic(fmt.Sprintln(err, "failed to parse json with env vars"))
+		panic(fmt.Sprintln(err, "failed to parse yaml/json with env vars"))
 	}
 
 	for key, value := range env_map {
