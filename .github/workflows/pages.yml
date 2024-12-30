@@ -25,11 +25,9 @@ jobs:
           python3 --version
           python3 -m ensurepip
       - name: Install requirements.txt
-        run: >
-          pip install -r requirements.txt -c constraints.txt
+        run: pip install -r requirements.txt -c constraints.txt
       - name: Build docs
-        run: >
-          mkdocs build
+        run: mkdocs build
       - uses: actions/upload-pages-artifact@v1
         with:
           name: github-pages
