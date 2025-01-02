@@ -1,8 +1,3 @@
-module "server" {
-  source = "../../../infra/tf/modules/hetzner_server/data"
-  name   = "node-darklab"
-}
-
 data "external" "secrets_darkbot" {
   program = ["pass", "personal/terraform/hetzner/darkbot/staging"]
 }
@@ -12,7 +7,7 @@ locals {
 }
 
 provider "docker" {
-  host     = "ssh://root@${module.server.ipv4_address}:22"
+  host     = "ssh://root@${module.data_cluster.node_darklab.ipv4_address}:22"
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-i", "~/.ssh/id_rsa.darklab"]
 }
 
