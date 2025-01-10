@@ -130,3 +130,7 @@ tasks:
     cmds:
       - task: profile:render
       - task: profile:render2
+
+  kcl:build:
+    cmds:
+      - kcl kcls/build.k

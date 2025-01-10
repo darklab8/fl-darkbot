@@ -1,26 +1,21 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
 name: Test
-
-on:
+'on':
   push:
-    branches: ["master"]
+    branches:
+    - master
   schedule:
-    # every sunday
-    - cron: '0 10 1 * *'
-
+  - cron: '0 10 1 * *'
+  workflow_dispatch: {}
 jobs:
-  test:
+  job:
+    name: Test
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Install Taskfile
-        uses: darklab8/infra/.github/actions/install-taskfile@master
-
-      - name: Set up Go
-        uses: darklab8/infra/.github/actions/install-go@master
-  
-      - name: Test
-        run: task test
+    - name: Check out source repository
+      uses: actions/checkout@v3
+    - name: Install Go
+      uses: darklab8/infra/.github/actions/install-go@master
+    - name: Install Taskfile
+      uses: darklab8/infra/.github/actions/install-taskfile@master
+    - name: test
+      run: task test
