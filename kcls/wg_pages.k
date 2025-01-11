@@ -1,7 +1,5 @@
 import infra.kcls.models.github_workflow as gw
 import infra.kcls.common.github as ghc
-import infra.kcls.actions.install_go as go
-import infra.kcls.actions.install_taskfile as tf
 import infra.kcls.models.github_action as ga
 
 _workflow_name = "Pages"
