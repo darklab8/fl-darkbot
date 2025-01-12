@@ -69,3 +69,21 @@ func TestDoNotInputRepeatedTags(t *testing.T) {
 	})
 
 }
+
+func TestAddForumIgnore(t *testing.T) {
+	FixtureMigrator(func(dbname types.Dbpath) {
+		configur := FixtureConfigurator(dbname)
+		cg := NewConfiguratorForumIgnore(configur)
+
+		ConfiguratorChannel{Configurator: configur}.Add("c1")
+		cg.TagsAdd("c1", []types.Tag{"t1", "t2"}...)
+
+		tags, _ := cg.TagsList("c1")
+		assert.Len(t, tags, 2)
+
+		watch_cfg := NewConfiguratorForumWatch(configur)
+		watch_tags, _ := watch_cfg.TagsList("c1")
+		assert.Len(t, watch_tags, 0)
+	})
+
+}

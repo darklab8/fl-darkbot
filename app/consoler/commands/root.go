@@ -103,7 +103,7 @@ func CreateConsoler(
 			cmdgroup.Command("ignore"),
 			cmdgroup.ShortDesc("Ignore commands"),
 		),
-		configurator.NewConfiguratorForumWatch(configur),
+		configurator.NewConfiguratorForumIgnore(configur),
 		configurator.NewConfiguratorChannel(configur),
 	)
 

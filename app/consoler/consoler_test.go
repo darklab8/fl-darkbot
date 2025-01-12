@@ -43,3 +43,15 @@ func TestSystemCommands(t *testing.T) {
 		assert.Contains(t, result, "System commands")
 	})
 }
+
+func TestAddForumIgnore(t *testing.T) {
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
+		channelID, _ := configurator.FixtureChannel(dbpath)
+		response := NewConsoler(dbpath).Execute(settings.Env.ConsolerPrefix+` forum thread ignore add Soundtrack`, channelID)
+		response2 := NewConsoler(dbpath).Execute(settings.Env.ConsolerPrefix+` forum thread watch list`, channelID)
+
+		_ = response
+		_ = response2
+		// assert.Contains(t, )
+	})
+}
