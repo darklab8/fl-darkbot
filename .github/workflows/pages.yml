@@ -17,7 +17,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
     - name: Check out source repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
@@ -27,9 +27,11 @@ jobs:
       run: pip install -r requirements.txt -c constraints.txt
     - name: Build docs
       run: mkdocs build
-    - uses: actions/upload-pages-artifact@v1
+    - name: Upload artifacts for deployment to Github Pages
+      uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages
         path: './site'
-    - uses: actions/deploy-pages@v1
+    - name: Deploy to pages
+      uses: actions/deploy-pages@v4
       id: deployment

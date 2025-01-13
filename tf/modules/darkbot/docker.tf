@@ -4,10 +4,14 @@ resource "docker_image" "darkbot" {
   keep_locally = true
 }
 
+locals {
+  service_name = "${var.environment}-darkbot-app"
+}
+
 resource "docker_container" "darkbot" {
   count = var.mode == "docker" ? 1 : 0
 
-  name  = "darkbot-${var.environment}"
+  name  = local.service_name
   image = docker_image.darkbot[0].name
 
   env = [for k, v in local.envs : "${k}=${v}"]
@@ -32,7 +36,7 @@ resource "docker_container" "darkbot" {
 resource "docker_service" "darkbot" {
   count = var.mode == "swarm" ? 1 : 0
 
-  name = "darkbot-${var.environment}"
+  name = local.service_name
 
   task_spec {
     container_spec {

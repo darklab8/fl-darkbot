@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Check out source repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Get version from tag
       run: |
         set -x
@@ -49,6 +49,6 @@ jobs:
         set -ex
         docker pull darkwind8/darkbot:production
         sleep 5
-        docker service update --image darkwind8/darkbot:production darkbot-production
+        docker service update --image darkwind8/darkbot:production production-darkbot-app
 env:
   DOCKER_HOST: ssh://root@darkbot
