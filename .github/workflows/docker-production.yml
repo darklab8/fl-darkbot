@@ -44,7 +44,7 @@ jobs:
         sleep 5
         docker manifest create darkwind8/darkbot:${tag_version} --amend darkwind8/darkbot:${tag_version}-arm64 --amend darkwind8/darkbot:${tag_version}-amd64
         docker manifest push darkwind8/darkbot:${tag_version}
-        docker manifest create darkwind8/darkbot:${tag_version} --amend darkwind8/darkbot:${tag_version}-arm64 --amend darkwind8/darkbot:${tag_version}-amd64
+        docker manifest create darkwind8/darkbot:production --amend darkwind8/darkbot:${tag_version}-arm64 --amend darkwind8/darkbot:${tag_version}-amd64
         docker manifest push darkwind8/darkbot:production
     - name: Switch service image darkwind8/darkbot for swarm to new one
       run: |
