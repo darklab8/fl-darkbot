@@ -5,9 +5,11 @@ name: Deploy docker staging
     - '*-*'
   workflow_dispatch: {}
 jobs:
-  job:
-    name: Deploy docker staging
+  build-arm64:
+    name: Build arm64
     runs-on: ubuntu-22.04
+    env:
+      DOCKER_HOST: ssh://root@darkbot
     steps:
     - name: Check out source repository
       uses: actions/checkout@v4
@@ -35,12 +37,76 @@ jobs:
       run: |
         set -ex
         export tag_version=staging
-        DOCKER_HOST=ssh://root@darkbot docker build --build-arg "BUILD_VERSION=$tag_version" --tag darkwind8/darkbot:${tag_version}-arm64 .
-        DOCKER_HOST=unix:///var/run/docker.sock docker build --build-arg "BUILD_VERSION=$tag_version" --tag darkwind8/darkbot:${tag_version}-amd64 .
-        DOCKER_HOST=ssh://root@darkbot docker push darkwind8/darkbot:${tag_version}-arm64
+        docker build --build-arg "BUILD_VERSION=${tag_version}-arm64" --tag darkwind8/darkbot:${tag_version}-arm64 .
+
+        docker push darkwind8/darkbot:${tag_version}-arm64
         sleep 5
-        DOCKER_HOST=unix:///var/run/docker.sock docker push darkwind8/darkbot:${tag_version}-amd64
+  build-amd64:
+    name: Build amd64
+    runs-on: ubuntu-22.04
+    env:
+      DOCKER_HOST: unix:///var/run/docker.sock
+    steps:
+    - name: Check out source repository
+      uses: actions/checkout@v4
+    - name: Get version from tag
+      run: |
+        set -x
+        echo "BUILD_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      id: version
+    - name: Docker login
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username darkwind8 --password-stdin
+    - name: Install Darklab ssh key
+      run: |
+        mkdir ~/.ssh | true
+        echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
+        echo "Host darkbot" > ~/.ssh/config
+        echo "    HostName 37.27.207.42" >> ~/.ssh/config
+        echo "    User root" >> ~/.ssh/config
+        echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+        echo "    IdentitiesOnly yes" >> ~/.ssh/config
+        chmod 700 ~/.ssh
+        chmod 600 ~/.ssh/*
+        ssh-keyscan -H 37.27.207.42 >> ~/.ssh/known_hosts | true
+        ssh-keyscan -H darkbot >> ~/.ssh/known_hosts | true
+    - name: Build image darkwind8/darkbot
+      run: |
+        set -ex
+        export tag_version=staging
+        docker build --build-arg "BUILD_VERSION=${tag_version}-amd64" --tag darkwind8/darkbot:${tag_version}-amd64 .
+
+        docker push darkwind8/darkbot:${tag_version}-amd64
         sleep 5
+  deploy:
+    name: Join And Deploy
+    runs-on: ubuntu-22.04
+    env:
+      DOCKER_HOST: ssh://root@darkbot
+    steps:
+    - name: Get version from tag
+      run: |
+        set -x
+        echo "BUILD_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      id: version
+    - name: Docker login
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username darkwind8 --password-stdin
+    - name: Install Darklab ssh key
+      run: |
+        mkdir ~/.ssh | true
+        echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
+        echo "Host darkbot" > ~/.ssh/config
+        echo "    HostName 37.27.207.42" >> ~/.ssh/config
+        echo "    User root" >> ~/.ssh/config
+        echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+        echo "    IdentitiesOnly yes" >> ~/.ssh/config
+        chmod 700 ~/.ssh
+        chmod 600 ~/.ssh/*
+        ssh-keyscan -H 37.27.207.42 >> ~/.ssh/known_hosts | true
+        ssh-keyscan -H darkbot >> ~/.ssh/known_hosts | true
+    - name: Manifest join image darkwind8/darkbot
+      run: |
+        set -ex
+        export tag_version=staging
         docker manifest create darkwind8/darkbot:${tag_version} --amend darkwind8/darkbot:${tag_version}-arm64 --amend darkwind8/darkbot:${tag_version}-amd64
         docker manifest push darkwind8/darkbot:${tag_version}
     - name: Switch service image darkwind8/darkbot for swarm to new one
@@ -49,5 +115,6 @@ jobs:
         docker pull darkwind8/darkbot:staging
         sleep 5
         docker service update --image darkwind8/darkbot:staging staging-darkbot-app
-env:
-  DOCKER_HOST: ssh://root@darkbot
+    needs:
+    - build-arm64
+    - build-amd64
