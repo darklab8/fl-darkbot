@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/anaskhan96/soup v1.2.5
 	github.com/bwmarrin/discordgo v0.28.1
-	github.com/darklab8/fl-darkstat v1.64.2
+	github.com/darklab8/fl-darkstat v1.64.3
 	github.com/darklab8/go-typelog v0.6.2
 	github.com/darklab8/go-utils v0.21.1
 	github.com/pkg/profile v1.7.0

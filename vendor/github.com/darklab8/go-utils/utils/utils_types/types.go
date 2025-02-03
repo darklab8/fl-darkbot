@@ -1,8 +1,11 @@
 package utils_types
 
 import (
+	"crypto/md5"
 	"embed"
 	"fmt"
+	"io"
+	"io/fs"
 	"log"
 	"path/filepath"
 	"strings"
@@ -40,7 +43,7 @@ type GetFilesParams struct {
 	AllowedExtensions []string
 }
 
-func GetFiles(fs embed.FS, params GetFilesParams) []File {
+func GetFiles(filesystem embed.FS, params GetFilesParams) []File {
 	if len(params.AllowedExtensions) == 0 {
 		params.AllowedExtensions = []string{"js", "css", "png", "jpeg"}
 	}
@@ -48,7 +51,7 @@ func GetFiles(fs embed.FS, params GetFilesParams) []File {
 		params.RootFolder = "."
 	}
 
-	files, err := fs.ReadDir(params.RootFolder.ToString())
+	files, err := filesystem.ReadDir(params.RootFolder.ToString())
 	var result []File
 	if err != nil {
 		log.Fatal(err)
@@ -61,7 +64,7 @@ func GetFiles(fs embed.FS, params GetFilesParams) []File {
 			params.relFolder = params.relFolder.Join(f.Name())
 			params.RootFolder = params.RootFolder.Join(f.Name())
 			result = append(result,
-				GetFiles(fs, params)...,
+				GetFiles(filesystem, params)...,
 			)
 		} else {
 			splitted := strings.Split(f.Name(), ".")
@@ -71,9 +74,14 @@ func GetFiles(fs embed.FS, params GetFilesParams) []File {
 			}
 
 			path := params.RootFolder.Join(f.Name())
-			content, err := fs.ReadFile(path.ToString())
+			requested := strings.ReplaceAll(path.ToString(), "\\", "/") // fix for windows
+			content, err := filesystem.ReadFile(requested)
 			if err != nil {
-				panic(fmt.Sprintln("failed to read file from embeded fs of ", path))
+				PrintFilesForDebug(filesystem)
+				fmt.Println(err.Error(), "failed to read file from embeded fs of",
+					"path=", path,
+					"requested", requested,
+				)
 			}
 
 			is_allowed_extension := false
@@ -97,4 +105,26 @@ func GetFiles(fs embed.FS, params GetFilesParams) []File {
 
 	}
 	return result
+}
+
+func PrintFilesForDebug(filesystem embed.FS) {
+	fs.WalkDir(filesystem, ".", func(p string, d fs.DirEntry, err error) error {
+		if !d.IsDir() {
+			st, _ := fs.Stat(filesystem, p)
+			r, _ := filesystem.Open(p)
+			defer r.Close()
+
+			// Read prefix
+			var buf [md5.Size]byte
+			n, _ := io.ReadFull(r, buf[:])
+
+			// Hash remainder
+			h := md5.New()
+			_, _ = io.Copy(h, r)
+			s := h.Sum(nil)
+
+			fmt.Printf("%s %d %x %x\n", p, st.Size(), buf[:n], s)
+		}
+		return nil
+	})
 }
