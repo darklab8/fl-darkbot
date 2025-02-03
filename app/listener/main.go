@@ -47,6 +47,10 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 		return false
 	}
 
+	if strings.HasPrefix(m.Content, fmt.Sprintf("%s info", settings.Env.ConsolerPrefix)) {
+		return true
+	}
+
 	// Ignore all messages created by the bot itself
 	// This isn't required in this specific example but it's a good practice.
 	if messageAuthorID == botID {
@@ -100,8 +104,29 @@ func init() {
 	console = consoler.NewConsoler(settings.Dbpath)
 }
 
-func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Chunks(s string, chunkSize int) []string {
+	if len(s) == 0 {
+		return nil
+	}
+	if chunkSize >= len(s) {
+		return []string{s}
+	}
+	var chunks []string = make([]string, 0, (len(s)-1)/chunkSize+1)
+	currentLen := 0
+	currentStart := 0
+	for i := range s {
+		if currentLen == chunkSize {
+			chunks = append(chunks, s[currentStart:i])
+			currentLen = 0
+			currentStart = i
+		}
+		currentLen++
+	}
+	chunks = append(chunks, s[currentStart:])
+	return chunks
+}
 
+func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if !allowedMessage(s, m) {
 		return
 	}
@@ -109,7 +134,17 @@ func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	rendered := console.Execute(m.Content, channelID)
 
 	if rendered != "" {
-		s.ChannelMessageSend(m.ChannelID, rendered)
+		var err error
+		chunked_strings := Chunks(rendered, 1950)
+		for _, chunk_str := range chunked_strings {
+			_, err := s.ChannelMessageSend(m.ChannelID, chunk_str)
+			if err != nil {
+				break
+			}
+		}
+		if logus.Log.CheckWarn(err, "failed to send message of consoler") {
+			s.ChannelMessageSend(m.ChannelID, fmt.Sprintln("failed to send message of consoler with reason: ", err.Error()))
+		}
 	}
 	logus.Log.Debug("consolerHandler finished", logus.ChannelID(channelID))
 }

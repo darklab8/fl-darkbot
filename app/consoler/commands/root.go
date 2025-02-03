@@ -286,6 +286,11 @@ func newRootCommands(
 	r.CreateConnect()
 	r.CreateDisconnect()
 	r.CreateConfig()
+
+	NewInfoCommands(
+		r.CmdGroup,
+		r.channels,
+	)
 	return r
 }
 

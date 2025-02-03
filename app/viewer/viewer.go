@@ -35,7 +35,6 @@ func NewViewer(dbpath types.Dbpath, scrappy_storage *scrappy.ScrappyStorage) *Vi
 	}
 
 	v.workers = worker.NewTaskPoolPersistent(
-		worker.WithAllowFailedTasks(),
 		worker.WithDisableParallelism(false),
 		worker.WithWorkersAmount(10),
 	)

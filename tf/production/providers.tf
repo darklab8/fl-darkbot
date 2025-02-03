@@ -23,7 +23,7 @@ provider "cloudflare" {
   api_token = data.external.secrets_cloudflare.result["token"]
 }
 
-provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "darkbot-context"
-}
+# provider "kubernetes" {
+#   config_path    = "~/.kube/config"
+#   config_context = "darkbot-context"
+# }
