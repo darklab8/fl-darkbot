@@ -47,9 +47,10 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 		return false
 	}
 
-	if strings.HasPrefix(m.Content, fmt.Sprintf("%s info", settings.Env.ConsolerPrefix)) {
-		return true
-	}
+	// TODO implement ability to allow info quering depending on some config option
+	// if strings.HasPrefix(m.Content, fmt.Sprintf("%s info", settings.Env.ConsolerPrefix)) {
+	// 	return true
+	// }
 
 	// Ignore all messages created by the bot itself
 	// This isn't required in this specific example but it's a good practice.
