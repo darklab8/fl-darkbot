@@ -44,7 +44,7 @@ var runCmd = &cobra.Command{
 		} else {
 			scrappy_storage = scrappy.NewScrappyWithApis()
 		}
-		dg := discorder.NewClient()
+		dg := discorder.NewClient(discorder.WithWebSocket())
 		scrappy_storage.GetPlayerStorage().RegisterObserve(dg)
 
 		scrappy_storage.Update()

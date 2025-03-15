@@ -21,15 +21,28 @@ import (
 )
 
 type Discorder struct {
-	dg *discordgo.Session
+	dg             *discordgo.Session
+	with_websocket bool
 }
 
 func (d *Discorder) GetDiscordSession() *discordgo.Session {
 	return d.dg
 }
 
-func NewClient() *Discorder {
+type DiscorderOption func(d *Discorder)
+
+func WithWebSocket() DiscorderOption {
+	return func(d *Discorder) {
+		d.with_websocket = true
+	}
+}
+
+func NewClient(opts ...DiscorderOption) *Discorder {
 	d := &Discorder{}
+	for _, opt := range opts {
+		opt(d)
+	}
+
 	dg, err := discordgo.New("Bot " + settings.Env.DiscorderBotToken)
 	logus.Log.CheckFatal(err, "failed to init discord")
 
@@ -42,10 +55,12 @@ func NewClient() *Discorder {
 		},
 	}
 
-	// Open a websocket connection to Discord and begin listening.
-	err = dg.Open()
-	logus.Log.CheckFatal(err, "error opening connection,")
-	defer dg.Close()
+	if d.with_websocket {
+		// Open a websocket connection to Discord and begin listening.
+		err = dg.Open()
+		logus.Log.CheckFatal(err, "error opening connection,")
+		defer dg.Close()
+	}
 
 	d.dg = dg
 	return d
