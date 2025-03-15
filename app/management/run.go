@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/discorder"
 	"github.com/darklab8/fl-darkbot/app/forumer"
 	"github.com/darklab8/fl-darkbot/app/listener"
 	"github.com/darklab8/fl-darkbot/app/scrappy"
@@ -43,6 +44,8 @@ var runCmd = &cobra.Command{
 		} else {
 			scrappy_storage = scrappy.NewScrappyWithApis()
 		}
+		dg := discorder.NewClient()
+		scrappy_storage.GetPlayerStorage().RegisterObserve(dg)
 
 		scrappy_storage.Update()
 		go scrappy_storage.Run()

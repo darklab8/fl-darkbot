@@ -11,6 +11,9 @@
 - Adding players for tracking based on tag in nickname or star systems / regions to track
 - Adding configurable alert triggers to base, player of forum tracking
 - Adding forum post for tracking
+- Writes amount of players at server in its status
+
+![](index_assets/status_players.png)
 
 # Important links
 

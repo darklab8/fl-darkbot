@@ -17,6 +17,21 @@ type PlayerStorage struct {
 	records.Records[records.StampedObjects[Player]]
 	api    IPlayerAPI
 	parser parser.Parser[records.StampedObjects[Player]]
+
+	observers []Observer
+}
+type Observer interface {
+	ReceivePlayers(p *PlayerStorage)
+}
+
+func (b *PlayerStorage) RegisterObserve(obs Observer) {
+	b.observers = append(b.observers, obs)
+}
+
+func (b *PlayerStorage) UpdateObservers() {
+	for _, obs := range b.observers {
+		obs.ReceivePlayers(b)
+	}
 }
 
 // Conveniently born some factory
@@ -31,6 +46,8 @@ func (b *PlayerStorage) Update() {
 	}
 	b.Add(record)
 	logus.Log.Info("updated player storage")
+
+	b.UpdateObservers()
 }
 
 func NewPlayerStorage(api IPlayerAPI) *PlayerStorage {

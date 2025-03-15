@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/darklab8/fl-darkbot/app/scrappy/player"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
@@ -31,6 +32,20 @@ func NewClient() *Discorder {
 	d := &Discorder{}
 	dg, err := discordgo.New("Bot " + settings.Env.DiscorderBotToken)
 	logus.Log.CheckFatal(err, "failed to init discord")
+
+	// May be not necessary
+	dg.Identify.Presence = discordgo.GatewayStatusUpdate{
+		Status: "online",
+		Game: discordgo.Activity{
+			Type: discordgo.ActivityTypeGame,
+			Name: "Init",
+		},
+	}
+
+	// Open a websocket connection to Discord and begin listening.
+	err = dg.Open()
+	logus.Log.CheckFatal(err, "error opening connection,")
+	defer dg.Close()
 
 	d.dg = dg
 	return d
@@ -90,6 +105,19 @@ func (d *Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*Disc
 	return result, nil
 }
 
+func (d *Discorder) SetPressence(msg string) {
+	err := d.dg.UpdateGameStatus(0, msg)
+	logus.Log.CheckWarn(err, "unable to set presence")
+}
+
+func (d *Discorder) ReceivePlayers(p *player.PlayerStorage) {
+	latest_record, err := p.GetLatestRecord()
+	if logus.Log.CheckWarn(err, "failed to get record for pressence update") {
+		return
+	}
+	d.SetPressence(fmt.Sprintf("with %d/255 players", len(latest_record.List)))
+}
+
 func (d *Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOwnerID, error) {
 	channel, err := d.dg.Channel(string(channelID))
 	if logus.Log.CheckError(err, "discord is not connected") {
@@ -101,6 +129,7 @@ func (d *Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordO
 	guildID := channel.GuildID
 
 	guild, err := d.dg.Guild(guildID)
+
 	if logus.Log.CheckWarn(err, "unable to get Guild Owner", logus.ChannelID(channelID)) {
 		return "", err
 	}
