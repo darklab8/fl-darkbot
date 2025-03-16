@@ -47,6 +47,11 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 		return false
 	}
 
+	// removing issue of players writing things like '... stuff' and triggering darkbot
+	if strings.HasPrefix(m.Content, fmt.Sprintf("%s%s", settings.Env.ConsolerPrefix, settings.Env.ConsolerPrefix)) {
+		return false
+	}
+
 	// TODO implement ability to allow info quering depending on some config option
 	// if strings.HasPrefix(m.Content, fmt.Sprintf("%s info", settings.Env.ConsolerPrefix)) {
 	// 	return true
