@@ -43,7 +43,7 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	messageAuthorID := m.Author.ID
 	botCreatorID := "370435997974134785"
 
-	if !strings.HasPrefix(m.Content, settings.Env.ConsolerPrefix) {
+	if !strings.HasPrefix(m.Content, fmt.Sprintf("%s ", settings.Env.ConsolerPrefix)) {
 		return false
 	}
 
