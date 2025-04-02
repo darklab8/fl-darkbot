@@ -26,19 +26,19 @@ jobs:
         mkdir ~/.ssh | true
         echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
         echo "Host darkbot" > ~/.ssh/config
-        echo "    HostName 37.27.207.42" >> ~/.ssh/config
+        echo "    HostName 95.217.128.104" >> ~/.ssh/config
         echo "    User root" >> ~/.ssh/config
         echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
         echo "    IdentitiesOnly yes" >> ~/.ssh/config
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/*
-        ssh-keyscan -H 37.27.207.42 >> ~/.ssh/known_hosts | true
+        ssh-keyscan -H 95.217.128.104 >> ~/.ssh/known_hosts | true
         ssh-keyscan -H darkbot >> ~/.ssh/known_hosts | true
     - name: Build image darkwind8/darkbot
       run: |
         set -ex
         export tag_version=${{ steps.version.outputs.BUILD_VERSION }}
-        docker build --build-arg "BUILD_VERSION=${tag_version}-arm64" --tag darkwind8/darkbot:${tag_version}-arm64 .
+        docker build --build-arg "BUILD_VERSION=${tag_version}" --tag darkwind8/darkbot:${tag_version}-arm64 .
 
         docker tag darkwind8/darkbot:${tag_version}-arm64 darkwind8/darkbot:production-arm64
         docker push darkwind8/darkbot:${tag_version}-arm64
@@ -65,19 +65,19 @@ jobs:
         mkdir ~/.ssh | true
         echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
         echo "Host darkbot" > ~/.ssh/config
-        echo "    HostName 37.27.207.42" >> ~/.ssh/config
+        echo "    HostName 95.217.128.104" >> ~/.ssh/config
         echo "    User root" >> ~/.ssh/config
         echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
         echo "    IdentitiesOnly yes" >> ~/.ssh/config
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/*
-        ssh-keyscan -H 37.27.207.42 >> ~/.ssh/known_hosts | true
+        ssh-keyscan -H 95.217.128.104 >> ~/.ssh/known_hosts | true
         ssh-keyscan -H darkbot >> ~/.ssh/known_hosts | true
     - name: Build image darkwind8/darkbot
       run: |
         set -ex
         export tag_version=${{ steps.version.outputs.BUILD_VERSION }}
-        docker build --build-arg "BUILD_VERSION=${tag_version}-amd64" --tag darkwind8/darkbot:${tag_version}-amd64 .
+        docker build --build-arg "BUILD_VERSION=${tag_version}" --tag darkwind8/darkbot:${tag_version}-amd64 .
 
         docker tag darkwind8/darkbot:${tag_version}-amd64 darkwind8/darkbot:production-amd64
         docker push darkwind8/darkbot:${tag_version}-amd64
@@ -102,13 +102,13 @@ jobs:
         mkdir ~/.ssh | true
         echo "${{ secrets.SSH_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
         echo "Host darkbot" > ~/.ssh/config
-        echo "    HostName 37.27.207.42" >> ~/.ssh/config
+        echo "    HostName 95.217.128.104" >> ~/.ssh/config
         echo "    User root" >> ~/.ssh/config
         echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
         echo "    IdentitiesOnly yes" >> ~/.ssh/config
         chmod 700 ~/.ssh
         chmod 600 ~/.ssh/*
-        ssh-keyscan -H 37.27.207.42 >> ~/.ssh/known_hosts | true
+        ssh-keyscan -H 95.217.128.104 >> ~/.ssh/known_hosts | true
         ssh-keyscan -H darkbot >> ~/.ssh/known_hosts | true
     - name: Manifest join image darkwind8/darkbot
       run: |
@@ -121,9 +121,9 @@ jobs:
     - name: Switch service image darkwind8/darkbot for swarm to new one
       run: |
         set -ex
-        docker pull darkwind8/darkbot:production
+        docker pull darkwind8/darkbot:production-arm64
         sleep 5
-        docker service update --image darkwind8/darkbot:production production-darkbot-app
+        docker service update --image darkwind8/darkbot:production-arm64 production-darkbot-app
     needs:
     - build-arm64
     - build-amd64
