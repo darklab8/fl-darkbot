@@ -4,6 +4,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package consoler
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
@@ -36,7 +37,7 @@ func (c *Consoler) Execute(
 	channelID types.DiscordChannelID,
 ) string {
 	// only commands starting from prefix are allowed
-	if !strings.HasPrefix(cmd, settings.Env.ConsolerPrefix) {
+	if !strings.HasPrefix(cmd, fmt.Sprintf("%s ", settings.Env.ConsolerPrefix)) {
 		return ""
 	}
 
