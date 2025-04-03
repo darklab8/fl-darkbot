@@ -10,6 +10,7 @@ locals {
 
 resource "docker_network" "darkbot" {
   name       = "darkbot-${var.environment}"
+  driver     = "overlay"
   attachable = true
 }
 
@@ -49,6 +50,11 @@ resource "docker_service" "darkbot" {
   name = local.service_name
 
   task_spec {
+    networks_advanced {
+      name    = docker_network.darkbot.id
+      aliases = ["darkbot"]
+    }
+
     container_spec {
       image = docker_image.darkbot[0].name
       env   = local.envs
@@ -82,6 +88,13 @@ resource "docker_service" "darkbot" {
         memory_bytes = 1000 * 1000 * 1000 # 1 gb
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      task_spec[0].restart_policy[0].window,
+      task_spec[0].container_spec[0].image,
+    ]
   }
 }
 
