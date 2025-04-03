@@ -8,11 +8,21 @@ locals {
   service_name = "${var.environment}-darkbot-app"
 }
 
+resource "docker_network" "darkbot" {
+  name       = "darkbot-${var.environment}"
+  attachable = true
+}
+
 resource "docker_container" "darkbot" {
   count = var.mode == "docker" ? 1 : 0
 
   name  = local.service_name
   image = docker_image.darkbot[0].name
+
+  networks_advanced {
+    name    = docker_network.darkbot.id
+    aliases = ["darkbot"]
+  }
 
   env = [for k, v in local.envs : "${k}=${v}"]
 
