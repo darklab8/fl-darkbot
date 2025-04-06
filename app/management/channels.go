@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package management
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
@@ -45,9 +46,16 @@ var channelListCMD = &cobra.Command{
 		var accessable_channels []types.DiscordChannelID
 		var error_channels []types.DiscordChannelID
 		var error_reason []error
+		var channels_count_by_guild map[string]int = make(map[string]int)
 
 		for _, channel := range channelIDs {
 			_, err := dg.GetLatestMessages(channel)
+
+			if ch, err := dg.GetDiscordSession().Channel(string(channel)); err == nil {
+				if guild, err := dg.GetDiscordSession().Guild(ch.GuildID); err == nil {
+					channels_count_by_guild[guild.Name] += 1
+				}
+			}
 
 			if err == nil {
 				accessable_channels = append(accessable_channels, channel)
@@ -60,6 +68,10 @@ var channelListCMD = &cobra.Command{
 		fmt.Println("accessable_channels", len(accessable_channels), " | ", accessable_channels)
 		fmt.Println("error_channels", len(error_channels), " | ", error_channels)
 		fmt.Println("error_reason", len(error_reason), " | ", error_reason)
+		fmt.Println("guilds_count", len(channels_count_by_guild))
+
+		data, _ := json.Marshal(channels_count_by_guild)
+		fmt.Println("guilds_channel_counts", string(data))
 	},
 }
 
