@@ -20,6 +20,8 @@ var (
 	}, []string{"guild_name", "channel_id"})
 )
 
+var old_labels map[string]map[string]int
+
 func ChannelsPerGuild(GuildID string, ChannelID string) prometheus.Gauge {
 	return channelsPerGuilds.WithLabelValues(GuildID, ChannelID)
 }
@@ -52,12 +54,20 @@ func Update(dg *discorder.Discorder, channels configurator.ConfiguratorChannel) 
 		}
 	}
 
-	DeleteAllGaugeVecValues(channelsPerGuilds)
+	if old_labels != nil {
+		for guild_name, channels := range old_labels {
+			for channel_id, _ := range channels {
+				channelsPerGuilds.DeleteLabelValues(guild_name, channel_id)
+			}
+		}
+	}
 	for guild_name, channels := range channels_count_by_guild {
 		for channel_id, count := range channels {
 			ChannelsPerGuild(guild_name, channel_id).Set(float64(count))
 		}
 	}
+
+	old_labels = channels_count_by_guild
 }
 
 func Prometheuser(dg *discorder.Discorder) {
