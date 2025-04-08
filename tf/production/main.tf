@@ -16,7 +16,7 @@ module "darkbot" {
   configurator_dbname = "production"
   consoler_prefix     = "."
   secrets             = local.secrets
-  tag_version         = "production"
+  tag_version         = "production-arm64"
   mode                = "swarm"
   environment         = "production"
   debug               = false

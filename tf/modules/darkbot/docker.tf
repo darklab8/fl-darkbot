@@ -14,6 +14,10 @@ resource "docker_network" "darkbot" {
   attachable = true
 }
 
+data "docker_network" "grafana" {
+  name = "grafana"
+}
+
 resource "docker_container" "darkbot" {
   count = var.mode == "docker" ? 1 : 0
 
@@ -25,6 +29,11 @@ resource "docker_container" "darkbot" {
     aliases = ["darkbot"]
   }
 
+  networks_advanced {
+    name    = data.docker_network.grafana.id
+    aliases = ["${var.environment}-darkbot"]
+  }
+
   env = [for k, v in local.envs : "${k}=${v}"]
 
   restart = "always"
@@ -32,6 +41,18 @@ resource "docker_container" "darkbot" {
     container_path = "/code/data"
     read_only      = false
     host_path      = "/var/lib/darklab/darkbot-${var.environment}"
+  }
+
+  volumes {
+    container_path = "/tmp/darkstat"
+    read_only      = false
+    host_path      = "/tmp/darkstat-${var.environment}"
+  }
+
+
+  labels {
+    label = "prometheus"
+    value = "true"
   }
 
   memory = 1000 # MBs
@@ -55,9 +76,19 @@ resource "docker_service" "darkbot" {
       aliases = ["darkbot"]
     }
 
+    networks_advanced {
+      name    = data.docker_network.grafana.id
+      aliases = ["${var.environment}-darkbot"]
+    }
+
     container_spec {
       image = docker_image.darkbot[0].name
       env   = local.envs
+
+      labels {
+        label = "prometheus"
+        value = "true"
+      }
 
       mounts {
         target    = "/code/data"

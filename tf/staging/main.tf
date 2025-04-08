@@ -16,7 +16,7 @@ module "darkbot" {
   configurator_dbname = "staging"
   consoler_prefix     = ","
   secrets             = local.secrets
-  tag_version         = "staging"
+  tag_version         = "staging-arm64"
   debug               = false
   mode                = "swarm"
   environment         = "staging"
