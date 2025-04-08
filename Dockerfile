@@ -25,4 +25,5 @@ COPY --from=build /code/main main
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ARG BUILD_VERSION
 ENV BUILD_VERSION="${BUILD_VERSION}"
+EXPOSE 8000
 CMD ./main run
