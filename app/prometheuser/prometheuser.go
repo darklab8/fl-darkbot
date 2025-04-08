@@ -7,42 +7,19 @@ import (
 	"github.com/darklab8/fl-darkbot/app/configurator"
 	"github.com/darklab8/fl-darkbot/app/discorder"
 	"github.com/darklab8/fl-darkbot/app/settings"
+	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
-	// to add later
-	// requestsPerChannel = promauto.NewCounterVec(prometheus.CounterOpts{
-	// 	Name: "darkbot_channel_commands_called_count",
-	// 	Help: "The total requests per channel",
-	// }, []string{"guild_name", "channel_id"})
-	// healthyChannels = promauto.NewCounterVec(prometheus.CounterOpts{
-	// 	Name: "darkbot_health_count",
-	// 	Help: "Healthy channel ping",
-	// }, []string{"guild_name", "channel_id"})
-	// erroredChannels = promauto.NewCounterVec(prometheus.CounterOpts{
-	// 	Name: "darkbot_errors_count",
-	// 	Help: "Channel ping resulted in error",
-	// }, []string{"guild_name", "channel_id"})
 	channelsPerGuilds = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "darkbot_guilds_channels_gauge",
 		Help: "The total number of channels used per guild",
 	}, []string{"guild_name", "channel_id"})
 )
 
-//	func CommandsCalled(GuildID string, ChannelID string) prometheus.Counter {
-//		return requestsPerChannel.WithLabelValues(GuildID, ChannelID)
-//	}
-//
-//	func HealthyChannelCalled(GuildID string, ChannelID string) prometheus.Counter {
-//		return healthyChannels.WithLabelValues(GuildID, ChannelID)
-//	}
-//
-//	func ErroredChannelCalled(GuildID string, ChannelID string) prometheus.Counter {
-//		return erroredChannels.WithLabelValues(GuildID, ChannelID)
-//	}
 func ChannelsPerGuild(GuildID string, ChannelID string) prometheus.Gauge {
 	return channelsPerGuilds.WithLabelValues(GuildID, ChannelID)
 }
@@ -63,6 +40,7 @@ func Update(dg *discorder.Discorder, channels configurator.ConfiguratorChannel) 
 	var channels_count_by_guild map[string]map[string]int = make(map[string]map[string]int)
 	for _, channel := range channelIDs {
 		_, err := dg.GetLatestMessages(channel)
+		logus.Log.CheckError(err, "prometheuser: unable to get msgs")
 
 		if ch, err := dg.GetDiscordSession().Channel(string(channel)); err == nil {
 			if guild, err := dg.GetDiscordSession().Guild(ch.GuildID); err == nil {
@@ -82,17 +60,17 @@ func Update(dg *discorder.Discorder, channels configurator.ConfiguratorChannel) 
 	}
 }
 
-func Prometheuser() {
-	dg := discorder.NewClient()
+func Prometheuser(dg *discorder.Discorder) {
 	channels := configurator.NewConfiguratorChannel(configurator.NewConfigurator(settings.Dbpath))
+
 	go func() {
-		// prometheus initializer
-		http.Handle("/metrics", promhttp.Handler())
-		http.ListenAndServe("0.0.0.0:8000", nil)
+		for {
+			Update(dg, channels)
+			time.Sleep(time.Minute)
+		}
 	}()
 
-	for {
-		Update(dg, channels)
-		time.Sleep(time.Minute)
-	}
+	http.Handle("/metrics", promhttp.Handler())
+	err := http.ListenAndServe("0.0.0.0:8000", nil)
+	logus.Log.CheckPanic(err, "unable to serve http server prometheuser")
 }

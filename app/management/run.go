@@ -12,6 +12,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/discorder"
 	"github.com/darklab8/fl-darkbot/app/forumer"
 	"github.com/darklab8/fl-darkbot/app/listener"
+	"github.com/darklab8/fl-darkbot/app/prometheuser"
 	"github.com/darklab8/fl-darkbot/app/scrappy"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
@@ -52,6 +53,7 @@ var runCmd = &cobra.Command{
 		go listener.Run()
 		go viewer.NewViewer(settings.Dbpath, scrappy_storage).Run()
 		go forumenacer.Run()
+		go prometheuser.Prometheuser(dg)
 
 		// profiler
 		if settings.Env.ProfilingEnabled {
