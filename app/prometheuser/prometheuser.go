@@ -10,8 +10,10 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/collectors/version"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	ver "github.com/prometheus/common/version"
 )
 
 var (
@@ -40,13 +42,18 @@ func init() {
 	}, []string{"guild_name", "channel_id", "error"})
 
 	newreg := prometheus.NewRegistry()
-	reg := prometheus.WrapRegistererWith(prometheus.Labels{"environment": settings.Env.Environment}, newreg)
+	reg := prometheus.WrapRegistererWith(
+		prometheus.Labels{
+			"environment": settings.Env.Environment,
+			"version":     ver.Version,
+		}, newreg)
 	reg.MustRegister(
 		channelsPerGuilds,
 		listenerAllowedOperations,
 		viewerOperations,
 		collectors.NewGoCollector(),
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
+		version.NewCollector("darkbot"),
 	)
 
 	http.Handle(

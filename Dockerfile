@@ -16,14 +16,15 @@ RUN mkdir data
 COPY main.go ./
 COPY app app
 ENV GOCACHE=/root/.cache/go-build
-RUN --mount=type=cache,target="/root/.cache/go-build" go build -v -o main main.go
+ARG BUILD_VERSION
+RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags "-X github.com/prometheus/common/version.Version=${BUILD_VERSION}" -v -o main main.go
 
 FROM debian:11.6-slim as runner
 WORKDIR /code
 RUN mkdir data
-COPY --from=build /code/main main
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ARG BUILD_VERSION
 ENV BUILD_VERSION="${BUILD_VERSION}"
+COPY --from=build /code/main main
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 EXPOSE 8000
 CMD ./main run
