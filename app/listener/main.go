@@ -90,7 +90,7 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 		}
 	}
 
-	var guild_name string = m.GuildID
+	var guild_name string = guild.Name
 
 	// if message not from guild owner, bot creator or person with role bot_controller, then ignore
 	if guild.OwnerID != messageAuthorID &&
