@@ -76,8 +76,10 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	channel_info, err := v.api.Discorder.GetDiscordSession().Channel(string(v.channelID))
 
 	var guild_name string = "unknown"
-	if guild, _ := v.api.Discorder.GetDiscordSession().Guild(channel_info.GuildID); guild != nil {
-		guild_name = guild.Name
+	if channel_info != nil {
+		if guild, _ := v.api.Discorder.GetDiscordSession().Guild(channel_info.GuildID); guild != nil {
+			guild_name = guild.Name
+		}
 	}
 
 	if logus_ch.CheckError(err, "unable to get channel info") {
