@@ -52,10 +52,7 @@ func init() {
 	http.Handle(
 		"/metrics", promhttp.HandlerFor(
 			newreg,
-			promhttp.HandlerOpts{
-				EnableOpenMetrics:                   true,
-				EnableOpenMetricsTextCreatedSamples: true,
-			}),
+			promhttp.HandlerOpts{}),
 	)
 }
 

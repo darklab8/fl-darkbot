@@ -15,5 +15,6 @@ locals {
     DEV_ENV_MOCK_API    = "false"
     DARKBOT_LOG_LEVEL   = "${var.debug ? "DEBUG" : "WARN"}"
     TYPELOG_LOG_JSON    = "true"
+    UTILS_ENVIRONMENT   = var.environment
   }
 }
