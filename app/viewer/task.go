@@ -1,10 +1,12 @@
 package viewer
 
 import (
+	"errors"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/darklab8/fl-darkbot/app/prometheuser"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
@@ -73,7 +75,13 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	logus_ch := logus.Log.WithFields(logus.ChannelID(v.channelID))
 	channel_info, err := v.api.Discorder.GetDiscordSession().Channel(string(v.channelID))
 
+	var guild_name string = "unknown"
+	if guild, _ := v.api.Discorder.GetDiscordSession().Guild(channel_info.GuildID); guild != nil {
+		guild_name = guild.Name
+	}
+
 	if logus_ch.CheckError(err, "unable to get channel info") {
+		prometheuser.ViewerOperations(guild_name, string(v.channelID), errors.New("unable to get channel info")).Inc()
 		return err
 	}
 
@@ -97,6 +105,7 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 	time_discover.Close()
 
 	if logus_ch.CheckWarn(err, "unable to grab Discord msgs") {
+		prometheuser.ViewerOperations(guild_name, string(v.channelID), errors.New("unable to grab Discord msgs")).Inc()
 		return err
 	}
 
@@ -114,6 +123,8 @@ func (v *TaskRefreshChannel) RunTask(worker_id worker_types.WorkerID) error {
 		typelog.String("started_at", time_run_task_started.String()),
 		typelog.String("finished_at", time.Now().String()),
 	)
+
+	prometheuser.ViewerOperations(guild_name, string(v.channelID), nil).Inc()
 
 	// Important for Mutex above! Prevents Guild level rate limits. looks like 5 msg edits per 5 second at one server is good
 	time.Sleep(time.Duration(v.delayBetweenChannels) * time.Second)

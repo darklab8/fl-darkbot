@@ -9,21 +9,74 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
+	channelsPerGuilds *prometheus.GaugeVec
+
+	listenerAllowedOperations *prometheus.CounterVec
+
+	viewerOperations *prometheus.CounterVec
+)
+
+func init() {
+	// Create non-global registry.
+
 	channelsPerGuilds = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "darkbot_guilds_channels_gauge",
 		Help: "The total number of channels used per guild",
 	}, []string{"guild_name", "channel_id"})
-)
+
+	listenerAllowedOperations = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "darkbot_listener_allowed_requests_count",
+		Help: "Requests incoming to listener from Discord. Contains error if not allowed",
+	}, []string{"guild_name", "channel_id", "error"})
+	viewerOperations = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "darkbot_viewer_requests_count",
+		Help: "Requests sent by viewer to handle table renderings. Contain error if smth went wrong",
+	}, []string{"guild_name", "channel_id", "error"})
+
+	newreg := prometheus.NewRegistry()
+	reg := prometheus.WrapRegistererWith(prometheus.Labels{"environment": settings.Env.Environment}, newreg)
+	reg.MustRegister(
+		channelsPerGuilds,
+		listenerAllowedOperations,
+		viewerOperations,
+		collectors.NewGoCollector(),
+		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
+	)
+
+	http.Handle(
+		"/metrics", promhttp.HandlerFor(
+			newreg,
+			promhttp.HandlerOpts{
+				EnableOpenMetrics:                   true,
+				EnableOpenMetricsTextCreatedSamples: true,
+			}),
+	)
+}
 
 var old_labels map[string]map[string]int
 
 func ChannelsPerGuild(GuildID string, ChannelID string) prometheus.Gauge {
 	return channelsPerGuilds.WithLabelValues(GuildID, ChannelID)
+}
+func ListenerIsAllowedOperations(GuildID string, ChannelID string, Error error) prometheus.Counter {
+	var StrError string
+	if Error != nil {
+		StrError = Error.Error()
+	}
+	return listenerAllowedOperations.WithLabelValues(GuildID, ChannelID, StrError)
+}
+func ViewerOperations(GuildID string, ChannelID string, Error error) prometheus.Counter {
+	var StrError string
+	if Error != nil {
+		StrError = Error.Error()
+	}
+	return viewerOperations.WithLabelValues(GuildID, ChannelID, StrError)
 }
 
 func addMapGuildChannelValue(a_map map[string]map[string]int, guild string, channel_id string, value int) {
@@ -80,7 +133,7 @@ func Prometheuser(dg *discorder.Discorder) {
 		}
 	}()
 
-	http.Handle("/metrics", promhttp.Handler())
+	// http.Handle("/metrics", promhttp.Handler())
 	err := http.ListenAndServe("0.0.0.0:8000", nil)
 	logus.Log.CheckPanic(err, "unable to serve http server prometheuser")
 }

@@ -43,7 +43,7 @@ func init() {
 
 func LoadEnv(envs *enverant.Enverant) {
 	Env = DarkbotEnv{
-		UtilsEnvs:            utils_settings.GetEnvs(envs),
+		UtilsEnvs:            utils_settings.GetEnvs(),
 		DevEnvMockApi:        envs.GetBoolOr("DEV_ENV_MOCK_API", true),
 		ScrappyBaseUrl:       envs.GetStrOr("SCRAPPY_BASE_URL", ""),
 		ScrappyPlayerUrl:     envs.GetStrOr("SCRAPPY_PLAYER_URL", ""),

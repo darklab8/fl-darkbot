@@ -8,7 +8,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/consoler/commands/cmdgroup"
 	"github.com/darklab8/fl-darkbot/app/consoler/printer"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
-	"github.com/darklab8/fl-darkstat/darkrpc"
+	"github.com/darklab8/fl-darkstat/darkapis/darkrpc"
 	"github.com/spf13/cobra"
 )
 
@@ -52,9 +52,7 @@ func (t *InfoCommands) CreateGetInfoCmd() {
 				for _, line := range reply.Content {
 					printer.Println(cmd, line)
 				}
-
 			}
-
 		},
 	}
 	t.CurrentCmd.AddCommand(command)

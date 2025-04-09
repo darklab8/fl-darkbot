@@ -5,10 +5,12 @@ Interacting with Discord API
 package listener
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/darklab8/fl-darkbot/app/consoler"
+	"github.com/darklab8/fl-darkbot/app/prometheuser"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
@@ -88,14 +90,18 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 		}
 	}
 
+	var guild_name string = m.GuildID
+
 	// if message not from guild owner, bot creator or person with role bot_controller, then ignore
 	if guild.OwnerID != messageAuthorID &&
 		botCreatorID != messageAuthorID &&
 		!isBotController {
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("ERR access denied. You must be server owner or person with role named '%s' in order to command me!", allowed_role))
+		prometheuser.ListenerIsAllowedOperations(guild_name, string(m.ChannelID), errors.New("not_allowed_by_listener")).Inc()
 		return false
 	}
 
+	prometheuser.ListenerIsAllowedOperations(guild_name, string(m.ChannelID), nil).Inc()
 	return true
 }
 
@@ -128,9 +134,12 @@ func Chunks(s string, chunkSize int) []string {
 }
 
 func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if !allowedMessage(s, m) {
+	is_allowed := allowedMessage(s, m)
+
+	if !is_allowed {
 		return
 	}
+
 	channelID := types.DiscordChannelID(m.ChannelID)
 	rendered := console.Execute(m.Content, channelID)
 
