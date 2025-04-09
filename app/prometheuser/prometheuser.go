@@ -45,7 +45,7 @@ func init() {
 	reg := prometheus.WrapRegistererWith(
 		prometheus.Labels{
 			"environment": settings.Env.Environment,
-			"version":     ver.Version,
+			"version_id":  ver.Version,
 		}, newreg)
 	reg.MustRegister(
 		channelsPerGuilds,
