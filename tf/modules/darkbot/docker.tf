@@ -112,7 +112,7 @@ resource "docker_service" "darkbot" {
     }
     restart_policy {
       condition = "any"
-      delay     = "180s"
+      delay     = "5m"
       window    = "10s"
     }
     resources {

@@ -22,6 +22,8 @@ var (
 	listenerAllowedOperations *prometheus.CounterVec
 
 	viewerOperations *prometheus.CounterVec
+
+	upTime prometheus.Counter
 )
 
 func init() {
@@ -41,6 +43,11 @@ func init() {
 		Help: "Requests sent by viewer to handle table renderings. Contain error if smth went wrong",
 	}, []string{"guild_name", "channel_id", "error"})
 
+	upTime = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "darkbot_uptime_minutes",
+		Help: "Uptime minutes",
+	})
+
 	newreg := prometheus.NewRegistry()
 	reg := prometheus.WrapRegistererWith(
 		prometheus.Labels{
@@ -51,6 +58,7 @@ func init() {
 		channelsPerGuilds,
 		listenerAllowedOperations,
 		viewerOperations,
+		upTime,
 		collectors.NewGoCollector(),
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 		version.NewCollector("darkbot"),
@@ -108,7 +116,7 @@ func Update(dg *discorder.Discorder, channels configurator.ConfiguratorChannel) 
 			addMapGuildChannelValue(channels_count_by_guild, "unknown", string(channel), 1)
 		}
 
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 3)
 	}
 
 	channelsPerGuilds.Reset()
@@ -125,6 +133,13 @@ func Prometheuser(dg *discorder.Discorder) {
 	go func() {
 		for {
 			Update(dg, channels)
+			time.Sleep(time.Minute)
+		}
+	}()
+
+	go func() {
+		for {
+			upTime.Inc()
 			time.Sleep(time.Minute)
 		}
 	}()
