@@ -53,7 +53,11 @@ var runCmd = &cobra.Command{
 		go listener.Run()
 		go viewer.NewViewer(settings.Dbpath, scrappy_storage).Run()
 		go forumenacer.Run()
-		go prometheuser.Prometheuser(dg)
+		// probably bugged
+
+		if settings.Env.PrometheuserOn {
+			go prometheuser.Prometheuser(dg)
+		}
 
 		// profiler
 		if settings.Env.ProfilingEnabled {

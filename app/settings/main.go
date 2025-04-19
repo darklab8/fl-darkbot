@@ -28,6 +28,8 @@ type DarkbotEnv struct {
 	ScrappyLoopDelay int
 	ViewerLoopDelay  int
 	DevEnvMockApi    bool
+
+	PrometheuserOn bool
 }
 
 var Env DarkbotEnv
@@ -58,6 +60,8 @@ func LoadEnv(envs *enverant.Enverant) {
 
 		ScrappyLoopDelay: envs.GetIntOr("SCRAPPY_LOOP_DELAY", 10),
 		ViewerLoopDelay:  envs.GetIntOr("VIEWER_LOOP_DELAY", 10),
+
+		PrometheuserOn: envs.GetBoolOr("PROMETHEUSER_ON", true),
 	}
 	Workdir = filepath.Dir(filepath.Dir(utils_os.GetCurrentFolder().ToString()))
 	Dbpath = NewDBPath(Env.ConfiguratorDbname)
