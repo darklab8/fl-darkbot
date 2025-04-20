@@ -1,0 +1,1699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!-- start: portal -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Discovery Gaming Community</title>
+<link rel="alternate" type="application/rss+xml" title="Latest Announcements (RSS 2.0)" href="https://discoverygc.com/forums/syndication.php?portal=1" />
+<link rel="alternate" type="application/atom+xml" title="Latest Announcements (Atom 1.0)" href="https://discoverygc.com/forums/syndication.php?portal=1&type=atom1.0" />
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="https://discoverygc.com/forums/syndication.php" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="https://discoverygc.com/forums/syndication.php?type=atom1.0" />
+<link href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,200italic,400italic,600italic' rel='stylesheet' type='text/css'>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/jquery.js?ver=1806"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/jquery.plugins.min.js?ver=1806"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/general.js?ver=1810"></script>
+<script type="text/javascript" src="images/revolution/jquery-ui.js"></script>
+<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/discoverygc.js"></script>
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/global.css?t=1715376811" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/css3.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/revolution.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/tabs.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/thread_status.css?t=1532880502" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/star_ratings.css?t=1522753518" />
+<link type="text/css" rel="stylesheet" href="https://discoverygc.com/forums/cache/themes/theme19/progressbar2.css?t=1522753518" />
+
+<link href="https://fonts.googleapis.com/css?family=Cinzel|Montserrat|Overpass|Oswald|Merienda+One|Orbitron|Open+Sans" rel="stylesheet">
+<script type="text/javascript">
+<!--
+	lang.unknown_error = "An unknown error has occurred.";
+
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";;
+
+        var templates = {
+                modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+                modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+        };
+
+	var cookieDomain = ".discoverygc.com";
+	var cookiePath = "/forums/";
+	var cookiePrefix = "";
+	var cookieSecureFlag = "1";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "c5cd77013774b16818c0967cdea52ca8";
+	var rootpath = "https://discoverygc.com/forums";
+	var imagepath = "https://discoverygc.com/forums/images/revolution";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "https://discoverygc.com/forums/images/revolution/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+// -->
+// By Alex., for the fldialogue MyBB Code
+$(function () {
+    var playNote = function (files) {
+        if (this.fileIndex + 1 >= files.length) {
+            this.removeEventListener('ended', playNote);
+            this.fileIndex = 0;
+            this.src = "https://discoverygc.com/fldialogue/" + files[0] + ".wav";
+        } else {
+            this.src = "https://discoverygc.com/fldialogue/" + files[++this.fileIndex] + ".wav";
+            this.play();
+        }
+    };
+
+    Array.from(document.getElementsByClassName('fldialogueplayer')).forEach(function (player) {
+        var files = player.dataset.audioseq.split(',');
+        player.fileIndex = 0;
+        player.src = "https://discoverygc.com/fldialogue/" + files[0] + ".wav";
+        if (files.length <= 8) { // no sequence of audio files go on more than 8 files
+            player.addEventListener('ended', playNote.bind(player, files));
+        }
+    });
+});
+</script>
+<!-- end: headerinclude -->
+</head>
+<body id="forums">
+<!-- start: header -->
+<a name="top" id="top"></a>
+<div class="menu">
+<ul>
+<li id="nav-portal"><a href="https://discoverygc.com/forums/portal.php"><i style="font-size: 12px;" class="fa fa-home fa-fw"></i> Home</a></li>
+<li id="nav-forumsshutupwiththatimage"> <a href="https://discoverygc.com/forums/index.php"><i style="font-size: 12px;" class="fa fa-comments fa-fw"></i> Index</a></li>
+<li id="nav-search"> <a href="https://discoverygc.com/forums/search.php"><i style="font-size: 12px;" class="fa fa-search fa-fw"></i>  Search</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=126999" style="color: #00FF00;"><i style="font-size: 12px;" class="fa fa-rocket fa-fw"></i>Download</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=2334"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>Server Rules</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=8584"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>House Roleplay Laws</a></li>
+<li><a href='javascript:;' id="playerslink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Player Utilities</a></li>
+<li><a href='javascript:;' id="playerhelplink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Player Help</a></li>
+<li><a href='javascript:;' id="extraslink"><i style="font-size: 14px;" class="fa fa-caret-down fa-fw"></i>Forum Utilities</a></li>
+<li id="nav-map"> <a href="https://discoverygc.com/forums/showthread.php?tid=151935" style="color: #00FF00;"><i style="font-size: 12px;" class="fa fa-book fa-fw"></i>Returning Player?</a></li>
+<li><a href='javascript:;' id="togglesidebar"><i style="font-size: 14px;" class="fa fa-flask fa-fw"></i>Toggle Sidebar</a></li>
+      <ul>
+            </div> 
+  <div id="playerslink_popup" class="popup_menu" style="display: none;">
+<!--	  <div class="popup_item_container">
+        <a href="https://ref.discoverygc.com/" class="popup_item">Information Reference</a>
+      </div>-->
+	  <div class="popup_item_container">
+        <a href="https://fifthbarrier.github.io/Navmap/" class="popup_item">Interactive Nav-Map</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=200550" class="popup_item">Tutorials</a>
+      </div>
+	  <!--<div class="popup_item_container">
+        <a href="https://discoverygc.com/wiki/" class="popup_item">Wiki (mostly outdated)</a>
+      </div>-->
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/wiki2/" class="popup_item">New Wiki</a>
+      </div>
+<!--	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/techcompat/techcompat_table.php" class="popup_item">Technology Chart</a>
+      </div>-->
+<!--	  <div class="popup_item_container">
+        <a href="http://lh.discoverygc.com/software/transponder" class="popup_item">Rep hack list</a>
+      </div>-->
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/ids.php" class="popup_item">ID reference</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/restarts.php" class="popup_item">Restart reference</a>
+      </div>
+<!--	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/eventinterface.php" class="popup_item">Server Events</a>
+     </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/serverinterface.php" class="popup_item">Server Stats</a>
+      </div>-->
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=players_online" class="popup_item">Players Online</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=players" class="popup_item">Player Activity</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/api_interface.php?action=faction_summary" class="popup_item">Faction Activity</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/bases.php" class="popup_item">Player Base Status</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discord.gg/FdSkbZ8" class="popup_item">Discord Help Channel</a>
+      </div>
+<!--	  <div class="popup_item_container">
+        <a href="http://lh.discoverygc.com/software/index" class="popup_item">Mactan Network</a>
+     </div>-->
+	  <div class="popup_item_container">
+        <a href="https://darklab8.github.io/fl-data-discovery/ " class="popup_item">DarkStat</a>
+     </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/gameconfigpublic/ " class="popup_item">Server public configs</a>
+     </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/base_admin.php" class="popup_item">POB Administration</a>
+     </div>
+  </div>
+	<div id="playerhelplink_popup" class="popup_menu" style="display: none;">
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=127003" class="popup_item">Missing Powerplant</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=81037" class="popup_item">Stuck in Connecticut</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=91864" class="popup_item">Account Banned</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=97064" class="popup_item">Lost Ship/Account</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=147083" class="popup_item">POB Restoration</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showthread.php?tid=42531" class="popup_item">Disconnected</a>
+      </div>
+  </div>
+  <div id="extraslink_popup" class="popup_menu" style="display: none;">
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/memberlist.php" class="popup_item">Member List</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/stats.php" class="popup_item">Forum Stats</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/showteam.php" class="popup_item">Show Team</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/search.php?action=getnew" class="popup_item">View New Posts</a>
+      </div>
+      <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/search.php?action=getdaily" class="popup_item">View Today's Posts</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/calendar.php" class="popup_item">Calendar</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/misc.php?action=help" class="popup_item">Help</a>
+      </div>
+	  <div class="popup_item_container">
+        <a href="https://discoverygc.com/forums/archive/index.php" class="popup_item">Archive Mode</a>
+      </div>	 
+</div>
+<br />
+<br />
+<br />
+<br />
+</div>
+
+<div id="container">
+		<div id="header">
+		<div id="content">
+			<div class="wrapper"> 
+<div class="navMenu2" style="padding-bottom:  10px;"><!-- start: header_welcomeblock_guest -->
+<font color="#a4a1a1"><i class="fa fa-info-circle fa-fw"></i> Hi there Guest,</font> &nbsp;
+<div class="float_right"><font color="#a4a1a1"> Existing user?</font> 
+
+<a href="https://discoverygc.com/forums/member.php?action=login" onclick="$('#quick_login').modal({ opacity: 0.2, fadeDuration: 250, keepelement: true }); return false;" class="login"><font color="white">  &nbsp; Sign in</font></a> &nbsp;  
+
+  <a href="https://discoverygc.com/forums/member.php?action=register" class="fstat"><font color="white"> <i class="fa fa-check-square fa-fw"></i>&nbsp;Create account</font></a></div>
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="https://discoverygc.com/forums/member.php">
+<!-- live DGC hack to fix MyBB 1.8.16 bug -->
+<input name="my_post_key" type="hidden" value="c5cd77013774b16818c0967cdea52ca8" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table style="padding: 20px;" width="100%" cellspacing="0" cellpadding="5" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%" style="text-shadow: 1px 1px 0px #000;"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2" style="text-shadow: 1px 1px 0px #000;"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="https://discoverygc.com/forums/member.php?action=lostpw" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me" style="text-shadow: 1px 1px 0px #000;">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest --></div>
+              <font color="white">  </font>
+				
+				
+
+
+				
+
+				<!-- BAM --><!-- start: bam_announcement_container -->
+<style>
+	.bam_announcement.yellow {
+		/*background: #FFF6BF;*/
+		border: 1px solid #FFD324;
+		box-shadow: #FFD324 0px 0px 5px inset, #FFD324 0px 0px 2px;
+	}
+	.bam_announcement.yellow:before, .bam_announcement.yellow:after {
+		/*content: "\26a0";*/ color: #FFD324; font-size: 36px; line-height: 26px; display: block;
+	}
+	.bam_announcement.yellow:before {
+		float: left;
+	}
+	.bam_announcement.yellow:after {
+		float: right;
+	}
+	.bam_announcement.yellow a {
+		color: #ffffff;
+	}
+
+	.bam_announcement.green {
+		/*background: #D6ECA6;*/
+		border: 1px solid #8DC93E;
+		box-shadow: #8DC93E 0px 0px 5px inset, #8DC93E 0px 0px 2px;
+		font-size: 1.25em;
+	}
+
+	.bam_announcement.blue {
+		/*background: #ADCBE7;*/
+		border: 1px solid #0F5C8E;
+		box-shadow: #0462DD 0px 0px 5px inset, #0462DD 0px 0px 2px;
+		font-size: 1.25em;
+	}
+	.bam_announcement.blue:before, .bam_announcement.blue:after {
+		/*content: "*";*/ color: #0F5C8E; font-size: 36px; line-height: 26px; display: block;
+	}
+	.bam_announcement.blue:before {
+		float: left;
+	}
+	.bam_announcement.blue:after {
+		float: right;
+	}
+
+
+	.bam_announcement.red {
+		/*background: #FBE3E4;*/
+		border: 1px solid #A5161A;
+		box-shadow: #FFD324 0px 0px 5px inset;
+	}
+
+	.bam_announcement {
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px; 
+		text-align: center;
+		font-size: 1.5em;
+		margin: 10px auto;
+		padding: 8px 12px;
+		/*background: #EBEBEB;*/
+		background: #111111;
+		color: #000000;
+		border: 1px solid #ADADAD;
+	}
+
+	.bam_date {
+		color: #636161;
+		font-size: 0.78em;
+		margin-left: 6px;
+	}	
+
+	/* Insert Custom CSS Here */
+
+.bam_announcement
+{
+color: #ccc !important;
+}
+
+.bam_announcement.red
+{
+background: #EA1922 !important;
+}
+</style>
+<div class="bam_announcements"></div>
+<!-- end: bam_announcement_container --><!-- /BAM -->  
+              	 <!-- start: nav -->
+<div class="navigation">
+&nbsp; <i style="font-size: 14px;" class="fa fa-home fa-fw"></i> <!-- start: nav_bit -->
+<a href="https://discoverygc.com/forums/index.php">Discovery Gaming Community</a>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+<i style="font-size: 14px;" class="fa fa-chevron-circle-right fa-fw"></i>
+<!-- end: nav_sep_active --><!-- start: nav_bit_active -->
+<span class="active">Portal</span>
+<!-- end: nav_bit_active -->
+</div>
+<!-- end: nav --><br />
+                                   
+<script type="text/javascript">
+// <!--
+    if(use_xmlhttprequest == "1")
+    {
+        $("#extraslink").popupMenu();
+		$("#playerslink").popupMenu();
+		$("#playerhelplink").popupMenu();
+    }
+// -->
+</script>
+<div id="side">
+	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Server Time (24h)</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<div style="text-align: center; color: #FFF;/* align-self: initial; */margin: auto auto;padding-top: 5px;"><iframe src="https://free.timeanddate.com/clock/i4m040z3/n1440/fn2/fcfff/tct/pct/ftb/th1/ts1/ta1" frameborder="0" width="83" height="20" allowTransparency="true"></iframe>
+
+
+
+</div>
+</td>
+</tr>
+</table>
+<br />
+
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Players Online</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<a href="api_interface.php?action=players_online"><div style="text-align: center; color: #FFF;/* align-self: initial; */margin: auto auto;padding-top: 5px;" id="playercount"></div></a>
+</td>
+</tr>
+</table>
+  
+<!--  <br />
+<iframe src="/moddb.html" style="border:none;" width="99%" height="520px" frameborder="0"></iframe>-->
+<!--
+<table border="0" cellspacing="0" cellpadding="5" class="tborder" style="display: none;">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Events</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1" id="events">
+If you can see this you have JavaScript disabled
+</td>
+</tr>
+</table>
+  
+  <br />-->
+
+ <!--- 
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Twitter feed</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/discolancer" data-widget-id="642044018902331393">Tweets by @discolancer</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</td>
+</tr>
+</table>
+
+  <br />  
+
+	
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Donations Needed</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<embed allowscriptaccess="never" src="https://pitchinbox.com/widget/widget.swf?id=6505579471" type="application/x-shockwave-flash" width="100%" wmode="transparent">
+</div>
+</td>
+</tr>
+</table>
+
+  
+  <br />  
+-->
+<!--
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Active Events - <a href="https://discoverygc.com/forums/eventinterface.php"><font color="green">Scoreboard</font></a></strong></div> 
+</td>
+</tr>
+<tr>
+
+	<td class="trow1">	
+	<-would-be-?php include 'srvint_cache/event_status.php'; ?->
+	</td>
+	</tr>
+</table>
+-->
+  <br />  
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Active Events - <font color="green">Scoreboard</font></strong></div> 
+</td>
+</tr>
+<tr>
+
+	<td class="trow1">	
+	
+	</td>
+	</tr>
+</table>
+
+  <br />
+<!---<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Next Game Patch</strong></div> 
+</td></tr>
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Initial 100%</div>
+<span style="width: 100%"></span></div></td></tr>
+
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Middle 40.0%</div>
+<span style="width: 40.0%"></span></div></td></tr>
+
+<tr><td>
+<div class="progress-bar2 orange">
+<div style="text-align: center; position:absolute; color: #FFF; margin: auto auto; padding-top: 5px;">4.90 Final 10%</div>
+<span style="width: 10%"></span></div></td></tr>
+
+</table>
+
+  <br/>-->
+
+  <script type="text/javascript">
+	jQuery(function(){
+		jQuery(".latestthreads").load("//discoverygc.com/forums/portal.php .latestthreads_portal");
+		$.get('players_online.php').done(function (ret) {
+                        var d = new Date(ret.AsOf + "Z");
+			$('#playercount').empty().append($('<span>').text(ret.PlayerCount).css('font-weight', 'bold').css('font-size', '20px'), $('<br>'), $('<span>').text('as of ' + d.toLocaleString(undefined, {timeZone: 'UTC'}) + ' UTC'));
+		});
+
+		$.get('events.php').done(function (ret) {
+			var allEvents = {};
+			ret.events.forEach(function (event) {
+				var sectionName = event[0],
+					kvs = event[1],
+					kvDict = {};
+				if (sectionName == "config") {
+					return;
+				}
+				kvs.forEach(function (kv) {
+					var key = kv[0],
+						value = kv[1];
+					if (["allowedid", "targetid", "system", "targetnpc"].indexOf(key) == -1) {
+						kvDict[key] = value;
+					} else {
+						if (key in kvDict) {
+							kvDict[key].push(value);
+						} else {
+							kvDict[key] = [value];
+						}
+					}
+				});
+				kvDict.type = sectionName;
+				allEvents[kvDict.id] = kvDict;
+			});
+			ret.events_status.forEach(function (event) {
+				var sectionName = event[0],
+					kvs = event[1],
+					kvDict = {};
+				kvs.forEach(function (kv) {
+					var key = kv[0],
+						value = kv[1];
+					kvDict[key] = value;
+				});
+				allEvents[kvDict.id].currentCount = Number.parseInt(kvDict.currentcount);
+			});
+
+			$('#events').empty();
+			$.each(allEvents, function (eventId, event) {
+				$('#events').append($('<span>').append(
+					$('<a>').attr('href', 'events_ui.php?id=' + eventId).text(event.name),
+					$('<span>').text(' - ' + event.currentCount + ' / ' + event.objectivemax),
+					$('<br>')
+				));
+			});
+			//$('#events').parent().parent().parent().show();
+		});
+	});
+	</script>
+  
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead">
+<div class="float_left"><strong>Latest activity</strong></div> 
+</td>
+</tr>
+<tr>
+<td class="trow1">
+				<div class="latestthreads float_left"></div>
+		</td>
+</tr>
+</table>
+  
+  <br />
+  
+  
+  
+  
+  
+  
+</div>
+<div id="forum">
+<!-- end: header -->
+
+<table width="100%" cellspacing="0" cellpadding="5" border="0" align="center">
+<tr><td valign="top" width="250">
+<!-- start: portal_welcome -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Welcome, Guest</strong></td>
+</tr>
+<tr>
+<td class="trow1">
+<!-- start: portal_welcome_guesttext -->
+<span class="smalltext">You have to <a href="https://discoverygc.com/forums/member.php?action=register">register</a> before you can post on our site.</span><br />
+<br />
+<form method="post" action="https://discoverygc.com/forums/member.php"><input type="hidden" name="action" value="do_login" /><input type="hidden" name="url" value="/forums/portal.php" />
+Username<br />&nbsp;&nbsp;<input type="text" class="textbox" name="username" value="" /><br /><br />
+Password<br />&nbsp;&nbsp;<input type="password" class="textbox" name="password" value="" /><br /><br />
+<label title="If ticked, your login details will be remembered on this computer, otherwise, you will be logged out as soon as you close your browser."><input type="checkbox" class="checkbox" name="remember" value="yes" /> Remember me</label><br /><br />
+<br /><input type="submit" class="button" name="loginsubmit" value="Login!" /><input name="my_post_key" type="hidden" value="c5cd77013774b16818c0967cdea52ca8" /></form>
+<!-- end: portal_welcome_guesttext -->
+</td>
+</tr>
+</table><br />
+<!-- end: portal_welcome -->
+
+<!-- start: portal_stats -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Forum Statistics</strong></td>
+</tr>
+<tr>
+<td class="trow1">
+<span class="smalltext">
+<strong>&raquo; </strong>Members: 31,616<br />
+<strong>&raquo; </strong>Latest member: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=59192">pylonius</a><br />
+<strong>&raquo; </strong>Forum threads: 164,506<br />
+<strong>&raquo; </strong>Forum posts: 2,116,881
+<br /><br /><a href="https://discoverygc.com/forums/stats.php">Full Statistics</a>
+</span>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_stats -->
+<!-- start: portal_whosonline -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Online Users</strong></td>
+</tr>
+<tr>
+<td class="trow1">
+<span class="smalltext">
+There are currently <b>869</b> online users.<br /><strong>&raquo;</strong> <b>12</b> Member(s) | <b>853</b> Guest(s)<br />Applebot,  Discord,  Google,  UptimeRobot,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=39839"><span style="color: #ff6600;"><strong>DiscoveryGC Moderators</strong></span></a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=59084">Hades Brigade</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=48519">Lea Kaufman</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=56322">Lighthouse Protection Inc.</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=42777">Lord Helmchen</a>,  <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10527">The Lane Hackers</a>
+</span>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_whosonline -->
+<!-- start: portal_latestthreads -->
+<table border="0" cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>Latest Threads</strong></td>
+</tr>
+<!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=94680&action=lastpost">Why should the person abo...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=34686">Zyliath</a><br /> <span title="04-19-2025, 10:02 PM">5 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207612&action=lastpost">5.3 - Singularity: Dev Di...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=38490">TheDoctorXI</a><br /> <span title="04-19-2025, 08:06 PM">7 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=143875&action=lastpost">Most Exciting Equipment V...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=32194">Logan</a><br /> <span title="04-19-2025, 05:40 PM">10 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207675&action=lastpost">[Server Config] You can s...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55068">Perfect Gentleman</a><br /> <span title="04-19-2025, 04:40 PM">11 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207498&action=lastpost">Hades Brigade - Reporting...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=41522">Firb</a><br /> <span title="04-19-2025, 04:09 PM">11 hours ago</span>   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207637&action=lastpost">The Pilgrim that wasn't s...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=46962">Coliz</a><br /> <span title="04-19-2025">Yesterday</span>, 03:09 PM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=202222&action=lastpost">[DSE] Deep Space Engineer...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=56677">[Deep Space Engineering]</a><br /> <span title="04-19-2025">Yesterday</span>, 01:48 PM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207644&action=lastpost">TO: Tau-23 Refineries For...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=34418">StellarViss</a><br /> <span title="04-19-2025">Yesterday</span>, 12:51 PM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207550&action=lastpost">To: The Order | From: The...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=55068">Perfect Gentleman</a><br /> <span title="04-19-2025">Yesterday</span>, 12:41 PM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207620&action=lastpost">&gt;: Grootegeluk Administra...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=56183">Eternal.Journey</a><br /> <span title="04-19-2025">Yesterday</span>, 11:03 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207533&action=lastpost">To: Horizons; From: Weiss...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=57109">Izoh</a><br /> <span title="04-19-2025">Yesterday</span>, 08:20 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207674&action=lastpost">WTS weapons</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=44768">Aly</a><br /> <span title="04-19-2025">Yesterday</span>, 06:58 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207661&action=lastpost">To: Lane Hackers || From:...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=42777">Lord Helmchen</a><br /> <span title="04-19-2025">Yesterday</span>, 01:56 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207673&action=lastpost">To: Rheinland Government</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=58046">Horizons</a><br /> <span title="04-19-2025">Yesterday</span>, 12:43 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207664&action=lastpost">[Official Event] Weekend ...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=58046">Horizons</a><br /> <span title="04-19-2025">Yesterday</span>, 12:22 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207545&action=lastpost">DTR-CNS&gt;Mors_Certissima -...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=15235">monmarfori</a><br /> <span title="04-19-2025">Yesterday</span>, 12:13 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207659&action=lastpost">To: ALG</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=58046">Horizons</a><br /> <span title="04-19-2025">Yesterday</span>, 12:12 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207466&action=lastpost">Hades Brigade - Recruitme...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=59084">Hades Brigade</a><br /> <span title="04-19-2025">Yesterday</span>, 12:02 AM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=204128&action=lastpost">To: Caliban</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=48519">Lea Kaufman</a><br /> 04-18-2025, 11:48 PM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread --><!-- start: portal_latestthreads_thread -->
+<tr class="latestthreads_portal">
+  
+<td width="230px" class="trow1">
+<strong><a href="https://discoverygc.com/forums/showthread.php?tid=207636&action=lastpost">To: BH Veto || From: Phoe...</a></strong>
+<span class="smalltext"><br />by <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=36223">Goliath</a><br /> 04-18-2025, 09:46 PM   
+
+  <br /> <div class="border"></div>
+</span>
+</td>
+</tr>
+<!-- end: portal_latestthreads_thread -->
+</table>
+<br />
+<!-- end: portal_latestthreads -->
+</td>
+<td>&nbsp;</td>
+<td valign="top">
+<!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=207664">[Official Event] Weekend Getaway</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10286">Barrier</a>  - 04-18-2025, 11:59 AM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=550">Official</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=207664">Replies</a> (9)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				<hr class="mycode_hr" />
+<span style="color: #FFFFFF;" class="mycode_color"><span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: xx-large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #4000BF;" class="mycode_color">Weekend Getaway</span></span></span><br />
+<span style="font-size: x-large;" class="mycode_size">Gallia &amp; Rheinland</span><br />
+<span style="font-size: large;" class="mycode_size">Trade &amp; RP Event</span></span></span><br />
+<hr class="mycode_hr" />
+<span style="color: #FFFFFF;" class="mycode_color"><span style="color: #008000;" class="mycode_color">OS&amp;C, Imperial Shipping,</span> <span style="color: #BF40FF;" class="mycode_color">Ile-de-France Shipping, and Unione Corse.</span><br />
+Brigands v Gendarmerie, LWB v RFP, and MORE</span>.<br />
+<hr class="mycode_hr" />
+<div style="text-align: center;" class="mycode_align"><img style="max-width: 700px; height: auto" src="https://imgur.com/RAAcDve.png" /></div>
+<br />
+<span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size"><span style="color: #4000BF;" class="mycode_color">DATE &amp; TIME</span></span></span><br />
+<hr class="mycode_hr" />
+<div style="margin-left: 40px; margin-right: 40px;"><span style="color: #FFFFFF;" class="mycode_color"><span style="font-size: large;" class="mycode_size">Apr 19 - Apr 25</span></span><br />
+(RP threads active until May 5)</div>
+<br />
+<br />
+<span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size"><span style="color: #4000BF;" class="mycode_color">OVERVIEW</span></span></span><br />
+<hr class="mycode_hr" /><span style="color: #FFFFFF;" class="mycode_color"><span style="font-size: medium;" class="mycode_size"><div style="margin-left: 40px; margin-right: 40px;">Late last year, Ile-de-France Shipping announced the sale of Versailles Station in orbit of New Paris. This had followed months of negotiations and bidding rounds, with Imperial Shipping eventually taking ownership, backed by the Rheinland government. This came after a potential domestic buyer - the Gonzaga Society representing the wealthy aristocratic estates of Nevers - balked at the price and withdrew. While OS&amp;C were also unsuccessful in their bid to acquire the station, IDFS was impressed by their proposed business model and has agreed to lease the operator license for Cannes Resort to the Sirian tour firm. <br />
+<br />
+Owing to travel restrictions and economic embargoes, OS&amp;C is primarily focusing on cultivating tourism links between Rheinland and Gallia, hoping to open new revenue streams in Provence, while bolstering its flagging Baden Baden resorts. Imperial Shipping is also now prepared to launch its first major initiative at Versailles, introducing a temporarily subsidized shuttle between Ile-de-France and New Berlin in an attempt to encourage business leaders, trend-setters and thought-leaders to visit the so-called "Sirian diplomatic enclave". Rheinland officials have the perhaps naïve hope that they will be the ones to integrate Gallia into the Sirian market, profiting immensely in the process.<br />
+ <br />
+Of course, the entry of Imperial and OS&amp;C into the Gallic tourism trade has ruffled feathers. While IDFS appears to be slowly shuttering Bouvet Space Entertainment and transitioning away from the market, the Unione Corse are considerably less sanguine. While the Corsican gangsters are careful to keep their own hands scrupulously clean in this affair, the Brigands they have hired to interrupt their competitors have no such concerns. Similarly in Rheinland, the LWB intend to target passenger liners in an attempt to take hostages that can be used in their battle against the two Houses' trade treaty.<br />
+<br />
+Both Rheinland and Gallia are conscious of the diplomatic and economic benefits that could arise from a thriving tourism trade, and have ordered their police units to high alert to ensure the liners' security. RFP and Gendarmerie patrols have accordingly been stepped up across the region.</div></span></span><br />
+<br />
+<span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size"><span style="color: #4000BF;" class="mycode_color">DETAILS</span></span></span><br />
+<span style="color: #FFFFFF;" class="mycode_color"><br />
+<hr class="mycode_hr" /><div style="margin-left: 40px; margin-right: 40px;">
+<span style="font-size: large;" class="mycode_size">Inter-house Tourism:</span><ul class="mycode_list"><li>Passengers (Gallia) will have their profits boosted by 25% at Planet Baden Baden, Planet New Berlin, and Wildau Station.<br />
+</li>
+<li>Passengers (Rheinland) will have their profits boosted by 25% at Cannes Resort Station, Planet Marseille, and Versailles Station.<br />
+</li>
+<li>Please note that not all stations that sell passengers are included in the config, though most are. Watch for the "registered into the event" message when buying to make sure.<br />
+</li>
+<li>Descriptions of cultural landmarks and other shenanigans which may occur during the meticulously engineered state tours are encouraged in a new <a href="https://discoverygc.com/forums/showthread.php?tid=207665" target="_blank" rel="noopener" class="mycode_url">event story thread</a>. The best submissions will earn rewards and potentially a place in future lore about each House.<br />
+</li>
+<li><span style="font-weight: bold;" class="mycode_b">Reminder</span>: Passenger Cabins take up 1000 cargo space, reduced to 500 for liner type vessels. <br />
+</li>
+</ul>
+<span style="font-size: large;" class="mycode_size">Hostages and hellraising:</span><ul class="mycode_list"><li>Beaumont and Darmstadt Depots will serve as drop-off points for Passengers whose tour package has been forcefully amended to an <span style="font-style: italic;" class="mycode_i">exciting</span>, unscheduled alternative.<br />
+</li>
+<li>Brigands and LWB can claim additional rewards by documenting the piracy of Passengers and their sale to Beaumont or Darmstadt (respectively). Roleplay from successful hostage-taking may be used for future events, or incorporated into lore. <br />
+</li>
+<li>Brigands and LWB <span style="font-style: italic;" class="mycode_i">do not</span> receive bounties or points for killing players - their interest is specifically in abducting Passengers.<br />
+</li>
+<li>RFP, Gendarmerie, and other approved House lawfuls are incentivized to keep the peace via <a href="https://discoverygc.com/forums/forumdisplay.php?fid=145" target="_blank" rel="noopener" class="mycode_url">established bounty boards</a>. We will sponsor any rewards handed out for event-related claims (at the current reward levels).</li>
+</ul>
+<span style="font-size: large;" class="mycode_size">Rule changes:</span><ul class="mycode_list"><li>The Trade Ship exemption in rule 2.2 does not apply to ships carrying Passengers in Gallia, Rheinland, and bordering systems for the duration of the event. Docking during a hostile encounter with one of these ships counts as a PvP death.<br />
+</li>
+</ul>
+<span style="font-size: large;" class="mycode_size">Event rewards:</span><br />
+<br />
+<div style="margin: 0 2% 0 2%;">All prizes require relevant roleplay about the event. This can be submitted as a report within a relevant faction channel, as part of a comm / story thread, or in an appropriate event thread.</div><ul class="mycode_list"><li>Custom title: A user title of your choice applied to your forum account.<br />
+</li>
+<li>Engine effects: Liners with event IDs scoring at least 160 points can request an appropriate replacement engine effect. <br />
+</li>
+<li>Ship contrails: For each valid post in the <a href="https://discoverygc.com/forums/showthread.php?tid=207665" target="_blank" rel="noopener" class="mycode_url">Tour Compendium</a>, <a href="https://discoverygc.com/forums/showthread.php?tid=207671&amp;action=lastpost" target="_blank" rel="noopener" class="mycode_url">Corsican Job</a>, or <a href="https://discoverygc.com/forums/showthread.php?tid=207670&amp;action=lastpost" target="_blank" rel="noopener" class="mycode_url">LWB Priority Targets</a> threads you can request replacement contrails for a ship. <br />
+</li>
+<li>Misc: Additional rewards are available for participating factions on a case by case basis. The more effort you put into your roleplay, the greater the potential reward.</div></span></li>
+</ul>
+
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=207664"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement --><!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=207432">Consultation: Shipyard bonuses for Gallia and Rheinland</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=3001">jammi</a>  - 03-27-2025, 01:47 PM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=13">News and Announcements</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=207432">Replies</a> (16)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				Hi everyone, I'm opening a consultation to discuss the bonuses and recipes that are offered for Shipyard Components in Gallia and Rheinland. Factions receive bonuses on two Components, with each Component being produced by factions from two regions and featuring a blend of ingredients from those regions. Currently these are distributed as follows: <ul class="mycode_list"><li>Avionics Systems (Kusari / Liberty)<br />
+</li>
+<li>Interior Systems (Gallia / Liberty)<br />
+</li>
+<li>Propulsion Systems (Kusari / Rheinland)<br />
+</li>
+<li>Reactor Systems (Bretonia / Gallia)<br />
+</li>
+<li>Superstructure Systems (Bretonia / Rheinland)</li>
+</ul>
+Currently there are issues where certain regions are disadvantaged due to the allocation of ingredients, incentivising production in certain Houses over others. Rheinland and Gallia are particularly affected by this, as the recipes for Interior Components and Propulsion Components are currently weighted more towards Liberty and Kusari respectively, while Superstructure Components favour Bretonia.  <br />
+<br />
+Given that the viability of Component production is a core part of the location and operation of many shipyard POBs, I'm raising the proposals for discussion before implementing anything. <ul class="mycode_list"><li>Interior:  Current.<br />
+consumed = commodity_industrial, 100<br />
+consumed = commodity_titanium, 100<br />
+consumed = commodity_copper, 100<br />
+consumed = commodity_xenobiotic, 100<br />
+<br />
+Interior:  Proposed.<br />
+consumed = commodity_industrial, 100<br />
+consumed = commodity_diamonds, 100<br />
+consumed = commodity_copper, 100<br />
+consumed = commodity_xenobiotic, 100<br />
+<br />
+<span style="font-weight: bold;" class="mycode_b">Notes:</span> Production bonuses to be swapped from Gallia and Liberty to Liberty and Rheinland. This means the ingredients will have one mined product from each region, a non-HRC product from directly between the two regions, and a non-HRC product that is produced locally in both. <br />
+<br />
+</li>
+<li>Propulsion: Current<br />
+consumed = commodity_high_temp_alloys, 100<br />
+consumed = commodity_ship_hull_panels, 100<br />
+consumed = commodity_engine_components, 100<br />
+consumed = commodity_niobium, 100<br />
+<br />
+Propulsion: Proposed<br />
+consumed_dynamic_alt = commodity_cryocubes, commodity_high_temp_alloys, 100<br />
+consumed = commodity_ship_hull_panels, 100<br />
+consumed = commodity_engine_components, 100<br />
+consumed = commodity_niobium, 100<br />
+<br />
+Notes: Production bonuses to be swapped from Kusari and Rheinland to Kusari and Gallia. This means the ingredients will have one mutually mined product, a HRC trade commodity from each region, and a non-HRC product that is produced locally in both. <br />
+<br />
+</li>
+<li>Superstructures: current<br />
+consumed_dynamic_alt = 100, commodity_gold, commodity_pirate_gold<br />
+consumed = commodity_ship_hull_panels, 100<br />
+consumed = commodity_ablativearmor, 100<br />
+consumed = commodity_super_alloys, 100<br />
+<br />
+Superstructures: proposed<br />
+consumed_dynamic_alt = 100, commodity_gold, commodity_pirate_gold<br />
+consumed = commodity_molybdenum, 100<br />
+consumed = commodity_ablativearmor, 100<br />
+consumed = commodity_super_alloys, 100<br />
+<br />
+Notes: Rebalances recipes to use one mined product from each region, and one HRC trade commodity from each region.</li>
+</ul>
+<br />
+Result: <ul class="mycode_list"><li>Avionics Systems (Kusari / Liberty)<br />
+</li>
+<li>Interior Systems (Liberty / Rheinland)<br />
+</li>
+<li>Propulsion Systems (Gallia / Kusari)<br />
+</li>
+<li>Reactor Systems (Bretonia / Gallia)<br />
+</li>
+<li>Superstructure Systems (Bretonia / Rheinland)</li>
+</ul>
+Some of these changes may also require some commodity availability adjustments to facilitate access, so feedback on that point would be useful. Particularly in respect of Propulsion Systems, which would require Kusari and Gallic groups to acquire items that are mutually embargoed.
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=207432"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement --><!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=207391">[Official Event] Agent and Director</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10286">Barrier</a>  - 03-23-2025, 09:38 PM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=550">Official</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=207391">Replies</a> (85)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				<hr class="mycode_hr" />
+<span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: xx-large;" class="mycode_size"><span style="font-weight: bold;" class="mycode_b"><span style="color: #BF40FF;" class="mycode_color">Agent and Director</span></span></span><br />
+<span style="font-size: x-large;" class="mycode_size">Ontario</span><br />
+<span style="font-size: large;" class="mycode_size">Combat, Convoy, PvE, &amp; Siege Event</span></span><br />
+<hr class="mycode_hr" />
+LSF | Order | Vagrants + Wild | Hackers + Xenos<br />
+<hr class="mycode_hr" />
+<br />
+<div style="text-align: center;" class="mycode_align"><img style="max-width: 700px; height: auto" src="https://i.imgur.com/Z0qrLMJ.png" /></div>
+<br />
+<span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size"><span style="color: #BF40FF;" class="mycode_color">DATE &amp; TIME</span></span></span><br />
+<hr class="mycode_hr" />
+<div style="margin-left: 40px; margin-right: 40px;"><span style="color: #FFFFFF;" class="mycode_color"><span style="font-size: large;" class="mycode_size">Mar 24-30<br />
+Weekday PvE &amp; PvP: 12pm-4am of the following day<br />
+Weekend Convoy &amp; Siege: 6-8pm<br />
+</span></span></div>
+<br />
+<span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size"><span style="color: #BF40FF;" class="mycode_color">OVERVIEW</span></span></span><br />
+<hr class="mycode_hr" /><span style="color: #FFFFFF;" class="mycode_color"><span style="font-size: medium;" class="mycode_size"><div style="margin-left: 40px; margin-right: 40px;">
+The Order has always been aware of alien infiltrators of human appearance, colloquially known as The Wild. But while the nationality of such creatures could usually be narrowed to a few infected areas, their proliferation across Sirius has been a growing cause for concern within the highest ranks of the shadowy organization. Seemingly indiscriminate terrorist strikes has managed to limit their spread between the Houses, but this was ever a losing battle. With the advent of alien thralls, virtually indistinguishable from a regular human, and general political upheaval in the colonies, the sides of the conflict were nothing like the clear borders of the Nomad War. A change of strategy was called for, focusing on the sources of infection in addition to its downstream effects.<br />
+<br />
+The first test-bed for this new strategy came about in Liberty, where the hardened Atun was deployed to stalk its alien prey. But after years of fruitless operations, its captain and crew were far from the proud volunteers going to the most important mission of the Order. The now haggard men and women, not having seen the inside of a port in all this time, are ready for the assignment to end. And this time, the universe seemed to have come to their aid. The Event on Sudbury would be of interest to any spacer stuck in the drudgery of a wearisome mission, but it is that very interest which would prove to be the undoing of the aliens.<br />
+<br />
+Mere seconds after the planet gleamed with a fell signal, a number of in-system sensors quickly detected the activity, and passed it along to their pre-programmed masters. After a cascade of discussion and decision-making, the LSF have decided that something worthy of continued investigation remained on the surface. The backchannel traffic to the Atum confirmed what many already suspected: the system would soon be a busy place. And while the Atum had not even gone through a quarter of its deep-space lifetime mission profile, its quarry was at the end of its ropes. The brief respite gained by the relocation of Wyoming to Ontario would soon be lost, as the scouting pickets of a multitude of separate, yet human, forces descended on the system. And when their quarry would be forced to burn at long last, the Atum would be there to finish the job.<br />
+<br />
+While the Atum's captain continued to focus on its moving target, the fathering forces in Ontario had a more stationary objective in mind. The ruins on planet Sudbury were sure to attract scientists and treasure hunters, and the whole area would need to be secured against any unfriendly visitors. With the secured assurance of senior admirals and assistant directors, the LSF has made its bid to be the first on-scene. But while setting up a strongpoint could happen in a matter of days, defending it, and the passage back to California, would be a taller order. Despite assurances of the Lane Hackers losing most of its crack forces in the bid for the Niyodo, no serious local commander would expect anything but more grueling fighting. The prior cry of cabinet warhawks has become a reality, as the mangled force at Cochrane was allowed to regroup and receive reinforcements for the next battle. And with the Xenos keeping their own counsel within the system since the departure of DSE, only fools would assume they would be unaware of recent developments. Plumbing the depths of Sudbury would not be an easy task, but once the digital ink had dried on the signatures, the operation would be a go, no matter the cost. And the whole might of the Xeno alliance within the system would do their utmost to ensure that the final tally will substantial indeed.<br />
+<br />
+The many wrecks and clouds of waste within the system would soon receive additions to their number. And under it all, grizzled junkers smugglers claimed to be able to detect an intermittent signal. One that when translated across the detectable spectra, produced a sort of harmonic resonance. It could almost be called a song - or the harrowing screech of the void.<br />
+</span></div>
+<br />
+<span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size"><span style="color: #BF40FF;" class="mycode_color">DETAILS</span></span></span></span><br />
+<span style="color: #FFFFFF;" class="mycode_color"><br />
+<hr class="mycode_hr" /><div style="margin-left: 40px; margin-right: 40px;">
+Bomber and VHF restarts with a standard loadout will be available for all event IDs for the duration of the event.<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Event Restarts';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Event Restarts';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Event Restarts</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li>/restart EventHackersA - Vindicator on Cochrane Depot<br />
+</li>
+<li>/restart EventHackersB - Transgressor on Cochrane Depot<br />
+</li>
+<li>/restart EventLSFA - Defender on Battlecruiser Lehigh<br />
+</li>
+<li>/restart EventLSFB - Upholder on Battlecruiser Lehigh<br />
+</li>
+<li>/restart EventOrderA - Anubis on Battleship Atum<br />
+</li>
+<li>/restart EventOrderB - Sekhmet on Battleship Atum+<br />
+</li>
+<li>/restart EventVagrantsA - Rabisu on The Hive<br />
+</li>
+<li>/restart EventVagrantsB - Adad on The Hive<br />
+</li>
+<li>/restart EventWendigo - Executioner on Battlecruiser Wyoming<br />
+</li>
+<li>/restart EventWildA - Eagle on Battlecruiser Wyoming<br />
+</li>
+<li>/restart EventWildB - Roc on Battlecruiser Wyoming<br />
+</li>
+<li>/restart EventXenosA - Rebel on Fort Ramsey<br />
+</li>
+<li>/restart EventXenosB - Aggressor on Fort Ramsey<br />
+</li>
+</ul></div></div>
+<br />
+<span style="font-size: large;" class="mycode_size">The Crush - Weekday PvE</span><ul class="mycode_list"><li>All event ids will earn double rewards and points for killing NPCs of the other event factions (Order and Xenos/Hackers are not on each other's config). Players will earn points but no credits for killing other players during this time. <br />
+</li>
+<li>The Junkers on Thunder Bay are taking advantage of the chaos and are offering large sums of credits for any recovered military salvage.<br />
+</li>
+<li>Local bases of operation are interested in recovering their pilots intact, and will also pay good money for enemy prisoners.<br />
+</li>
+<li>Periodically, more challenging NPCs with valuable loot will be spawned near Sudbury.<br />
+</li>
+</ul>
+<br />
+<span style="font-size: large;" class="mycode_size">Smash &amp; Grab - Saturday Siege (LSF vs Hackers + Xenos)</span><ul class="mycode_list"><li>The Lehigh will oversee the defense of the California jump gate and the Robert Peary, a lightly reinforced bustard support ship maintaining the gate. The Liberty Rose, a reinforced Overlord-class dreadnought, will lead the Xeno assault.<br />
+</li>
+<li>The LSF strongpoint will be defended by 10 weapon platforms (can be shot by all guns), which must be destroyed before the Peary becomes killable. After this occurs, the Peary will attempt to exit the system through the gate and close it behind them, which will take time.<br />
+</li>
+<li>The Lehigh and the Rose will be flown by staff (40x reinforced, docking bay). They cannot be killed, though both can be disabled and thus removed from the event with further story consequences. The Robert Peary (10x reinforced) will also be flown by staff, and can be permanently killed after all weapons platforms are down.<br />
+</li>
+<li>Included event IDs will earn points and a &#36;400k bonus for kills of the other sides' player ships.<br />
+</li>
+<li>Being credited with putting  any event ship out of action will earn you 20 mil credits, split among the listed players.<br />
+</li>
+</ul>
+<br />
+<span style="font-size: large;" class="mycode_size">Hot Pursuit - Sunday Convoy (Order vs Wild + Vagrants)</span><ul class="mycode_list"><li>The Atum will pursue the Wyoming across Ontario. After 30 minutes of pursuit, the Wyoming will head towards the Vagrant Hive in Inverness.<br />
+</li>
+<li>Both ships will be flown by staff (40x, reinforced, ∞ powercore, docking bay). They cannot be killed, though both can be disabled and thus removed from the event, with further story consequences.<br />
+</li>
+<li>Included event IDs will earn points and a &#36;400k bonus for kills of the other sides' player ships in Ontario and Inverness.<br />
+</li>
+<li>Being credited with putting either event ship out of action will earn you 20 mil credits, split among the listed players.<br />
+</li>
+</ul>
+<br />
+<span style="font-size: large;" class="mycode_size">Rule Changes:</span><ul class="mycode_list"><li>During the weekend, all event participants are limited to Gunboats and below.<br />
+</li>
+<li>During the weekend, non-included ids may not engage any event participants.<br />
+</li>
+<li>During the weekend, the respawn timer is reduced to 10 minutes for all event participants, and 5 minutes for Hackers &amp; Xenos. This is subject to change to ensure fight balance.<br />
+</li>
+</ul>
+<br />
+<span style="font-size: large;" class="mycode_size">Rewards:</span><br />
+All rewards require an INRP write-up about the event from the point of view of your character. Can be submitted as a report within the comm section, in a relevant faction channel, or as part of a story thread.<br />
+<br />
+<span style="text-decoration: underline;" class="mycode_u">Custom Title</span><br />
+Requires participation in the event, event IDs only.<br />
+<br />
+<span style="text-decoration: underline;" class="mycode_u">Prototype Components (500)</span><br />
+Requires 150 NPC kils. You may combine kills across all characters you played during the event. Can be claimed multiple times.<br />
+<br />
+<span style="text-decoration: underline;" class="mycode_u">Tier-1 Fighter Codenames (x4)</span><br />
+Requires 5 player kills. You may combine kills across all characters you played during the event. Can be claimed multiple times.<br />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Codename List';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Codename List';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Codename List</a></div><div class="spoiler_body" style="display: none;"><ul class="mycode_list"><li>AHRIMAN<br />
+</li>
+<li>ASURAS (x2 instead of x4)<br />
+</li>
+<li>ARCHANGEL <br />
+</li>
+<li>BLOODSTONE <br />
+</li>
+<li>BLUE BLAZE <br />
+</li>
+<li>CERBERUS <br />
+</li>
+<li>CLAYMORE <br />
+</li>
+<li>DARK BLOSSOM <br />
+</li>
+<li>DEFILER <br />
+</li>
+<li>DELUSION <br />
+</li>
+<li>DIAMONDBACK <br />
+</li>
+<li>DULZIAN <br />
+</li>
+<li>EXCALIBUR <br />
+</li>
+<li>GARNET <br />
+</li>
+<li>GOLDEN BLADE<br />
+</li>
+<li>GUARDIAN <br />
+</li>
+<li>HAMMERFALL <br />
+</li>
+<li>HEIMDALL <br />
+</li>
+<li>HELLION <br />
+</li>
+<li>IRON HAMMER <br />
+</li>
+<li>JADE <br />
+</li>
+<li>KINTANO <br />
+</li>
+<li>LAZURITE <br />
+</li>
+<li>MALACHITE <br />
+</li>
+<li>MEDUSA <br />
+</li>
+<li>ONYX <br />
+</li>
+<li>PHOENIX <br />
+</li>
+<li>PROMETHEUS <br />
+</li>
+<li>RAGNAROK <br />
+</li>
+<li>SILVER FIRE <br />
+</li>
+<li>SOLARIS <br />
+</li>
+<li>TANZANITE <br />
+</li>
+<li>TARANIS <br />
+</li>
+<li>THORS HAMMER <br />
+</li>
+<li>TWILIGHT <br />
+</li>
+</ul></div></div>
+<br />
+<span style="text-decoration: underline;" class="mycode_u">Faction POBs in Ontario</span> OR <span style="text-decoration: underline;" class="mycode_u">Cloaking Devices</span><br />
+Kills by tagged ships on the config will be summed, allowing the purchase of faction POBs at the following rates: Tier 3 = 60, Tier 2 = 40, Tier 1 = 20. The pobs will come with one free Storage Module and will be fully repaired and stocked with necessary supplies. However, they may only be placed in Ontario. <br />
+Alternatively, the tagged ship kill points may also be spent to purchase cloaks at the following rates: Mk1 = 15, Mk2 = 20, Mk2 adv = 20 Mk3 = 25.<br />
+Faction leaders should pm @<a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10286" class="mycode_mention"><span style="color: #ffcc00;"><strong>Barrier</strong></span></a> with the final details.<br />
+Factions currently eligible for these rewards: Hackers ();--), LSF (LSS|), Order (Order| &amp; E\V/), Vagrants (Vagrant), Wild (Das Wilde), Xenos (XA-)</div>
+<br />
+<span style="color: #BF40FF;" class="mycode_color"><span style="font-family: Cinzel;" class="mycode_font"><span style="font-size: x-large;" class="mycode_size">Results</span></span></span><br />
+<span style="font-size: medium;" class="mycode_size"><br />
+<hr class="mycode_hr" /><div style="margin-left: 40px; margin-right: 40px;">
+<span style="font-size: medium;" class="mycode_size"><span style="font-style: italic;" class="mycode_i"><br />
+<div style="text-align: center;" class="mycode_align"><img style="max-width: 700px; height: auto" src="https://i.imgur.com/1fEajrL.png" /></div>
+One of the LSF’s primary objectives in Ontario is to acquire control over the mysterious alien complex on Planet Sudbury – Site Alpha. Probing patrols launched from the Lehigh frequently faced opposition from local enemies and unknown hostiles generically callsigned Wendigos. The Tuscaloosa was withdrawn from Inverness to take on deep space provisions at Los Angeles, and issued with a brief to finally capture Sudbury’s orbit. Upon departing the Lehigh’s beach head perimeter in Ontario, the task force had expected to meet heavy resistance. Instead, their occupation of Sudbury orbit was uncontested.<br />
+<br />
+The Xenos had been watching the LSF buildup at the Jump Gate. They executed their plan once the Tuscaloosa had departed and was too distant to intervene. A tide of haphazardly equipped Xeno fighters poured from the Georgian Ice Field and overran the LSF position with bloody wave attacks. At the head of this horde was the Liberty Rose, an obsolete Liberty Dreadnought – the ghost of the LNS Alabama. While the sophisticated Battlecruiser Lehigh was the Rose’s superior in every material sense, the elderly battleship brought mass and numbers to bear. <br />
+<br />
+Both capital ships were heavily damaged in the resulting clash, and forced to abandon the field. As a result, the euphemistically named "repair ship” Robert S. Peary was left exposed and then destroyed. As the only vessel of its kind in Liberty, the authorities will now be unable to maintain the stability of the California Jump Gate's improvised repairs. Before long the gate will need to be deactivated to prevent a critical blowout, placing an inevitable countdown on local operations. Heavy casualties among the Peary’s elite Ageira and DSE crew has already whipped up a near unprecedented scandal, with Congressional committees calling for Director Maxwell’s head and the court martial of the Lehigh’s command staff. <br />
+<div style="text-align: center;" class="mycode_align"><img style="max-width: 700px; height: auto" src="https://i.imgur.com/eUDU5Tj.png" /></div>
+The Xenos have suffered eye-watering losses, as Fort Ramsey willingly paid an extreme toll in blood and mangled bone to cripple Liberty's foothold. The unexpected victory has emboldened the separatist wing of the movement, bolstering their vision of Ontario as the capital of an ascendant Liberty Free Republic. Despite this, the combat wings lent by the other Xeno clans to support the offensive have returned to their bases. It will take time for Ramsey to reconstitute its shattered strength and repay the debts and obligations they incurred with the other clans to achieve their victory. <br />
+<br />
+The bloodshed has also reopened ideological fissures with the Xenos’ isolationist wing, who resent the separatists’ success. They argue the fixation on Ontario is hubris, and the scores of lost fighters should have been expended to combat foreign goods and corporations in Liberty. This comes at a time when Liberty's working classes are being ravaged by the Bretonian drug Slog, and isolationist provocateurs are fixated on instigating a war they believe will decouple Liberty’s economy from its dependency on Kusari.<br />
+<br />
+The Tuscaloosa for its part is now beginning to execute its mission, despite the risks. Expeditionary teams have been dispatched to Sudbury’s surface, and have placed antimatter blasting charges to rapidly excavate through the regolith. They hope to undermine the Alpha Site’s protective shield and gain access to the beam emitter’s inner mechanisms. With Ontario now politically radioactive, it is unlikely they will receive further reinforcements. Should they fail to complete their objective before the Jump Gate fail-safes execute, they will be forced to discard as much mass as possible to ration fuel for the long voyage home. <br />
+<div style="text-align: center;" class="mycode_align"><img style="max-width: 700px; height: auto" src="https://i.imgur.com/erdxVK8.png" /></div>
+For months the Battlecruiser Wyoming has laid dormant, hiding among the churning ocean of scrap in the South Ontario Debris Sea. The Wild had long known it was a matter of when and not if The Order would finally track them down. For weeks, Order patrols had methodically swept the field, having already ruled out other locations. The Wyoming’s remaining fighters had scrambled to destroy one scout that strayed too close, and in the process revealed their presence. Scout activity increased sharply, with detection now inevitable in a matter of days, if not hours. Assessing their options as poor across the board, the Wild determined that their best shot was fleeing to Inverness, and hoping the Vagrants would attack an Order presence so close to their Hive.<br />
+ <br />
+When the Xenos attacked the California Jump Gate, the local comm net lit up with the chaos of battle. The Wyoming used this distraction to initiate a hard burn for the Georgian Ice Field. The Atum’s gaze was already fixed upon the area however, and was soon in hot pursuit. Within the ice field, Order interceptors immobilized the Wyoming, and its last stand began. The Wild fighter screen was obliterated during the grinding battle, with the Wyoming’s destruction apparently inevitable. When all seemed lost, the Vagrants made contact with an ultimatum: sever links with the Nomad mindshare and be subsumed into their own, and the precious Liberty thrall network would be saved.<br />
+<br />
+Facing certain death, the Wild reluctantly agreed, concluding that survival to continue the work against humanity in some capability was preferable to their death and the loss of all progress. Immediately Vagrant heavy warforms jumped to Ontario and whisked the Wyoming away. Loathe to lose their prey so easily, the Atum mustered its forces and plunged through the collapsing drive rift. Arriving in orbit of Planet Veracruz in Vespucci, the battle reignited. The Atum wrought grievous damage on one of the warforms, with the crippled entity falling into Veracruz’s atmosphere. Despite this, The Atum had suffered increasingly severe damage itself, with fires raging across multiple decks. Breaking off, the battleship cloaked and fled into the Sonora Ice Field. Soon intercepted by the Gaians of Atcama Base, the two mutually suspicious groups are now locked in a parlay as they try to gauge one another’s intentions and reliability.<br />
+<div style="text-align: center;" class="mycode_align"><img style="max-width: 700px; height: auto" src="https://i.imgur.com/NkaVvj6.png" /></div>
+The Vagrants have been expanding their influence in Vespucci for some months. After the Liberty Insurgency’s destruction, the human wreckage of that defeat was scattered across Liberty and its Independent Worlds. After infesting a number of such survivors, the Vagrants had become aware of Fort Leniex. Using their own reserves of infested or indoctrinated humans, scouts had investigated and discovered the complex gutted by explosive sabotage. Some sections of the fortress were salvageable however, and it was here the Wendigos made their hidden lair. By the time the Wyoming had been spirited away to Vespucci, basic docking functions had been restored, and the sole surviving drydock was put to use.<br />
+<br />
+The Wyoming is now being assessed for repairs, which will inevitably be complex and arduous. The battlecruiser has incurred years of minor damage, as well as the severe blows dealt by the Atum. Its crew have also been restrained and isolated aboard Leneix, readying them for the mental rites needed to sever their mindshare and reconnect to the Vagrants. The psychic trauma from such severance and melding can be deadly, inflicting terrible pain or even psychosis on both parties – such practice is normally taboo for the Nomads. Many remember the shock and anguish of the disconnection following the Nomad Wars, 35 years ago. Despite this, the potential prize for the Vagrants is too tempting to pass up.<br />
+<br />
+Having effectively had the Liberty thrall network torn from their grasp, the Nomads’ reaction has been one of shock and rage. The isolated Wild of Stockton Depot are also fearful that they may be subjected to a similar ploy in the future, and have beseeched their masters to send reinforcements to repulse any potential Wendigo trickery. The two alien hives’ interests appear to have diverged to a hitherto unprecedented level, with their pawns now engaged in outright conflict as proxies to settle this growing dispute. While the Vagrants have acted aggressively to secure their position in Liberty, this dissonance also presents a startling opportunity for the forces of humanity to divide and conquer their alien enemies.<br />
+<br />
+</span></span><br />
+<hr class="mycode_hr" />
+<div class="spoiler_wrap"><div class="spoiler_header"><a href="javascript:void(0);" onclick="javascript:if(parentNode.parentNode.getElementsByTagName('div')[1].style.display=='block'){parentNode.parentNode.getElementsByTagName('div')[1].style.display='none';this.innerHTML='&lt;img title=&quot;[+]&quot; alt=&quot;[+]&quot; src=&quot;/forums/images/collapse_collapsed.png&quot; class=&quot;expandspoiler&quot; /&gt;Event Bounties';}else {parentNode.parentNode.getElementsByTagName('div')[1].style.display='block';this.innerHTML='&lt;img title=&quot;[-]&quot; alt=&quot;[-]&quot; src=&quot;/forums/images/collapse.png&quot; class=&quot;expandspoiler&quot; /&gt;Event Bounties';}"><img title="[+]" alt="[+]" src="/forums/images/collapse_collapsed.png" class="expandspoiler" />Event Bounties</a></div><div class="spoiler_body" style="display: none;">
+<table style="width:100%;">
+<td>Hackers &amp; Xenos</td>
+<td>LSF</td>
+<td>Vagrants &amp; Wild</td>
+<td>Order</td>
+<tr>
+<td>
+FRS-Liberty.Rose,	10<br />
+XA-FRS-Crimson.Biter	6<br />
+XA-FRS-Victrix	4<br />
+XA-Mourn	4<br />
+XA-Phantom,67	4<br />
+);--Zero/Logon	2<br />
+FRS-Salem	2<br />
+Oliver-Anderson	2<br />
+Syndic,	2<br />
+Wonderlust:King	2<br />
+);--Misconfig	1<br />
+'Caliban',	1<br />
+Cittium-2,	1<br />
+Fence.Breaker	1<br />
+FRS-Medusa	1<br />
+Henry.Willis,	1<br />
+Marksma,	1<br />
+Silverton.Adder,	1<br />
+Slaver.Creek	1<br />
+Tax.Evader,	1<br />
+XA-Cobra,	1<br />
+XA-FRS-Mourning.Star	1<br />
+XA-Hedge.Knight,	1<br />
+XA-Redback,	1<br />
+XA-U-Fodder,	1<br />
+</td>
+<td>
+CSRT|'Plat',	24<br />
+LNS-Cheyenne,	21<br />
+Coast,	18<br />
+CSRT|'Slit',	16<br />
+Ryan.Coleman,	16<br />
+[LSF]-V-Meteor,	13<br />
+=LSF=Fort.Rucker,	13<br />
+Boyson.Parde,	13<br />
+LSS|Vrihedd,	11<br />
+=LSF=Excelsus	10<br />
+LSS|Thunderhawk	9<br />
+Right.Cupholder,	9<br />
+D47|Zeta-2,	7<br />
+Silver-0,	7<br />
+LSS|Bravo-2	6<br />
+Jason.Howard,	4<br />
+Lawbringer,	4<br />
+PX44,	4<br />
+Dredge	3<br />
+LSS|Delta-4	3<br />
+LSS|Partybreaker,	3<br />
+Pluto	3<br />
+libertyuberalles,	2<br />
+LSS|Beta-14,	2<br />
+Titan-5,	2<br />
+Agent.Blue.Fox,	1<br />
+CSRT|Sylph,	1<br />
+LNS-Lehigh,	1<br />
+LNS-Worrywart,	1<br />
+LSS|Oscar-9,	1<br />
+Mojo.mojo,	1<br />
+</td>
+<td>
+LNS-Wyoming	9<br />
+Vagrant.Ourania	7<br />
+Kuzunoha|Aoi,	5<br />
+Evangelist	4<br />
+Wilde.Krefeld,	4<br />
+High.Wave	3<br />
+Paralysis,	3<br />
+Le'On'Sie,	2<br />
+Suiko|Kumiho,	2<br />
+Va'grant,	2<br />
+Vagrant.Psyche-Agape,	2<br />
+Vagrant.Psyche-Eros	2<br />
+Astraea,	1<br />
+Delta-9	1<br />
+Lifeprime,	1<br />
+LNS-Alakanuk,	1<br />
+Maverick.|Aoi,	1<br />
+Pentecost	1<br />
+Screamer,	1<br />
+S'kibi'Dhee,	1<br />
+Visions,	1<br />
+Wendigos,	1<br />
+Wilde.Verdammtenlied	1<br />
+Windsor-11,	1<br />
+</td>
+<td>
+Centurion|S8,	10<br />
+Peach.Blossom,	9<br />
+Ramesses,	8<br />
+Alpha-2,	7<br />
+Michael.Vogt,	6<br />
+Cargonia	5<br />
+Golanskis.Wrath,	5<br />
+CV-Atum,	4<br />
+Tau-3,	4<br />
+Asim,	3<br />
+E\V/-H-Rapida,	3<br />
+E\V/-OCV-Seth,	3<br />
+E\V/-OCV-VermilionY,	3<br />
+E\V/-OCV-Wayfarer,	3<br />
+Super-Anubis	3<br />
+E\V/-Heqet	2<br />
+Tsukiharu	2<br />
+E\V/-H-Serqet	1<br />
+E\V/-Sweet.Revenge-3	1<br />
+Golanski's.Fentanyl,	1<br />
+John.Bercrow[O]	1<br />
+OCV-Sed	1<br />
+</td>
+</tr>
+<tr>
+<td>Hacker &amp; Xeno total: 53</td>
+<td>LSF total: 229</td>
+<td>Vagrant &amp; Wild total: 57</td>
+<td>Order total: 85</td>
+</tr>
+</table></div></div>
+<br />
+Unfortunately, the PvE config is unrecoverable due to data loss on Tuesday and a bug preventing server-side scoring on Wednesday and Thursday. If you did a lot of PvE, you can get your score by opening up DSAce.log (located in Documents\My Games\Freelancer), and searching for the words: <span style="font-weight: bold;" class="mycode_b"><span style="font-style: italic;" class="mycode_i">1 points awarded</span></span><br />
+The number of hits is your total score. Keep in mind that this will show other PvE events, so just make sure you're only looking within the past two weeks.<br />
+You can then post your total in a reply and claim the appropriate amount of Prototype Components (500 per 150 NPC kills).<br />
+<hr class="mycode_hr" />
+<br />
+Players of characters eligible for Codenames:<ul class="mycode_list"><li>CSRT|'Plat' (24)<br />
+</li>
+<li>LNS-Cheyenne (21)<br />
+</li>
+<li>Coast (18)<br />
+</li>
+<li>CSRT|'Slit' 16)<br />
+</li>
+<li>Ryan.Coleman (16)<br />
+</li>
+<li>[LSF]-V-Meteor (13)<br />
+</li>
+<li>=LSF=Fort.Rucker (13)<br />
+</li>
+<li>Boyson.Parde (13)<br />
+</li>
+<li>LSS|Vrihedd (11)<br />
+</li>
+<li>=LSF=Excelsus (10)<br />
+</li>
+<li>FRS-Liberty.Rose (10)<br />
+</li>
+<li>LNS-Wyoming	(9)<br />
+</li>
+<li>LSS|Thunderhawk (9)<br />
+</li>
+<li>Peach.Blossom (9)<br />
+</li>
+<li>Right.Cupholder (9)<br />
+</li>
+<li>D47|Zeta-2 (7)<br />
+</li>
+<li>Silver-0 (7)<br />
+</li>
+<li>Vagrant.Ourania (7)<br />
+</li>
+<li>LSS|Bravo-2 (6)<br />
+</li>
+<li>XA-FRS-Crimson.Biter (6)<br />
+</li>
+<li>Golanskis.Wrath (5)<br />
+</li>
+<li>Kuzunoha|Aoi (5)<br />
+</li>
+</ul>
+Additional players may be eligible if they played multiple character with the combined score over 5 points. Please let me know if you played multiple characters and what their combined score is when claiming rewards.<br />
+<br />
+Furthermore, players of tagged factions accumulated the following point totals which are eligible for the faction rewards. Please remember that the faction leader must provide some RP in order to claim these.<br />
+Rates (pobs in Ontario): Tier 3 = 60, Tier 2 = 40, Tier 1 = 20.<br />
+Rates (cloaks): Mk1 = 15, Mk2 = 20, Mk2 adv = 20 Mk3 = 25.<ul class="mycode_list"><li>E\V/ = 16 <br />
+</li>
+<li>LSS| = 35<br />
+</li>
+<li>XA- = 23 (close enough for mk3 cloak)<br />
+</li>
+</ul>
+</span></div></span>
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=207391"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement --><!-- start: portal_announcement -->
+<table cellspacing="0" cellpadding="5" class="tborder">
+<tr>
+<td class="thead"><strong>&nbsp; <a href="https://discoverygc.com/forums/showthread.php?tid=207318">Official Event Schedule</a></strong></td>
+</tr>
+<tr>
+<td class="trow2" align="right">
+<span class="smalltext">Posted by: <a href="https://discoverygc.com/forums/member.php?action=profile&amp;uid=10286">Barrier</a>  - 03-16-2025, 11:54 PM - Forum: <a href="https://discoverygc.com/forums/forumdisplay.php?fid=550">Official</a> <!-- start: portal_announcement_numcomments -->
+- <a href="https://discoverygc.com/forums/showthread.php?tid=207318">Replies</a> (8)
+<!-- end: portal_announcement_numcomments --></span>
+</td>
+</tr>
+<tr>
+<td class="trow1">
+<table border="0" cellpadding="5" class="tfixed" style="width: 100%;">
+	<tr>
+			<p>
+				<span style="font-size: medium;" class="mycode_size">Hello everyone. <br />
+<br />
+In the interest of assisting with event organization, we will start posting our planned event schedule at least a month in advance. While the details may be subject to change, the overall event order will generally remain the same. So if we have to postpone, you can expect the schedule to move up to the following weekend, and so on.<br />
+<br />
+Please check this thread regularly for updates. You can reply to discuss upcoming events, or make suggestions about dates/times of the events.<br />
+<br />
+Without further ado, here's the current schedule. <br />
+<br />
+<table style="width:100%;">
+<tr>
+<td><span style="font-weight: bold;" class="mycode_b">Dates</span></td>
+<td><span style="font-weight: bold;" class="mycode_b">Times (UTC)</span></td>
+<td><span style="font-weight: bold;" class="mycode_b">Factions</span></td>
+<td><span style="font-weight: bold;" class="mycode_b">Event type</span></td>
+</tr>
+<tr>
+<td>Apr 14 - 25</td>
+<td>TBD, likely 24/7</td>
+<td>TBD</td>
+<td>Trade</td>
+</tr>
+<tr>
+<td>Apr 26 (&amp; maybe 27)</td>
+<td>4-10pm (tentative)</td>
+<td>Everyone</td>
+<td>Racing</td>
+</tr>
+<tr>
+<td>May 5 - 11</td>
+<td>6-8pm (tentative)</td>
+<td>BAF/BIS/BPA, Coalition, Corsairs, Mollys</td>
+<td>Combat &amp; Siege</td>
+</tr>
+</table></span>
+			</p>
+			
+	</tr>
+	<tr>
+		<td align="right" colspan="2" valign="bottom">
+			<span class="smalltext">
+				<a href="https://discoverygc.com/forums/printthread.php?tid=207318"><i class="fa fa-print fa-fw" title="print"></i> </a> 
+              
+			</span>
+		</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<!-- end: portal_announcement -->
+<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (236):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="portal.php?page=2" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="portal.php?page=3" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="portal.php?page=4" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="portal.php?page=5" class="pagination_page">5</a>
+<!-- end: multipage_page --><!-- start: multipage_end -->
+&hellip;  <a href="portal.php?page=236" class="pagination_last">236</a>
+<!-- end: multipage_end --><!-- start: multipage_nextpage -->
+<a href="portal.php?page=2" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+</td>
+</tr>
+</table>
+</div>
+<!-- start: footer -->
+<!-- The following piece of code allows MyBB to run scheduled tasks. DO NOT REMOVE --><!-- End task image code -->
+<br />
+<br />
+
+
+<div id="footer">
+	<div class="upper">
+		<div class="float_right" style="margin-right: 4%;"> 
+          <span id="copyright smalltext">Powered By <a href="http://www.mybb.com" target="_blank">MyBB</a>, &copy; 2002-2025 <a href="http://www.mybb.com" target="_blank">MyBB Group</a>.</span><span id="copyright"> Theme © 2014 iAndrew & DiscoveryGC</span></div>
+      
+			<div class="float_left" style="margin-top:-15px; margin-left: 1%;"> 
+               <ul class="footermenu bottom_links" style="text-shadow: 1px 1px 0px #0d0d0d;">
+<li><a href="#top" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-chevron-circle-up fa-fw"></i></a></li>
+<!-- start: footer_contactus -->
+<li><a href="mailto:info@discoverygc.com" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-envelope-square fa-fw"></i> Contact Us</a></li>
+<!-- end: footer_contactus --> <!-- start: footer_themeselect -->
+<div class="theme">
+<form method="POST" action="/forums/portal.php" id="theme_select">
+	
+	<input type="hidden" name="my_post_key" value="c5cd77013774b16818c0967cdea52ca8" />
+	<!-- start: footer_themeselector -->
+<select name="theme" onchange="MyBB.changeTheme();" style="margin-top: 7px;">
+<optgroup label="Quick Theme Select">
+<!-- start: usercp_themeselector_option -->
+<option value="23">Carbon</option>
+<!-- end: usercp_themeselector_option --><!-- start: usercp_themeselector_option -->
+<option value="25">test</option>
+<!-- end: usercp_themeselector_option --><!-- start: usercp_themeselector_option -->
+<option value="19">Blue Revolution</option>
+<!-- end: usercp_themeselector_option -->
+</optgroup>
+</select>
+<!-- end: footer_themeselector -->
+	<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+</div>
+<!-- end: footer_themeselect --> 
+<li><a href="https://discoverygc.com/forums/archive/index.php" style="text-shadow: 1px 1px 0px #0d0d0d;"><i style="font-size: 14px;" class="fa fa-bars fa-fw"></i>&nbsp;Lite mode</a></li>
+			</ul>
+        </div></div>
+
+
+	
+	<!--<script type="text/javascript" src="https://discoverygc.com/forums/jspenguin/jspenguin.js"></script>
+	<script type="text/javascript" src="https://discoverygc.com/forums/jscripts/snowstorm.js"></script> -->
+<!-- end: footer -->
+</body>
+</html>
+<!-- end: portal -->

@@ -13,7 +13,7 @@ import (
 )
 
 func FixtureMockedThreadsRequester() func(mt MethodType, u forum_types.Url) (*QueryResult, error) {
-	thread_post_content_filepath := filepath.Join(utils_os.GetCurrentFolder().ToString(), "test_data", "latest_threads.html")
+	thread_post_content_filepath := filepath.Join(utils_os.GetCurrentFolder().ToString(), "test_data", "latest_threads2.html")
 	if _, err := os.Stat(thread_post_content_filepath); err != nil {
 		query, err := NewQuery("GET", ThreadPageURL)
 		logus.Log.CheckFatal(err, "failed to create mock data")

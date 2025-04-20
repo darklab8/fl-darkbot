@@ -62,7 +62,14 @@ func (p *ThreadsRequester) GetLatestThreads(opts ...threadPageParam) ([]*forum_t
 			return nil, span_section.Error
 		}
 
-		forum_timestamp := span_section.Find("span").Attrs()["title"]
+		var forum_timestamp string
+		span := span_section.Find("span")
+
+		if span.Error == nil {
+			forum_timestamp, _ = span_section.Find("span").Attrs()["title"]
+		} else {
+			forum_timestamp = "unknown"
+		}
 
 		author := span_section.Find("a")
 		if logus.Log.CheckError(author.Error, "failed to get author object") {
