@@ -43,9 +43,9 @@ func init() {
 		Help: "Requests sent by viewer to handle table renderings. Contain error if smth went wrong",
 	}, []string{"guild_name", "channel_id", "error"})
 
-	upTime = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "darkbot_uptime_minutes",
-		Help: "Uptime minutes",
+	upTime = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "darkbot_uptime_seconds",
+		Help: "Uptime in seconds",
 	})
 
 	newreg := prometheus.NewRegistry()
@@ -139,7 +139,7 @@ func Prometheuser(dg *discorder.Discorder) {
 
 	go func() {
 		for {
-			upTime.Inc()
+			upTime.Add(60)
 			time.Sleep(time.Minute)
 		}
 	}()
