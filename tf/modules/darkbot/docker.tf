@@ -49,6 +49,10 @@ resource "docker_container" "darkbot" {
     host_path      = "/tmp/darkstat-${var.environment}"
   }
 
+  log_opts = {
+    "max-file": "3"
+    "max-size": "10m"
+  }
 
   labels {
     label = "prometheus"
@@ -79,6 +83,15 @@ resource "docker_service" "darkbot" {
     networks_advanced {
       name    = data.docker_network.grafana.id
       aliases = ["${var.environment}-darkbot"]
+    }
+
+    log_driver {
+      name = "json-file"
+
+      options = {
+        "max-file": "3"
+        "max-size": "10m"
+      }
     }
 
     container_spec {
