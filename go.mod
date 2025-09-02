@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/anaskhan96/soup v1.2.5
-	github.com/bwmarrin/discordgo v0.28.1
+	github.com/bwmarrin/discordgo v0.29.0
 	github.com/darklab8/fl-darkstat v1.76.6
 	github.com/darklab8/go-utils v0.28.0
 	github.com/pkg/profile v1.7.0
@@ -12,7 +12,7 @@ require (
 	github.com/prometheus/common v0.62.0
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/net v0.37.0
+	golang.org/x/net v0.42.0
 	gorm.io/driver/sqlite v1.5.6
 	gorm.io/gorm v1.25.11
 )
@@ -39,9 +39,9 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	go.opentelemetry.io/otel v1.35.0 // indirect
 	go.opentelemetry.io/otel/trace v1.35.0 // indirect
-	golang.org/x/crypto v0.36.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
