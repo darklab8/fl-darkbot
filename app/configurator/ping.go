@@ -6,7 +6,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/discorder"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
-	"github.com/darklab8/go-typelog/typelog"
+	"github.com/darklab8/go-utils/typelog"
 )
 
 func GetPingingMessage(ChannelID types.DiscordChannelID, configurator *Configurators, Discorder *discorder.Discorder) types.PingMessage {

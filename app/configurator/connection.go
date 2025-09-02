@@ -9,7 +9,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
-	"github.com/darklab8/go-typelog/typelog"
+	"github.com/darklab8/go-utils/typelog"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

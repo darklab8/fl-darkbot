@@ -7,7 +7,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/forumer/forum_types"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 
-	"github.com/darklab8/go-typelog/typelog"
+	"github.com/darklab8/go-utils/typelog"
 	"gorm.io/gorm"
 )
 

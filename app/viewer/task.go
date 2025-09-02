@@ -10,7 +10,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
-	"github.com/darklab8/go-typelog/typelog"
+	"github.com/darklab8/go-utils/typelog"
 
 	"github.com/darklab8/go-utils/utils/timeit"
 	"github.com/darklab8/go-utils/utils/worker"

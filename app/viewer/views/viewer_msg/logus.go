@@ -3,7 +3,7 @@ package viewer_msg
 import (
 	"log/slog"
 
-	"github.com/darklab8/go-typelog/typelog"
+	"github.com/darklab8/go-utils/typelog"
 )
 
 func LogusMsg(value *Msg) typelog.LogType {
