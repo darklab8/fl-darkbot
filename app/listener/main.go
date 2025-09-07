@@ -42,6 +42,14 @@ func Run() {
 
 func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 	botID := s.State.User.ID
+
+	if m == nil {
+		return false
+	}
+	if m.Author == nil {
+		return false
+	}
+
 	messageAuthorID := m.Author.ID
 	botCreatorID := "370435997974134785"
 
