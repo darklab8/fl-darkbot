@@ -1,4 +1,4 @@
-FROM golang:1.23-bullseye as dependencies
+FROM golang:1.24-bullseye as dependencies
 
 RUN apt update
 RUN apt install -y build-essential
