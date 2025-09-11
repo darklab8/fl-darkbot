@@ -16,5 +16,6 @@ locals {
     DARKBOT_LOG_LEVEL   = "${var.debug ? "DEBUG" : "WARN"}"
     TYPELOG_LOG_JSON    = "true"
     UTILS_ENVIRONMENT   = var.environment
+    UTILS_USERAGENT     = "darkwind/1.0"
   }
 }

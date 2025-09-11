@@ -2,12 +2,12 @@ package exposer
 
 import (
 	"io"
-	"net/http"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/go-utils/utils/utils_http"
 )
 
 var (
@@ -30,7 +30,7 @@ func FixtureTestWebServer() {
 }
 
 func testQuery(url string) (string, error) {
-	resp, err := http.Get("http://localhost:8080" + url)
+	resp, err := utils_http.Get("http://localhost:8080" + url)
 	if logus.Log.CheckError(err, "query failed") {
 		return "", err
 	}

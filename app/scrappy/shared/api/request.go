@@ -2,17 +2,17 @@ package api
 
 import (
 	"io"
-	"net/http"
 
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
+	"github.com/darklab8/go-utils/utils/utils_http"
 )
 
 type APIrequest struct {
 }
 
 func (a APIrequest) GetData(url types.APIurl) ([]byte, error) {
-	resp, err := http.Get(string(url))
+	resp, err := utils_http.Get(string(url))
 	if logus.Log.CheckWarn(err, "unable to get url") {
 		return []byte{}, err
 	}
