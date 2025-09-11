@@ -6,6 +6,7 @@ import (
 
 	"github.com/darklab8/fl-darkbot/app/forumer/forum_types"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/go-utils/utils/utils_settings"
 
 	"golang.org/x/net/html/charset"
 )
@@ -32,7 +33,12 @@ func NewQuery(method_type MethodType, url forum_types.Url) (*QueryResult, error)
 	if logus.Log.CheckWarn(err, "Failed to create request") {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
+	if utils_settings.Envs.UserAgent != "" {
+		req.Header.Set("User-Agent", utils_settings.Envs.UserAgent)
+	} else {
+		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
+	}
+
 	// req.Header.Set("User-Agent", "curl/7.81.0")
 	req.Header.Set("ACCEPT", "*/*")
 	req.Header.Set("CONTENT-LENGTH", "")
