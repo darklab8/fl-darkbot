@@ -64,8 +64,8 @@ func LoadEnv(envs *enverant.Enverant) {
 		ScrappyLoopDelay: envs.GetIntOr("SCRAPPY_LOOP_DELAY", 10),
 		ViewerLoopDelay:  envs.GetIntOr("VIEWER_LOOP_DELAY", 10),
 
-		DarkstatHost: envs.GetStrOr("DARKSTAT_HOST", "127.0.0.1"),
-		DarkstatPort: envs.GetIntOr("DARKSTAT_PORT", 8100),
+		DarkstatHost: envs.GetStrOr("DARKBOT_DARKSTAT_HOST", "127.0.0.1"),
+		DarkstatPort: envs.GetIntOr("DARKBOT_DARKSTAT_PORT", 8100),
 
 		PrometheuserOn: envs.GetBoolOr("PROMETHEUSER_ON", true),
 	}
