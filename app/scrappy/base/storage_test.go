@@ -15,6 +15,7 @@ func FixtureBaseStorageMockified() *BaseStorage {
 
 func TestGetBases(t *testing.T) {
 	storage := FixtureBaseStorageMockified()
+	// storage := NewBaseStorage(NewBaseApi())
 	storage.Update()
 
 	bases, err := storage.GetLatestRecord()

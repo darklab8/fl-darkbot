@@ -29,6 +29,9 @@ type DarkbotEnv struct {
 	ViewerLoopDelay  int
 	DevEnvMockApi    bool
 
+	DarkbotHost string
+	DarkbotPort int
+
 	PrometheuserOn bool
 }
 
@@ -60,6 +63,9 @@ func LoadEnv(envs *enverant.Enverant) {
 
 		ScrappyLoopDelay: envs.GetIntOr("SCRAPPY_LOOP_DELAY", 10),
 		ViewerLoopDelay:  envs.GetIntOr("VIEWER_LOOP_DELAY", 10),
+
+		DarkbotHost: envs.GetStrOr("DARKBOT_HOST", "127.0.0.1"),
+		DarkbotPort: envs.GetIntOr("DARKBOT_PORT", 8100),
 
 		PrometheuserOn: envs.GetBoolOr("PROMETHEUSER_ON", true),
 	}
