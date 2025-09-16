@@ -43,8 +43,8 @@ func (t *InfoCommands) CreateGetInfoCmd() {
 			printer.Println(cmd, answer)
 
 			client := darkrpc.NewClient(
-				darkrpc.WithTcpAddress(settings.Env.DarkbotHost),
-				darkrpc.WithPortCli(settings.Env.DarkbotPort),
+				darkrpc.WithTcpAddress(settings.Env.DarkstatHost),
+				darkrpc.WithPortCli(settings.Env.DarkstatPort),
 			)
 			reply := new(darkrpc.GetInfoReply)
 			err := client.GetInfo(darkrpc.GetInfoArgs{Query: query}, reply)
