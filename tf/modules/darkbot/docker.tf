@@ -18,6 +18,10 @@ data "docker_network" "grafana" {
   name = "grafana"
 }
 
+data "docker_network" "darkstat" {
+  name = "darkstat-production"
+}
+
 resource "docker_container" "darkbot" {
   count = var.mode == "docker" ? 1 : 0
 
@@ -27,6 +31,10 @@ resource "docker_container" "darkbot" {
   networks_advanced {
     name    = docker_network.darkbot.id
     aliases = ["darkbot"]
+  }
+
+  networks_advanced {
+    name = data.docker_network.darkstat.id
   }
 
   networks_advanced {
@@ -43,15 +51,9 @@ resource "docker_container" "darkbot" {
     host_path      = "/var/lib/darklab/darkbot-${var.environment}"
   }
 
-  volumes {
-    container_path = "/tmp/darkstat"
-    read_only      = false
-    host_path      = "/tmp/darkstat-${var.environment}"
-  }
-
   log_opts = {
-    "max-file": "3"
-    "max-size": "10m"
+    "max-file" : "3"
+    "max-size" : "10m"
   }
 
   labels {
@@ -79,7 +81,9 @@ resource "docker_service" "darkbot" {
       name    = docker_network.darkbot.id
       aliases = ["darkbot"]
     }
-
+    networks_advanced {
+      name = data.docker_network.darkstat.id
+    }
     networks_advanced {
       name    = data.docker_network.grafana.id
       aliases = ["${var.environment}-darkbot"]
@@ -89,8 +93,8 @@ resource "docker_service" "darkbot" {
       name = "json-file"
 
       options = {
-        "max-file": "3"
-        "max-size": "10m"
+        "max-file" : "3"
+        "max-size" : "10m"
       }
     }
 

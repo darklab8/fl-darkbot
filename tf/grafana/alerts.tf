@@ -1,5 +1,5 @@
 locals {
-    alert_disable_provenance = true
+  alert_disable_provenance = true
 }
 
 resource "grafana_rule_group" "rule_group_15cad967beae7328" {
