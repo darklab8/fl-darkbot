@@ -117,15 +117,6 @@ resource "docker_service" "darkbot" {
           propagation = "rprivate"
         }
       }
-      mounts { // darkstat socks
-        target    = "/tmp/darkstat"
-        source    = "/tmp/darkstat-${var.environment}"
-        type      = "bind"
-        read_only = false
-        bind_options {
-          propagation = "rprivate"
-        }
-      }
     }
     restart_policy {
       condition = "any"
