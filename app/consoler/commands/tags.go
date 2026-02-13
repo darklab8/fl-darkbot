@@ -15,13 +15,34 @@ import (
 
 type tagCommands struct {
 	*cmdgroup.CmdGroup
-	cfgTags  configurator.IConfiguratorTags
-	channels configurator.ConfiguratorChannel
+	cfgTags          configurator.IConfiguratorTags
+	channels         configurator.ConfiguratorChannel
+	disabled_add_cmd bool
 }
 
-func NewTagCommands(cmd *cmdgroup.CmdGroup, cfgTags configurator.IConfiguratorTags, channels configurator.ConfiguratorChannel) *tagCommands {
+type tagCommandOpt func(p *tagCommands)
+
+func WithDisabledAdd() tagCommandOpt {
+	return func(p *tagCommands) {
+		p.disabled_add_cmd = true
+	}
+}
+
+func NewTagCommands(
+	cmd *cmdgroup.CmdGroup,
+	cfgTags configurator.IConfiguratorTags,
+	channels configurator.ConfiguratorChannel,
+	opts ...tagCommandOpt,
+) *tagCommands {
 	t := &tagCommands{CmdGroup: cmd, cfgTags: cfgTags, channels: channels}
-	t.CreateTagAdd()
+
+	for _, opt := range opts {
+		opt(t)
+	}
+	if !t.disabled_add_cmd {
+		t.CreateTagAdd()
+	}
+
 	t.CreateTagRemove()
 	t.CreateTagClear()
 	t.CreateTagList()

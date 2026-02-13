@@ -32,6 +32,8 @@ type DarkbotEnv struct {
 	DarkstatHost string
 	DarkstatPort int
 
+	PlayerViewDeprecated bool
+
 	PrometheuserOn bool
 }
 
@@ -67,7 +69,8 @@ func LoadEnv(envs *enverant.Enverant) {
 		DarkstatHost: envs.GetStrOr("DARKBOT_DARKSTAT_HOST", "127.0.0.1"),
 		DarkstatPort: envs.GetIntOr("DARKBOT_DARKSTAT_PORT", 8100),
 
-		PrometheuserOn: envs.GetBoolOr("PROMETHEUSER_ON", true),
+		PrometheuserOn:       envs.GetBoolOr("PROMETHEUSER_ON", true),
+		PlayerViewDeprecated: true,
 	}
 	Workdir = filepath.Dir(filepath.Dir(utils_os.GetCurrentFolder().ToString()))
 	Dbpath = NewDBPath(Env.ConfiguratorDbname)

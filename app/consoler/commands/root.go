@@ -134,56 +134,61 @@ func CreateConsoler(
 	playerGroup := root.GetChild(
 		root.CurrentCmd,
 		cmdgroup.Command("player"),
-		cmdgroup.ShortDesc("Player commands"),
+		cmdgroup.ShortDesc("DEPRECATED Player commands"),
 	)
 	NewTagCommands(
 		playerGroup.GetChild(
 			playerGroup.CurrentCmd,
 			cmdgroup.Command("system"),
-			cmdgroup.ShortDesc("System commands"),
+			cmdgroup.ShortDesc("DEPRECATED System commands"),
 		),
 		configurator.NewConfiguratorSystem(configur),
 		configurator.NewConfiguratorChannel(configur),
+		WithDisabledAdd(),
 	)
 
 	NewTagCommands(
 		playerGroup.GetChild(
 			playerGroup.CurrentCmd,
 			cmdgroup.Command("region"),
-			cmdgroup.ShortDesc("Region commands"),
+			cmdgroup.ShortDesc("DEPRECATED Region commands"),
 		),
 		configurator.NewConfiguratorRegion(configur),
 		configurator.NewConfiguratorChannel(configur),
+		WithDisabledAdd(),
 	)
 
 	NewTagCommands(
 		playerGroup.GetChild(
 			playerGroup.CurrentCmd,
 			cmdgroup.Command("friend"),
-			cmdgroup.ShortDesc("Player friend commands"),
+			cmdgroup.ShortDesc("DEPRECATED Player friend commands"),
 		),
 		configurator.NewConfiguratorPlayerFriend(configur),
 		configurator.NewConfiguratorChannel(configur),
+		WithDisabledAdd(),
 	)
 
 	NewTagCommands(
 		playerGroup.GetChild(
 			playerGroup.CurrentCmd,
 			cmdgroup.Command("enemy"),
-			cmdgroup.ShortDesc("Player enemy commands"),
+			cmdgroup.ShortDesc("DEPRECATED Player enemy commands"),
 		),
 		configurator.NewConfiguratorPlayerEnemy(configur),
 		configurator.NewConfiguratorChannel(configur),
+		WithDisabledAdd(),
 	)
 
 	NewTagCommands(
 		playerGroup.GetChild(
 			playerGroup.CurrentCmd,
 			cmdgroup.Command("event"),
-			cmdgroup.ShortDesc("Player event commands"),
+			cmdgroup.ShortDesc("DEPRECATED Player event commands"),
 		),
 		configurator.NewConfiguratorPlayerEvent(configur),
 		configurator.NewConfiguratorChannel(configur),
+		WithDisabledAdd(),
 	)
 
 	alertGroup := root.GetChild(
@@ -226,7 +231,7 @@ func CreateConsoler(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
 			cmdgroup.Command("player_neutral_count_above"),
-			cmdgroup.ShortDesc("Set threshold, if above amount of neutral players will be preesent, you will receive alert"),
+			cmdgroup.ShortDesc("DEPRECATED Set threshold, if above amount of neutral players will be preesent, you will receive alert"),
 		),
 		configurator.NewCfgAlertNeutralPlayersGreaterThan(configur),
 		configurator.NewConfiguratorChannel(configur),
@@ -236,7 +241,7 @@ func CreateConsoler(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
 			cmdgroup.Command("player_enemy_count_above"),
-			cmdgroup.ShortDesc("Set threshold, if above amount of enemy players will be preesent, you will receive alert"),
+			cmdgroup.ShortDesc("DEPRECATED Set threshold, if above amount of enemy players will be preesent, you will receive alert"),
 		),
 		configurator.NewCfgAlertEnemyPlayersGreaterThan(configur),
 		configurator.NewConfiguratorChannel(configur),
@@ -246,10 +251,11 @@ func CreateConsoler(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
 			cmdgroup.Command("player_friend_count_above"),
-			cmdgroup.ShortDesc("Set threshold, if above amount of friendly players will be preesent, you will receive alert"),
+			cmdgroup.ShortDesc("DEPRECATED Set threshold, if above amount of friendly players will be preesent, you will receive alert"),
 		),
 		configurator.NewCfgAlertFriendPlayersGreaterThan(configur),
 		configurator.NewConfiguratorChannel(configur),
+		func(t *alertThresholdCommands[models.AlertFriendsEqualOrGreater]) { t.disable_set = true },
 	)
 
 	NewAlertSetStringCommand[models.AlertPingMessage](
