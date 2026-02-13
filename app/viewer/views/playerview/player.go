@@ -6,6 +6,7 @@ import (
 	"text/template"
 
 	"github.com/darklab8/fl-darkbot/app/scrappy/player"
+	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
@@ -45,13 +46,20 @@ type PlayersTemplates struct {
 	enemies PlayersEnemies
 	api     *apis.API
 	*views.SharedViewTableSplitter
-	channelID types.DiscordChannelID
+	channelID              types.DiscordChannelID
+	DeprecatedNotification *views.ViewTable
 }
 
 func NewTemplatePlayers(api *apis.API, channelID types.DiscordChannelID) *PlayersTemplates {
 	templator := PlayersTemplates{}
 	templator.api = api
 	templator.channelID = channelID //
+	templator.DeprecatedNotification = views.NewViewTable(viewer_msg.NewTableMsg(
+		types.ViewID("#darkbot-players-deprecation"),
+		types.ViewHeader("> :bangbang: :bangbang: :bangbang: **Based on community poll and discussions in** https://discoverygc.com/forums/showthread.php?tid=210911\n"),
+		types.ViewBeginning("> :warning: :warning: :warning: **Player related functionality is disabled** :warning: :warning: :warning: \n To remove the warning make sure player lists are clear: `. player region clear`, `. player system clear`, `. player friend clear`, `. player enemy clear`, `. player event clear`\nyou can validate your player lists are clear by `. conf` command"),
+		types.ViewEnd(""),
+	))
 	templator.friends.mainTable = views.NewViewTable(viewer_msg.NewTableMsg(
 		types.ViewID("#darkbot-players-friends-table"),
 		types.ViewHeader("**Friend players in all systems and regions**\n"),
@@ -80,17 +88,26 @@ func NewTemplatePlayers(api *apis.API, channelID types.DiscordChannelID) *Player
 		types.ViewID("#darkbot-players-enemies-alert"),
 	))
 
-	templator.SharedViewTableSplitter = views.NewSharedViewSplitter(
-		api,
-		channelID,
-		&templator,
-		templator.friends.mainTable,
-		templator.neutral.mainTable,
-		templator.enemies.mainTable,
-		templator.friends.alertTmpl,
-		templator.neutral.alertTmpl,
-		templator.enemies.alertTmpl,
-	)
+	if settings.Env.PlayerViewDeprecated {
+		templator.SharedViewTableSplitter = views.NewSharedViewSplitter(
+			api,
+			channelID,
+			&templator,
+			templator.DeprecatedNotification,
+		)
+	} else {
+		templator.SharedViewTableSplitter = views.NewSharedViewSplitter(
+			api,
+			channelID,
+			&templator,
+			templator.friends.mainTable,
+			templator.neutral.mainTable,
+			templator.enemies.mainTable,
+			templator.friends.alertTmpl,
+			templator.neutral.alertTmpl,
+		)
+	}
+
 	return &templator
 }
 
@@ -143,7 +160,9 @@ func (t *PlayersTemplates) GenerateRecords() error {
 		}
 	}
 
+	do_send_notification := false
 	if len(systemTags) > 0 || len(regionTags) > 0 {
+		do_send_notification = true
 		for _, playerVars := range neutralPlayers {
 			t.neutral.mainTable.AppendRecord(types.ViewRecord(utils.TmpRender(playerTemplate, playerVars)))
 		}
@@ -152,6 +171,7 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	}
 
 	if (len(systemTags) > 0 || len(regionTags) > 0) && len(enemyTags) > 0 {
+		do_send_notification = true
 		for _, playerVars := range enemyPlayers {
 			t.enemies.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("-%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
@@ -160,15 +180,15 @@ func (t *PlayersTemplates) GenerateRecords() error {
 	}
 
 	if len(friendTags) > 0 {
+		do_send_notification = true
+
 		for _, playerVars := range friendPlayers {
 			t.friends.mainTable.AppendRecord(types.ViewRecord(fmt.Sprintf("+%s", utils.TmpRender(playerTemplate, playerVars))))
 		}
-
 		protectAgainstResend(&friendPlayers, t.friends.mainTable)
 	}
 
 	// Alerts
-
 	if alertNeutralCount, err := t.api.Alerts.NeutralsGreaterThan.Status(t.channelID); err == nil {
 		if len(neutralPlayers) >= alertNeutralCount {
 			t.neutral.alertTmpl.SetHeader(views.RenderAlertTemplate(t.channelID, fmt.Sprintf("Amount %d of neutral players is above or equal threshold %d", len(neutralPlayers), alertNeutralCount), t.api))
@@ -187,6 +207,11 @@ func (t *PlayersTemplates) GenerateRecords() error {
 			t.friends.alertTmpl.AppendRecord("")
 		}
 	}
+
+	if do_send_notification {
+		t.DeprecatedNotification.AppendRecord(" ")
+	}
+
 	return nil
 }
 

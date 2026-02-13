@@ -24,24 +24,6 @@ enable, disable, status sub commands are similar.
 
 - you can turn on `. alert base_health_is_decreasing enable` command for making alert if base loses its health.
 
-## Player alerts
-
-### Enemy player alert
-
-- `. alert player_enemy_count_above set 1` - Sets alert to ping if spotting enemies above this count in tracked regions/systems.
-- `. alert player_enemy_count_above status` to check status of configuration
-- `. alert player_enemy_count_above unset` to unset the alert
-
-### Neutral player alert
-
-- `. player_neutral_count_above set 1` - Sets alert if finding more than X neutral players in tracked systems, regions. Convinient command if not knowing who you track, but knowing where.
-- commands set, status and unset are similar to enemy alert configuration
-
-### Friends alert
-
-- `. alert player_friend_count_above set 0` - if your friends login, you can spot them right away across galaxy. This command is not affected by which regions/systems you track.
-- commands set, status and unset are similar to enemy alert configuration.
-
 ## Ping message
 
 - By default Discord server owner is pinged ( `<@DiscordServer.Owner.ID>` )

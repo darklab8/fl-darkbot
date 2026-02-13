@@ -1,4 +1,4 @@
-# Player tracking
+# Player tracking (Deprecated)
 
 ![player view](/fl-darkbot/index_assets/player_render2.png)
 
@@ -36,3 +36,40 @@ list, remove, add, clear commands are similar to other command groups
 - `. player friend add My Friend` - for tracking friends acorss entire galaxy
 
 list, remove, add clear commands are similar to other command groups
+
+##  Player alerts
+
+###  Enemy player alert
+
+- `. alert player_enemy_count_above set 1` - Sets alert to ping if spotting enemies above this count in tracked regions/systems.
+- `. alert player_enemy_count_above status` to check status of configuration
+- `. alert player_enemy_count_above unset` to unset the alert
+
+###  Neutral player alert
+
+- `. player_neutral_count_above set 1` - Sets alert if finding more than X neutral players in tracked systems, regions. Convinient command if not knowing who you track, but knowing where.
+- commands set, status and unset are similar to enemy alert configuration
+
+### Friends alert
+
+- `. alert player_friend_count_above set 0` - if your friends login, you can spot them right away across galaxy. This command is not affected by which regions/systems you track.
+- commands set, status and unset are similar to enemy alert configuration.
+
+# Event helper
+
+![events view](/fl-darkbot/index_assets/events_table.png)
+
+This feature was implemented on request from Event manager Barrier, for the purpose of easily tracking
+that all players participating in event, arrived to the scene.
+
+- `. player event add PlayerPreffixOrSuffix` - add player for tracking for event
+- `. player event add Any Partial Name` - add player for tracking for event
+
+- `. player event remove Any Partial Name` - remove specific one from tracking
+
+- `. player event list` -  check tracked players
+- `. player event clear` - clear all tracked players
+
+P.S. ensure you used `. connect` first one some channel to turn one bot on.
+Beware. bot automatically erases msgs for the channel for comfort of its usage.
+Use bot on dedicated channel.

@@ -3,11 +3,13 @@
         "-v"
     ],
     "go.testEnvVars": {
-        "ENVERANT_ENV_FILE": "${workspaceFolder}/.vscode/enverant.json"
+        "ENVERANT_ENV_FILE": "${workspaceFolder}/.vscode/enverant.json",
+        "UTILS_USERAGENT": "darkwind/1.0"
     },
     "go.testTimeout": "30000s",
     "editor.formatOnSave": true,
     "terminal.integrated.env.linux": {
-        "ENVERANT_ENV_FILE": "${workspaceFolder}/.vscode/enverant.json"
+        "ENVERANT_ENV_FILE": "${workspaceFolder}/.vscode/enverant.json",
+        "UTILS_USERAGENT": "darkwind/1.0"
     }
 }

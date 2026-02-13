@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
@@ -14,7 +15,8 @@ import (
 )
 
 type EventView struct {
-	main *views.ViewTable
+	main                   *views.ViewTable
+	DeprecatedNotification *views.ViewTable
 
 	*views.SharedViewTableSplitter
 	channelID types.DiscordChannelID
@@ -28,9 +30,19 @@ func NewEventRenderer(api *apis.API, channelID types.DiscordChannelID) *EventVie
 		types.ViewBeginning("```json\n"),
 		types.ViewEnd("```\n"),
 	))
+	base.DeprecatedNotification = views.NewViewTable(viewer_msg.NewTableMsg(
+		types.ViewID("#darkbot-players-deprecation"),
+		types.ViewHeader("> :bangbang: :bangbang: :bangbang: **Based on community poll and discussions in** https://discoverygc.com/forums/showthread.php?tid=210911\n"),
+		types.ViewBeginning("> :warning: :warning: :warning: **Player related functionality is disabled** :warning: :warning: :warning: \n"),
+		types.ViewEnd(""),
+	))
 	base.channelID = channelID
 
-	base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, channelID, &base, base.main)
+	if settings.Env.PlayerViewDeprecated {
+		base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, channelID, &base, base.DeprecatedNotification)
+	} else {
+		base.SharedViewTableSplitter = views.NewSharedViewSplitter(api, channelID, &base, base.main)
+	}
 
 	return &base
 }

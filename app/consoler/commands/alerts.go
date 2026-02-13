@@ -18,17 +18,26 @@ import (
 
 type alertThresholdCommands[T configurator.AlertThresholdType] struct {
 	*cmdgroup.CmdGroup
-	cfgTags  configurator.IConfiguratorAlertThreshold[T]
-	channels configurator.ConfiguratorChannel
+	cfgTags     configurator.IConfiguratorAlertThreshold[T]
+	channels    configurator.ConfiguratorChannel
+	disable_set bool
 }
+
+type AlertThresholdCommandsOption[T configurator.AlertThresholdType] func(t *alertThresholdCommands[T])
 
 func NewAlertThresholdCommands[T configurator.AlertThresholdType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertThreshold[T],
 	channels configurator.ConfiguratorChannel,
+	opts ...AlertThresholdCommandsOption[T],
 ) *alertThresholdCommands[T] {
 	t := &alertThresholdCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
-	t.CreateSetAlertCmd()
+	for _, opt := range opts {
+		opt(t)
+	}
+	if !t.disable_set {
+		t.CreateSetAlertCmd()
+	}
 	t.CreateUnsetCmd()
 	t.CreateStatusCmd()
 	return t
@@ -122,17 +131,27 @@ func (t *alertThresholdCommands[T]) CreateStatusCmd() {
 
 type AlertBoolCommands[T configurator.AlertBoolType] struct {
 	*cmdgroup.CmdGroup
-	cfgTags  configurator.IConfiguratorAlertBool[T]
-	channels configurator.ConfiguratorChannel
+	cfgTags        configurator.IConfiguratorAlertBool[T]
+	channels       configurator.ConfiguratorChannel
+	disable_enable bool
 }
+
+type AlertBoolCommandsOption[T configurator.AlertBoolType] func(t *AlertBoolCommands[T])
 
 func NewAlertBoolCommands[T configurator.AlertBoolType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertBool[T],
 	channels configurator.ConfiguratorChannel,
+	opts ...AlertBoolCommandsOption[T],
 ) *AlertBoolCommands[T] {
 	t := &AlertBoolCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
-	t.CreateEnableCmd()
+	for _, opt := range opts {
+		opt(t)
+	}
+	if !t.disable_enable {
+		t.CreateEnableCmd()
+	}
+
 	t.CreateDisableCmd()
 	t.CreateStatusCmd()
 	return t
@@ -227,13 +246,20 @@ type AlertSetStringCommand[T configurator.AlertStringType] struct {
 	channels configurator.ConfiguratorChannel
 }
 
+type AlertOption[T configurator.AlertStringType] func(t *AlertSetStringCommand[T])
+
 func NewAlertSetStringCommand[T configurator.AlertStringType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertString[T],
 	channels configurator.ConfiguratorChannel,
 	allowed_order_keys []types.OrderKey,
+	opts ...AlertOption[T],
 ) *AlertSetStringCommand[T] {
 	t := &AlertSetStringCommand[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
+
+	for _, opt := range opts {
+		opt(t)
+	}
 	t.CreateSetCmd(allowed_order_keys)
 	t.CreateUnsetCmd()
 	t.CreateStatusCmd()
