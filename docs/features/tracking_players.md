@@ -1,5 +1,11 @@
 # Player tracking (Deprecated)
 
+According to community feedback and made poll, this functionality is deactivated
+https://discoverygc.com/forums/showthread.php?tid=210911
+![player view](/fl-darkbot/index_assets/player_deprecation.png)
+
+## How it looks
+
 ![player view](/fl-darkbot/index_assets/player_render2.png)
 
 ### Rules
