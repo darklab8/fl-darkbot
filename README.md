@@ -17,13 +17,11 @@
 # Project Description for devs
 
 - This project is a discord bot **Darkbot3** for open source game community [Freelancer Discovery](https://discoverygc.com/)
-- It implements Discord bot to track player bases, players themselves and forum posting with notifications to Discord.
-- The logic of it: User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track. Darkbot repeatedly updates information to discord channel
+- It implements Discord bot to track player owned bases and forum posting with notifications to Discord.
+- The logic of it: User connects darkbot to some discord channel, and sets settings which space bases, forum threads or sections to track. Darkbot repeatedly updates information to discord channel
 - project saves ready for deployment docker images [at docker hub](https://hub.docker.com/repository/docker/darkwind8/darkbot/general), see [settings here](https://github.com/darklab8/fl-darkbot/blob/master/tf/modules/production), which are invoking [this configuration](https://github.com/darklab8/fl-darkbot/blob/master/tf/modules/darkbot)
 
 ![base tracking table](docs/index_assets/base_render2.png)
-
-![player tracking table](docs/index_assets/player_render2.png)
 
 ![forum tracking notifications](docs/index_assets/forum_tracking.png)
 

@@ -2,14 +2,14 @@
 
 ![logo](./index_assets/fulllogo.png)
 
-- It implements Discord bot to track player bases, players themselves and forum posting with notifications to Discord.
-- The logic of it: User connects darkbot to some discord channel, and sets settings which space bases, player tags or space systems to track. Darkbot repeatedly updates information to discord channel
+- It implements Discord bot to track player owned bases, and forum posting with notifications to Discord.
+- The logic of it: User connects darkbot to some discord channel, and sets settings which space bases, forum threads or sections to track.
+Darkbot repeatedly updates information to discord channel
 
 # Features
 
 - Adding player bases for tracking in discord channel
-- Adding players for tracking based on tag in nickname or star systems / regions to track
-- Adding configurable alert triggers to base, player of forum tracking
+- Adding configurable alert triggers to base, or forum tracking
 - Adding forum post for tracking
 - Writes amount of players at server in its status
 
