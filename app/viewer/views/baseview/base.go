@@ -227,7 +227,7 @@ func (b *TemplateBase) GenerateRecords() error {
 			if base.IsUnderAttack {
 				b.alertBaseUnderAttack.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
-					fmt.Sprintf("Base %s health %d is probably under attack because health change %s is dropping faster than %f. Or it was detected at forum attack declaration thread.",
+					fmt.Sprintf("Base %s health %d is under attack, because we detected base name at forum attack declaration thread.",
 						base.Name,
 						int(base.Health),
 						base.HealthChange,

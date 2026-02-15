@@ -19,9 +19,6 @@ type taggable interface {
 	models.TagBase |
 		models.TagSystem |
 		models.TagRegion |
-		models.TagPlayerFriend |
-		models.TagPlayerEnemy |
-		models.TagPlayerEvent |
 		models.TagForumPostTrack |
 		models.TagForumPostIgnore |
 		models.TagForumSubforumTrack |
@@ -49,18 +46,6 @@ var NewConfiguratorSystem = NewConfiguratorTags[models.TagSystem]
 type ConfiguratorRegion = ConfiguratorTags[models.TagRegion]
 
 var NewConfiguratorRegion = NewConfiguratorTags[models.TagRegion]
-
-type ConfiguratorPlayerFriend = ConfiguratorTags[models.TagPlayerFriend]
-
-var NewConfiguratorPlayerFriend = NewConfiguratorTags[models.TagPlayerFriend]
-
-type ConfiguratorPlayerEnemy = ConfiguratorTags[models.TagPlayerEnemy]
-
-var NewConfiguratorPlayerEnemy = NewConfiguratorTags[models.TagPlayerEnemy]
-
-type ConfiguratorPlayerEvent = ConfiguratorTags[models.TagPlayerEvent]
-
-var NewConfiguratorPlayerEvent = NewConfiguratorTags[models.TagPlayerEvent]
 
 type ConfiguratorForumWatch = ConfiguratorTags[models.TagForumPostTrack]
 

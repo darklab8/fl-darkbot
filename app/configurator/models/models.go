@@ -16,19 +16,6 @@ type Channel struct {
 type TagBase struct {
 	TagTemplate
 }
-
-type TagPlayerFriend struct {
-	TagTemplate
-}
-
-type TagPlayerEnemy struct {
-	TagTemplate
-}
-
-type TagPlayerEvent struct {
-	TagTemplate
-}
-
 type TagSystem struct {
 	TagTemplate
 }
@@ -61,21 +48,6 @@ type AlertTresholdShared struct {
 
 func (t AlertTresholdShared) GetThreshold() int {
 	return t.Threshold
-}
-
-type AlertNeutralPlayersEqualOrGreater struct {
-	OneValueTemplate
-	AlertTresholdShared
-}
-
-type AlertEnemiesEqualOrGreater struct {
-	OneValueTemplate
-	AlertTresholdShared
-}
-
-type AlertFriendsEqualOrGreater struct {
-	OneValueTemplate
-	AlertTresholdShared
 }
 
 // ====== Shared alerts for all bases =========

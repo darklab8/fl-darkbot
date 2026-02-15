@@ -2,17 +2,7 @@ package configurator
 
 import "github.com/darklab8/fl-darkbot/app/settings/types"
 
-type Players struct {
-	Systems ConfiguratorSystem
-	Regions ConfiguratorRegion
-	Enemies ConfiguratorPlayerEnemy
-	Friends ConfiguratorPlayerFriend
-	Events  ConfiguratorPlayerEvent
-}
 type Alerts struct {
-	NeutralsGreaterThan    CfgAlertNeutralPlayersGreaterThan
-	EnemiesGreaterThan     CfgAlertEnemyPlayersGreaterThan
-	FriendsGreaterThan     CfgAlertFriendPlayersGreaterThan
 	BaseHealthLowerThan    CfgAlertBaseHealthLowerThan
 	BaseHealthIsDecreasing CfgAlertBaseHealthIsDecreasing
 	BaseIsUnderAttack      CfgAlertBaseIsUnderAttack
@@ -39,7 +29,6 @@ type Base struct {
 }
 type Configurators struct {
 	Bases    Base
-	Players  Players
 	Alerts   Alerts
 	Forum    Forum
 	Configur *Configurator
@@ -60,17 +49,7 @@ func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 			Tags:    NewConfiguratorBase(configur),
 			OrderBy: NewCfgBaseOrderingKey(configur),
 		},
-		Players: Players{
-			Systems: NewConfiguratorSystem(configur),
-			Regions: NewConfiguratorRegion(configur),
-			Enemies: NewConfiguratorPlayerEnemy(configur),
-			Friends: NewConfiguratorPlayerFriend(configur),
-			Events:  NewConfiguratorPlayerEvent(configur),
-		},
 		Alerts: Alerts{
-			NeutralsGreaterThan:    NewCfgAlertNeutralPlayersGreaterThan(configur),
-			EnemiesGreaterThan:     NewCfgAlertEnemyPlayersGreaterThan(configur),
-			FriendsGreaterThan:     NewCfgAlertFriendPlayersGreaterThan(configur),
 			BaseHealthLowerThan:    NewCfgAlertBaseHealthLowerThan(configur),
 			BaseHealthIsDecreasing: NewCfgAlertBaseHealthIsDecreasing(configur),
 			BaseIsUnderAttack:      NewCfgAlertBaseIsUnderAttack(configur),

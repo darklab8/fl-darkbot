@@ -10,7 +10,6 @@ import (
 	"github.com/darklab8/fl-darkbot/app/scrappy"
 	"github.com/darklab8/fl-darkbot/app/scrappy/base"
 	"github.com/darklab8/fl-darkbot/app/scrappy/baseattack"
-	"github.com/darklab8/fl-darkbot/app/scrappy/player"
 	"github.com/darklab8/fl-darkbot/app/scrappy/shared/records"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
@@ -115,7 +114,6 @@ func TestBaseViewerRealData(t *testing.T) {
 
 		scrapper := scrappy.NewScrapyStorage(
 			base.NewMock("basedata.json"),
-			player.FixturePlayerAPIMock(),
 			baseattack.FixtureBaseAttackAPIMock(),
 		)
 		api := apis.NewAPI(dbpath, scrapper)
@@ -137,7 +135,7 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 		logus.Log.Debug("1")
 		tags := []types.Tag{""}
 		logus.Log.Debug("2")
-		scrapper := scrappy.NewScrapyStorage(base.NewMock("basedata.json"), player.FixturePlayerAPIMock(), baseattack.FixtureBaseAttackAPIMock())
+		scrapper := scrappy.NewScrapyStorage(base.NewMock("basedata.json"), baseattack.FixtureBaseAttackAPIMock())
 		logus.Log.Debug("2.1")
 		logus.Log.Debug("2.2")
 		scrapper.Update()
@@ -186,7 +184,7 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		cg := configurator.NewConfiguratorBase(configurator.NewConfigurator(dbpath))
 		cg.TagsAdd(channelID, []types.Tag{"LP-7743"}...)
 
-		scrapper := scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), player.FixturePlayerAPIMock(), baseattack.NewMock("data_lp.json"))
+		scrapper := scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), baseattack.NewMock("data_lp.json"))
 		scrapper.Update()
 		api := apis.NewAPI(dbpath, scrapper)
 
