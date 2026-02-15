@@ -131,66 +131,6 @@ func CreateConsoler(
 		configurator.NewConfiguratorChannel(configur),
 	)
 
-	playerGroup := root.GetChild(
-		root.CurrentCmd,
-		cmdgroup.Command("player"),
-		cmdgroup.ShortDesc("DEPRECATED Player commands"),
-	)
-	NewTagCommands(
-		playerGroup.GetChild(
-			playerGroup.CurrentCmd,
-			cmdgroup.Command("system"),
-			cmdgroup.ShortDesc("DEPRECATED System commands"),
-		),
-		configurator.NewConfiguratorSystem(configur),
-		configurator.NewConfiguratorChannel(configur),
-		WithDisabledAdd(),
-	)
-
-	NewTagCommands(
-		playerGroup.GetChild(
-			playerGroup.CurrentCmd,
-			cmdgroup.Command("region"),
-			cmdgroup.ShortDesc("DEPRECATED Region commands"),
-		),
-		configurator.NewConfiguratorRegion(configur),
-		configurator.NewConfiguratorChannel(configur),
-		WithDisabledAdd(),
-	)
-
-	NewTagCommands(
-		playerGroup.GetChild(
-			playerGroup.CurrentCmd,
-			cmdgroup.Command("friend"),
-			cmdgroup.ShortDesc("DEPRECATED Player friend commands"),
-		),
-		configurator.NewConfiguratorPlayerFriend(configur),
-		configurator.NewConfiguratorChannel(configur),
-		WithDisabledAdd(),
-	)
-
-	NewTagCommands(
-		playerGroup.GetChild(
-			playerGroup.CurrentCmd,
-			cmdgroup.Command("enemy"),
-			cmdgroup.ShortDesc("DEPRECATED Player enemy commands"),
-		),
-		configurator.NewConfiguratorPlayerEnemy(configur),
-		configurator.NewConfiguratorChannel(configur),
-		WithDisabledAdd(),
-	)
-
-	NewTagCommands(
-		playerGroup.GetChild(
-			playerGroup.CurrentCmd,
-			cmdgroup.Command("event"),
-			cmdgroup.ShortDesc("DEPRECATED Player event commands"),
-		),
-		configurator.NewConfiguratorPlayerEvent(configur),
-		configurator.NewConfiguratorChannel(configur),
-		WithDisabledAdd(),
-	)
-
 	alertGroup := root.GetChild(
 		root.CurrentCmd,
 		cmdgroup.Command("alert"),
@@ -225,37 +165,6 @@ func CreateConsoler(
 		),
 		configurator.NewCfgAlertBaseHealthLowerThan(configur),
 		configurator.NewConfiguratorChannel(configur),
-	)
-
-	NewAlertThresholdCommands[models.AlertNeutralPlayersEqualOrGreater](
-		alertGroup.GetChild(
-			alertGroup.CurrentCmd,
-			cmdgroup.Command("player_neutral_count_above"),
-			cmdgroup.ShortDesc("DEPRECATED Set threshold, if above amount of neutral players will be preesent, you will receive alert"),
-		),
-		configurator.NewCfgAlertNeutralPlayersGreaterThan(configur),
-		configurator.NewConfiguratorChannel(configur),
-	)
-
-	NewAlertThresholdCommands[models.AlertEnemiesEqualOrGreater](
-		alertGroup.GetChild(
-			alertGroup.CurrentCmd,
-			cmdgroup.Command("player_enemy_count_above"),
-			cmdgroup.ShortDesc("DEPRECATED Set threshold, if above amount of enemy players will be preesent, you will receive alert"),
-		),
-		configurator.NewCfgAlertEnemyPlayersGreaterThan(configur),
-		configurator.NewConfiguratorChannel(configur),
-	)
-
-	NewAlertThresholdCommands[models.AlertFriendsEqualOrGreater](
-		alertGroup.GetChild(
-			alertGroup.CurrentCmd,
-			cmdgroup.Command("player_friend_count_above"),
-			cmdgroup.ShortDesc("DEPRECATED Set threshold, if above amount of friendly players will be preesent, you will receive alert"),
-		),
-		configurator.NewCfgAlertFriendPlayersGreaterThan(configur),
-		configurator.NewConfiguratorChannel(configur),
-		func(t *alertThresholdCommands[models.AlertFriendsEqualOrGreater]) { t.disable_set = true },
 	)
 
 	NewAlertSetStringCommand[models.AlertPingMessage](
@@ -370,15 +279,6 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString(fmt.Sprintf("base order_by = %#v\n", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
 			sb.WriteString("\n```\n")
 
-			// players
-			sb.WriteString("Players:\n```\n")
-			sb.WriteString(fmt.Sprintf("player region = %#v\n", PrintList(r.Players.Regions.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintf("player system = %#v\n", PrintList(r.Players.Systems.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintf("player friend = %#v\n", PrintList(r.Players.Friends.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintf("player enemy = %#v\n", PrintList(r.Players.Enemies.TagsList2(channel_id))))
-			sb.WriteString(fmt.Sprintf("player event = %#v\n", PrintList(r.Players.Events.TagsList2(channel_id))))
-			sb.WriteString("\n```\n")
-
 			// forum
 			sb.WriteString("Forum:\n```\n")
 			sb.WriteString(fmt.Sprintf("forum subforum watch = %#v\n", PrintList(r.Forum.Subforum.Watch.TagsList2(channel_id))))
@@ -393,10 +293,6 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString(fmt.Sprintf("alert base_health_is_decreasing = %#v\n", GetStatus(r.Alerts.BaseHealthIsDecreasing, channel_id)))
 			sb.WriteString(fmt.Sprintf("alert base_health_is_lower_than = %#v\n", GetStatus(r.Alerts.BaseHealthLowerThan, channel_id)))
 			sb.WriteString(fmt.Sprintf("alert base_is_under_attack = %#v\n", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
-			sb.WriteString(fmt.Sprintf("alert player_enemy_count_above = %#v\n", GetStatus(r.Alerts.EnemiesGreaterThan, channel_id)))
-			sb.WriteString(fmt.Sprintf("alert player_friend_count_above = %#v\n", GetStatus(r.Alerts.FriendsGreaterThan, channel_id)))
-			sb.WriteString(fmt.Sprintf("alert player_neutral_count_above = %#v\n", GetStatus(r.Alerts.NeutralsGreaterThan, channel_id)))
-
 			value, err := r.Alerts.PingMessage.Status(channel_id)
 			if err != nil {
 				switch err.(type) {

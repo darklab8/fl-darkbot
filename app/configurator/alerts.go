@@ -7,10 +7,8 @@ import (
 )
 
 type AlertThresholdType interface {
-	models.AlertNeutralPlayersEqualOrGreater |
-		models.AlertEnemiesEqualOrGreater |
-		models.AlertFriendsEqualOrGreater |
-		models.AlertBaseHealthLowerThan
+	// models.SomeAlert |
+	models.AlertBaseHealthLowerThan
 
 	GetThreshold() int
 }
@@ -50,18 +48,6 @@ func NewConfiguratorAlertString[T AlertStringType](configurator *Configurator) I
 	t := IConfiguratorAlertString[T]{Configurator: configurator}
 	return t
 }
-
-type CfgAlertNeutralPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertNeutralPlayersEqualOrGreater]
-
-var NewCfgAlertNeutralPlayersGreaterThan = NewConfiguratorAlertThreshold[models.AlertNeutralPlayersEqualOrGreater]
-
-type CfgAlertEnemyPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertEnemiesEqualOrGreater]
-
-var NewCfgAlertEnemyPlayersGreaterThan = NewConfiguratorAlertThreshold[models.AlertEnemiesEqualOrGreater]
-
-type CfgAlertFriendPlayersGreaterThan = IConfiguratorAlertThreshold[models.AlertFriendsEqualOrGreater]
-
-var NewCfgAlertFriendPlayersGreaterThan = NewConfiguratorAlertThreshold[models.AlertFriendsEqualOrGreater]
 
 type CfgAlertBaseHealthLowerThan = IConfiguratorAlertThreshold[models.AlertBaseHealthLowerThan]
 

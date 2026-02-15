@@ -16,7 +16,7 @@ type Records[T Deletable] struct {
 	mu      sync.Mutex
 }
 
-const recordLimit = 100
+const recordLimit = 10
 
 func (b *Records[T]) Add(record T) {
 	b.mu.Lock()

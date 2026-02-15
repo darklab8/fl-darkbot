@@ -16,7 +16,7 @@ func TestAlertTreshold(t *testing.T) {
 		genericCfg := NewConfigurator(dbpath).AutoMigrateSchema()
 		_ = channelID
 
-		cfg := NewCfgAlertNeutralPlayersGreaterThan(genericCfg)
+		cfg := NewCfgAlertBaseHealthLowerThan(genericCfg)
 		status, err := cfg.Status(channelID)
 		logus.Log.Debug(fmt.Sprintf("status=%v", status))
 		assert.Error(t, err, ErrorZeroAffectedRowsMsg)
