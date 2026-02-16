@@ -14,7 +14,7 @@ type ScrappyStorage struct {
 	baseAttackStorage *baseattack.BaseAttackStorage
 }
 
-func NewScrapyStorage(base_api base.IbaseAPI, base_attack baseattack.IbaseAttackAPI, opts ...StorageParam) *ScrappyStorage {
+func NewScrapyStorage(base_api base.BaseApi, base_attack baseattack.IbaseAttackAPI, opts ...StorageParam) *ScrappyStorage {
 	s := &ScrappyStorage{}
 	s.baseStorage = base.NewBaseStorage(base_api)
 	s.baseAttackStorage = baseattack.NewBaseAttackStorage(base_attack)

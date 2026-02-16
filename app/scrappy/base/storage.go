@@ -1,9 +1,9 @@
 package base
 
 import (
-	"github.com/darklab8/fl-darkbot/app/scrappy/shared/parser"
-	"github.com/darklab8/fl-darkbot/app/scrappy/shared/records"
+	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
 
+	"github.com/darklab8/fl-darkbot/app/scrappy/shared/records"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
 
@@ -14,29 +14,59 @@ type Base struct {
 	Name        string
 }
 
-type BaseStorage struct {
-	records.Records[records.StampedObjects[Base]]
-	api    IbaseAPI
-	parser parser.Parser[records.StampedObjects[Base]]
+// converted for old tests
+func NewPoB1(base Base) *configs_export.PoB {
+	return &configs_export.PoB{
+		PoBCore: configs_export.PoBCore{
+			Name:        base.Name,
+			FactionName: &base.Affiliation,
+			Health:      &base.Health,
+		},
+	}
 }
+
+type BaseStorage struct {
+	records.Records[records.StampedObjects[*configs_export.PoB]]
+	parser baseParser
+
+	api BaseApi
+
+	// pobs []*configs_export.PoB
+	// err  error
+}
+
+type BaseData struct {
+	List []*configs_export.PoB
+}
+
+type BaseApi interface {
+	GetPobs() ([]*configs_export.PoB, error)
+}
+
+// func (b *BaseStorage) GetLatestRecord() (BaseData, error) {
+// 	return BaseData{
+// 		List: b.pobs,
+// 	}, b.err
+// }
+// func (b *BaseStorage) Length() int {
+// 	return len(b.pobs)
+// }
 
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
-	data, err := b.api.GetBaseData()
+	pobs, err := b.api.GetPobs()
 	if logus.Log.CheckWarn(err, "quering API with error in BaseStorage") {
+		err = err
 		return
 	}
-	record, err := b.parser.Parse(data)
-	if logus.Log.CheckWarn(err, "received bad parser parsing result in BaseStorage. Ignoring.") {
-		return
-	}
-	b.Add(record)
+
+	b.parser.Parse(pobs)
+
 	logus.Log.Info("updated base storage")
 }
 
-func NewBaseStorage(api IbaseAPI) *BaseStorage {
+func NewBaseStorage(api BaseApi) *BaseStorage {
 	b := &BaseStorage{}
-	b.parser = baseParser{}
 	b.api = api
 	return b
 }

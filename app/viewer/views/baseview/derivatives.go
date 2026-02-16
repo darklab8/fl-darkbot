@@ -3,11 +3,11 @@ package baseview
 import (
 	"math"
 
-	"github.com/darklab8/fl-darkbot/app/scrappy/base"
 	"github.com/darklab8/fl-darkbot/app/scrappy/shared/records"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
+	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
 )
 
 type ErrorCalculatingDerivative struct {
@@ -30,8 +30,8 @@ func (t WarningNoNonZeroDerivatives) Error() string {
 
 func CalculateDerivates(tags []types.Tag, api *apis.API) (map[string]float64, error) {
 	baseHealths := make(map[string][]float64)
-	var res_records []records.StampedObjects[base.Base]
-	api.Scrappy.GetBaseStorage().Records.List(func(records2 []records.StampedObjects[base.Base]) {
+	var res_records []records.StampedObjects[*configs_export.PoB]
+	api.Scrappy.GetBaseStorage().Records.List(func(records2 []records.StampedObjects[*configs_export.PoB]) {
 		res_records = records2
 	})
 
@@ -52,7 +52,7 @@ func CalculateDerivates(tags []types.Tag, api *apis.API) (map[string]float64, er
 			if _, ok := baseHealths[base.Name]; !ok {
 				baseHealths[base.Name] = make([]float64, 0)
 			}
-			baseHealths[base.Name] = append(baseHealths[base.Name], base.Health)
+			baseHealths[base.Name] = append(baseHealths[base.Name], *base.Health)
 		}
 	}
 

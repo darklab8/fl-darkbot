@@ -14,6 +14,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
+	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -27,9 +28,9 @@ func TestBaseViewerMocked(t *testing.T) {
 
 		scrapper := scrappy.FixtureMockedStorage()
 		scrapper.Update()
-		record := records.NewStampedObjects[base.Base]()
-		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
-		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100})
+		record := records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(base.NewPoB1(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100}))
+		record.Add(base.NewPoB1(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 100}))
 		scrapper.GetBaseStorage().Add(record)
 
 		api := apis.NewAPI(dbpath, scrapper)
@@ -48,9 +49,9 @@ func TestBaseViewerMocked(t *testing.T) {
 		isEnabled, _ := baseAlertDecreasing.Status(channelID)
 		assert.False(t, isEnabled)
 
-		record = records.NewStampedObjects[base.Base]()
-		record.Add(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100})
-		record.Add(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 50})
+		record = records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(base.NewPoB1(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100}))
+		record.Add(base.NewPoB1(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 50}))
 		scrapper.GetBaseStorage().Add(record)
 
 		baseAlertDecreasing.Enable(channelID)
@@ -87,8 +88,8 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.True(t, render.alertHealthLowerThan.HasRecords())
 		assert.False(t, render.alertBaseUnderAttack.HasRecords())
 
-		record = records.NewStampedObjects[base.Base]()
-		record.Add(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100})
+		record = records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(base.NewPoB1(base.Base{Name: "Bank of Bretonia", Affiliation: "Abc", Health: 100}))
 		scrapper.GetBaseStorage().Add(record)
 		cg.TagsAdd(channelID, []types.Tag{"Bank"}...)
 		render = NewTemplateBase(api, channelID)
@@ -113,14 +114,15 @@ func TestBaseViewerRealData(t *testing.T) {
 		cg.TagsAdd(channelID, []types.Tag{"Station"}...)
 
 		scrapper := scrappy.NewScrapyStorage(
-			base.NewMock("basedata.json"),
+			base.FixtureBaseApiMock(),
+			// base.NewMock("basedata.json"),
 			baseattack.FixtureBaseAttackAPIMock(),
 		)
 		api := apis.NewAPI(dbpath, scrapper)
 		scrapper.Update()
-		scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
+		// scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
 		scrapper.Update()
-		scrapper.GetBaseStorage().Records.List(func(values []records.StampedObjects[base.Base]) {
+		scrapper.GetBaseStorage().Records.List(func(values []records.StampedObjects[*configs_export.PoB]) {
 			values[1].Timestamp = values[0].Timestamp.Add(time.Minute * 15)
 		})
 
@@ -135,7 +137,11 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 		logus.Log.Debug("1")
 		tags := []types.Tag{""}
 		logus.Log.Debug("2")
-		scrapper := scrappy.NewScrapyStorage(base.NewMock("basedata.json"), baseattack.FixtureBaseAttackAPIMock())
+		scrapper := scrappy.NewScrapyStorage(
+			// base.NewMock("basedata.json"),
+			base.FixtureBaseApiMock(),
+			baseattack.FixtureBaseAttackAPIMock(),
+		)
 		logus.Log.Debug("2.1")
 		logus.Log.Debug("2.2")
 		scrapper.Update()
@@ -143,17 +149,17 @@ func TestGetDerivativeBaseHealth(t *testing.T) {
 
 		api := apis.NewAPI(dbpath, scrapper)
 
-		scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
+		// scrapper.GetBaseStorage().FixtureSetAPI(base.NewMock("basedata2.json"))
 		scrapper.Update()
-		scrapper.GetBaseStorage().Records.List(func(values []records.StampedObjects[base.Base]) {
+		scrapper.GetBaseStorage().Records.List(func(values []records.StampedObjects[*configs_export.PoB]) {
 			values[1].Timestamp = values[0].Timestamp.Add(time.Minute * 15)
 		})
 
 		logus.Log.Debug("3")
 
-		result1 := make(map[string]base.Base)
-		result2 := make(map[string]base.Base)
-		scrapper.GetBaseStorage().Records.List(func(values []records.StampedObjects[base.Base]) {
+		result1 := make(map[string]*configs_export.PoB)
+		result2 := make(map[string]*configs_export.PoB)
+		scrapper.GetBaseStorage().Records.List(func(values []records.StampedObjects[*configs_export.PoB]) {
 			for _, base := range values[0].List {
 				result1[base.Name] = base
 			}
@@ -191,11 +197,11 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		assert.True(t, strings.Contains(string(scrapper.GetBaseAttackStorage().GetData()), "LP-7743"))
 
 		bases := scrapper.GetBaseStorage()
-		record := records.NewStampedObjects[base.Base]()
-		record.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 5})
+		record := records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(base.NewPoB1(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 5}))
 		bases.Add(record)
-		record2 := records.NewStampedObjects[base.Base]()
-		record2.Add(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 6})
+		record2 := records.NewStampedObjects[*configs_export.PoB]()
+		record2.Add(base.NewPoB1(base.Base{Name: "LP-7743", Affiliation: "Abc", Health: 6}))
 		record2.Timestamp = record2.Timestamp.Add(time.Hour * 1)
 		bases.Add(record2)
 
