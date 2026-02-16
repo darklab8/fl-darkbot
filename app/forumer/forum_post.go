@@ -80,10 +80,15 @@ func (p *PostRequester) GetDetailedPost(thread *forum_types.LatestThread) (*foru
 	// post_author_link := post_author_a.Attrs()["href"]
 
 	post_body := post.Find("div", "class", "post_body")
+
 	if logus.Log.CheckError(post_body.Error, "failed to get post_body object") {
 		return nil, post_body.Error
 	}
 	post_content := post_body.FullText()
+
+	if signiature := post_body.Find("div", "class", "signature"); signiature.Error == nil {
+		post_content = strings.ReplaceAll(post_content, signiature.FullText(), "")
+	}
 
 	post_content = strings.ReplaceAll(post_content, "\t", "")
 	for i := 0; i < 5; i++ {
