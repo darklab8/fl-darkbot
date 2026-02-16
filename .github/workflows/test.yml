@@ -1,22 +1,21 @@
 name: Test
-"on":
+'on':
   push:
     branches:
-      - master
+    - master
   schedule:
-    - cron: "0 10 1 * *"
-  pull_request: {}
+  - cron: '0 10 1 * *'
   workflow_dispatch: {}
 jobs:
   job:
     name: Test
     runs-on: ubuntu-22.04
     steps:
-      - name: Check out source repository
-        uses: actions/checkout@v4
-      - name: Install Go
-        uses: darklab8/infra/.github/actions/install-go@master
-      - name: Install Taskfile
-        uses: darklab8/infra/.github/actions/install-taskfile@master
-      - name: test
-        run: task test
+    - name: Check out source repository
+      uses: actions/checkout@v4
+    - name: Install Go
+      uses: darklab8/infra/.github/actions/install-go@master
+    - name: Install Taskfile
+      uses: darklab8/infra/.github/actions/install-taskfile@master
+    - name: test
+      run: task test
