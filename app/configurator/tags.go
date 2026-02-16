@@ -22,7 +22,9 @@ type taggable interface {
 		models.TagForumPostTrack |
 		models.TagForumPostIgnore |
 		models.TagForumSubforumTrack |
-		models.TagForumSubforumIgnore
+		models.TagForumSubforumIgnore |
+		models.TagForumContentWatch |
+		models.TagForumContentIgnore
 	GetTag() types.Tag
 }
 
@@ -62,6 +64,14 @@ var NewConfiguratorSubForumWatch = NewConfiguratorTags[models.TagForumSubforumTr
 type ConfiguratorSubForumIgnore = ConfiguratorTags[models.TagForumSubforumIgnore]
 
 var NewConfiguratorSubForumIgnore = NewConfiguratorTags[models.TagForumSubforumIgnore]
+
+type ConfiguratorContentWatch = ConfiguratorTags[models.TagForumContentWatch]
+
+var NewConfiguratorContentWatch = NewConfiguratorTags[models.TagForumContentWatch]
+
+type ConfiguratorContentIgnore = ConfiguratorTags[models.TagForumContentIgnore]
+
+var NewConfiguratorContentIgnore = NewConfiguratorTags[models.TagForumContentIgnore]
 
 func (c ConfiguratorTags[T]) TagsAdd(channelID types.DiscordChannelID, tags ...types.Tag) error {
 	objs := []T{}
@@ -108,6 +118,11 @@ func (c ConfiguratorTags[T]) TagsRemove(channelID types.DiscordChannelID, tags .
 
 func (c ConfiguratorTags[T]) TagsList(channelID types.DiscordChannelID) ([]types.Tag, error) {
 	objs := []T{}
+
+	if c.db == nil {
+		logus.Log.Panic("db is nil in Tag list")
+	}
+
 	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
 	logus.Log.CheckWarn(result.Error, "unsuccesful result of c.db.Find")
 

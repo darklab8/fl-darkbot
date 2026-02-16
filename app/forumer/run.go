@@ -118,6 +118,13 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 	subforum_ignore_tags, err := v.Forum.Subforum.Ignore.TagsList(channel)
 	logus.Log.CheckDebug(err, "failed to get ignore tags")
 
+	content_watch_tags, err := v.Forum.Content.Watch.TagsList(channel)
+	logus.Log.CheckDebug(err, "failed to get watch tags")
+
+	content_ignore_tags, err := v.Forum.Content.Ignore.TagsList(channel)
+	logus.Log.CheckDebug(err, "failed to get ignore tags")
+	// new_post.PostContent
+
 	for _, watch_tag := range thread_watch_tags {
 		if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) ||
 			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(watch_tag))) {
@@ -137,8 +144,24 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 
 	}
 
+	post_content := strings.ToLower(string(new_post.PostContent))
+	for _, ignore_tag := range content_ignore_tags {
+		if strings.Contains(post_content, string(ignore_tag)) ||
+			strings.Contains(strings.ToLower(string(new_post.PostContent)), strings.ToLower(string(ignore_tag))) {
+			post_content = strings.ReplaceAll(post_content, strings.ToLower(string(ignore_tag)), "")
+		}
+	}
+	for _, watch_tag := range content_watch_tags {
+		if strings.Contains(post_content, string(watch_tag)) ||
+			strings.Contains(post_content, strings.ToLower(string(watch_tag))) {
+			do_we_show_this_post = true
+			matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
+		}
+	}
+
 	for _, ignore_tag := range thread_ignore_tags {
-		if strings.Contains(string(new_post.ThreadFullName), string(ignore_tag)) {
+		if strings.Contains(string(new_post.ThreadFullName), string(ignore_tag)) ||
+			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(ignore_tag))) {
 			do_we_show_this_post = false
 			break
 		}
@@ -146,7 +169,8 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 
 	for _, ignore_tag := range subforum_ignore_tags {
 		for _, subforum := range new_post.Subforums {
-			if strings.Contains(string(subforum), string(ignore_tag)) {
+			if strings.Contains(string(subforum), string(ignore_tag)) ||
+				strings.Contains(strings.ToLower(string(subforum)), strings.ToLower(string(ignore_tag))) {
 				do_we_show_this_post = false
 				break
 			}

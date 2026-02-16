@@ -33,3 +33,10 @@ This feature is aimed specifically for faction subforums, as u can easily add en
 
 - It is even more important ignoring some subforums for this kind of tracking
 - `. forum subforum ignore add Other Discovery Servers` - allows you to add ignored sub forums for ignoring.
+
+### Forum post content tracking
+
+You can track by any present content/text present inside forum posts
+
+- `. forum content watch add torvalds` - will print you messages mentioning linus torvald
+- `. forum content ignore add Discovery At Linux` - will be helpful to ignore in post messages inclusions of specific signature if you are tracking all msgs having mentioned things like `linux` with: `. forum content watch add linux`

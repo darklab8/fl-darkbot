@@ -40,6 +40,14 @@ type TagForumSubforumIgnore struct {
 	TagTemplate
 }
 
+type TagForumContentWatch struct {
+	TagTemplate
+}
+
+type TagForumContentIgnore struct {
+	TagTemplate
+}
+
 // =========== Alerts ===============
 
 type AlertTresholdShared struct {

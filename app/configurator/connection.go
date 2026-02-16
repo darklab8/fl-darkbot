@@ -46,6 +46,8 @@ func (cg *Configurator) AutoMigrateSchema() *Configurator {
 		&models.TagForumPostIgnore{},
 		&models.TagForumSubforumTrack{},
 		&models.TagForumSubforumIgnore{},
+		&models.TagForumContentWatch{},
+		&models.TagForumContentIgnore{},
 		&models.AlertBaseHealthLowerThan{},
 		&models.AlertBaseIfHealthDecreasing{},
 		&models.AlertBaseIfUnderAttack{},

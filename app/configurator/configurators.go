@@ -19,9 +19,14 @@ type ForumSubforum struct {
 	Ignore ConfiguratorSubForumIgnore
 }
 
+type ForumContent struct {
+	Watch  ConfiguratorContentWatch
+	Ignore ConfiguratorContentIgnore
+}
 type Forum struct {
 	Thread   ForumThread
 	Subforum ForumSubforum
+	Content  ForumContent
 }
 type Base struct {
 	Tags    ConfiguratorBase
@@ -63,6 +68,10 @@ func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 			Subforum: ForumSubforum{
 				Watch:  NewConfiguratorSubForumWatch(configur),
 				Ignore: NewConfiguratorSubForumIgnore(configur),
+			},
+			Content: ForumContent{
+				Watch:  NewConfiguratorContentWatch(configur),
+				Ignore: NewConfiguratorContentIgnore(configur),
 			},
 		},
 	}

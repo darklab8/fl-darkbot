@@ -130,6 +130,29 @@ func CreateConsoler(
 		configurator.NewConfiguratorSubForumIgnore(configur),
 		configurator.NewConfiguratorChannel(configur),
 	)
+	forumContentGroup := forumGroup.GetChild(
+		forumGroup.CurrentCmd,
+		cmdgroup.Command("content"),
+		cmdgroup.ShortDesc("track by content inside"),
+	)
+	NewTagCommands(
+		forumContentGroup.GetChild(
+			forumContentGroup.CurrentCmd,
+			cmdgroup.Command("watch"),
+			cmdgroup.ShortDesc("Watch commands"),
+		),
+		configurator.NewConfiguratorContentWatch(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+	NewTagCommands(
+		forumContentGroup.GetChild(
+			forumContentGroup.CurrentCmd,
+			cmdgroup.Command("ignore"),
+			cmdgroup.ShortDesc("Ignore commands"),
+		),
+		configurator.NewConfiguratorContentIgnore(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
 
 	alertGroup := root.GetChild(
 		root.CurrentCmd,
@@ -285,6 +308,8 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString(fmt.Sprintf("forum subforum ignore = %#v\n", PrintList(r.Forum.Subforum.Ignore.TagsList2(channel_id))))
 			sb.WriteString(fmt.Sprintf("forum thread watch = %#v\n", PrintList(r.Forum.Thread.Watch.TagsList2(channel_id))))
 			sb.WriteString(fmt.Sprintf("forum thread ignore = %#v\n", PrintList(r.Forum.Thread.Ignore.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("forum content watch = %#v\n", PrintList(r.Forum.Content.Watch.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("forum content ignore = %#v\n", PrintList(r.Forum.Content.Ignore.TagsList2(channel_id))))
 			sb.WriteString("\n```\n")
 
 			// alerts
