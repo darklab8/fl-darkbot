@@ -230,8 +230,6 @@ func (b *TemplateBase) GenerateRecords() error {
 					fmt.Sprintf("Base %s health %d is under attack, because we detected base name at forum attack declaration thread.",
 						base.Name,
 						int(base.Health),
-						base.HealthChange,
-						HealthRateDecreasingThreshold,
 					),
 					b.api,
 				))
