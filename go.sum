@@ -28,6 +28,8 @@ github.com/darklab8/fl-darkstat v1.86.4 h1:nUu2BOLEZ2V13COhoWJ61G8IvnqaIHYkunvBU
 github.com/darklab8/fl-darkstat v1.86.4/go.mod h1:wuWjyKHjmdCk3TETukXTdeLDdpXVFNa8RC3+zBxZFek=
 github.com/darklab8/fl-darkstat v1.99.1 h1:wlNgDgze+zdcfZjH91yeosUznd/vEPsJNoD58AtS8O4=
 github.com/darklab8/fl-darkstat v1.99.1/go.mod h1:rFdb9dB9AatvHPr/nKwcXksfs6zlJa/KkcNjetBKW4M=
+github.com/darklab8/fl-darkstat v1.99.4 h1:yMXA1oVL0JPoFTKXTm0JuAH+zgAitNBy5AKRYbCBkqg=
+github.com/darklab8/fl-darkstat v1.99.4/go.mod h1:rFdb9dB9AatvHPr/nKwcXksfs6zlJa/KkcNjetBKW4M=
 github.com/darklab8/fl-data-discovery v0.4.0 h1:cUacP+N04/PrYl4cmw687BAaQWVJI32scePjLfmqxEI=
 github.com/darklab8/fl-data-discovery v0.4.0/go.mod h1:SgRh0N3cWrhslXVkc5LJXK52Mw4+Fdsbmv+0qkNJ6QI=
 github.com/darklab8/fl-data-discovery v0.4.5 h1:9DD1w+7QN7LLiR4teWZs1uo57XiOQF6z/RKjhs+4qsI=
