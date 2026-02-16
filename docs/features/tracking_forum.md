@@ -40,3 +40,5 @@ You can track by any present content/text present inside forum posts
 
 - `. forum content watch add torvalds` - will print you messages mentioning linus torvald
 - `. forum content ignore add Discovery At Linux` - will be helpful to ignore in post messages inclusions of specific signature if you are tracking all msgs having mentioned things like `linux` with: `. forum content watch add linux`
+
+P.S. Fair warning, it will be able to alert you about such message only if it was able to scrap in several minutes minutes interval in time before someone overposted a more recent msg in same thread. if that happens. If thread has too fast message posting, darkbot could miss such msg content to alert about
