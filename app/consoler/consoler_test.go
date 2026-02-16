@@ -38,9 +38,9 @@ func TestSystemCommands(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 		cons := NewConsoler(dbpath)
-		result := cons.Execute(settings.Env.ConsolerPrefix+` player --help`, channelID)
+		result := cons.Execute(settings.Env.ConsolerPrefix+` base --help`, channelID)
 		_ = result
-		assert.Contains(t, result, "System commands")
+		assert.Contains(t, result, "Base commands")
 	})
 }
 
