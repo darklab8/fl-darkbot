@@ -5,18 +5,21 @@ import (
 
 	"github.com/darklab8/fl-darkbot/app/scrappy/base"
 	"github.com/darklab8/fl-darkbot/app/scrappy/baseattack"
+	"github.com/darklab8/fl-darkbot/app/scrappy/player"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
 
 type ScrappyStorage struct {
 	baseStorage       *base.BaseStorage
+	playerStorage     *player.PlayerStorage
 	baseAttackStorage *baseattack.BaseAttackStorage
 }
 
-func NewScrapyStorage(base_api base.IbaseAPI, base_attack baseattack.IbaseAttackAPI, opts ...StorageParam) *ScrappyStorage {
+func NewScrapyStorage(base_api base.IbaseAPI, player_api player.IPlayerAPI, base_attack baseattack.IbaseAttackAPI, opts ...storageParam) *ScrappyStorage {
 	s := &ScrappyStorage{}
 	s.baseStorage = base.NewBaseStorage(base_api)
+	s.playerStorage = player.NewPlayerStorage(player_api)
 	s.baseAttackStorage = baseattack.NewBaseAttackStorage(base_attack)
 
 	for _, opt := range opts {
@@ -27,11 +30,15 @@ func NewScrapyStorage(base_api base.IbaseAPI, base_attack baseattack.IbaseAttack
 
 func (s *ScrappyStorage) Update() {
 	s.baseStorage.Update()
+	s.playerStorage.Update()
 	s.baseAttackStorage.Update()
 }
 
 func (s *ScrappyStorage) GetBaseStorage() *base.BaseStorage {
 	return s.baseStorage
+}
+func (s *ScrappyStorage) GetPlayerStorage() *player.PlayerStorage {
+	return s.playerStorage
 }
 
 func (s *ScrappyStorage) GetBaseAttackStorage() *baseattack.BaseAttackStorage {
@@ -39,7 +46,7 @@ func (s *ScrappyStorage) GetBaseAttackStorage() *baseattack.BaseAttackStorage {
 }
 
 func NewScrappyWithApis() *ScrappyStorage {
-	return NewScrapyStorage(base.NewBaseApi(), baseattack.NewBaseAttackAPI())
+	return NewScrapyStorage(base.NewBaseApi(), player.NewPlayerAPI(), baseattack.NewBaseAttackAPI())
 }
 
 func (s *ScrappyStorage) Run() {

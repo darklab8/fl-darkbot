@@ -46,6 +46,7 @@ var runCmd = &cobra.Command{
 			scrappy_storage = scrappy.NewScrappyWithApis()
 		}
 		dg := discorder.NewClient(discorder.WithWebSocket())
+		scrappy_storage.GetPlayerStorage().RegisterObserve(dg) // updates number of players in Bot description
 
 		scrappy_storage.Update()
 		go scrappy_storage.Run()

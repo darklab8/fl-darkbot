@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/darklab8/fl-darkbot/app/scrappy/player"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
@@ -122,6 +123,14 @@ func (d *Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*Disc
 func (d *Discorder) SetPressence(msg string) {
 	err := d.dg.UpdateGameStatus(0, msg)
 	logus.Log.CheckWarn(err, "unable to set presence")
+}
+
+func (d *Discorder) ReceivePlayers(p *player.PlayerStorage) {
+	latest_record, err := p.GetLatestRecord()
+	if logus.Log.CheckWarn(err, "failed to get record for pressence update") {
+		return
+	}
+	d.SetPressence(fmt.Sprintf("with %d/255 players", len(latest_record.List)))
 }
 
 func (d *Discorder) GetOwnerID(channelID types.DiscordChannelID) (types.DiscordOwnerID, error) {
