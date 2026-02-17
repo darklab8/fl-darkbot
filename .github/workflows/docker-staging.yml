@@ -106,9 +106,9 @@ jobs:
     - name: Switch service image darkwind8/darkbot for swarm to new one
       run: |
         set -ex
-        docker pull darkwind8/darkbot:staging-arm64
+        docker pull darkwind8/darkbot:${{ steps.version.outputs.BUILD_VERSION }}-arm64
         sleep 5
-        docker service update --image darkwind8/darkbot:staging-arm64 staging-darkbot-app
+        docker service update --image darkwind8/darkbot:${{ steps.version.outputs.BUILD_VERSION }}-arm64 staging-darkbot-app
     needs:
     - build-arm64
     - build-amd64
