@@ -153,7 +153,29 @@ func CreateConsoler(
 		configurator.NewConfiguratorContentIgnore(configur),
 		configurator.NewConfiguratorChannel(configur),
 	)
-
+	forumAuthorGroup := forumGroup.GetChild(
+		forumGroup.CurrentCmd,
+		cmdgroup.Command("author"),
+		cmdgroup.ShortDesc("track by author name, partial name or uid"),
+	)
+	NewTagCommands(
+		forumAuthorGroup.GetChild(
+			forumAuthorGroup.CurrentCmd,
+			cmdgroup.Command("watch"),
+			cmdgroup.ShortDesc("Watch commands"),
+		),
+		configurator.NewConfiguratorAuthorWatch(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+	NewTagCommands(
+		forumAuthorGroup.GetChild(
+			forumAuthorGroup.CurrentCmd,
+			cmdgroup.Command("ignore"),
+			cmdgroup.ShortDesc("Ignore commands"),
+		),
+		configurator.NewConfiguratorAuthorIgnore(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
 	alertGroup := root.GetChild(
 		root.CurrentCmd,
 		cmdgroup.Command("alert"),
@@ -310,6 +332,8 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString(fmt.Sprintf("forum thread ignore = %#v\n", PrintList(r.Forum.Thread.Ignore.TagsList2(channel_id))))
 			sb.WriteString(fmt.Sprintf("forum content watch = %#v\n", PrintList(r.Forum.Content.Watch.TagsList2(channel_id))))
 			sb.WriteString(fmt.Sprintf("forum content ignore = %#v\n", PrintList(r.Forum.Content.Ignore.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("forum author watch = %#v\n", PrintList(r.Forum.Author.Watch.TagsList2(channel_id))))
+			sb.WriteString(fmt.Sprintf("forum author ignore = %#v\n", PrintList(r.Forum.Author.Ignore.TagsList2(channel_id))))
 			sb.WriteString("\n```\n")
 
 			// alerts

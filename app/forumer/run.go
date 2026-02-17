@@ -123,11 +123,28 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 
 	content_ignore_tags, err := v.Forum.Content.Ignore.TagsList(channel)
 	logus.Log.CheckDebug(err, "failed to get ignore tags")
-	// new_post.PostContent
+
+	author_watch_tags, err := v.Forum.Author.Watch.TagsList(channel)
+	logus.Log.CheckDebug(err, "failed to get Author watch tags")
+
+	author_ignore_tags, err := v.Forum.Author.Ignore.TagsList(channel)
+	logus.Log.CheckDebug(err, "failed to get Author ignore tags")
+
+	thread_link := fmt.Sprintf("%s$", new_post.ThreadLink)
+	author_link := fmt.Sprintf("%s$", new_post.PostAuthorLink)
+
+	for _, watch_tag := range author_watch_tags {
+		if strings.Contains(strings.ToLower(string(new_post.PostAuthorName)), strings.ToLower(string(watch_tag))) ||
+			strings.Contains(strings.ToLower(string(author_link)), strings.ToLower(string(watch_tag))) {
+			do_we_show_this_post = true
+			matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
+		}
+	}
 
 	for _, watch_tag := range thread_watch_tags {
 		if strings.Contains(string(new_post.ThreadFullName), string(watch_tag)) ||
-			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(watch_tag))) {
+			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(watch_tag))) ||
+			strings.ToLower(string(thread_link)) == strings.ToLower(string(watch_tag)) {
 			do_we_show_this_post = true
 			matched_tags = append(matched_tags, string(fmt.Sprintf(`"%s"`, watch_tag)))
 		}
@@ -161,7 +178,8 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 
 	for _, ignore_tag := range thread_ignore_tags {
 		if strings.Contains(string(new_post.ThreadFullName), string(ignore_tag)) ||
-			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(ignore_tag))) {
+			strings.Contains(strings.ToLower(string(new_post.ThreadFullName)), strings.ToLower(string(ignore_tag))) ||
+			strings.ToLower(string(thread_link)) == strings.ToLower(string(ignore_tag)) {
 			do_we_show_this_post = false
 			break
 		}
@@ -174,6 +192,13 @@ func (v *Forumer) isPostMatchTags(channel types.DiscordChannelID, new_post *foru
 				do_we_show_this_post = false
 				break
 			}
+		}
+	}
+	for _, ignore_tag := range author_ignore_tags {
+		if strings.Contains(strings.ToLower(string(new_post.PostAuthorName)), strings.ToLower(string(ignore_tag))) ||
+			strings.Contains(strings.ToLower(string(author_link)), strings.ToLower(string(ignore_tag))) {
+			do_we_show_this_post = false
+			break
 		}
 	}
 

@@ -23,10 +23,15 @@ type ForumContent struct {
 	Watch  ConfiguratorContentWatch
 	Ignore ConfiguratorContentIgnore
 }
+type ForumAuthor struct {
+	Watch  ConfiguratorAuthorWatch
+	Ignore ConfiguratorAuthorIgnore
+}
 type Forum struct {
 	Thread   ForumThread
 	Subforum ForumSubforum
 	Content  ForumContent
+	Author   ForumAuthor
 }
 type Base struct {
 	Tags    ConfiguratorBase
@@ -72,6 +77,10 @@ func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 			Content: ForumContent{
 				Watch:  NewConfiguratorContentWatch(configur),
 				Ignore: NewConfiguratorContentIgnore(configur),
+			},
+			Author: ForumAuthor{
+				Watch:  NewConfiguratorAuthorWatch(configur),
+				Ignore: NewConfiguratorAuthorIgnore(configur),
 			},
 		},
 	}
