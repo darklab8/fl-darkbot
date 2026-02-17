@@ -16,7 +16,7 @@ func TestLogging(t *testing.T) {
 	logus.Log.Warn("send shot msg", logus.MsgContent(short_test))
 }
 
-func TestReceivePlayersNumbersUpdate(t *testing.T) {
+func TestReceivePlayersNumbersUpdateForBotDescription(t *testing.T) {
 	// unit test by static typing check it is present :)
 
 	if false {
