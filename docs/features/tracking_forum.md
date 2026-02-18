@@ -5,6 +5,7 @@
 ## All rules work together
 
 Final forum tracking is working as sum results of all rules you configured together.
+
 - Did you configure watching posts of specific author posts, but configured ignore for subsection named flood? You will see all subscribed author posts except in flood
 - Did you configure watching specific thread names + specific multiple authors - ignoring specific forum sub sections? That is exactly what you will get. Sum of desired thread names+authors, and excluded subsections.
 - Did you configure watching specific forum subsection and ignoring specific author? That is exactly what you will get once again. All msgs in the forum forum subsection except "muted" specific author
@@ -12,7 +13,7 @@ Final forum tracking is working as sum results of all rules you configured toget
 
 Connect forumlancer to separate channel if u wish to start with a clean list of rules :] It is not a bug, it is a feature!
 
-code of post matching logic could be check in `func isPostMatchTagsfunction` at https://github.com/darklab8/fl-darkbot/blob/master/app/forumer/run.go#L105
+code of post matching logic could be check in `func isPostMatchTagsfunction` at [https://github.com/darklab8/fl-darkbot/blob/master/app/forumer/run.go#L105](https://github.com/darklab8/fl-darkbot/blob/master/app/forumer/run.go#L105)
 
 ### Thread tracking
 
@@ -25,9 +26,11 @@ Basic tracking by thread names
 
 Additionally you can subscribe to thread by its url link. For example thread has url https://discoverygc.com/forums/showthread.php?tid=188959
 you can input 
+
 - `. forum thread watch add tid=188959` or `. forum thread watch add 188959` to subscribe to it. Whatever part of url u wish
 
 matching works by partial name. so if thread has uid 30010, he will be matched too :| to prevent issues about it, added special symbol `$` to the end of all links just in case during matching
+
 - `. forum thread watch add tid=188959$` will match only exact thread and no other thread
 
 ### Thread ignoring
@@ -72,8 +75,10 @@ You can subscribe to specific authors now
 This feature supports subscribing by profile uid (or more likely by profile link)
 
 All those commands valid to subscribe to jammi
+
 - `. forum author watch add https://discoverygc.com/forums/member.php?action=profile&uid=3001`
 - `. forum author watch add uid=3001`
 - `. forum author watch add 3001`
+
 matching works by partial name. so if anyone has uid 30010, he will be matched too :| to prevent issues about it, added special symbol `$` to the end of all links just in case during matching
-`. forum author watch add uid=3001$` will match only jammi and no one else for sure
+- `. forum author watch add uid=3001$` will match only jammi and no one else for sure
