@@ -72,7 +72,7 @@ You can subscribe to specific authors now
 - `. forum author watch add jammi` - Will print you all msgs of player jammi (case not sensitive tracking as usual)
 - `. forum author ignore add ignore Ignored` - To ignore msgs of someone (during your subscruption to thread or forum subsection)
 
-This feature supports subscribing by profile uid (or more likely by profile link)
+This feature supports subscribing by profile uid (or more like by any part of profile link)
 
 All those commands valid to subscribe to jammi
 
