@@ -3,6 +3,7 @@ package base
 import (
 	"github.com/darklab8/fl-darkbot/app/scrappy/shared/parser"
 	"github.com/darklab8/fl-darkbot/app/scrappy/shared/records"
+	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
 
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 )
@@ -15,18 +16,21 @@ type Base struct {
 }
 
 type BaseStorage struct {
-	records.Records[records.StampedObjects[Base]]
+	records.Records[records.StampedObjects[*configs_export.PoB]]
 	api    IbaseAPI
-	parser parser.Parser[records.StampedObjects[Base]]
+	parser parser.Parser[records.StampedObjects[*configs_export.PoB]]
 }
 
 // Conveniently born some factory
 func (b *BaseStorage) Update() {
-	data, err := b.api.GetBaseData()
+	pobs, err := b.api.GetPobs()
 	if logus.Log.CheckWarn(err, "quering API with error in BaseStorage") {
 		return
 	}
-	record, err := b.parser.Parse(data)
+	record := records.NewStampedObjects[*configs_export.PoB]()
+	for _, pob := range pobs {
+		record.Add(pob)
+	}
 	if logus.Log.CheckWarn(err, "received bad parser parsing result in BaseStorage. Ignoring.") {
 		return
 	}
@@ -36,7 +40,6 @@ func (b *BaseStorage) Update() {
 
 func NewBaseStorage(api IbaseAPI) *BaseStorage {
 	b := &BaseStorage{}
-	b.parser = baseParser{}
 	b.api = api
 	return b
 }

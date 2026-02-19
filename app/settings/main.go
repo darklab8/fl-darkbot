@@ -14,7 +14,7 @@ import (
 type DarkbotEnv struct {
 	utils_settings.UtilsEnvs
 
-	ScrappyBaseUrl       string
+	DarkstatApiUrl       string
 	ScrappyPlayerUrl     string
 	ScrappyBaseAttackUrl string
 
@@ -52,7 +52,7 @@ func LoadEnv(envs *enverant.Enverant) {
 	Env = DarkbotEnv{
 		UtilsEnvs:            utils_settings.GetEnvs(),
 		DevEnvMockApi:        envs.GetBoolOr("DEV_ENV_MOCK_API", true),
-		ScrappyBaseUrl:       envs.GetStrOr("SCRAPPY_BASE_URL", ""),
+		DarkstatApiUrl:       envs.GetStrOr("DARKSTAT_API", "https://darkstat.dd84ai.com"),
 		ScrappyPlayerUrl:     envs.GetStrOr("SCRAPPY_PLAYER_URL", ""),
 		ScrappyBaseAttackUrl: envs.GetStrOr("SCRAPPY_BASE_ATTACK_URL", "https://discoverygc.com/forums/showthread.php?tid=110046&action=lastpost"),
 
@@ -76,12 +76,10 @@ func LoadEnv(envs *enverant.Enverant) {
 	Dbpath = NewDBPath(Env.ConfiguratorDbname)
 
 	if !Env.DevEnvMockApi {
-		if Env.ScrappyBaseUrl == "" {
-			log.Panic("DevEnvMockApi=false, Expected SCRAPPY_BASE_URL env var to be defined")
-		}
-		if Env.ScrappyPlayerUrl == "" {
-			log.Panic("DevEnvMockApi=false, Expected SCRAPPY_PLAYER_URL env var to be defined")
-		}
+		// permit launching without Player API initialized?
+		// if Env.ScrappyPlayerUrl == "" {
+		// 	log.Panic("DevEnvMockApi=false, Expected SCRAPPY_PLAYER_URL env var to be defined")
+		// }
 	}
 }
 
