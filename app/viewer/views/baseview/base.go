@@ -9,12 +9,12 @@ import (
 	"text/template"
 
 	"github.com/darklab8/fl-darkbot/app/configurator/models"
-	"github.com/darklab8/fl-darkbot/app/scrappy/base"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 	"github.com/darklab8/fl-darkbot/app/viewer/views"
 	"github.com/darklab8/fl-darkbot/app/viewer/views/viewer_msg"
+	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
 
 	"github.com/darklab8/go-utils/utils"
 	"github.com/darklab8/go-utils/utils/utils_types"
@@ -75,7 +75,7 @@ func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateB
 }
 
 type TemplateAugmentedBase struct {
-	base.Base
+	*configs_export.PoB
 	HealthChange         string
 	IsHealthDecreasing   bool
 	IsUnderAttack        bool
@@ -83,7 +83,7 @@ type TemplateAugmentedBase struct {
 	UnderAttackPhrase    string
 }
 
-func BaseContainsTag(bas base.Base, tags []types.Tag) bool {
+func BaseContainsTag(bas *configs_export.PoB, tags []types.Tag) bool {
 	for _, tag := range tags {
 		if strings.Contains(bas.Name, string(tag)) {
 			return true
@@ -93,8 +93,8 @@ func BaseContainsTag(bas base.Base, tags []types.Tag) bool {
 	return false
 }
 
-func MatchBases(bases []base.Base, tags []types.Tag) []base.Base {
-	result := []base.Base{}
+func MatchBases(bases []*configs_export.PoB, tags []types.Tag) []*configs_export.PoB {
+	result := []*configs_export.PoB{}
 	for _, base := range bases {
 
 		if !BaseContainsTag(base, tags) {
@@ -114,7 +114,7 @@ func ErrorForbiddenOrderKey(order_key types.OrderKey) ForbiddenOrderKey {
 
 func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order key=%s", f.order_key) }
 
-func (b *TemplateBase) sortBases(bases []base.Base, order_key types.OrderKey) ([]base.Base, error) {
+func (b *TemplateBase) sortBases(bases []*configs_export.PoB, order_key types.OrderKey) ([]*configs_export.PoB, error) {
 
 	switch order_key {
 	case models.BaseKeyName:
@@ -123,7 +123,7 @@ func (b *TemplateBase) sortBases(bases []base.Base, order_key types.OrderKey) ([
 		})
 	case models.BaseKeyAffiliation:
 		sort.Slice(bases, func(i, j int) bool {
-			return bases[i].Affiliation < bases[j].Affiliation
+			return types.GetS(bases[i].FactionName) < types.GetS(bases[j].FactionName)
 		})
 	default:
 		logus.Log.Error(fmt.Sprintf("forbidden order order_key=%s, only keys=%v are allowed", order_key, models.ConfigBaseOrderingKeyAllowedTags))
@@ -179,7 +179,7 @@ func (b *TemplateBase) GenerateRecords() error {
 		}
 
 		baseVars := TemplateAugmentedBase{
-			Base:                 base,
+			PoB:                  base,
 			HealthChange:         healthDeritive,
 			IsHealthDecreasing:   HealthDecreasing,
 			IsUnderAttack:        UnderAttack,
@@ -196,10 +196,10 @@ func (b *TemplateBase) GenerateRecords() error {
 
 	if healthThreshold, err := b.api.Alerts.BaseHealthLowerThan.Status(b.channelID); err == nil {
 		for _, base := range bases {
-			if int(base.Health) < healthThreshold {
+			if int(types.GetF(base.Health)) < healthThreshold {
 				b.alertHealthLowerThan.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
-					fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(base.Health), healthThreshold),
+					fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(types.GetF(base.Health)), healthThreshold),
 					b.api,
 				))
 				b.alertHealthLowerThan.AppendRecord("")
@@ -213,7 +213,7 @@ func (b *TemplateBase) GenerateRecords() error {
 			if base.IsHealthDecreasing {
 				b.alertHealthIsDecreasing.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
-					fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(base.Health), base.HealthChange),
+					fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(types.GetF(base.Health)), base.HealthChange),
 					b.api,
 				))
 				b.alertHealthIsDecreasing.AppendRecord("")
@@ -229,7 +229,7 @@ func (b *TemplateBase) GenerateRecords() error {
 					b.channelID,
 					fmt.Sprintf("Base %s health %d is under attack, because we detected base name at forum attack declaration thread.",
 						base.Name,
-						int(base.Health),
+						int(types.GetF(base.Health)),
 					),
 					b.api,
 				))

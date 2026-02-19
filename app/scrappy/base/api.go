@@ -4,6 +4,8 @@ import (
 	"github.com/darklab8/fl-darkbot/app/scrappy/shared/api"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
+	"github.com/darklab8/fl-darkstat/darkapis/darkhttp"
+	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
 )
 
 type basesAPI struct {
@@ -16,11 +18,9 @@ func (b basesAPI) GetBaseData() ([]byte, error) {
 }
 
 type IbaseAPI interface {
-	GetBaseData() ([]byte, error)
+	GetPobs() ([]*configs_export.PoB, error)
 }
 
 func NewBaseApi() IbaseAPI {
-	b := basesAPI{}
-	b.url = types.APIurl(settings.Env.ScrappyBaseUrl)
-	return b
+	return darkhttp.NewClient(settings.Env.DarkstatApiUrl)
 }

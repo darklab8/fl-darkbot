@@ -19,7 +19,11 @@ type IPlayerAPI interface {
 	GetPlayerData() ([]byte, error)
 }
 
-func NewPlayerAPI() PlayerAPI {
+func NewPlayerAPI() IPlayerAPI {
+	if settings.Env.ScrappyPlayerUrl == "" {
+		return FixturePlayerAPIMock()
+	}
+
 	a := PlayerAPI{}
 	a.url = types.APIurl(settings.Env.ScrappyPlayerUrl)
 	return a
