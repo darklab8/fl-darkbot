@@ -1,10 +1,10 @@
+# OUT OF ALL THOSE VARIABLES ONLY "DISCORDER_BOT_TOKEN" IS OBLIGATORY FOR YOUR DEV ENV. The rest is your own choice :)
 {
-    # "SCRAPPY_PLAYER_URL": "**********", # Not required for dev env if u use "DEV_ENV_MOCK_API": "true"
-    # "SCRAPPY_BASE_URL": "**********", # Not required for dev env if u use "DEV_ENV_MOCK_API": "true"
+    # "SCRAPPY_PLAYER_URL": "**********", # Not required for dev env
     # "DARK_TEST_REGENERATE": "false",
-    "DEV_ENV": "true",
-    "DEV_ENV_MOCK_API": "true",
+    "DEV_ENV": "true", # probably does nothing
+    "DEV_ENV_MOCK_API": "false", # legacy param which is not needed any longer i guess
     "DARKBOT_LOG_LEVEL": "INFO",
-    "CONFIGURATOR_DBNAME": "dev",
+    "CONFIGURATOR_DBNAME": "dev", # name of sqlite db.
     "DISCORDER_BOT_TOKEN": "**********", # Get your own app token at https: //discord.com/developers/applications
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func FixtureCreateTestDataFolder() string {
-	_, filename, _, _ := runtime.Caller(1)
+	_, filename, _, _ := runtime.Caller(2)
 	path_curr_folder := filepath.Dir(filename)
 	path_testdata := path.Join(path_curr_folder, "testdata")
 	os.Mkdir(path_testdata, os.ModePerm)
