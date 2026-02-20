@@ -76,7 +76,7 @@ func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateB
 
 type TemplateAugmentedBase struct {
 	*configs_export.PoB
-	BaseHealth           int
+	BaseHealth           float64
 	Affiliation          string
 	HealthChange         string
 	IsHealthDecreasing   bool
@@ -182,7 +182,7 @@ func (b *TemplateBase) GenerateRecords() error {
 
 		baseVars := TemplateAugmentedBase{
 			PoB:                  base,
-			BaseHealth:           int(*base.Health),
+			BaseHealth:           *base.Health,
 			Affiliation:          *base.FactionName,
 			HealthChange:         healthDeritive,
 			IsHealthDecreasing:   HealthDecreasing,
