@@ -136,7 +136,7 @@ func (b *TemplateBase) sortBases(bases []*configs_export.PoB, order_key types.Or
 	return bases, nil
 }
 
-const HealthRateDecreasingThreshold = -0.01
+const HealthRateDecreasingThreshold = -0.5
 
 func (b *TemplateBase) GenerateRecords() error {
 	record, err := b.api.Scrappy.GetBaseStorage().GetLatestRecord()
