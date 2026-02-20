@@ -16,6 +16,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/viewer/views/viewer_msg"
 	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
 
+	"github.com/darklab8/go-utils/typelog"
 	"github.com/darklab8/go-utils/utils"
 	"github.com/darklab8/go-utils/utils/utils_types"
 )
@@ -175,6 +176,7 @@ func (b *TemplateBase) GenerateRecords() error {
 
 		if DerivativesInitializing {
 			healthDeritive = "initializing"
+			logus.Log.Warn("healthDeritive is initializing, because", typelog.OptError(healthDerivativeErr))
 		} else {
 			HealthDecreasing = healthDeritiveNumber < 0
 			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(string(b.api.Scrappy.GetBaseAttackStorage().GetData()), base.Name)
