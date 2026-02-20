@@ -31,13 +31,13 @@ type ViewEnd string
 
 type OrderKey string
 
-func GetF(pointer *float64) float64 {
+func GetF(pointer *float64, defaul float64) float64 {
 	if pointer == nil {
 		return 0
 	}
 	return *pointer
 }
-func GetS(pointer *string) string {
+func GetS(pointer *string, defaul string) string {
 	if pointer == nil {
 		return ""
 	}

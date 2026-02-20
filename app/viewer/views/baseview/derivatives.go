@@ -49,10 +49,13 @@ func CalculateDerivates(tags []types.Tag, api *apis.API) (map[string]float64, er
 		bases := record.List
 
 		for _, base := range bases {
+			if base.Health == nil {
+				continue
+			}
 			if _, ok := baseHealths[base.Name]; !ok {
 				baseHealths[base.Name] = make([]float64, 0)
 			}
-			baseHealths[base.Name] = append(baseHealths[base.Name], types.GetF(base.Health))
+			baseHealths[base.Name] = append(baseHealths[base.Name], *base.Health)
 		}
 	}
 

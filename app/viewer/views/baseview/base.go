@@ -76,6 +76,8 @@ func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateB
 
 type TemplateAugmentedBase struct {
 	*configs_export.PoB
+	BaseHealth           int
+	Affiliation          string
 	HealthChange         string
 	IsHealthDecreasing   bool
 	IsUnderAttack        bool
@@ -123,7 +125,7 @@ func (b *TemplateBase) sortBases(bases []*configs_export.PoB, order_key types.Or
 		})
 	case models.BaseKeyAffiliation:
 		sort.Slice(bases, func(i, j int) bool {
-			return types.GetS(bases[i].FactionName) < types.GetS(bases[j].FactionName)
+			return types.GetS(bases[i].FactionName, "") < types.GetS(bases[j].FactionName, "")
 		})
 	default:
 		logus.Log.Error(fmt.Sprintf("forbidden order order_key=%s, only keys=%v are allowed", order_key, models.ConfigBaseOrderingKeyAllowedTags))
@@ -180,6 +182,8 @@ func (b *TemplateBase) GenerateRecords() error {
 
 		baseVars := TemplateAugmentedBase{
 			PoB:                  base,
+			BaseHealth:           int(*base.Health),
+			Affiliation:          *base.FactionName,
 			HealthChange:         healthDeritive,
 			IsHealthDecreasing:   HealthDecreasing,
 			IsUnderAttack:        UnderAttack,
@@ -196,10 +200,13 @@ func (b *TemplateBase) GenerateRecords() error {
 
 	if healthThreshold, err := b.api.Alerts.BaseHealthLowerThan.Status(b.channelID); err == nil {
 		for _, base := range bases {
-			if int(types.GetF(base.Health)) < healthThreshold {
+			if base.Health == nil {
+				continue
+			}
+			if int(*base.Health) < healthThreshold {
 				b.alertHealthLowerThan.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
-					fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(types.GetF(base.Health)), healthThreshold),
+					fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(*base.Health), healthThreshold),
 					b.api,
 				))
 				b.alertHealthLowerThan.AppendRecord("")
@@ -210,10 +217,10 @@ func (b *TemplateBase) GenerateRecords() error {
 
 	if isAlertEnabled, err := b.api.Alerts.BaseHealthIsDecreasing.Status(b.channelID); err == nil && isAlertEnabled {
 		for _, base := range bases {
-			if base.IsHealthDecreasing {
+			if base.IsHealthDecreasing && base.Health != nil {
 				b.alertHealthIsDecreasing.SetHeader(views.RenderAlertTemplate(
 					b.channelID,
-					fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(types.GetF(base.Health)), base.HealthChange),
+					fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(*base.Health), base.HealthChange),
 					b.api,
 				))
 				b.alertHealthIsDecreasing.AppendRecord("")
@@ -229,7 +236,7 @@ func (b *TemplateBase) GenerateRecords() error {
 					b.channelID,
 					fmt.Sprintf("Base %s health %d is under attack, because we detected base name at forum attack declaration thread.",
 						base.Name,
-						int(types.GetF(base.Health)),
+						int(types.GetF(base.Health, -1)),
 					),
 					b.api,
 				))
