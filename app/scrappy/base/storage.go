@@ -27,6 +27,12 @@ func (b *BaseStorage) Update() {
 	if logus.Log.CheckWarn(err, "quering API with error in BaseStorage") {
 		return
 	}
+
+	if len(pobs) == 0 {
+		logus.Log.Warn("skip pobs update if no pobs was received")
+		return
+	}
+
 	record := records.NewStampedObjects[*configs_export.PoB]()
 	for _, pob := range pobs {
 		record.Add(pob)
