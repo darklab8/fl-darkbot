@@ -20,6 +20,7 @@ var (
 	channelsPerGuilds *prometheus.GaugeVec
 
 	listenerAllowedOperations *prometheus.CounterVec
+	ListenerKindOperation     *prometheus.CounterVec
 
 	viewerOperations *prometheus.CounterVec
 
@@ -37,12 +38,15 @@ func init() {
 	listenerAllowedOperations = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "darkbot_listener_allowed_requests_count",
 		Help: "Requests incoming to listener from Discord. Contains error if not allowed",
-	}, []string{"guild_name", "channel_id", "error"})
+	}, []string{"guild_name", "channel_id", "error", "command"})
+	ListenerKindOperation = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "darkbot_listener_kind_operation",
+		Help: "Which commands are invoked",
+	}, []string{"channel_id", "command"})
 	viewerOperations = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "darkbot_viewer_requests_count",
 		Help: "Requests sent by viewer to handle table renderings. Contain error if smth went wrong",
 	}, []string{"guild_name", "channel_id", "error"})
-
 	upTime = promauto.NewGauge(prometheus.GaugeOpts{
 		Name: "darkbot_uptime_seconds",
 		Help: "Uptime in seconds",
@@ -57,6 +61,7 @@ func init() {
 	reg.MustRegister(
 		channelsPerGuilds,
 		listenerAllowedOperations,
+		ListenerKindOperation,
 		viewerOperations,
 		upTime,
 		collectors.NewGoCollector(),
@@ -74,19 +79,23 @@ func init() {
 func ChannelsPerGuild(GuildID string, ChannelID string) prometheus.Gauge {
 	return channelsPerGuilds.WithLabelValues(GuildID, ChannelID)
 }
-func ListenerIsAllowedOperations(GuildID string, ChannelID string, Error error) prometheus.Counter {
+func ListenerIsAllowedOperations(GuildID string, ChannelID string, Error error, command string) prometheus.Counter {
 	var StrError string
 	if Error != nil {
 		StrError = Error.Error()
 	}
-	return listenerAllowedOperations.WithLabelValues(GuildID, ChannelID, StrError)
+	return listenerAllowedOperations.WithLabelValues(GuildID, ChannelID, StrError, command)
 }
 func ViewerOperations(GuildID string, ChannelID string, Error error) prometheus.Counter {
 	var StrError string
 	if Error != nil {
 		StrError = Error.Error()
 	}
-	return viewerOperations.WithLabelValues(GuildID, ChannelID, StrError)
+	return viewerOperations.With(prometheus.Labels{
+		"guild_name": GuildID,
+		"channel_id": ChannelID,
+		"error":      StrError,
+	})
 }
 
 func addMapGuildChannelValue(a_map map[string]map[string]int, guild string, channel_id string, value int) {

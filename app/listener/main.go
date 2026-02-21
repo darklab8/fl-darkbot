@@ -105,11 +105,13 @@ func allowedMessage(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 		botCreatorID != messageAuthorID &&
 		!isBotController {
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("ERR access denied. You must be server owner or person with role named '%s' in order to command me!", allowed_role))
-		prometheuser.ListenerIsAllowedOperations(guild_name, string(m.ChannelID), errors.New("not_allowed_by_listener")).Inc()
+		prometheuser.ListenerIsAllowedOperations(guild_name, string(m.ChannelID), errors.New("not_allowed_by_listener"), "").Inc()
 		return false
 	}
 
-	prometheuser.ListenerIsAllowedOperations(guild_name, string(m.ChannelID), nil).Inc()
+	command := ""
+
+	prometheuser.ListenerIsAllowedOperations(guild_name, string(m.ChannelID), nil, command).Inc()
 	return true
 }
 

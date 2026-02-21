@@ -9,8 +9,10 @@ import (
 	"github.com/darklab8/fl-darkbot/app/configurator"
 	"github.com/darklab8/fl-darkbot/app/consoler/commands"
 	"github.com/darklab8/fl-darkbot/app/consoler/consoler_types"
+	"github.com/darklab8/fl-darkbot/app/prometheuser"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Consoler struct {
@@ -31,6 +33,10 @@ func NewConsoler(
 	return c
 }
 
+type ConsolerOut struct {
+	stdout string
+}
+
 func (c *Consoler) Execute(
 	cmd string,
 	channelID types.DiscordChannelID,
@@ -47,8 +53,26 @@ func (c *Consoler) Execute(
 	rootCmd.SetErr(buffStderr)
 
 	c.params.SetChannelID(channelID)
-	rootCmd.SetArgs(strings.Split(cmd, " "))
+	args := strings.Split(cmd, " ")
+	rootCmd.SetArgs(args)
 	rootCmd.Execute()
+
+	_, remainingArgs, _ := rootCmd.Find(args)
+	remained := make(map[string]bool)
+	for _, arg := range remainingArgs {
+		remained[arg] = true
+	}
+	var command_args []string
+	for _, arg := range args[1:] {
+		_, ok := remained[arg]
+		if !ok {
+			command_args = append(command_args, arg)
+		}
+	}
+	prometheuser.ListenerKindOperation.With(prometheus.Labels{
+		"command":    strings.Join(command_args, " "),
+		"channel_id": string(channelID),
+	}).Inc()
 
 	return buffStdout.String() + buffStderr.String()
 }
