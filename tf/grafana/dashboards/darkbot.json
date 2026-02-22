@@ -403,7 +403,7 @@
           "expr": "sum by(guild_name) (darkbot_guilds_channels_gauge)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "some_user",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -475,11 +475,11 @@
             "uid": "prometheus-datasource"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "sum by(guild_name) (darkbot_guilds_channels_gauge)",
+          "editorMode": "code",
+          "expr": "sum by(guild_name) (darkbot_guilds_channels_gauge{guild_name!=\"unknown\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "guild",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -581,7 +581,7 @@
           "expr": "sum by(guild_name) (increase(darkbot_viewer_requests_count{error=\"\"}[5m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "{{guild_name}}",
+          "legendFormat": "some_guild",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -888,13 +888,115 @@
           "expr": "sum by(guild_name) (darkbot_listener_allowed_requests_count{error=\"\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "some_guild",
           "range": true,
           "refId": "A",
           "useBackend": false
         }
       ],
       "title": "Listener Requests Success",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus-datasource"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum by(command) (darkbot_listener_kind_operation{})",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Listener Kind of Operations [10m]",
       "type": "timeseries"
     },
     {
@@ -990,7 +1092,7 @@
           "expr": "sum by(guild_name, error) (increase(darkbot_listener_allowed_requests_count{error!=\"\"}[10m]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "some_guild",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -1014,5 +1116,5 @@
   "timezone": "browser",
   "title": "App Darkbot",
   "uid": "deiax9gq89b0gd",
-  "version": 2
+  "version": 9
 }
