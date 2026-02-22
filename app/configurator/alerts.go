@@ -1,6 +1,8 @@
 package configurator
 
 import (
+	"errors"
+
 	"github.com/darklab8/fl-darkbot/app/configurator/models"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
@@ -8,7 +10,9 @@ import (
 
 type AlertThresholdType interface {
 	// models.SomeAlert |
-	models.AlertBaseHealthLowerThan
+	models.AlertBaseHealthLowerThan |
+		models.AlertBaseMoneyBelow |
+		models.AlertBaseCargoBelow
 
 	GetThreshold() int
 }
@@ -61,6 +65,14 @@ type CfgAlertBaseIsUnderAttack = IConfiguratorAlertBool[models.AlertBaseIfUnderA
 
 var NewCfgAlertBaseIsUnderAttack = NewConfiguratorAlertBool[models.AlertBaseIfUnderAttack]
 
+type CfgAlertBaseMoneyBelowThan = IConfiguratorAlertThreshold[models.AlertBaseMoneyBelow]
+
+var NewCfgAlertBaseMoneyBelowThan = NewConfiguratorAlertThreshold[models.AlertBaseMoneyBelow]
+
+type CfgAlertBaseCargoBelowThan = IConfiguratorAlertThreshold[models.AlertBaseCargoBelow]
+
+var NewCfgAlertBaseCargoBelowThan = NewConfiguratorAlertThreshold[models.AlertBaseCargoBelow]
+
 type CfgAlertPingMessage = IConfiguratorAlertString[models.AlertPingMessage]
 
 var NewCfgAlertPingMessage = NewConfiguratorAlertString[models.AlertPingMessage]
@@ -69,11 +81,18 @@ type CfgBaseOrderingKey = IConfiguratorAlertString[models.ConfigBaseOrderingKey]
 
 var NewCfgBaseOrderingKey = NewConfiguratorAlertString[models.ConfigBaseOrderingKey]
 
-func (c IConfiguratorAlertThreshold[T]) Set(channelID types.DiscordChannelID, value int) error {
+func (c IConfiguratorAlertThreshold[T]) Set(channelID types.DiscordChannelID, kind models.ThresholdIntegerKind, value int) error {
 	c.Unset(channelID)
+
+	if kind == models.ThresholdIntegerPercentage {
+		if value < 0 || value > 100 {
+			return errors.New("value should be within 0 to 100 range")
+		}
+	}
+
 	obj := T{
-		OneValueTemplate:    models.OneValueTemplate{ChannelID: channelID},
-		AlertTresholdShared: models.AlertTresholdShared{Threshold: value},
+		OneValueTemplate:     models.OneValueTemplate{ChannelID: channelID},
+		AlertTresholdInteger: models.AlertTresholdInteger{Threshold: value},
 	}
 	result2 := c.db.Create(&obj)
 

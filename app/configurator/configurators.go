@@ -6,6 +6,8 @@ type Alerts struct {
 	BaseHealthLowerThan    CfgAlertBaseHealthLowerThan
 	BaseHealthIsDecreasing CfgAlertBaseHealthIsDecreasing
 	BaseIsUnderAttack      CfgAlertBaseIsUnderAttack
+	BaseMoneyBelowThan     CfgAlertBaseMoneyBelowThan
+	BaseCargoBelowThan     CfgAlertBaseCargoBelowThan
 	PingMessage            CfgAlertPingMessage
 }
 
@@ -61,6 +63,8 @@ func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 		},
 		Alerts: Alerts{
 			BaseHealthLowerThan:    NewCfgAlertBaseHealthLowerThan(configur),
+			BaseMoneyBelowThan:     NewCfgAlertBaseMoneyBelowThan(configur),
+			BaseCargoBelowThan:     NewCfgAlertBaseCargoBelowThan(configur),
 			BaseHealthIsDecreasing: NewCfgAlertBaseHealthIsDecreasing(configur),
 			BaseIsUnderAttack:      NewCfgAlertBaseIsUnderAttack(configur),
 			PingMessage:            NewCfgAlertPingMessage(configur),

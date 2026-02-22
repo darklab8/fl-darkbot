@@ -67,7 +67,7 @@ func CreateConsoler(
 		configurator.NewConfiguratorChannel(configur),
 	)
 
-	NewAlertSetStringCommand[models.ConfigBaseOrderingKey](
+	NewAlertSetStringCommand(
 		baseGroup.GetChild(
 			baseGroup.CurrentCmd,
 			cmdgroup.Command("order_by"),
@@ -182,7 +182,7 @@ func CreateConsoler(
 		cmdgroup.ShortDesc("Alert commands"),
 	)
 
-	NewAlertBoolCommands[models.AlertBaseIfHealthDecreasing](
+	NewAlertBoolCommands(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
 			cmdgroup.Command("base_health_is_decreasing"),
@@ -192,7 +192,7 @@ func CreateConsoler(
 		configurator.NewConfiguratorChannel(configur),
 	)
 
-	NewAlertBoolCommands[models.AlertBaseIfUnderAttack](
+	NewAlertBoolCommands(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
 			cmdgroup.Command("base_is_under_attack"),
@@ -202,7 +202,7 @@ func CreateConsoler(
 		configurator.NewConfiguratorChannel(configur),
 	)
 
-	NewAlertThresholdCommands[models.AlertBaseHealthLowerThan](
+	NewAlertThresholdCommands(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
 			cmdgroup.Command("base_health_is_lower_than"),
@@ -210,9 +210,30 @@ func CreateConsoler(
 		),
 		configurator.NewCfgAlertBaseHealthLowerThan(configur),
 		configurator.NewConfiguratorChannel(configur),
+		models.ThresholdIntegerPercentage,
+	)
+	NewAlertThresholdCommands(
+		alertGroup.GetChild(
+			alertGroup.CurrentCmd,
+			cmdgroup.Command("base_money_is_lower_than"),
+			cmdgroup.ShortDesc("Set threshold of base money, below which you will receive alert"),
+		),
+		configurator.NewCfgAlertBaseMoneyBelowThan(configur),
+		configurator.NewConfiguratorChannel(configur),
+		models.ThresholdIntegerNotConstrained,
+	)
+	NewAlertThresholdCommands(
+		alertGroup.GetChild(
+			alertGroup.CurrentCmd,
+			cmdgroup.Command("base_cargo_space_left_is_lower_than"),
+			cmdgroup.ShortDesc("Set threshold of base cargo space left, below which you will receive alert"),
+		),
+		configurator.NewCfgAlertBaseCargoBelowThan(configur),
+		configurator.NewConfiguratorChannel(configur),
+		models.ThresholdIntegerNotConstrained,
 	)
 
-	NewAlertSetStringCommand[models.AlertPingMessage](
+	NewAlertSetStringCommand(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
 			cmdgroup.Command("ping_message"),
@@ -342,6 +363,8 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString(fmt.Sprintf("alert base_health_is_decreasing = %#v\n", GetStatus(r.Alerts.BaseHealthIsDecreasing, channel_id)))
 			sb.WriteString(fmt.Sprintf("alert base_health_is_lower_than = %#v\n", GetStatus(r.Alerts.BaseHealthLowerThan, channel_id)))
 			sb.WriteString(fmt.Sprintf("alert base_is_under_attack = %#v\n", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert base_money_is_lower_than = %#v\n", GetStatus(r.Alerts.BaseMoneyBelowThan, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert base_cargo_space_left_is_lower_than = %#v\n", GetStatus(r.Alerts.BaseCargoBelowThan, channel_id)))
 			value, err := r.Alerts.PingMessage.Status(channel_id)
 			if err != nil {
 				switch err.(type) {

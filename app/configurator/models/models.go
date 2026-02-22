@@ -58,18 +58,19 @@ type TagForumAuthorIgnore struct {
 
 // =========== Alerts ===============
 
-type AlertTresholdShared struct {
-	Threshold int `gorm:"check:threshold > 0; check:threshold <= 100"`
+type AlertTresholdInteger struct {
+	Threshold int `gorm:"check:threshold > 0; check:threshold >= 0"`
 }
 
-func (t AlertTresholdShared) GetThreshold() int {
+func (t AlertTresholdInteger) GetThreshold() int {
 	return t.Threshold
 }
 
 // ====== Shared alerts for all bases =========
 type AlertBaseHealthLowerThan struct {
 	OneValueTemplate
-	AlertTresholdShared
+	AlertTresholdInteger
+	ThresholdIntegerKind
 }
 
 type AlertBaseIfHealthDecreasing struct {
@@ -78,6 +79,25 @@ type AlertBaseIfHealthDecreasing struct {
 type AlertBaseIfUnderAttack struct {
 	OneValueTemplate
 }
+
+type AlertBaseMoneyBelow struct {
+	OneValueTemplate
+	AlertTresholdInteger
+	ThresholdIntegerKind
+}
+
+type AlertBaseCargoBelow struct {
+	OneValueTemplate
+	AlertTresholdInteger
+	ThresholdIntegerKind
+}
+
+type ThresholdIntegerKind int64
+
+const (
+	ThresholdIntegerPercentage ThresholdIntegerKind = iota
+	ThresholdIntegerNotConstrained
+)
 
 type AlertPingMessage struct {
 	OneValueTemplate

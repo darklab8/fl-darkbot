@@ -31,6 +31,12 @@ type ViewEnd string
 
 type OrderKey string
 
+func GetI(pointer *int, defaul int) int {
+	if pointer == nil {
+		return 0
+	}
+	return *pointer
+}
 func GetF(pointer *float64, defaul float64) float64 {
 	if pointer == nil {
 		return 0

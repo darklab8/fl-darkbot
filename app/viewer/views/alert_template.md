@@ -1,1 +1,1 @@
-**Alert: {{.Msg}}** {{.PingMessage}} 
+{{.Msg}}{{.PingMessage}}

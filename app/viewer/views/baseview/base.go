@@ -32,11 +32,15 @@ func init() {
 // Base
 
 type TemplateBase struct {
-	main                    *views.ViewTable
-	alertHealthLowerThan    *views.ViewTable
-	alertHealthIsDecreasing *views.ViewTable
-	alertBaseUnderAttack    *views.ViewTable
-	api                     *apis.API
+	main                     *views.ViewTable
+	alertHealthLowerThan     *views.ViewTable
+	alertHealthIsDecreasing  *views.ViewTable
+	alertBaseUnderAttack     *views.ViewTable
+	alertMoneyBelow          *views.ViewTable
+	AlertCargospaceLeftBelow *views.ViewTable
+	WarningMissconfiguration *views.ViewTable
+
+	api *apis.API
 	*views.SharedViewTableSplitter
 	channelID types.DiscordChannelID
 }
@@ -63,6 +67,17 @@ func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateB
 		types.ViewID("#darkbot-base-base-under-attack"),
 	))
 
+	base.alertMoneyBelow = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-base-money-below"),
+	))
+	base.AlertCargospaceLeftBelow = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-base-cargospace-below"),
+	))
+
+	base.WarningMissconfiguration = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-base-warning-missconfiguration"),
+	))
+
 	base.SharedViewTableSplitter = views.NewSharedViewSplitter(
 		api,
 		channelID,
@@ -71,14 +86,15 @@ func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateB
 		base.alertHealthLowerThan,
 		base.alertHealthIsDecreasing,
 		base.alertBaseUnderAttack,
+		base.alertMoneyBelow,
+		base.AlertCargospaceLeftBelow,
+		base.WarningMissconfiguration,
 	)
 	return &base
 }
 
 type TemplateAugmentedBase struct {
 	*configs_export.PoB
-	BaseHealth           float64
-	Affiliation          string
 	HealthChange         string
 	IsHealthDecreasing   bool
 	IsUnderAttack        bool
@@ -184,8 +200,6 @@ func (b *TemplateBase) GenerateRecords() error {
 
 		baseVars := TemplateAugmentedBase{
 			PoB:                  base,
-			BaseHealth:           *base.Health,
-			Affiliation:          *base.FactionName,
 			HealthChange:         healthDeritive,
 			IsHealthDecreasing:   HealthDecreasing,
 			IsUnderAttack:        UnderAttack,
@@ -206,12 +220,11 @@ func (b *TemplateBase) GenerateRecords() error {
 				continue
 			}
 			if int(*base.Health) < healthThreshold {
-				b.alertHealthLowerThan.SetHeader(views.RenderAlertTemplate(
+				b.alertHealthLowerThan.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
 					b.channelID,
 					fmt.Sprintf("Base %s has health %d lower than threshold %d", base.Name, int(*base.Health), healthThreshold),
 					b.api,
-				))
-				b.alertHealthLowerThan.AppendRecord("")
+				)))
 				break
 			}
 		}
@@ -220,12 +233,11 @@ func (b *TemplateBase) GenerateRecords() error {
 	if isAlertEnabled, err := b.api.Alerts.BaseHealthIsDecreasing.Status(b.channelID); err == nil && isAlertEnabled {
 		for _, base := range bases {
 			if base.IsHealthDecreasing && base.Health != nil {
-				b.alertHealthIsDecreasing.SetHeader(views.RenderAlertTemplate(
+				b.alertHealthIsDecreasing.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
 					b.channelID,
 					fmt.Sprintf("Base %s health %d is decreasing with value %s", base.Name, int(*base.Health), base.HealthChange),
 					b.api,
-				))
-				b.alertHealthIsDecreasing.AppendRecord("")
+				)))
 				break
 			}
 		}
@@ -234,15 +246,74 @@ func (b *TemplateBase) GenerateRecords() error {
 	if isAlertEnabled, _ := b.api.Alerts.BaseIsUnderAttack.Status(b.channelID); isAlertEnabled {
 		for _, base := range bases {
 			if base.IsUnderAttack {
-				b.alertBaseUnderAttack.SetHeader(views.RenderAlertTemplate(
+				b.alertBaseUnderAttack.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
 					b.channelID,
 					fmt.Sprintf("Base %s health %d is under attack, because we detected base name at forum attack declaration thread.",
 						base.Name,
 						int(types.GetF(base.Health, -1)),
 					),
 					b.api,
-				))
-				b.alertBaseUnderAttack.AppendRecord("")
+				)))
+				break
+			}
+		}
+	}
+
+	if money_threshold, err := b.api.Alerts.BaseMoneyBelowThan.Status(b.channelID); err == nil {
+		for _, base := range bases {
+
+			if base.Money == nil {
+				b.WarningMissconfiguration.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+					b.channelID,
+					fmt.Sprintf("Base %s has no data for money, but has configured money alert. No permission present to see it. Fix in Player Owned Base account manager at forum\n",
+						base.Name,
+					),
+					b.api,
+					views.WithAlertOverride(""),
+				)))
+				continue
+			}
+
+			if *base.Money < money_threshold {
+				b.alertMoneyBelow.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+					b.channelID,
+					fmt.Sprintf("Base %s money %d is below threshold %d. Fix money at your base :)\n",
+						base.Name,
+						int(types.GetI(base.Money, -1)),
+						money_threshold,
+					),
+					b.api,
+				)))
+				break
+			}
+		}
+	}
+
+	if cargo_threshold, err := b.api.Alerts.BaseCargoBelowThan.Status(b.channelID); err == nil {
+		for _, base := range bases {
+
+			if base.CargoSpaceLeft == nil {
+				b.WarningMissconfiguration.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+					b.channelID,
+					fmt.Sprintf("Base %s has no data for cargo space left, but has alert for cargo configured. No permission present to see it. Fix in Player Owned Base account manager at forum\n",
+						base.Name,
+					),
+					b.api,
+					views.WithAlertOverride(""),
+				)))
+				continue
+			}
+
+			if *base.CargoSpaceLeft < cargo_threshold {
+				b.AlertCargospaceLeftBelow.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+					b.channelID,
+					fmt.Sprintf("Base %s cargo space left %d is below threshold %d. Fix cargo left space at your base :)\n",
+						base.Name,
+						int(types.GetI(base.Money, -1)),
+						cargo_threshold,
+					),
+					b.api,
+				)))
 				break
 			}
 		}

@@ -13,6 +13,18 @@
 - `. alert base_health_is_lower_than status` to check current configuration
 - `. alert base_health_is_lower_than unset` to disable alert
 
+### Base money below threshold
+
+- `. alert base_money_is_lower_than set 5000` - Set threshold of base money, below which you will receive alert
+- `. alert base_money_is_lower_than status` to check current configuration
+- `. alert base_money_is_lower_than unset` to disable alert
+
+### Base cargo below threshold
+
+- `. alert base_cargo_space_left_is_lower_than set 5000` - Set threshold of base cargo space left, below which you will receive alert
+- `. alert base_cargo_space_left_is_lower_than status` to check current configuration
+- `. alert base_cargo_space_left_is_lower_than unset` to disable alert
+
 ### Base under attack
 
 - `. alert base_is_under_attack enable` - turns on alert if spotting the base in forum thread for base attack declarations.

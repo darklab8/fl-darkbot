@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/configurator/models"
 	"github.com/darklab8/fl-darkbot/app/scrappy"
 	"github.com/darklab8/fl-darkbot/app/scrappy/base"
 	"github.com/darklab8/fl-darkbot/app/scrappy/baseattack"
@@ -16,6 +17,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 	"github.com/darklab8/fl-darkstat/darkstat/configs_export"
+	"github.com/darklab8/go-utils/utils/ptr"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -71,7 +73,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		_, err := baseAlertBelowThreshold.Status(channelID)
 		assert.Error(t, err)
 
-		baseAlertBelowThreshold.Set(channelID, 40)
+		baseAlertBelowThreshold.Set(channelID, models.ThresholdIntegerPercentage, 40)
 		render = NewTemplateBase(api, channelID)
 		render.RenderView()
 
@@ -80,7 +82,7 @@ func TestBaseViewerMocked(t *testing.T) {
 		assert.False(t, render.alertHealthLowerThan.HasRecords())
 		assert.False(t, render.alertBaseUnderAttack.HasRecords())
 
-		baseAlertBelowThreshold.Set(channelID, 60)
+		baseAlertBelowThreshold.Set(channelID, models.ThresholdIntegerPercentage, 60)
 		render = NewTemplateBase(api, channelID)
 		render.RenderView()
 
@@ -209,5 +211,52 @@ func TestDetectAttackOnLPBase(t *testing.T) {
 		render.RenderView()
 
 		assert.True(t, render.alertBaseUnderAttack.HasRecords())
+	})
+}
+func TestBaseShowMoneyAndCargoSpaceLeft(t *testing.T) {
+	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
+		channelID, _ := configurator.FixtureChannel(dbpath)
+
+		cg := configurator.NewConfiguratorBase(configurator.NewConfigurator(dbpath))
+		cg.TagsAdd(channelID, []types.Tag{"LP-7743"}...)
+
+		scrapper := scrappy.NewScrapyStorage(base.FixtureBaseApiMock(), player.FixturePlayerAPIMock(), baseattack.NewMock("data_lp.json"))
+		scrapper.Update()
+		api := apis.NewAPI(dbpath, scrapper)
+
+		bases := scrapper.GetBaseStorage()
+		record := records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(&configs_export.PoB{
+			PoBCore: configs_export.PoBCore{
+				Name:           "LP-7743",
+				FactionName:    ptr.Ptr("Abc"),
+				Health:         ptr.Ptr(5.0),
+				Money:          ptr.Ptr(500),
+				CargoSpaceLeft: ptr.Ptr(500),
+			},
+		})
+		bases.Add(record)
+
+		baseUnderAttackalert := configurator.NewCfgAlertBaseMoneyBelowThan(configurator.NewConfigurator(dbpath))
+		baseUnderAttackalert.Set(channelID, models.ThresholdIntegerNotConstrained, 1000)
+
+		render := NewTemplateBase(api, channelID)
+		render.RenderView()
+
+		assert.True(t, render.alertMoneyBelow.HasRecords())
+
+		if msgs := render.main.GetMsgs(); len(msgs) > 0 {
+			for _, msg := range msgs {
+				rendered := msg.Render()
+				fmt.Println(rendered)
+			}
+		}
+
+		if msgs := render.alertMoneyBelow.GetMsgs(); len(msgs) > 0 {
+			for _, msg := range msgs {
+				rendered := msg.Render()
+				fmt.Println(rendered)
+			}
+		}
 	})
 }

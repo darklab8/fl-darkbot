@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/configurator/models"
 	"github.com/darklab8/fl-darkbot/app/consoler/commands/cmdgroup"
 	"github.com/darklab8/fl-darkbot/app/consoler/printer"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
@@ -18,9 +19,10 @@ import (
 
 type alertThresholdCommands[T configurator.AlertThresholdType] struct {
 	*cmdgroup.CmdGroup
-	cfgTags     configurator.IConfiguratorAlertThreshold[T]
-	channels    configurator.ConfiguratorChannel
-	disable_set bool
+	cfgTags                configurator.IConfiguratorAlertThreshold[T]
+	channels               configurator.ConfiguratorChannel
+	disable_set            bool
+	threshold_integer_kind models.ThresholdIntegerKind
 }
 
 type AlertThresholdCommandsOption[T configurator.AlertThresholdType] func(t *alertThresholdCommands[T])
@@ -29,9 +31,15 @@ func NewAlertThresholdCommands[T configurator.AlertThresholdType](
 	cmdGroup *cmdgroup.CmdGroup,
 	cfgTags configurator.IConfiguratorAlertThreshold[T],
 	channels configurator.ConfiguratorChannel,
+	threshold_integer_kind models.ThresholdIntegerKind,
 	opts ...AlertThresholdCommandsOption[T],
 ) *alertThresholdCommands[T] {
-	t := &alertThresholdCommands[T]{CmdGroup: cmdGroup, cfgTags: cfgTags, channels: channels}
+	t := &alertThresholdCommands[T]{
+		CmdGroup:               cmdGroup,
+		cfgTags:                cfgTags,
+		channels:               channels,
+		threshold_integer_kind: threshold_integer_kind,
+	}
 	for _, opt := range opts {
 		opt(t)
 	}
@@ -62,7 +70,7 @@ func (t *alertThresholdCommands[T]) CreateSetAlertCmd() {
 			}
 
 			printer.Println(cmd, "Parsed integer = "+strconv.Itoa(integer))
-			err = t.cfgTags.Set(t.GetChannelID(), integer)
+			err = t.cfgTags.Set(t.GetChannelID(), t.threshold_integer_kind, integer)
 			if err != nil {
 				printer.Println(cmd, "ERR msg="+err.Error())
 				return

@@ -42,13 +42,33 @@ func NewTableMsg(
 	}
 }
 
+type AlertMsgOpt func(m *MsgShared)
+
+func WithBeginning(input string) AlertMsgOpt {
+	return func(m *MsgShared) {
+		m.viewBeginning = types.ViewBeginning(input)
+	}
+}
+func WithEnd(input string) AlertMsgOpt {
+	return func(m *MsgShared) {
+		m.viewEnd = types.ViewEnd(input)
+	}
+}
+
 func NewAlertMsg(
 	viewID types.ViewID,
+	opts ...AlertMsgOpt,
 ) *MsgShared {
-	return &MsgShared{
-		viewID:   viewID,
-		viewType: MsgAlert,
+	m := &MsgShared{
+		viewID:        viewID,
+		viewType:      MsgAlert,
+		viewBeginning: "\n",
 	}
+
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
 }
 
 func (v *MsgShared) SetHeader(header types.ViewHeader) { v.viewHeader = header }
@@ -105,24 +125,19 @@ func (m *Msg) Len() int {
 func (v *Msg) Render() string {
 	var content strings.Builder
 
-	if v.viewType == MsgTable {
-		content.WriteString(string(v.viewEnumeratedID) + string(v.GetTimestamp()) + "\n")
-		content.WriteString(string(v.viewHeader))
-		content.WriteString(string(v.viewBeginning))
-		for _, record := range v.records {
-			content.WriteString(string(*record))
-		}
-		content.WriteString(string(v.viewEnd))
-	} else {
-		// Mobile friendly way to render alert
-		content.WriteString(string(v.viewHeader))
-		content.WriteString("\n" + string(v.viewEnumeratedID) + string(v.GetTimestamp()))
-		// content.WriteString(string(v.viewBeginning))
-		// for _, record := range v.records {
-		// 	content.WriteString(string(*record))
-		// }
-		// content.WriteString(string(v.viewEnd))
+	content.WriteString(string(v.viewEnumeratedID) + string(v.GetTimestamp()) + "\n")
+	content.WriteString(string(v.viewHeader))
+
+	if v.viewType == MsgAlert {
+		content.WriteString("**Alert**:")
 	}
+
+	content.WriteString(string(v.viewBeginning))
+	for _, record := range v.records {
+		content.WriteString(string(*record))
+	}
+	content.WriteString(string(v.viewEnd))
+
 	return content.String()
 }
 

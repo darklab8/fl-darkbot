@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/darklab8/fl-darkbot/app/configurator/models"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 
@@ -22,7 +23,7 @@ func TestAlertTreshold(t *testing.T) {
 		assert.Error(t, err, ErrorZeroAffectedRowsMsg)
 		assert.ErrorContains(t, err, ErrorZeroAffectedRowsMsg)
 
-		cfg.Set(channelID, 5)
+		cfg.Set(channelID, models.ThresholdIntegerPercentage, 5)
 		status, err = cfg.Status(channelID)
 		assert.Nil(t, err, "result of status operation is without errors")
 		assert.Equal(t, 5, status)
