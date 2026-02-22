@@ -93,12 +93,14 @@ func (d *Discorder) DeleteMessage(channelID types.DiscordChannelID, messageID ty
 }
 
 type DiscordMessage struct {
-	ID        types.DiscordMessageID
-	Content   string
-	Timestamp time.Time
-	Embeds    []*discordgo.MessageEmbed
+	ID               types.DiscordMessageID
+	Content          string
+	Timestamp        time.Time
+	Embeds           []*discordgo.MessageEmbed
+	RequiresRecreate bool
 }
 
+/* 0 msg returns is the most new, 100 is the most ancient*/
 func (d *Discorder) GetLatestMessages(channelID types.DiscordChannelID) ([]*DiscordMessage, error) {
 	messagesLimitToGrab := 100 // max 100
 	messages, err := d.dg.ChannelMessages(string(channelID), messagesLimitToGrab, "", "", "")

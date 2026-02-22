@@ -13,6 +13,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/viewer/views/baseview"
 	"github.com/darklab8/fl-darkbot/app/viewer/views/pobgoodsview"
 
+	"github.com/darklab8/go-utils/typelog"
 	"github.com/darklab8/go-utils/utils/timeit"
 )
 
@@ -42,11 +43,61 @@ func (v *ChannelView) Discover() error {
 		return err
 	}
 
+	// force order discovery start
+	logus.Log.Info("Trying to find msgs for recreating")
+	pob_goods_indexes := []int{}
+	base_indexes := []int{}
+	for index, msg := range msgs {
+
+		if strings.Contains(msg.Content, string(pobgoodsview.PobGoodViewID)) {
+			pob_goods_indexes = append(pob_goods_indexes, index)
+		}
+		if strings.Contains(msg.Content, string(baseview.BaseViewID)) {
+			base_indexes = append(base_indexes, index)
+		}
+	}
+	for _, msg_base_index := range base_indexes { // PoB Good view to be after Base view
+		for _, msg_pobgood_index := range pob_goods_indexes {
+			if msg_pobgood_index > msg_base_index {
+				msgs[msg_pobgood_index].RequiresRecreate = true
+				logus.Log.Info("found msg requiring to be recreated. Case 1",
+					typelog.Int("msg_base_index", msg_base_index),
+					typelog.Any("msgs[msg_base_index].ID", msgs[msg_base_index].ID),
+					typelog.Any("msgs[msg_pobgood_index].ID", msgs[msg_pobgood_index].ID),
+				)
+			}
+		}
+	}
+
+	for forum_msg_index, msg := range msgs { // pob good and base view msgs to be after forum msgs
+		if len(msg.Embeds) > 0 { // then it is forum msg
+			for _, msg_base_index := range base_indexes {
+				if forum_msg_index < msg_base_index {
+					msgs[msg_base_index].RequiresRecreate = true
+					logus.Log.Info("found msg requiring to be recreated. Case 2",
+						typelog.Int("msg_base_index", msg_base_index),
+						typelog.Any("forum_msg_index", forum_msg_index),
+					)
+				}
+			}
+			for _, pob_good_msg_index := range pob_goods_indexes {
+				if forum_msg_index < pob_good_msg_index {
+					msgs[pob_good_msg_index].RequiresRecreate = true
+					logus.Log.Info("found msg requiring to be recreated. Case 3",
+						typelog.Int("pob_good_msg_index", pob_good_msg_index),
+						typelog.Any("forum_msg_index", forum_msg_index),
+					)
+				}
+			}
+		}
+	}
+
+	// force order discovery end
+
 	for _, msg := range msgs {
 		for _, view := range v.views {
-			view.DiscoverMessageID(msg.Content, msg.ID)
+			view.DiscoverMessageID(msg.Content, msg.ID, msg.RequiresRecreate)
 		}
-
 	}
 
 	v.Msgs = msgs
@@ -99,7 +150,7 @@ func (v ChannelView) DeleteOld() {
 			break
 		}
 
-		timeDiff := time.Now().Sub(msg.Timestamp)
+		timeDiff := time.Since(msg.Timestamp)
 		if timeDiff.Seconds() < 40 {
 			continue
 		}

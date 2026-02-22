@@ -34,7 +34,7 @@ type ViewHeader string
 const DiscordMsgLimit = 2000 - 150
 
 type View interface {
-	DiscoverMessageID(content string, msgID types.DiscordMessageID)
+	DiscoverMessageID(content string, msgID types.DiscordMessageID, RequiresRecreate bool)
 	RenderView() error
 	Send()
 	MatchMessageID(messageID types.DiscordMessageID) bool

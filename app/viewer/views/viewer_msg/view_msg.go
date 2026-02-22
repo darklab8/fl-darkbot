@@ -9,6 +9,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 
+	"github.com/darklab8/go-utils/typelog"
 	"github.com/darklab8/go-utils/utils/timeit"
 )
 
@@ -98,6 +99,7 @@ type Msg struct {
 	records          []*types.ViewRecord
 	viewEnumeratedID types.ViewEnumeratedID
 	channelID        types.DiscordChannelID
+	requiresRecreate bool
 }
 
 func NewMsg(msgShared *MsgShared, number int, channelID types.DiscordChannelID) *Msg {
@@ -116,6 +118,7 @@ func (m *Msg) GetViewEnumeratedID() types.ViewEnumeratedID { return m.viewEnumer
 func (m *Msg) HasRecords() bool { return len(m.records) > 0 }
 
 func (m *Msg) SetMessageID(messagID types.DiscordMessageID) { m.messageID = messagID }
+func (m *Msg) SetRequiresRecreate(RequiresRecreate bool)    { m.requiresRecreate = RequiresRecreate }
 
 func (m *Msg) AppendRecordToMsg(record *types.ViewRecord) { m.records = append(m.records, record) }
 
@@ -148,6 +151,14 @@ func (v *Msg) Render() string {
 
 func (v *Msg) Send(api *apis.API) {
 	timeit.NewTimerMF(fmt.Sprintf("Msg.Send() msg=%v", v), func() {
+
+		if v.requiresRecreate {
+			msg_id := v.messageID
+			api.Discorder.DeleteMessage(v.channelID, v.messageID)
+			v.messageID = ""
+			v.requiresRecreate = false
+			logus.Log.Info("wiped msg for recreation", typelog.Any("v.messageID", msg_id))
+		}
 
 		timeit.NewTimerMFL(fmt.Sprintf("msg.Send DeleteMessage. Msg=%v", *v), func() {
 			if len(v.records) == 0 && v.messageID != "" {

@@ -66,12 +66,13 @@ func (t *SharedViewTableSplitter) RenderView() error {
 }
 
 // Time comlexity: Must be called only after Generate()
-func (t *SharedViewTableSplitter) DiscoverMessageID(content string, msgID types.DiscordMessageID) {
+func (t *SharedViewTableSplitter) DiscoverMessageID(content string, msgID types.DiscordMessageID, RequiresRecreate bool) {
 	for _, view := range t.views {
 		for _, msg := range view.msgs {
 			if strings.Contains(content, string(msg.GetViewEnumeratedID())) {
 				logus.Log.Debug(fmt.Sprintf("discovered content to ViewEnumeratedID=%v", viewer_msg.LogusMsg(msg)))
 				msg.SetMessageID(msgID)
+				msg.SetRequiresRecreate(RequiresRecreate)
 			}
 		}
 	}

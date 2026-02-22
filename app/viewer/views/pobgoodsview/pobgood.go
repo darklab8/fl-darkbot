@@ -39,12 +39,14 @@ type TemplatePoBGood struct {
 	channelID types.DiscordChannelID
 }
 
+const PobGoodViewID types.ViewID = "#darkbot-pobgood-view"
+
 func NewTemplatePoBGood(api *apis.API, channelID types.DiscordChannelID) *TemplatePoBGood {
 	base := TemplatePoBGood{}
 	base.api = api
 	base.channelID = channelID
 	base.main = views.NewViewTable(viewer_msg.NewTableMsg(
-		types.ViewID("#darkbot-pobgood-view"),
+		types.ViewID(PobGoodViewID),
 		types.ViewHeader("**PoB Goods:**\n"),
 		types.ViewBeginning("```scss\n"),
 		types.ViewEnd("```"),

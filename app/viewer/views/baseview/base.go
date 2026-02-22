@@ -45,12 +45,14 @@ type TemplateBase struct {
 	channelID types.DiscordChannelID
 }
 
+const BaseViewID types.ViewID = "#darkbot-base-view"
+
 func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateBase {
 	base := TemplateBase{}
 	base.api = api
 	base.channelID = channelID
 	base.main = views.NewViewTable(viewer_msg.NewTableMsg(
-		types.ViewID("#darkbot-base-view"),
+		types.ViewID(BaseViewID),
 		types.ViewHeader("**Bases:**\n"),
 		types.ViewBeginning(""),
 		types.ViewEnd(""),
