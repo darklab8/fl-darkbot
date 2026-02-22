@@ -28,7 +28,16 @@ type AlertStringType interface {
 	GetValue() string
 }
 
+type AlertPoBGoodType interface {
+	models.AlertPobGoodBelowThan | models.AlertPobGoodAboveThan
+	GetGoodNickname() string
+	GetThreshold() int
+}
+
 type IConfiguratorAlertThreshold[T AlertThresholdType] struct {
+	*Configurator
+}
+type IConfiguratorAlertPoBGood[T AlertPoBGoodType] struct {
 	*Configurator
 }
 
@@ -52,6 +61,18 @@ func NewConfiguratorAlertString[T AlertStringType](configurator *Configurator) I
 	t := IConfiguratorAlertString[T]{Configurator: configurator}
 	return t
 }
+func NewConfiguratorAlertPoBGood[T AlertPoBGoodType](configurator *Configurator) IConfiguratorAlertPoBGood[T] {
+	t := IConfiguratorAlertPoBGood[T]{Configurator: configurator}
+	return t
+}
+
+type CfgAlertPoBGoodBelowThan = IConfiguratorAlertPoBGood[models.AlertPobGoodBelowThan]
+
+var NewCfgAlertPoBGoodBelowThan = NewConfiguratorAlertPoBGood[models.AlertPobGoodBelowThan]
+
+type CfgAlertPoBGoodAboveThan = IConfiguratorAlertPoBGood[models.AlertPobGoodAboveThan]
+
+var NewCfgAlertPoBGoodAboveThan = NewConfiguratorAlertPoBGood[models.AlertPobGoodAboveThan]
 
 type CfgAlertBaseHealthLowerThan = IConfiguratorAlertThreshold[models.AlertBaseHealthLowerThan]
 
@@ -192,4 +213,68 @@ func (c IConfiguratorAlertString[T]) Status(channelID types.DiscordChannelID) (s
 
 	str := obj.GetValue()
 	return str, result.Error
+}
+
+////////////////////////////////
+
+func (c IConfiguratorAlertPoBGood[T]) Add(channelID types.DiscordChannelID, good_nickname string, value int) error {
+	obj := T{
+		MultiValueTemplate:   models.MultiValueTemplate{ChannelID: channelID},
+		AlertTresholdInteger: models.AlertTresholdInteger{Threshold: value},
+		AlertPoBGood:         models.AlertPoBGood{GoodNickname: good_nickname},
+	}
+	result2 := c.db.Create(&obj)
+
+	return result2.Error
+}
+
+func (c IConfiguratorAlertPoBGood[T]) Remove(channelID types.DiscordChannelID, good_nickname string) error {
+	objs := []T{}
+	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&objs)
+	if result.RowsAffected == 0 {
+		return ErrorZeroAffectedRows{}
+	}
+	result = c.db.Unscoped().Delete(&objs)
+
+	return result.Error
+}
+
+type PoBGoodStatus struct {
+	Threshold    int
+	GoodNickname string
+}
+
+func (c IConfiguratorAlertPoBGood[T]) Get(channelID types.DiscordChannelID) (map[string]int, error) {
+	var objs []T = []T{}
+
+	result := c.db.Where("channel_id = ?", channelID).Find(&objs)
+	var output map[string]int
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return nil, ErrorZeroAffectedRows{}
+	}
+
+	output = make(map[string]int)
+
+	for _, obj := range objs {
+		output[obj.GetGoodNickname()] = obj.GetThreshold()
+	}
+
+	return output, nil
+}
+
+func (c IConfiguratorAlertPoBGood[T]) Clear(channelID types.DiscordChannelID) error {
+	tags := []T{}
+	result := c.db.Unscoped().Where("channel_id = ?", channelID).Find(&tags)
+	if len(tags) == 0 {
+		return ErrorZeroAffectedRows{ExtraMsg: "no pob good alert configs found"}
+	}
+	logus.Log.Debug("Clear.Find", logus.GormResult(result))
+	result = c.db.Unscoped().Delete(&tags)
+	logus.Log.Debug("Clear.Detete", logus.GormResult(result))
+	return result.Error
 }

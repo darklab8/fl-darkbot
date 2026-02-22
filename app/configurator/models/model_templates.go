@@ -22,3 +22,9 @@ type OneValueTemplate struct {
 	ChannelID types.DiscordChannelID
 	Channel   Channel `gorm:"references:ChannelID,unique"`
 }
+
+type MultiValueTemplate struct {
+	gorm.Model
+	ChannelID types.DiscordChannelID
+	Channel   Channel `gorm:"references:ChannelID"`
+}

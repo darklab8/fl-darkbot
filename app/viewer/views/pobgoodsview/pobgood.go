@@ -29,10 +29,10 @@ func init() {
 // Base
 
 type TemplatePoBGood struct {
-	main *views.ViewTable
-	// alertPoBGoodLowerThan    *views.ViewTable
-	// alertPoBGoodAboveThan    *views.ViewTable
-	// WarningMissconfiguration *views.ViewTable
+	main                     *views.ViewTable
+	alertPoBGoodLowerThan    *views.ViewTable
+	alertPoBGoodAboveThan    *views.ViewTable
+	WarningMissconfiguration *views.ViewTable
 
 	api *apis.API
 	*views.SharedViewTableSplitter
@@ -50,24 +50,25 @@ func NewTemplatePoBGood(api *apis.API, channelID types.DiscordChannelID) *Templa
 		types.ViewEnd("```"),
 	))
 
-	//
-	// base.alertPoBGoodLowerThan = views.NewViewTable(viewer_msg.NewAlertMsg(
-	// 	types.ViewID("#darkbot-pobgood-below-than"),
-	// ))
-	// base.alertPoBGoodAboveThan = views.NewViewTable(viewer_msg.NewAlertMsg(
-	// 	types.ViewID("#darkbot-pobgood-above-than"),
-	// ))
-	// base.WarningMissconfiguration = views.NewViewTable(viewer_msg.NewAlertMsg(
-	// 	types.ViewID("#darkbot-pobgood-warning-missconfiguration"),
-	// ))
+	base.alertPoBGoodLowerThan = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-pobgood-below-than"),
+	))
+	base.alertPoBGoodAboveThan = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-pobgood-above-than"),
+	))
+	base.WarningMissconfiguration = views.NewViewTable(viewer_msg.NewAlertMsg(
+		types.ViewID("#darkbot-pobgood-warning-missconfiguration"),
+		viewer_msg.WithHeader(":warning: :warning: :warning: "),
+	))
 
 	base.SharedViewTableSplitter = views.NewSharedViewSplitter(
 		api,
 		channelID,
 		&base,
 		base.main,
-		// base.alertPoBGoodLowerThan,
-		// base.alertPoBGoodAboveThan,
+		base.alertPoBGoodLowerThan,
+		base.alertPoBGoodAboveThan,
+		base.WarningMissconfiguration,
 	)
 	return &base
 }
@@ -105,7 +106,7 @@ type MatchedGood struct {
 }
 
 func MatchGoods(bases []*configs_export.PoB, good_tags map[string]bool) map[string]MatchedGood {
-	result := make(map[string]MatchedGood)
+	goods_unique := make(map[string]MatchedGood)
 	for _, base := range bases {
 
 		for _, good := range base.ShopItems {
@@ -119,11 +120,12 @@ func MatchGoods(bases []*configs_export.PoB, good_tags map[string]bool) map[stri
 				Base: base,
 				Good: good,
 			}
-			result[matched_good.Good.Nickname+matched_good.Base.Nickname] = matched_good
+			goods_unique[matched_good.Good.Nickname+matched_good.Base.Nickname] = matched_good
+
 		}
 
 	}
-	return result
+	return goods_unique
 }
 func (b *TemplatePoBGood) GenerateRecords() error {
 	record, err := b.api.Scrappy.GetBaseStorage().GetLatestRecord()
@@ -170,6 +172,76 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 
 	for _, good := range goods {
 		b.main.AppendRecord(types.ViewRecord(utils.TmpRender(pobGoodsTemplate, good)))
+	}
+
+	if pobgood_thresholds, err := b.api.Alerts.PoBGoodsBelowThan.Get(b.channelID); err == nil {
+		matched_pobgoods := make(map[string]bool)
+		for pobgood_nickname, _ := range pobgood_thresholds {
+			matched_pobgoods[pobgood_nickname] = false
+		}
+
+		for _, good := range matchedGoods {
+
+			alert_threshold, ok := pobgood_thresholds[good.Good.Nickname]
+			if ok {
+				matched_pobgoods[good.Good.Nickname] = true
+				if good.Good.Quantity < alert_threshold {
+					b.alertPoBGoodLowerThan.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+						b.channelID,
+						fmt.Sprintf("Good %s has quantity %d below threshold %d at base %s\n", good.Good.Name, good.Good.Quantity, alert_threshold, good.Base.Name),
+						b.api,
+					)))
+				}
+			}
+		}
+
+		for alert_config_pobgood_nickname, alert_config_is_matched := range matched_pobgoods {
+			if !alert_config_is_matched {
+				b.WarningMissconfiguration.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+					b.channelID,
+					fmt.Sprintf("alert for pob good %s to be below threshold is configured, but all monitored bases have no such pob good data exposed!\n",
+						alert_config_pobgood_nickname,
+					),
+					b.api,
+					views.WithAlertOverride(""),
+				)))
+			}
+		}
+	}
+
+	if pobgood_thresholds, err := b.api.Alerts.PoBGoodsAboveThan.Get(b.channelID); err == nil {
+		matched_pobgoods := make(map[string]bool)
+		for pobgood_nickname, _ := range pobgood_thresholds {
+			matched_pobgoods[pobgood_nickname] = false
+		}
+
+		for _, good := range matchedGoods {
+
+			alert_threshold, ok := pobgood_thresholds[good.Good.Nickname]
+			if ok {
+				matched_pobgoods[good.Good.Nickname] = true
+				if good.Good.Quantity > alert_threshold {
+					b.alertPoBGoodAboveThan.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+						b.channelID,
+						fmt.Sprintf("Good %s has quantity %d above threshold %d at base %s\n", good.Good.Name, good.Good.Quantity, alert_threshold, good.Base.Name),
+						b.api,
+					)))
+				}
+			}
+		}
+
+		for alert_config_pobgood_nickname, alert_config_is_matched := range matched_pobgoods {
+			if !alert_config_is_matched {
+				b.WarningMissconfiguration.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+					b.channelID,
+					fmt.Sprintf("alert for pob good %s to be above threshold is configured, but all monitored bases have no such pob good data exposed!\n",
+						alert_config_pobgood_nickname,
+					),
+					b.api,
+					views.WithAlertOverride(""),
+				)))
+			}
+		}
 	}
 
 	return nil

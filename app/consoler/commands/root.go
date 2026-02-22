@@ -197,6 +197,24 @@ func CreateConsoler(
 		cmdgroup.ShortDesc("Alert commands"),
 	)
 
+	NewPoBGoodCommand(
+		alertGroup.GetChild(
+			alertGroup.CurrentCmd,
+			cmdgroup.Command("pobgood_quantity_below_than"),
+			cmdgroup.ShortDesc("pob goods amounts to add for alerting when below the threshold"),
+		),
+		configurator.NewConfiguratorAlertPoBGood[models.AlertPobGoodBelowThan](configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+	NewPoBGoodCommand(
+		alertGroup.GetChild(
+			alertGroup.CurrentCmd,
+			cmdgroup.Command("pobgood_quantity_above_than"),
+			cmdgroup.ShortDesc("pob goods amounts to add for alerting when above the threshold"),
+		),
+		configurator.NewConfiguratorAlertPoBGood[models.AlertPobGoodAboveThan](configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
 	NewAlertBoolCommands(
 		alertGroup.GetChild(
 			alertGroup.CurrentCmd,
@@ -384,6 +402,9 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString(fmt.Sprintf("alert base_is_under_attack = %#v\n", GetStatus(r.Alerts.BaseIsUnderAttack, channel_id)))
 			sb.WriteString(fmt.Sprintf("alert base_money_is_lower_than = %#v\n", GetStatus(r.Alerts.BaseMoneyBelowThan, channel_id)))
 			sb.WriteString(fmt.Sprintf("alert base_cargo_space_left_is_lower_than = %#v\n", GetStatus(r.Alerts.BaseCargoBelowThan, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert pobgood_quantity_below_than = %#v\n", GetPoBGoodAlerts(r.Alerts.PoBGoodsBelowThan, channel_id)))
+			sb.WriteString(fmt.Sprintf("alert pobgood_quantity_above_than = %#v\n", GetPoBGoodAlerts(r.Alerts.PoBGoodsAboveThan, channel_id)))
+
 			value, err := r.Alerts.PingMessage.Status(channel_id)
 			if err != nil {
 				switch err.(type) {
@@ -436,4 +457,25 @@ func GetStatus[T any](r ConfStatus[T], channelID types.DiscordChannelID) string 
 	}
 
 	return fmt.Sprint(value)
+}
+
+func GetPoBGoodAlerts[T configurator.AlertPoBGoodType](r configurator.IConfiguratorAlertPoBGood[T], channelID types.DiscordChannelID) string {
+	value, err := r.Get(channelID)
+
+	if err != nil {
+		switch err.(type) {
+		case configurator.ErrorZeroAffectedRows:
+			return "not set"
+		default:
+			return err.Error()
+		}
+	}
+
+	var buf strings.Builder
+
+	for good, threshold := range value {
+		buf.WriteString(fmt.Sprintf("good=%s, threshold=%d\n", good, threshold))
+	}
+
+	return buf.String()
 }

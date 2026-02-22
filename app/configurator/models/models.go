@@ -70,11 +70,32 @@ func (t AlertTresholdInteger) GetThreshold() int {
 	return t.Threshold
 }
 
+type AlertPoBGood struct {
+	GoodNickname string
+}
+
+func (t AlertPoBGood) GetGoodNickname() string {
+	return t.GoodNickname
+}
+
+type AlertPobGoodBelowThan struct {
+	MultiValueTemplate
+	AlertTresholdInteger
+	ThresholdIntegerKind `gorm:"-"`
+	AlertPoBGood
+}
+type AlertPobGoodAboveThan struct {
+	MultiValueTemplate
+	AlertTresholdInteger
+	ThresholdIntegerKind `gorm:"-"`
+	AlertPoBGood
+}
+
 // ====== Shared alerts for all bases =========
 type AlertBaseHealthLowerThan struct {
 	OneValueTemplate
 	AlertTresholdInteger
-	ThresholdIntegerKind
+	ThresholdIntegerKind `gorm:"-"`
 }
 
 type AlertBaseIfHealthDecreasing struct {
@@ -87,13 +108,13 @@ type AlertBaseIfUnderAttack struct {
 type AlertBaseMoneyBelow struct {
 	OneValueTemplate
 	AlertTresholdInteger
-	ThresholdIntegerKind
+	ThresholdIntegerKind `gorm:"-"`
 }
 
 type AlertBaseCargoBelow struct {
 	OneValueTemplate
 	AlertTresholdInteger
-	ThresholdIntegerKind
+	ThresholdIntegerKind `gorm:"-"`
 }
 
 type ThresholdIntegerKind int64

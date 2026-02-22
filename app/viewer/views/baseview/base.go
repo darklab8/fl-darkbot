@@ -76,6 +76,7 @@ func NewTemplateBase(api *apis.API, channelID types.DiscordChannelID) *TemplateB
 
 	base.WarningMissconfiguration = views.NewViewTable(viewer_msg.NewAlertMsg(
 		types.ViewID("#darkbot-base-warning-missconfiguration"),
+		viewer_msg.WithHeader(":warning: :warning: :warning: "),
 	))
 
 	base.SharedViewTableSplitter = views.NewSharedViewSplitter(

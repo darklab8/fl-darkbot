@@ -44,6 +44,11 @@ func NewTableMsg(
 
 type AlertMsgOpt func(m *MsgShared)
 
+func WithHeader(input string) AlertMsgOpt {
+	return func(m *MsgShared) {
+		m.viewHeader = types.ViewHeader(input)
+	}
+}
 func WithBeginning(input string) AlertMsgOpt {
 	return func(m *MsgShared) {
 		m.viewBeginning = types.ViewBeginning(input)

@@ -36,6 +36,17 @@ enable, disable, status sub commands are similar.
 
 - you can turn on `. alert base_health_is_decreasing enable` command for making alert if base loses its health.
 
+## PoB Good alerts
+
+First add bases for tracking, the alerts will work only if there are bases added by `. base tags` command about which [u can read there](./tracking_bases.md). After that you can add pob good alert configs like that:
+
+- `. alert pobgood_quantity_below_than add commodity_food 1000` - to add alert if commodity good below than 1000
+- `. alert pobgood_quantity_below_than remove commodity_food` - to remove alert about commodity good
+- `. alert pobgood_quantity_below_than clear` - to remove all pob good alert configs
+- `. alert pobgood_quantity_below_than list` - list settings of this alert
+
+Also exists `pobgood_quantity_above_than` alert, that is configured same, but works in opposite way of alerting when amount of good is above the desired threshold amount
+
 ## Ping message
 
 - By default Discord server owner is pinged ( `<@DiscordServer.Owner.ID>` )

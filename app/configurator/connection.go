@@ -56,6 +56,8 @@ func (cg *Configurator) AutoMigrateSchema() *Configurator {
 		&models.AlertBaseIfUnderAttack{},
 		&models.AlertBaseMoneyBelow{},
 		&models.AlertBaseCargoBelow{},
+		&models.AlertPobGoodBelowThan{},
+		&models.AlertPobGoodAboveThan{},
 		&models.AlertPingMessage{},
 		&models.ConfigBaseOrderingKey{},
 	)

@@ -8,6 +8,8 @@ type Alerts struct {
 	BaseIsUnderAttack      CfgAlertBaseIsUnderAttack
 	BaseMoneyBelowThan     CfgAlertBaseMoneyBelowThan
 	BaseCargoBelowThan     CfgAlertBaseCargoBelowThan
+	PoBGoodsBelowThan      CfgAlertPoBGoodBelowThan
+	PoBGoodsAboveThan      CfgAlertPoBGoodAboveThan
 	PingMessage            CfgAlertPingMessage
 }
 
@@ -76,6 +78,8 @@ func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 			BaseCargoBelowThan:     NewCfgAlertBaseCargoBelowThan(configur),
 			BaseHealthIsDecreasing: NewCfgAlertBaseHealthIsDecreasing(configur),
 			BaseIsUnderAttack:      NewCfgAlertBaseIsUnderAttack(configur),
+			PoBGoodsBelowThan:      NewCfgAlertPoBGoodBelowThan(configur),
+			PoBGoodsAboveThan:      NewCfgAlertPoBGoodAboveThan(configur),
 			PingMessage:            NewCfgAlertPingMessage(configur),
 		},
 		Forum: Forum{

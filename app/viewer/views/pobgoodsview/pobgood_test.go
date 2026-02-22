@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/darklab8/fl-darkbot/app/configurator"
+	"github.com/darklab8/fl-darkbot/app/configurator/models"
 	"github.com/darklab8/fl-darkbot/app/scrappy"
 	"github.com/darklab8/fl-darkbot/app/scrappy/base"
 	"github.com/darklab8/fl-darkbot/app/scrappy/baseattack"
@@ -93,12 +94,43 @@ func TestPoBGoodiewerRealData(t *testing.T) {
 		cg_pobgood := configurator.NewConfiguratorPoBGood(configurator.NewConfigurator(dbpath))
 		cg_pobgood.TagsAdd(channelID, []types.Tag{"commodity_nox_fake01", "commodity_military_salvage", "commodity_food"}...)
 
+		cg_pobgood_below := configurator.NewConfiguratorAlertPoBGood[models.AlertPobGoodBelowThan](configurator.NewConfigurator(dbpath))
+		cg_pobgood_below.Add(channelID, "commodity_food", 50000)
+		cg_pobgood_below.Add(channelID, "invalid_commodity", 50000)
+
+		cg_pobgood_above := configurator.NewConfiguratorAlertPoBGood[models.AlertPobGoodAboveThan](configurator.NewConfigurator(dbpath))
+		cg_pobgood_above.Add(channelID, "commodity_food", 500)
+
 		render := NewTemplatePoBGood(api, channelID)
 		render.RenderView()
 		logus.Log.Debug(fmt.Sprintf("base.main.Msgs=%v", render.main.GetMsgs()))
 
 		assert.True(t, render.main.HasRecords())
 		if msgs := render.main.GetMsgs(); len(msgs) > 0 {
+			for _, msg := range msgs {
+				rendered := msg.Render()
+				fmt.Println(rendered)
+			}
+		}
+
+		assert.True(t, render.alertPoBGoodLowerThan.HasRecords())
+		if msgs := render.alertPoBGoodLowerThan.GetMsgs(); len(msgs) > 0 {
+			for _, msg := range msgs {
+				rendered := msg.Render()
+				fmt.Println(rendered)
+			}
+		}
+
+		assert.True(t, render.WarningMissconfiguration.HasRecords())
+		if msgs := render.WarningMissconfiguration.GetMsgs(); len(msgs) > 0 {
+			for _, msg := range msgs {
+				rendered := msg.Render()
+				fmt.Println(rendered)
+			}
+		}
+
+		assert.True(t, render.alertPoBGoodAboveThan.HasRecords())
+		if msgs := render.alertPoBGoodAboveThan.GetMsgs(); len(msgs) > 0 {
 			for _, msg := range msgs {
 				rendered := msg.Render()
 				fmt.Println(rendered)
