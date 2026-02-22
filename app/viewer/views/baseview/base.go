@@ -88,7 +88,7 @@ type TemplateAugmentedBase struct {
 
 func BaseContainsTag(bas *configs_export.PoB, tags []types.Tag) bool {
 	for _, tag := range tags {
-		if strings.Contains(bas.Name, string(tag)) {
+		if strings.Contains(strings.ToLower(bas.Name), strings.ToLower(string(tag))) {
 			return true
 		}
 	}

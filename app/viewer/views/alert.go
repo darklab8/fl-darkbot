@@ -25,13 +25,30 @@ type TemplateAlertInput struct {
 	Msg         string
 }
 
-func RenderAlertTemplate(ChannelID types.DiscordChannelID, Msg string, api *apis.API) types.ViewHeader {
+type Alert struct {
+	PingMessage types.PingMessage
+}
+type AlertOpt func(a *Alert)
+
+func WithAlertOverride(PingMessage string) AlertOpt {
+	return func(a *Alert) {
+		a.PingMessage = types.PingMessage(PingMessage)
+	}
+}
+
+func RenderAlertTemplate(ChannelID types.DiscordChannelID, Msg string, api *apis.API, opts ...AlertOpt) types.ViewHeader {
 	// pingMessage, err := api.Alerts.PingMessage.Status(ChannelID)
 	// ownerID, err := api.Discorder.GetOwnerID(ChannelID)
 
-	pingMessage := configurator.GetPingingMessage(ChannelID, api.Configurators, api.Discorder)
+	a := &Alert{
+		PingMessage: configurator.GetPingingMessage(ChannelID, api.Configurators, api.Discorder),
+	}
+	for _, opt := range opts {
+		opt(a)
+	}
+
 	input := TemplateAlertInput{
-		PingMessage: pingMessage,
+		PingMessage: a.PingMessage,
 		Msg:         Msg,
 	}
 	return types.ViewHeader(utils.TmpRender(alertTemplate, input))
