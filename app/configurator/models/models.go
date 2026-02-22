@@ -16,6 +16,10 @@ type Channel struct {
 type TagBase struct {
 	TagTemplate
 }
+type TagPoBGood struct {
+	TagTemplate
+}
+
 type TagSystem struct {
 	TagTemplate
 }

@@ -26,7 +26,8 @@ type taggable interface {
 		models.TagForumContentWatch |
 		models.TagForumContentIgnore |
 		models.TagForumAuthorWatch |
-		models.TagForumAuthorIgnore
+		models.TagForumAuthorIgnore |
+		models.TagPoBGood
 	GetTag() types.Tag
 }
 
@@ -42,6 +43,10 @@ func NewConfiguratorTags[T taggable](configurator *Configurator) ConfiguratorTag
 type ConfiguratorBase = ConfiguratorTags[models.TagBase]
 
 var NewConfiguratorBase = NewConfiguratorTags[models.TagBase]
+
+type ConfiguratorPoBGood = ConfiguratorTags[models.TagPoBGood]
+
+var NewConfiguratorPoBGood = NewConfiguratorTags[models.TagPoBGood]
 
 type ConfiguratorSystem = ConfiguratorTags[models.TagSystem]
 

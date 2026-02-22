@@ -40,6 +40,7 @@ func (cg *Configurator) AutoMigrateSchema() *Configurator {
 	err := cg.db.AutoMigrate(
 		&models.Channel{},
 		&models.TagBase{},
+		&models.TagPoBGood{},
 		&models.TagSystem{},
 		&models.TagRegion{},
 		&models.TagForumPostTrack{},

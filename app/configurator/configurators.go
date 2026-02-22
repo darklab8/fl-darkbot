@@ -39,10 +39,16 @@ type Base struct {
 	Tags    ConfiguratorBase
 	OrderBy CfgBaseOrderingKey
 }
+
+type PoBGood struct {
+	Tags ConfiguratorPoBGood
+}
+
 type Configurators struct {
 	Bases    Base
 	Alerts   Alerts
 	Forum    Forum
+	PoBGood  PoBGood
 	Configur *Configurator
 	Channels ConfiguratorChannel
 }
@@ -60,6 +66,9 @@ func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 		Bases: Base{
 			Tags:    NewConfiguratorBase(configur),
 			OrderBy: NewCfgBaseOrderingKey(configur),
+		},
+		PoBGood: PoBGood{
+			Tags: NewConfiguratorPoBGood(configur),
 		},
 		Alerts: Alerts{
 			BaseHealthLowerThan:    NewCfgAlertBaseHealthLowerThan(configur),

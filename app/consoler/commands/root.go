@@ -78,6 +78,21 @@ func CreateConsoler(
 		models.ConfigBaseOrderingKeyAllowedTags,
 	)
 
+	PobGoodGroup := root.GetChild(
+		root.CurrentCmd,
+		cmdgroup.Command("pobgood"),
+		cmdgroup.ShortDesc("POB Good commands"),
+	)
+	NewTagCommands(
+		PobGoodGroup.GetChild(
+			PobGoodGroup.CurrentCmd,
+			cmdgroup.Command("tags"),
+			cmdgroup.ShortDesc("pobgood tags u add for tracking"),
+		),
+		configurator.NewConfiguratorPoBGood(configur),
+		configurator.NewConfiguratorChannel(configur),
+	)
+
 	forumGroup := root.GetChild(
 		root.CurrentCmd,
 		cmdgroup.Command("forum"),
@@ -343,6 +358,10 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString("Bases:\n```\n")
 			sb.WriteString(fmt.Sprintf("base tags = %#v\n", PrintList(r.Bases.Tags.TagsList2(channel_id))))
 			sb.WriteString(fmt.Sprintf("base order_by = %#v\n", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
+			sb.WriteString("\n```\n")
+
+			sb.WriteString("PoB Goods:\n```\n")
+			sb.WriteString(fmt.Sprintf("pobgood tags = %#v\n", PrintList(r.PoBGood.Tags.TagsList2(channel_id))))
 			sb.WriteString("\n```\n")
 
 			// forum

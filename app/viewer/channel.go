@@ -11,6 +11,8 @@ import (
 	"github.com/darklab8/fl-darkbot/app/viewer/apis"
 	"github.com/darklab8/fl-darkbot/app/viewer/views"
 	"github.com/darklab8/fl-darkbot/app/viewer/views/baseview"
+	"github.com/darklab8/fl-darkbot/app/viewer/views/pobgoodsview"
+
 	"github.com/darklab8/go-utils/utils/timeit"
 )
 
@@ -24,6 +26,7 @@ type ChannelView struct {
 func NewChannelView(api *apis.API, channelID types.DiscordChannelID) ChannelView {
 	view := ChannelView{api: api}
 	view.views = append(view.views, baseview.NewTemplateBase(api, channelID))
+	view.views = append(view.views, pobgoodsview.NewTemplatePoBGood(api, channelID))
 	view.ChannelID = channelID
 
 	return view

@@ -133,7 +133,7 @@ func ErrorForbiddenOrderKey(order_key types.OrderKey) ForbiddenOrderKey {
 
 func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order key=%s", f.order_key) }
 
-func (b *TemplateBase) sortBases(bases []*configs_export.PoB, order_key types.OrderKey) ([]*configs_export.PoB, error) {
+func SortBases(bases []*configs_export.PoB, order_key types.OrderKey) ([]*configs_export.PoB, error) {
 
 	switch order_key {
 	case models.BaseKeyName:
@@ -151,8 +151,6 @@ func (b *TemplateBase) sortBases(bases []*configs_export.PoB, order_key types.Or
 
 	return bases, nil
 }
-
-const HealthRateDecreasingThreshold = -0.5
 
 func (b *TemplateBase) GenerateRecords() error {
 	record, err := b.api.Scrappy.GetBaseStorage().GetLatestRecord()
@@ -172,7 +170,7 @@ func (b *TemplateBase) GenerateRecords() error {
 
 	order_key, err := b.api.Bases.OrderBy.Status(b.channelID)
 	if !logus.Log.CheckDebug(err, "failed to query Order by key") {
-		matchedBases, err = b.sortBases(matchedBases, types.OrderKey(order_key))
+		matchedBases, err = SortBases(matchedBases, types.OrderKey(order_key))
 
 		base_table_will_be_rendered := len(matchedBases) > 0
 		if err != nil && base_table_will_be_rendered {
@@ -195,7 +193,7 @@ func (b *TemplateBase) GenerateRecords() error {
 			logus.Log.Warn("healthDeritive is initializing, because", typelog.OptError(healthDerivativeErr))
 		} else {
 			HealthDecreasing = healthDeritiveNumber < 0
-			UnderAttack = healthDeritiveNumber < HealthRateDecreasingThreshold || strings.Contains(string(b.api.Scrappy.GetBaseAttackStorage().GetData()), base.Name)
+			UnderAttack = strings.Contains(string(b.api.Scrappy.GetBaseAttackStorage().GetData()), base.Name)
 		}
 
 		baseVars := TemplateAugmentedBase{
