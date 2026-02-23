@@ -9,7 +9,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/consoler/printer"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
-	"github.com/darklab8/fl-darkstat/darkapis/darkrpc"
+	"github.com/darklab8/fl-darkstat/darkapis/darkhttp"
 	"github.com/spf13/cobra"
 )
 
@@ -42,12 +42,8 @@ func (t *InfoCommands) CreateGetInfoCmd() {
 			answer := "OK giving info about(" + fmt.Sprintf("%d", len(query)) + "): " + query
 			printer.Println(cmd, answer)
 
-			client := darkrpc.NewClient(
-				darkrpc.WithTcpAddress(settings.Env.DarkstatHost),
-				darkrpc.WithPortCli(settings.Env.DarkstatPort),
-			)
-			reply := new(darkrpc.GetInfoReply)
-			err := client.GetInfo(darkrpc.GetInfoArgs{Query: query}, reply)
+			client := darkhttp.NewClient(settings.Env.DarkstatApiUrl)
+			reply, err := client.GetInfo(darkhttp.GetInfoArgs{Query: query})
 
 			if err != nil {
 				printer.Println(cmd, err.Error())
