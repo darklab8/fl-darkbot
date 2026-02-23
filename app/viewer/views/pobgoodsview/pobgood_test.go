@@ -72,10 +72,7 @@ func TestPoBGoodsRender(t *testing.T) {
 	})
 }
 
-func TestPoBGoodiewerRealData(t *testing.T) {
-	if false { // test pur efor debugging on real data
-
-	}
+func TestPoBGoodiewerAlerts(t *testing.T) {
 	configurator.FixtureMigrator(func(dbpath types.Dbpath) {
 		channelID, _ := configurator.FixtureChannel(dbpath)
 
@@ -83,7 +80,7 @@ func TestPoBGoodiewerRealData(t *testing.T) {
 		cg.TagsAdd(channelID, []types.Tag{"Monte Cinto"}...)
 
 		scrapper := scrappy.NewScrapyStorage(
-			base.NewBaseApi(),
+			base.NewMock("basedata.json"), //base.NewBaseApi(),
 			player.FixturePlayerAPIMock(),
 			baseattack.FixtureBaseAttackAPIMock(),
 		)
