@@ -204,7 +204,7 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 			if !alert_config_is_matched {
 				b.WarningMissconfiguration.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
 					b.channelID,
-					fmt.Sprintf("alert for pob good %s to be below threshold is configured, but all monitored bases have no such pob good data exposed!\n",
+					fmt.Sprintf("alert for pob good %s to be below threshold is configured, but all monitored bases have no such pob good data exposed! Add pob good exposure, see here for details: https://darkstat.dd84ai.com/#how_to_turn_pob_feature_on\\n",
 						alert_config_pobgood_nickname,
 					),
 					b.api,
@@ -239,7 +239,7 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 			if !alert_config_is_matched {
 				b.WarningMissconfiguration.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
 					b.channelID,
-					fmt.Sprintf("alert for pob good %s to be above threshold is configured, but all monitored bases have no such pob good data exposed!\n",
+					fmt.Sprintf("alert for pob good %s to be above threshold is configured, but all monitored bases have no such pob good data exposed! Add pob good exposure, see here for details: https://darkstat.dd84ai.com/#how_to_turn_pob_feature_on\n",
 						alert_config_pobgood_nickname,
 					),
 					b.api,
