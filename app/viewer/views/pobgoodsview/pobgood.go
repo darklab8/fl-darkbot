@@ -93,6 +93,9 @@ func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order 
 func SortGoods(goods []PoBGood) ([]PoBGood, error) {
 
 	sort.Slice(goods, func(i, j int) bool {
+		if goods[i].BaseName != goods[j].BaseName {
+			return goods[i].BaseName < goods[j].BaseName
+		}
 		if goods[i].Category != goods[j].Category {
 			return goods[i].Category < goods[j].Category
 		}
