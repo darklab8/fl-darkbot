@@ -53,7 +53,7 @@ func NewTemplatePoBGood(api *apis.API, channelID types.DiscordChannelID) *Templa
 	base.channelID = channelID
 	base.main = views.NewViewTable(viewer_msg.NewTableMsg(
 		types.ViewID(PobGoodViewID),
-		types.ViewHeader("**PoB Goods:**\n"),
+		types.ViewHeader("**PoB Goods:** (Base, Quantity, Category, Item name)\n"),
 		types.ViewBeginning("```scss\n"),
 		types.ViewEnd("```"),
 	))
