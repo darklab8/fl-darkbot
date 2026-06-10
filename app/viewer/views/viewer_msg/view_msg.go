@@ -80,7 +80,7 @@ func NewAlertMsg(
 func (v *MsgShared) SetHeader(header types.ViewHeader) { v.viewHeader = header }
 
 func (m *MsgShared) GetTimestamp() types.ViewTimeStamp {
-	return types.ViewTimeStamp(fmt.Sprintf(" (last updated: %s)", time.Now().String()))
+	return types.ViewTimeStamp(fmt.Sprintf(" (last updated: %s)", time.Now().Format("2006-01-02T15:04:05Z07:00")))
 }
 func (m *MsgShared) GetViewID() types.ViewID { return m.viewID }
 

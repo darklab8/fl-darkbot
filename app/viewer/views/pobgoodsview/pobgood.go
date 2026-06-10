@@ -22,8 +22,14 @@ import (
 var pobGoodsTemplateText utils_types.TemplateExpression
 var pobGoodsTemplate *template.Template
 
+//go:embed pobgood_template_base.md
+var pobGoodsTemplateBaseText utils_types.TemplateExpression
+var pobGoodsTemplateBase *template.Template
+
 func init() {
 	pobGoodsTemplate = utils.TmpInit(pobGoodsTemplateText)
+	pobGoodsTemplateBase = utils.TmpInit(pobGoodsTemplateBaseText)
+
 }
 
 // Base
@@ -80,6 +86,7 @@ type PoBGood struct {
 	GoodName    string
 	BaseName    string
 	Category    string
+	IsEnd       bool
 }
 
 type ForbiddenOrderKey struct{ order_key types.OrderKey }
@@ -175,7 +182,25 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 	}
 	goods, err = SortGoods(goods)
 
-	for _, good := range goods {
+	var base_names map[string]bool = make(map[string]bool)
+
+	is_first := true
+	for index, good := range goods {
+		if ok := base_names[good.BaseName]; !ok {
+			if !is_first {
+				b.main.AppendRecord(types.ViewRecord("\n"))
+			}
+			b.main.AppendRecord(types.ViewRecord(utils.TmpRender(pobGoodsTemplateBase, good)))
+			base_names[good.BaseName] = true
+			is_first = false
+		}
+		// makes sure base name remains white in scss markdown view, and pob good records green
+		if index < len(goods)-2 {
+			if goods[index+1].BaseName != good.BaseName {
+				good.IsEnd = true
+			}
+		}
+
 		b.main.AppendRecord(types.ViewRecord(utils.TmpRender(pobGoodsTemplate, good)))
 	}
 
