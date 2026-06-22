@@ -57,6 +57,21 @@ func TestBaseViewerMocked(t *testing.T) {
 		record.Add(base.NewBase2(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 50}))
 		scrapper.GetBaseStorage().Add(record)
 
+		record = records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(base.NewBase2(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100}))
+		record.Add(base.NewBase2(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 40}))
+		scrapper.GetBaseStorage().Add(record)
+
+		record = records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(base.NewBase2(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100}))
+		record.Add(base.NewBase2(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 40}))
+		scrapper.GetBaseStorage().Add(record)
+
+		record = records.NewStampedObjects[*configs_export.PoB]()
+		record.Add(base.NewBase2(base.Base{Name: "Station1", Affiliation: "Abc", Health: 100}))
+		record.Add(base.NewBase2(base.Base{Name: "Station2", Affiliation: "Qwe", Health: 40}))
+		scrapper.GetBaseStorage().Add(record)
+
 		baseAlertDecreasing.Enable(channelID)
 		isEnabled, _ = baseAlertDecreasing.Status(channelID)
 		assert.True(t, isEnabled)

@@ -70,12 +70,10 @@ func CalculateDerivates(tags []types.Tag, api *apis.API) (map[string]float64, er
 			baseDerivatives[baseName] = 0
 		}
 
-		for i := 0; i < len(baseHealthHistory)-1; i++ {
-			derivative := baseHealthHistory[i+1] - baseHealthHistory[i]
-			if math.Abs(derivative) > 1e-10 {
-				baseDerivatives[baseName] = derivative
-				wasThereNonZeroDeravatives = true
-			}
+		derivative := baseHealthHistory[len(baseHealthHistory)-1] - baseHealthHistory[0]
+		if math.Abs(derivative) > 1e-10 {
+			baseDerivatives[baseName] = derivative
+			wasThereNonZeroDeravatives = true
 		}
 	}
 
