@@ -28,5 +28,5 @@ COPY --from=build /code/main main
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 EXPOSE 8000
 USER 1001:1001
-ENTRYPOINT ["/main"]
+ENTRYPOINT ["/code/main"]
 CMD ["run"]
