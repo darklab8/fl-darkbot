@@ -27,4 +27,5 @@ ENV BUILD_VERSION="${BUILD_VERSION}"
 COPY --from=build /code/main main
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 EXPOSE 8000
-CMD ./main run
+USER 1001:1001
+CMD ["/main","run"]
