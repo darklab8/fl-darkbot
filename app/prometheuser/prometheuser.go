@@ -58,6 +58,7 @@ func init() {
 		prometheus.Labels{
 			"environment": settings.Env.Environment,
 			"version_id":  ver.Version,
+			"project":     "darkbot",
 		}, newreg)
 	reg.MustRegister(
 		channelsPerGuilds,
