@@ -8,6 +8,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/discorder"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
+	"github.com/darklab8/go-utils/typelog"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/collectors/version"
@@ -67,6 +68,7 @@ func init() {
 		collectors.NewGoCollector(),
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 		version.NewCollector("darkbot"),
+		typelog.MetricMsgsTotal,
 	)
 
 	http.Handle(
