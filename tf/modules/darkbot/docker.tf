@@ -101,7 +101,13 @@ resource "docker_service" "darkbot" {
     container_spec {
       image = docker_image.darkbot[0].name
       env   = local.envs
-
+      healthcheck {
+        test         = ["CMD", "/code/main", "health"]
+        interval     = "14s"
+        timeout      = "20s"
+        retries      = 6
+        start_period = "2m"
+      }
       labels {
         label = "prometheus"
         value = "true"
