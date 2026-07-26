@@ -24,8 +24,8 @@ github.com/darklab8/fl-darkstat v1.99.5 h1:s3KhYIamV0vlnt3awZrpcW6bKg9C4LOfEGNz7
 github.com/darklab8/fl-darkstat v1.99.5/go.mod h1:rFdb9dB9AatvHPr/nKwcXksfs6zlJa/KkcNjetBKW4M=
 github.com/darklab8/fl-data-discovery v0.4.5 h1:9DD1w+7QN7LLiR4teWZs1uo57XiOQF6z/RKjhs+4qsI=
 github.com/darklab8/fl-data-discovery v0.4.5/go.mod h1:SgRh0N3cWrhslXVkc5LJXK52Mw4+Fdsbmv+0qkNJ6QI=
-github.com/darklab8/go-utils v0.32.0 h1:m1LirDD8Jod2YqL/3mJEdfdpmy9ITnXM16+AezMBodw=
-github.com/darklab8/go-utils v0.32.0/go.mod h1:Wr2+a1K/7wEe1aN4kQez36dlG7RGOoMiZyw21gE7/fY=
+github.com/darklab8/go-utils v0.32.1 h1:0MxS545/n+S1ru1QA5CCOG1e2uyKZq4xscyPW3tuL/k=
+github.com/darklab8/go-utils v0.32.1/go.mod h1:Wr2+a1K/7wEe1aN4kQez36dlG7RGOoMiZyw21gE7/fY=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
