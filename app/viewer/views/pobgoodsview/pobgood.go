@@ -84,9 +84,12 @@ func NewTemplatePoBGood(api *apis.API, channelID types.DiscordChannelID) *Templa
 type PoBGood struct {
 	AmountValue int
 	GoodName    string
-	BaseName    string
 	Category    string
 	IsEnd       bool
+}
+type BaseWithGoods struct {
+	BaseName string
+	Goods    []PoBGood
 }
 
 type ForbiddenOrderKey struct{ order_key types.OrderKey }
@@ -100,9 +103,9 @@ func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order 
 func SortGoods(goods []PoBGood) ([]PoBGood, error) {
 
 	sort.Slice(goods, func(i, j int) bool {
-		if goods[i].BaseName != goods[j].BaseName {
-			return goods[i].BaseName < goods[j].BaseName
-		}
+		// if goods[i].BaseName != goods[j].BaseName {
+		// 	return goods[i].BaseName < goods[j].BaseName
+		// }
 		if goods[i].Category != goods[j].Category {
 			return goods[i].Category < goods[j].Category
 		}
@@ -112,15 +115,17 @@ func SortGoods(goods []PoBGood) ([]PoBGood, error) {
 	return goods, nil
 }
 
-type MatchedGood struct {
-	Base *configs_export.PoB
-	Good *configs_export.ShopItem
+type BaseGoods struct {
+	Base  *configs_export.PoB
+	Goods []*configs_export.ShopItem
 }
 
-func MatchGoods(bases []*configs_export.PoB, good_tags map[string]bool) map[string]MatchedGood {
-	goods_unique := make(map[string]MatchedGood)
-	for _, base := range bases {
+func MatchGoods(bases []*configs_export.PoB, good_tags map[string]bool) []*BaseGoods {
 
+	results := []*BaseGoods{}
+
+	for _, base := range bases {
+		goods_unique := make(map[string]*configs_export.ShopItem)
 		for _, good := range base.ShopItems {
 
 			_, ok := good_tags[good.Nickname]
@@ -128,16 +133,21 @@ func MatchGoods(bases []*configs_export.PoB, good_tags map[string]bool) map[stri
 				continue
 			}
 
-			matched_good := MatchedGood{
-				Base: base,
-				Good: good,
-			}
-			goods_unique[matched_good.Good.Nickname+matched_good.Base.Nickname] = matched_good
-
+			goods_unique[good.Nickname+base.Nickname] = good
 		}
 
+		base_goods := &BaseGoods{
+			Base: base,
+		}
+		for _, good := range goods_unique {
+			base_goods.Goods = append(base_goods.Goods, good)
+		}
+		if len(base_goods.Goods) == 0 {
+			continue
+		}
+		results = append(results, base_goods)
 	}
-	return goods_unique
+	return results
 }
 func (b *TemplatePoBGood) GenerateRecords() error {
 	record, err := b.api.Scrappy.GetBaseStorage().GetLatestRecord()
@@ -162,46 +172,54 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 		}
 	}
 
-	goods := []PoBGood{}
-
 	// match goods
 	good_tags, _ := b.api.PoBGood.Tags.TagsList(b.channelID)
 	good_tags_map := make(map[string]bool)
 	for _, tag := range good_tags {
 		good_tags_map[string(tag)] = true
 	}
-	matchedGoods := MatchGoods(matchedBases, good_tags_map)
+	base_goods := MatchGoods(matchedBases, good_tags_map)
 
-	for _, matched_good := range matchedGoods {
-		goods = append(goods, PoBGood{
-			AmountValue: matched_good.Good.Quantity,
-			GoodName:    matched_good.Good.Name,
-			BaseName:    matched_good.Base.Name,
-			Category:    matched_good.Good.Category,
-		})
+	bases := []BaseWithGoods{}
+	for _, base := range base_goods {
+		base_with_goods := BaseWithGoods{
+			BaseName: base.Base.Name,
+		}
+		for _, good := range base.Goods {
+			base_with_goods.Goods = append(base_with_goods.Goods, PoBGood{
+				AmountValue: good.Quantity,
+				GoodName:    good.Name,
+				Category:    good.Category,
+			})
+		}
+		bases = append(bases, base_with_goods)
 	}
-	goods, err = SortGoods(goods)
+	for i, base := range bases {
+		base.Goods, err = SortGoods(base.Goods)
+
+		if len(base.Goods) > 0 {
+			// makes sure base name remains white in scss markdown view, and pob good records green
+			bases[i].Goods[len(base.Goods)-1].IsEnd = true
+		}
+	}
 
 	var base_names map[string]bool = make(map[string]bool)
 
 	is_first := true
-	for index, good := range goods {
-		if ok := base_names[good.BaseName]; !ok {
+	for _, base := range bases {
+		if ok := base_names[base.BaseName]; !ok {
 			if !is_first {
 				b.main.AppendRecord(types.ViewRecord("\n"))
 			}
-			b.main.AppendRecord(types.ViewRecord(utils.TmpRender(pobGoodsTemplateBase, good)))
-			base_names[good.BaseName] = true
+			b.main.AppendRecord(types.ViewRecord(utils.TmpRender(pobGoodsTemplateBase, base)))
+			base_names[base.BaseName] = true
 			is_first = false
 		}
-		// makes sure base name remains white in scss markdown view, and pob good records green
-		if index < len(goods)-2 {
-			if goods[index+1].BaseName != good.BaseName {
-				good.IsEnd = true
-			}
+
+		for _, good := range base.Goods {
+			b.main.AppendRecord(types.ViewRecord(utils.TmpRender(pobGoodsTemplate, good)))
 		}
 
-		b.main.AppendRecord(types.ViewRecord(utils.TmpRender(pobGoodsTemplate, good)))
 	}
 
 	if pobgood_thresholds, err := b.api.Alerts.PoBGoodsBelowThan.Get(b.channelID); err == nil {
@@ -210,17 +228,19 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 			matched_pobgoods[pobgood_nickname] = false
 		}
 
-		for _, good := range matchedGoods {
+		for _, base := range base_goods {
+			for _, good := range base.Goods {
 
-			alert_threshold, ok := pobgood_thresholds[good.Good.Nickname]
-			if ok {
-				matched_pobgoods[good.Good.Nickname] = true
-				if good.Good.Quantity < alert_threshold {
-					b.alertPoBGoodLowerThan.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
-						b.channelID,
-						fmt.Sprintf("Good %s has quantity %d below threshold %d at base %s\n", good.Good.Name, good.Good.Quantity, alert_threshold, good.Base.Name),
-						b.api,
-					)))
+				alert_threshold, ok := pobgood_thresholds[good.Nickname]
+				if ok {
+					matched_pobgoods[good.Nickname] = true
+					if good.Quantity < alert_threshold {
+						b.alertPoBGoodLowerThan.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+							b.channelID,
+							fmt.Sprintf("Good %s has quantity %d below threshold %d at base %s\n", good.Name, good.Quantity, alert_threshold, base.Base.Name),
+							b.api,
+						)))
+					}
 				}
 			}
 		}
@@ -245,17 +265,19 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 			matched_pobgoods[pobgood_nickname] = false
 		}
 
-		for _, good := range matchedGoods {
+		for _, base := range base_goods {
+			for _, good := range base.Goods {
 
-			alert_threshold, ok := pobgood_thresholds[good.Good.Nickname]
-			if ok {
-				matched_pobgoods[good.Good.Nickname] = true
-				if good.Good.Quantity > alert_threshold {
-					b.alertPoBGoodAboveThan.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
-						b.channelID,
-						fmt.Sprintf("Good %s has quantity %d above threshold %d at base %s\n", good.Good.Name, good.Good.Quantity, alert_threshold, good.Base.Name),
-						b.api,
-					)))
+				alert_threshold, ok := pobgood_thresholds[good.Nickname]
+				if ok {
+					matched_pobgoods[good.Nickname] = true
+					if good.Quantity > alert_threshold {
+						b.alertPoBGoodAboveThan.AppendRecord(types.ViewRecord(views.RenderAlertTemplate(
+							b.channelID,
+							fmt.Sprintf("Good %s has quantity %d above threshold %d at base %s\n", good.Name, good.Quantity, alert_threshold, base.Base.Name),
+							b.api,
+						)))
+					}
 				}
 			}
 		}
