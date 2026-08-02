@@ -92,14 +92,6 @@ type BaseWithGoods struct {
 	Goods    []PoBGood
 }
 
-type ForbiddenOrderKey struct{ order_key types.OrderKey }
-
-func ErrorForbiddenOrderKey(order_key types.OrderKey) ForbiddenOrderKey {
-	return ForbiddenOrderKey{order_key: order_key}
-}
-
-func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order key=%s", f.order_key) }
-
 func SortGoods(goods []PoBGood) ([]PoBGood, error) {
 
 	sort.Slice(goods, func(i, j int) bool {

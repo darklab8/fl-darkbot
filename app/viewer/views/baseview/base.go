@@ -139,7 +139,7 @@ func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order 
 
 func SortBases(bases []*configs_export.PoB, order_key types.OrderKey, base_priorities_by_nick map[string]int) ([]*configs_export.PoB, error) {
 
-	if order_key != models.BaseKeyName && order_key != models.BaseKeyAffiliation {
+	if order_key != models.BaseKeyName && order_key != models.BaseKeyAffiliation && order_key != "" {
 		logus.Log.Error(fmt.Sprintf("forbidden order order_key=%s, only keys=%v are allowed", order_key, models.ConfigBaseOrderingKeyAllowedTags))
 		return bases, ErrorForbiddenOrderKey(order_key)
 	}
