@@ -103,6 +103,7 @@ type TemplateAugmentedBase struct {
 	IsUnderAttack        bool
 	HealthDecreasePhrase string
 	UnderAttackPhrase    string
+	Priority             int
 }
 
 func BaseContainsTag(bas *configs_export.PoB, tags []types.Tag) bool {
@@ -136,21 +137,33 @@ func ErrorForbiddenOrderKey(order_key types.OrderKey) ForbiddenOrderKey {
 
 func (f ForbiddenOrderKey) Error() string { return fmt.Sprintf("Forbidden order key=%s", f.order_key) }
 
-func SortBases(bases []*configs_export.PoB, order_key types.OrderKey) ([]*configs_export.PoB, error) {
+func SortBases(bases []*configs_export.PoB, order_key types.OrderKey, base_priorities_by_nick map[string]int) ([]*configs_export.PoB, error) {
 
-	switch order_key {
-	case models.BaseKeyName:
-		sort.Slice(bases, func(i, j int) bool {
-			return bases[i].Name < bases[j].Name
-		})
-	case models.BaseKeyAffiliation:
-		sort.Slice(bases, func(i, j int) bool {
-			return types.GetS(bases[i].FactionName, "") < types.GetS(bases[j].FactionName, "")
-		})
-	default:
+	if order_key != models.BaseKeyName && order_key != models.BaseKeyAffiliation {
 		logus.Log.Error(fmt.Sprintf("forbidden order order_key=%s, only keys=%v are allowed", order_key, models.ConfigBaseOrderingKeyAllowedTags))
 		return bases, ErrorForbiddenOrderKey(order_key)
 	}
+
+	sort.Slice(bases, func(i, j int) bool {
+		base_i_priority := 0
+		base_j_priority := 0
+		if value, ok := base_priorities_by_nick[bases[i].Nickname]; ok {
+			base_i_priority = value
+		}
+		if value, ok := base_priorities_by_nick[bases[j].Nickname]; ok {
+			base_j_priority = value
+		}
+		if base_i_priority != base_j_priority {
+			return base_i_priority < base_j_priority
+		}
+
+		if order_key == models.BaseKeyAffiliation {
+			if bases[i].FactionName != bases[j].FactionName {
+				return types.GetS(bases[i].FactionName, "") < types.GetS(bases[j].FactionName, "")
+			}
+		}
+		return bases[i].Name < bases[j].Name
+	})
 
 	return bases, nil
 }
@@ -172,14 +185,20 @@ func (b *TemplateBase) GenerateRecords() error {
 	matchedBases := MatchBases(record.List, tags)
 
 	order_key, err := b.api.Bases.OrderBy.Status(b.channelID)
-	if !logus.Log.CheckDebug(err, "failed to query Order by key") {
-		matchedBases, err = SortBases(matchedBases, types.OrderKey(order_key))
+	base_priorities, err2 := b.api.Bases.Priorities.Get(b.channelID)
+	if len(base_priorities) > 0 {
+		fmt.Println()
+	}
+	logus.Log.CheckDebug(err, "failed to query Order by key")
+	if logus.Log.CheckDebug(err2, "failed to base priorities") {
+		base_priorities = make(map[string]int)
+	}
+	matchedBases, err = SortBases(matchedBases, types.OrderKey(order_key), base_priorities)
 
-		base_table_will_be_rendered := len(matchedBases) > 0
-		if err != nil && base_table_will_be_rendered {
-			b.main.AppendRecord(types.ViewRecord(fmt.Sprintf("ERR %s", err.Error())))
-			return err
-		}
+	base_table_will_be_rendered := len(matchedBases) > 0
+	if err != nil && base_table_will_be_rendered {
+		b.main.AppendRecord(types.ViewRecord(fmt.Sprintf("ERR %s", err.Error())))
+		return err
 	}
 
 	healthDeritives, healthDerivativeErr := CalculateDerivates(tags, b.api)
@@ -206,6 +225,9 @@ func (b *TemplateBase) GenerateRecords() error {
 			IsUnderAttack:        UnderAttack,
 			HealthDecreasePhrase: HealthDecreasePhrase,
 			UnderAttackPhrase:    UnderAttackPhrase,
+		}
+		if value, ok := base_priorities[baseVars.Nickname]; ok {
+			baseVars.Priority = value
 		}
 		bases = append(bases, baseVars)
 

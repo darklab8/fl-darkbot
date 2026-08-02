@@ -162,14 +162,17 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 	matchedBases := baseview.MatchBases(record.List, tags)
 
 	order_key, err := b.api.Bases.OrderBy.Status(b.channelID)
-	if !logus.Log.CheckDebug(err, "failed to query Order by key") {
-		matchedBases, err = baseview.SortBases(matchedBases, types.OrderKey(order_key))
+	base_priorities, err2 := b.api.Bases.Priorities.Get(b.channelID)
+	logus.Log.CheckDebug(err, "failed to query Order by key")
+	if !logus.Log.CheckDebug(err2, "failed to base priorities") {
+		base_priorities = make(map[string]int)
+	}
+	matchedBases, err = baseview.SortBases(matchedBases, types.OrderKey(order_key), base_priorities)
 
-		base_table_will_be_rendered := len(matchedBases) > 0
-		if err != nil && base_table_will_be_rendered {
-			b.main.AppendRecord(types.ViewRecord(fmt.Sprintf("ERR %s", err.Error())))
-			return err
-		}
+	base_table_will_be_rendered := len(matchedBases) > 0
+	if err != nil && base_table_will_be_rendered {
+		b.main.AppendRecord(types.ViewRecord(fmt.Sprintf("ERR %s", err.Error())))
+		return err
 	}
 
 	// match goods

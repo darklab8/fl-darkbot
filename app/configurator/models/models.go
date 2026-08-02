@@ -140,6 +140,26 @@ type ConfigBaseOrderingKey struct {
 	Value string
 }
 
+type ConfigBasePriorty struct {
+	MultiValueTemplate
+	PriorityValue
+	BaseNick
+}
+
+type BaseNick struct {
+	BaseNickname string
+}
+type PriorityValue struct {
+	Priority int
+}
+
+func (t ConfigBasePriorty) GetPriority() int {
+	return t.Priority
+}
+func (t ConfigBasePriorty) GetBaseNickname() string {
+	return t.BaseNickname
+}
+
 // i know it can be Constraint. But if i add it as `struct tag` it breaks typing
 // and kind of hard to figure out how to fix nicely
 const (

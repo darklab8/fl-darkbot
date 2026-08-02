@@ -38,8 +38,9 @@ type Forum struct {
 	Author   ForumAuthor
 }
 type Base struct {
-	Tags    ConfiguratorBase
-	OrderBy CfgBaseOrderingKey
+	Tags       ConfiguratorBase
+	OrderBy    CfgBaseOrderingKey
+	Priorities CfgConfigBasePriorty
 }
 
 type PoBGood struct {
@@ -66,8 +67,9 @@ func NewConfiguratorsFromConfigur(configur *Configurator) *Configurators {
 		Configur: configur,
 		Channels: NewConfiguratorChannel(configur),
 		Bases: Base{
-			Tags:    NewConfiguratorBase(configur),
-			OrderBy: NewCfgBaseOrderingKey(configur),
+			Tags:       NewConfiguratorBase(configur),
+			OrderBy:    NewCfgBaseOrderingKey(configur),
+			Priorities: NewCfgConfigBasePriorty(configur),
 		},
 		PoBGood: PoBGood{
 			Tags: NewConfiguratorPoBGood(configur),

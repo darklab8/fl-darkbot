@@ -33,6 +33,11 @@ type AlertPoBGoodType interface {
 	GetGoodNickname() string
 	GetThreshold() int
 }
+type BasePriorityType interface {
+	models.ConfigBasePriorty
+	GetBaseNickname() string
+	GetPriority() int
+}
 
 type IConfiguratorAlertThreshold[T AlertThresholdType] struct {
 	*Configurator

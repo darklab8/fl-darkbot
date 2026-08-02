@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -76,6 +77,16 @@ func CreateConsoler(
 		configurator.NewCfgBaseOrderingKey(configur),
 		configurator.NewConfiguratorChannel(configur),
 		models.ConfigBaseOrderingKeyAllowedTags,
+	)
+
+	NewBasePriorityCommands(
+		baseGroup.GetChild(
+			baseGroup.CurrentCmd,
+			cmdgroup.Command("priority"),
+			cmdgroup.ShortDesc("Set order of priority to show. Any integer values from negative to positive like -999 or 999. That will rearrange order of bases shown in channel accordingly"),
+		),
+		configurator.NewConfiguratorBasePriority[models.ConfigBasePriorty](configur),
+		configurator.NewConfiguratorChannel(configur),
 	)
 
 	PobGoodGroup := root.GetChild(
@@ -376,6 +387,10 @@ func (r *rootCommands) CreateConfig() {
 			sb.WriteString("Bases:\n```\n")
 			sb.WriteString(fmt.Sprintf("base tags = %#v\n", PrintList(r.Bases.Tags.TagsList2(channel_id))))
 			sb.WriteString(fmt.Sprintf("base order_by = %#v\n", GetStatus(r.Configurators.Bases.OrderBy, channel_id)))
+			priorities, err := r.Configurators.Bases.Priorities.Get(channel_id)
+			priorities_dump, err := json.Marshal(priorities)
+			sb.WriteString(fmt.Sprintf("base priority = %#v\n", string(priorities_dump)))
+
 			sb.WriteString("\n```\n")
 
 			sb.WriteString("PoB Goods:\n```\n")
