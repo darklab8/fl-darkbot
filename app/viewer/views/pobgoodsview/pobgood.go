@@ -89,6 +89,7 @@ type PoBGood struct {
 }
 type BaseWithGoods struct {
 	BaseName string
+	Priority int
 	Goods    []PoBGood
 }
 
@@ -177,8 +178,14 @@ func (b *TemplatePoBGood) GenerateRecords() error {
 
 	bases := []BaseWithGoods{}
 	for _, base := range base_goods {
+		priority := 0
+		if value, ok := base_priorities[base.Base.Nickname]; ok {
+			priority = value
+		}
+
 		base_with_goods := BaseWithGoods{
 			BaseName: base.Base.Name,
+			Priority: priority,
 		}
 		for _, good := range base.Goods {
 			base_with_goods.Goods = append(base_with_goods.Goods, PoBGood{

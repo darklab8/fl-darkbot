@@ -19,7 +19,7 @@
 ### Base ordering by priority
 
 - `. base priority add elcano_manufacturing_complex 1000` - Changes priority in which base is ordered by. Base will be at the end of a list
-- `. base priority add fort_torrelavega -1000` - Changes priority in which base is ordered by. Base will be at the beginning of a list
+- `. base priority add fort_torrelavega 50` - Changes priority in which base is ordered by. Base will be written before `elcano_manufacturing_complex`
 - `. base priority spriorityet elcano_manufacturing_complex` - remove
 - `. base priority clear` - to remove ordering
 
