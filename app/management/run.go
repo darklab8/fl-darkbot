@@ -50,27 +50,29 @@ var runCmd = &cobra.Command{
 
 		scrappy_storage.Update()
 		go func() {
+			defer logus.Log.Fatal("exited scrappy")
 			scrappy_storage.Run()
-			logus.Log.Fatal("exited scrappy")
+
 		}()
 		go func() {
+			defer logus.Log.Fatal("exited listener")
 			listener.Run()
-			logus.Log.Fatal("exited listener")
+
 		}()
 		go func() {
+			defer logus.Log.Fatal("exited viewer")
 			viewer.NewViewer(settings.Dbpath, scrappy_storage).Run()
-			logus.Log.Fatal("exited viewer")
 		}()
 		go func() {
+			defer logus.Log.Fatal("exited forumer")
 			forumenacer.Run()
-			logus.Log.Fatal("exited forumer")
 		}()
 		// probably bugged
 
 		if settings.Env.PrometheuserOn {
 			go func() {
+				defer logus.Log.Fatal("exited prometheuser")
 				prometheuser.Prometheuser(dg)
-				logus.Log.Fatal("exited prometheuser")
 			}()
 		}
 
@@ -80,9 +82,9 @@ var runCmd = &cobra.Command{
 			defer p.Stop()
 
 			go func() {
+				defer logus.Log.Fatal("exited web server")
 				err := http.ListenAndServe(":8080", nil)
 				logus.Log.CheckError(err, "failed to listen to 8080")
-				logus.Log.Fatal("exited web server")
 			}()
 		}
 
