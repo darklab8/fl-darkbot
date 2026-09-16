@@ -163,24 +163,30 @@ func Prometheuser(dg *discorder.Discorder) {
 
 		if time.Since(ScrappyLastUpdated) > time.Minute*60 {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "scrappy last updated was too long ago")
+			fmt.Fprintf(w, "scrappy last update was too long ago")
 			return
 		}
 
 		if time.Since(ForumerLastUpdated) > time.Minute*60 {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "forumer last updated1 was too long ago")
+			fmt.Fprintf(w, "forumer last update1 was too long ago")
 			return
 		}
 		if time.Since(ForumerLastUpdated2) > time.Minute*60 {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "forumer last updated2 was too long ago")
+			fmt.Fprintf(w, "forumer last update2 was too long ago")
 			return
 		}
 
 		if time.Since(ViewerLastUpdated) > time.Minute*180 {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, "viewer last updated was too long ago")
+			fmt.Fprintf(w, "viewer last update was too long ago")
+			return
+		}
+
+		if time.Since(ListenerLastUpdated) > time.Minute*180 {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "listener last update was too long ago")
 			return
 		}
 
@@ -196,4 +202,5 @@ var (
 	ForumerLastUpdated2 = time.Now()
 	ViewerLastUpdated   = time.Now()
 	ScrappyLastUpdated  = time.Now()
+	ListenerLastUpdated = time.Now()
 )

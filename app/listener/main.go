@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/darklab8/fl-darkbot/app/consoler"
 	"github.com/darklab8/fl-darkbot/app/prometheuser"
@@ -144,6 +145,7 @@ func Chunks(s string, chunkSize int) []string {
 }
 
 func consolerHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	prometheuser.ListenerLastUpdated = time.Now()
 	is_allowed := allowedMessage(s, m)
 
 	if !is_allowed {
