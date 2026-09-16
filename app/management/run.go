@@ -49,14 +49,29 @@ var runCmd = &cobra.Command{
 		scrappy_storage.GetPlayerStorage().RegisterObserve(dg) // updates number of players in Bot description
 
 		scrappy_storage.Update()
-		go scrappy_storage.Run()
-		go listener.Run()
-		go viewer.NewViewer(settings.Dbpath, scrappy_storage).Run()
-		go forumenacer.Run()
+		go func() {
+			scrappy_storage.Run()
+			logus.Log.Fatal("exited scrappy")
+		}()
+		go func() {
+			listener.Run()
+			logus.Log.Fatal("exited listener")
+		}()
+		go func() {
+			viewer.NewViewer(settings.Dbpath, scrappy_storage).Run()
+			logus.Log.Fatal("exited viewer")
+		}()
+		go func() {
+			forumenacer.Run()
+			logus.Log.Fatal("exited forumer")
+		}()
 		// probably bugged
 
 		if settings.Env.PrometheuserOn {
-			go prometheuser.Prometheuser(dg)
+			go func() {
+				prometheuser.Prometheuser(dg)
+				logus.Log.Fatal("exited prometheuser")
+			}()
 		}
 
 		// profiler
@@ -67,6 +82,7 @@ var runCmd = &cobra.Command{
 			go func() {
 				err := http.ListenAndServe(":8080", nil)
 				logus.Log.CheckError(err, "failed to listen to 8080")
+				logus.Log.Fatal("exited web server")
 			}()
 		}
 
