@@ -3,6 +3,7 @@ package scrappy
 import (
 	"time"
 
+	"github.com/darklab8/fl-darkbot/app/prometheuser"
 	"github.com/darklab8/fl-darkbot/app/scrappy/base"
 	"github.com/darklab8/fl-darkbot/app/scrappy/baseattack"
 	"github.com/darklab8/fl-darkbot/app/scrappy/player"
@@ -54,6 +55,7 @@ func (s *ScrappyStorage) Run() {
 	logus.Log.Info("starting scrappy infinity update loop")
 	for {
 		s.Update()
+		prometheuser.ScrappyLastUpdated = time.Now()
 		time.Sleep(time.Duration(settings.Env.ScrappyLoopDelay) * time.Second)
 	}
 	logus.Log.Info("gracefully shutdown scrappy infinity loop")

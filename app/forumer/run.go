@@ -10,6 +10,7 @@ import (
 	"github.com/darklab8/fl-darkbot/app/configurator"
 	"github.com/darklab8/fl-darkbot/app/discorder"
 	"github.com/darklab8/fl-darkbot/app/forumer/forum_types"
+	"github.com/darklab8/fl-darkbot/app/prometheuser"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
 	"github.com/darklab8/fl-darkbot/app/settings/types"
 
@@ -369,6 +370,7 @@ func (v *Forumer) Run() {
 		for {
 			logus.Log.Debug("retrying to send msgs")
 			v.RetryMsgs()
+			prometheuser.ForumerLastUpdated = time.Now()
 			time.Sleep(delay)
 		}
 	}()
@@ -376,6 +378,7 @@ func (v *Forumer) Run() {
 	for {
 		logus.Log.Debug("trying new forumer cycle")
 		v.update()
+		prometheuser.ForumerLastUpdated2 = time.Now()
 		time.Sleep(delay)
 	}
 }

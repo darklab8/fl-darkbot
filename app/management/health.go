@@ -1,6 +1,7 @@
 package management
 
 import (
+	"io"
 	"net/http"
 	"time"
 
@@ -20,12 +21,19 @@ var healthCmd = &cobra.Command{
 		}
 
 		client := &http.Client{Transport: tr}
-		resp, err := client.Get("http://localhost:8000/metrics")
+		resp, err := client.Get("http://localhost:8000/health")
 		logus.Log.CheckPanic(err, "failed to health check")
-		if resp.StatusCode != 200 {
-			logus.Log.Panic("status code is not 200", typelog.Any("code", resp.StatusCode))
+
+		var body []byte
+		if resp != nil {
+			defer resp.Body.Close()
+			body, _ = io.ReadAll(resp.Body)
 		}
-		logus.Log.Debug("service is healthy")
+
+		if resp.StatusCode != 200 {
+			logus.Log.Panic("status code is not 200", typelog.Any("code", resp.StatusCode), typelog.Any("body", string(body)))
+		}
+		logus.Log.Debug("service is healthy", typelog.Any("code", resp.StatusCode))
 	},
 }
 

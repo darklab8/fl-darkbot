@@ -3,6 +3,7 @@ package viewer
 import (
 	"time"
 
+	"github.com/darklab8/fl-darkbot/app/prometheuser"
 	"github.com/darklab8/fl-darkbot/app/scrappy"
 	"github.com/darklab8/fl-darkbot/app/settings"
 	"github.com/darklab8/fl-darkbot/app/settings/logus"
@@ -47,6 +48,7 @@ func (v *Viewer) Run() {
 
 	for {
 		v.Update()
+		prometheuser.ViewerLastUpdated = time.Now()
 	}
 }
 

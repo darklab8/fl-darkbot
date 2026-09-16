@@ -1,6 +1,8 @@
 package prometheuser
 
 import (
+	"fmt"
+	"html"
 	"net/http"
 	"time"
 
@@ -157,6 +159,41 @@ func Prometheuser(dg *discorder.Discorder) {
 	}()
 
 	// http.Handle("/metrics", promhttp.Handler())
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+
+		if time.Since(ScrappyLastUpdated) > time.Minute*60 {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "scrappy last updated was too long ago")
+			return
+		}
+
+		if time.Since(ForumerLastUpdated) > time.Minute*60 {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "forumer last updated1 was too long ago")
+			return
+		}
+		if time.Since(ForumerLastUpdated2) > time.Minute*60 {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "forumer last updated2 was too long ago")
+			return
+		}
+
+		if time.Since(ViewerLastUpdated) > time.Minute*180 {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "viewer last updated was too long ago")
+			return
+		}
+
+		fmt.Fprintf(w, "ok, %q", html.EscapeString(r.URL.Path))
+	})
+
 	err := http.ListenAndServe("0.0.0.0:8000", nil)
 	logus.Log.CheckPanic(err, "unable to serve http server prometheuser")
 }
+
+var (
+	ForumerLastUpdated  = time.Now()
+	ForumerLastUpdated2 = time.Now()
+	ViewerLastUpdated   = time.Now()
+	ScrappyLastUpdated  = time.Now()
+)
