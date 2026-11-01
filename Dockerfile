@@ -1,4 +1,4 @@
-FROM golang:1.25-bookworm as dependencies
+FROM golang:1.27-bookworm AS dependencies
 
 RUN apt update
 RUN apt install -y build-essential
@@ -10,7 +10,7 @@ WORKDIR /code
 COPY go.mod go.sum ./
 RUN go mod download -x
 
-FROM dependencies as build
+FROM dependencies AS build
 
 RUN mkdir data
 COPY main.go ./
@@ -19,7 +19,7 @@ ENV GOCACHE=/root/.cache/go-build
 ARG BUILD_VERSION
 RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags "-X github.com/prometheus/common/version.Version=${BUILD_VERSION}" -v -o main main.go
 
-FROM debian:12.11-slim as runner
+FROM debian:12.11-slim AS runner
 WORKDIR /code
 RUN mkdir data
 ARG BUILD_VERSION
