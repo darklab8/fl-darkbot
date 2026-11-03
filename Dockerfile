@@ -19,9 +19,10 @@ ENV GOCACHE=/root/.cache/go-build
 ARG BUILD_VERSION
 RUN --mount=type=cache,target="/root/.cache/go-build" go build -ldflags "-X github.com/prometheus/common/version.Version=${BUILD_VERSION}" -v -o main main.go
 
-FROM debian:13-slim AS runner
+# FROM debian:13-slim AS runner
+FROM gcr.io/distroless/base-debian13
 WORKDIR /code
-RUN mkdir data
+# RUN mkdir data
 ARG BUILD_VERSION
 ENV BUILD_VERSION="${BUILD_VERSION}"
 COPY --from=build /code/main main
