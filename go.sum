@@ -20,8 +20,8 @@ github.com/chzyer/readline v1.5.1/go.mod h1:Eh+b79XXUwfKfcPLepksvw2tcLE/Ct21YObk
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/chzyer/test v1.0.0/go.mod h1:2JlltgoNkt4TW/z9V/IzDdFaMTM2JPIi26O1pF38GC8=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
-github.com/darklab8/fl-darkstat v1.152.1 h1:hf8mEVhl5+ttbXCMEehcWL2EyL1pOq3V23PwVj+2HTA=
-github.com/darklab8/fl-darkstat v1.152.1/go.mod h1:B9wA2x5TaMmZc2fT8CAVEC0ZgEjwgxxL9ST7LNOO/Bg=
+github.com/darklab8/fl-darkstat v1.151.2 h1:PyaqYpuZIqYMP22icTnjlUGWKQFQyZchm3y506Ab3Oc=
+github.com/darklab8/fl-darkstat v1.151.2/go.mod h1:B9wA2x5TaMmZc2fT8CAVEC0ZgEjwgxxL9ST7LNOO/Bg=
 github.com/darklab8/fl-data-discovery v0.6.2 h1:eDuUSbvCn6wknh9bHF7XwXKm+z66wRzB4k+RQMLq6uY=
 github.com/darklab8/fl-data-discovery v0.6.2/go.mod h1:Ywv+wHcb9nj8i9NRud7aaxswoUIsdVhm9H04u3RpNLY=
 github.com/darklab8/go-utils v0.34.0 h1:nOKeArO3QyOJz6p0wZ/czUttAq4sJhgsGm2bij3Yy/g=
